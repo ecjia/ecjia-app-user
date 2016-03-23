@@ -1,0 +1,95 @@
+<?php
+defined('IN_ECJIA') or exit('No permission resources.');
+/**
+ * 找回密码请求
+ * @author will
+ *
+ */
+class forget_password_module implements ecjia_interface {
+	
+	public function run(ecjia_api & $api) {
+		/* 判断session_id*/
+		if ( RC_Session::session_id() != EM_Api::$session['sid']) {
+            RC_Session::destroy();
+            RC_Session::init(null, EM_Api::$session['sid']);
+        }
+        
+        $type = _POST('type');
+        $value = _POST('value');
+
+        if (empty($type) || empty($value)) {
+        	EM_Api::outPut(101);
+        }
+        $db = RC_Loader::load_app_model('users_model', 'user');
+        if ($type == 'mobile') {
+        	$user_count = $db->where(array('mobile_phone' => $value))->count();
+        	//如果用户数量大于1
+        	if ($user_count > 1) {
+        		return new ecjia_error('mobile_repeat_error', __('手机号重复，请与管理员联系！'));
+        	}
+        	$userinfo = $db->find(array('mobile_phone' => $value));
+        }
+        if ($type == 'email') {
+        	$userinfo = $db->find(array('email' => $value));
+        }
+        
+        if (empty($userinfo)) {
+        	return new ecjia_error('user_error', __('用户信息错误！'));
+        }
+        
+        $code = rand(100000, 999999);
+        /* 短信找回密码*/
+        if ($type == 'mobile') {
+        	$result = ecjia_app::validate_application('sms');
+        	/* 判断是否有短信app*/
+        	if (!is_ecjia_error($result)) {
+        		//发送短信
+        		$tpl_name = 'sms_verifying_authentication';
+        		$tpl   = RC_Api::api('sms', 'sms_template', $tpl_name);
+        		/* 判断短信模板是否存在*/
+        		if (!empty($tpl)) {
+        			ecjia_api::$view_object->assign('action', __('通过短信找回密码'));
+        			ecjia_api::$view_object->assign('code', $code);
+        			ecjia_api::$view_object->assign('service_phone', ecjia::config('service_phone'));
+        			
+        			$content = ecjia_api::$controller->fetch_string($tpl['template_content']);
+        			$options = array(
+        					'mobile' 		=> $value,
+        					'msg'			=> $content,
+        					'template_id' 	=> $tpl['template_id'],
+        			);
+        				
+        			$response = RC_Api::api('sms', 'sms_send', $options);
+        		}
+        	}
+        }
+        /* 邮箱找回密码*/
+        if ($type == 'email') {
+        	$tpl_name = 'email_verifying_authentication';
+        	$tpl   = RC_Api::api('mail', 'mail_template', $tpl_name);
+        	/* 判断短信模板是否存在*/
+        	if (!empty($tpl)) {
+        		ecjia_api::$view_object->assign('action', __('通过短信找回密码'));
+        		ecjia_api::$view_object->assign('code', $code);
+        		ecjia_api::$view_object->assign('service_phone', ecjia::config('service_phone'));
+        		$content = ecjia_api::$controller->fetch_string($tpl['template_content']);
+        		$response = RC_Mail::send_mail(ecjia::config('shop_name'), ecjia::config('service_email'), $tpl['template_subject'], $content, $tpl['is_html']);
+        		
+        	}
+        }
+        
+        /* 判断是否发送成功*/
+        if ($response === true) {
+        	$time = RC_Time::gmtime();
+        	RC_Session::set('forget_code', $code);
+        	RC_Session::set('forget_expiry', $time + 600);//设置有效期10分钟
+        	return array('data' => '验证码发送成功！');
+        } else {
+        	return new ecjia_error('send_code_error', __('验证码发送失败！'));
+        }
+        
+        
+	}
+}
+
+// end
