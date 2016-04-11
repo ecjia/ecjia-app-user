@@ -10,43 +10,32 @@ class add_module implements ecjia_interface {
 	public function run(ecjia_api & $api) {
 		
 		EM_Api::authSession();
-		
-		RC_Loader::load_app_func('user', 'user');
-		
-		$db_user_address = RC_Loader::load_app_model('user_address_model', 'user');
-		$count = $db_user_address->where(array('user_id' => $_SESSION['user_id']))->count();
-		
+	
 		$address = _POST('address', array());
 		
-		$address['address_id']    = $address['id'];
-		$address['consignee']     = $address['consignee'];
-		$address['sign_building'] = $address['sign_building'];
 		$address['user_id']       = $_SESSION['user_id'];
-		$address['default']       = $count == 0 ? 1 : 0;
+		$address['consignee']     = isset($address['consignee']) ? trim($address['consignee']) : '';
+		$address['country']       = isset($address['country']) ? intval($address['country']) : '';
+		$address['province']      = isset($address['province']) ? intval($address['province']) : '';
+		$address['city']      	  = isset($address['city']) ? intval($address['city']) : '';
+		$address['district']      = isset($address['district']) ? intval($address['district']) : '';
+		$address['email']         = !empty($address['email']) ? trim($address['email']) : '';
+		$address['mobile']        = isset($address['mobile']) ? trim($address['mobile']) : '';
+		$address['address']       = isset($address['address']) ? trim($address['address']) : '';
+		$address['best_time']     = isset($address['best_time']) ? trim($address['best_time']) : '';
+		$address['default']       = (isset($address['set_default']) && $address['set_default'] == 'true') ? 1 : 0;
+		$address['sign_building'] = isset($address['sign_building']) ? trim($address['sign_building']) : '';
+		$address['tel'] 		  = isset($address['tel']) ? trim($address['tel']) : '';
 		
-		unset($address['id']);
-		
-		if (!check_address_info($address)) {
-			EM_Api::outPut(101);
+		$result = RC_Api::api('user', 'address_manage', $address);
+	
+		if (is_ecjia_error($result)) {
+			return $result;
 		}
-		update_address($address);
-		
 		return array();
 	}
+	
+	
 }
-
-
-function check_address_info($address){
-	if (
-		!empty($address['consignee']) &&
-		!empty($address['country']) &&
-// 		!empty($address['email']) &&
-		!empty($address['tel'])
-	) {
-		return true;
-	}
-}
-
-
 
 // end
