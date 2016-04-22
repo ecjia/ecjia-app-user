@@ -55,6 +55,7 @@ class info_module implements ecjia_interface {
 		$result['district_name']  = isset($out[$result['district']]) ? $out[$result['district']] : '';
 		
 		$result['address']        = $arr['address'];
+		$result['address_info']   = $arr['address_info'];
 		$result['zipcode']        = $arr['zipcode'];
 		$result['mobile']         = $arr['mobile'];
 		$result['sign_building']  = $arr['sign_building'];

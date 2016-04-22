@@ -37,6 +37,7 @@ class list_module implements ecjia_interface {
 				$result[$key]['id'] = $value['address_id'];
 				$result[$key]['consignee'] = $value['consignee'];
 				$result[$key]['address'] = $value['address'];
+				$result[$key]['address_info'] = $value['address_info'];
 			
 				$country = $value['country'];
 				$province = $value['province'];

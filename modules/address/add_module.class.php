@@ -22,6 +22,7 @@ class add_module implements ecjia_interface {
 		$address['email']         = !empty($address['email']) ? trim($address['email']) : '';
 		$address['mobile']        = isset($address['mobile']) ? trim($address['mobile']) : '';
 		$address['address']       = isset($address['address']) ? trim($address['address']) : '';
+		$address['address_info']  = isset($address['address_info']) ? trim($address['address_info']) : '';
 		$address['best_time']     = isset($address['best_time']) ? trim($address['best_time']) : '';
 		$address['default']       = (isset($address['set_default']) && $address['set_default'] == 'true') ? 1 : 0;
 		$address['sign_building'] = isset($address['sign_building']) ? trim($address['sign_building']) : '';
