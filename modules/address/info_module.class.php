@@ -38,6 +38,10 @@ class info_module implements ecjia_interface {
 		$result['province']   = $arr['province'];
 		$result['city']       = $arr['city'];
 		$result['district']   = $arr['district'];
+		$result['location']	  = array(
+									'longitude' => $arr['longitude'],
+									'latitude'	=> $arr['latitude'],
+								);
 		
 		$ids = array($result['country'], $result['province'], $result['city'], $result['district']);
 		$ids = array_filter($ids);
@@ -55,6 +59,7 @@ class info_module implements ecjia_interface {
 		$result['district_name']  = isset($out[$result['district']]) ? $out[$result['district']] : '';
 		
 		$result['address']        = $arr['address'];
+		$result['address_info']   = $arr['address_info'];
 		$result['zipcode']        = $arr['zipcode'];
 		$result['mobile']         = $arr['mobile'];
 		$result['sign_building']  = $arr['sign_building'];

@@ -10,6 +10,7 @@ class user_address_manage_api extends Component_Event_Api {
     public function call(&$address) {
         if (!is_array($address) 
 	        || !isset($address['user_id'])
+	        || !isset($address['address'])
 	        || !isset($address['consignee'])
 	        || (!isset($address['mobile']) && !isset($address['tel']))
         ) {
