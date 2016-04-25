@@ -56,8 +56,8 @@ class user_address_manage_api extends Component_Event_Api {
         	return new ecjia_error('not_exists_info', '不存在的信息');
         }
         
-        $this->update_address($address);
-        return true;
+        $address_id = $this->update_address($address);
+        return $address_id;
     }
        
     /**
@@ -110,7 +110,7 @@ class user_address_manage_api extends Component_Event_Api {
     		$db_user->where(array('user_id' => $address['user_id']))->update(array('address_id' => $address_id));
     	}
     
-    	return true;
+    	return $address_id;
     }
 }
 

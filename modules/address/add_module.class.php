@@ -33,7 +33,7 @@ class add_module implements ecjia_interface {
 		if (is_ecjia_error($result)) {
 			return $result;
 		}
-		return array();
+		return array('address_id' => $result);
 	}
 	
 	
