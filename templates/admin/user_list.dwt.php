@@ -37,7 +37,7 @@
 			</select>
 			<a class="btn m_l5 screen-btn">{t}筛选{/t}</a>
 			<div class="top_right f_r" >
-				<input type="text" name="keywords" value="{$user_list.filter.keywords}" placeholder="请输入会员名称或者邮箱"/> 
+				<input type="text" name="keywords" value="{$smarty.get.keywords}" placeholder="请输入会员名称或者邮箱关键字"/> 
 				<button class="btn m_l5" type="submit">{t}搜索会员{/t}</button>
 			</div>
 		</form>

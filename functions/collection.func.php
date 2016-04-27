@@ -49,7 +49,6 @@ function EM_get_collection_goods($user_id, $num = 10, $start = 1, $rec_id = 0) {
             $goods_list[$row['goods_id']]['unformatted_promote_price'] = $promote_price;
         }
     }
-    
     return $goods_list;
 }
 

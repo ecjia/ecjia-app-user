@@ -198,10 +198,6 @@
 	<!--{/if}-->
 	<!--#找回密码界面 end-->
 	
-	
-	
-	
-	
 <!-- {* 包含脚本文件 *} -->
 <script src="{$front_url}/js/jquery.min.js" type="text/javascript"></script>
 <script src="{$ecjia_js}" type="text/javascript"></script>
@@ -210,7 +206,7 @@
 <script src="{$front_url}/js/forget_password.js" type="text/javascript"></script>
 
 <script type="text/javascript">
-ecjia.front.get_password.init();
+	ecjia.front.get_password.init();
 </script>
 
 </body>

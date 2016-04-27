@@ -1,11 +1,9 @@
 <?php
 defined('IN_ROYALCMS') or exit('No permission resources.');
-RC_Loader::load_sys_class('ecjia_front', false);
 RC_Loader::load_app_class('integrate', 'user', false);
 
 class get_password extends ecjia_front {
 	private $db_users;
-	
 
 	public function __construct() {	
 		parent::__construct();	
@@ -85,7 +83,6 @@ class get_password extends ecjia_front {
 			$userinfo = $this->db_users->field('user_id, user_name, email, passwd_question, passwd_answer')->find(array('mobile_phone' => $username));
 		}
 		
-		
 		if (empty($userinfo)) {
 			if ($captcha->check_activation_captcha()) {
 				$captcha_url =  $captcha->current_captcha_url();
@@ -126,9 +123,9 @@ class get_password extends ecjia_front {
 				$content = ecjia::$controller->fetch_string($tpl['template_content']);
 				
 				$options = array(
-						'mobile' 		=> $username,
-						'msg'			=> $content,
-						'template_id' 	=> $tpl['template_id'],
+					'mobile' 		=> $username,
+					'msg'			=> $content,
+					'template_id' 	=> $tpl['template_id'],
 				);
 				$response = RC_Api::api('sms', 'sms_send', $options);
 				if (!is_ecjia_error($result)) {
@@ -151,9 +148,6 @@ class get_password extends ecjia_front {
 				}
 			}
 		}
-		
-		
-		
 	}
 
 	/* 密码找回（方式一）-->发送密码修改 验证码邮件 */
@@ -247,9 +241,9 @@ class get_password extends ecjia_front {
 				$content = ecjia::$controller->fetch_string($tpl['template_content']);
 					
 				$options = array(
-						'mobile' 		=> $user_name,
-						'msg'			=> $content,
-						'template_id' 	=> $tpl['template_id'],
+					'mobile' 		=> $user_name,
+					'msg'			=> $content,
+					'template_id' 	=> $tpl['template_id'],
 				);
 				$response = RC_Api::api('sms', 'sms_send', $options);
 				if (!is_ecjia_error($result)) {
@@ -286,41 +280,6 @@ class get_password extends ecjia_front {
 			$this->assign('passwd_question', RC_Lang::lang('passwd_questions/'.$_SESSION['temp_passwd_question']));
 			$this->display('forget_password.dwt');
 		}
-		// 		$user =& init_users();
-	
-		// 		$captcha = intval(ecjia::config('captcha'));
-		// 		if (($captcha & CAPTCHA_LOGIN) && (!($captcha & CAPTCHA_LOGIN_FAIL) ||
-		// 			(($captcha & CAPTCHA_LOGIN_FAIL) && $_SESSION['login_fail'] > 2)) && RC_ENV::gd_version() > 0) {
-		// 			if (empty($_POST['captcha'])) {
-		// 				show_message(RC_Lang::lang('invalid_captcha'), RC_Lang::lang('back_retry_answer'), 'user.php?act=qpassword_name', 'error');
-		// 			}
-	
-		// 			/* 检查验证码 */
-		// 			$validator = RC_Loader::load_sys_class('captcha');
-		// 			$validator->session_word = 'captcha_login';
-		// 			if (!$validator->check_word($_POST['captcha'])) {
-		// 				show_message(RC_Lang::lang('invalid_captcha'), RC_Lang::lang('back_retry_answer'), 'user.php?act=qpassword_name', 'error');
-		// 			}
-		// 		}
-	
-		// 		if (empty($_POST['passwd_answer']) || $_POST['passwd_answer'] != $_SESSION['passwd_answer']) {
-		// 			show_message(RC_Lang::lang('wrong_passwd_answer'), RC_Lang::lang('back_retry_answer'), 'user.php?act=qpassword_name', 'info');
-		// 		} else {
-			
-		// 			$_SESSION['user_id'] = $_SESSION['temp_user'];
-		// 			$_SESSION['user_name'] = $_SESSION['temp_user_name'];
-		// 			unset($_SESSION['temp_user']);
-		// 			unset($_SESSION['temp_user_name']);
-		// 			/* 对页面进行相应赋值 */
-		// 			$this->assign_template();
-		// 			$position = assign_ur_here(0, RC_Lang::lang('user_center'));
-		// 			$this->assign('page_title', 	$position['title']); 	// 页面标题
-		// 			$this->assign('ur_here',    	$position['ur_here']);
-		// 			$this->assign('lang',       	RC_Lang::lang());
-		// 			$this->assign('uid',    		$_SESSION['user_id']);
-		// 			$this->assign('action', 		'reset_password');
-		// 			$this->display('user_passport.dwt');
-		// 		}
 	}
 	
 	/* 切换密码找回方式*/
@@ -331,7 +290,7 @@ class get_password extends ecjia_front {
 	}
 	
 	/* 修改会员密码 */
-	public function reset_pwd (){
+	public function reset_pwd() {
 		RC_Loader::load_app_class('integrate', 'user', false);
 		$user = integrate::init_users();
 		
@@ -377,10 +336,6 @@ class get_password extends ecjia_front {
 		}
 	}
 	
-	
-
-	
-	
 	/* 密码找回(密码提示问题)-->输入用户名界面   暂时没用到*/
 	public function qpassword_name() {
 		$this->assign('action', 'qpassword_name');
@@ -392,7 +347,6 @@ class get_password extends ecjia_front {
 		$this->assign('action', 'get_password');
 		$this->display('forget_password.dwt');
 	}
-	
 }
 
 // end

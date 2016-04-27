@@ -8,11 +8,15 @@ defined('IN_ECJIA') or exit('No permission resources.');
 class user_user_stats_api extends Component_Event_Api {
     
     public function call(&$options) {
-		$db_user = RC_Loader::load_app_model ('users_model', 'user');
-        
-        /* 获取会员总数*/
-		$stats['total'] = $db_user->count();
-		
+    	$cache_key = 'api_user_stats_'.md5($_SESSION['admin_id']);
+        $stats = RC_Cache::app_cache_get($cache_key, 'user');
+        if (!$stats) {
+    	
+			$db_user = RC_Loader::load_app_model ('users_model', 'user');
+	        /* 获取会员总数*/
+			$stats['total'] = $db_user->count();
+			RC_Cache::app_cache_set($cache_key, $stats, 'user', 120);//2小时缓存
+        }
 		return $stats;
     }
     

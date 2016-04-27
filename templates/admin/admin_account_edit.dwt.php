@@ -36,13 +36,14 @@
 				</div>
 				<div class="control-group formSep">
 					<label class="control-label">{$lang.pay_mothed}：</label>
-					<div class="controls">
+					<div class="controls no-chzn-container">
 						<select class="w350" name="payment" {if $user_surplus.is_paid} disabled="disabled" {/if}>
 							<option value="">{$lang.please_select}</option>
 							<!-- {foreach from=$payment item=item} -->
 							<option value="{$item.pay_name}" {if $user_surplus.payment eq $item.pay_name} selected="selected" {/if}>{$item.pay_name}</option> 
 							<!-- {/foreach} -->
 						</select>
+						<span class="input-must">{$lang.require_field}</span>
 					</div>
 				</div>
 				<!-- 类型 -->

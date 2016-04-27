@@ -19,11 +19,11 @@ class visitor_module implements ecjia_interface {
 		if (empty($start_date) || empty($end_date)) {
 			EM_Api::outPut(101);
 		}
-		
-		$data = RC_Cache::app_cache_get('admin_stats_visitor_'.$_SESSION['admin_id'], 'api');
+		$cache_key = 'admin_stats_visitor_'.md5($start_date.$end_date);
+		$data = RC_Cache::app_cache_get($cache_key, 'api');
 		if (empty($data)) {
 			$response = visitor($start_date, $end_date);
-			RC_Cache::app_cache_set('admin_stats_visitor_'.$_SESSION['admin_id'], $response, 'api', API_CACHE_TIME);
+			RC_Cache::app_cache_set($cache_key, $response, 'api', 60);
 			//流程逻辑结束
 		} else {
 			$response = $data;

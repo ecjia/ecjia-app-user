@@ -15,7 +15,7 @@ class userinfo_module implements ecjia_interface {
 
 		$db = RC_Loader::load_model('admin_user_model');
 		$role_db = RC_Loader::load_model('role_model');
-		$user_id = EM_Api::$session['uid'];
+		$user_id = $_SESSION['admin_id'];
 		
 		$result = $db->find(array('user_id' => $user_id));
 		

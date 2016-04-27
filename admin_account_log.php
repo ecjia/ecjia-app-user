@@ -1,5 +1,4 @@
 <?php
-
 /**
  * 会员帐户变动记录
  */
@@ -22,14 +21,14 @@ class admin_account_log extends ecjia_admin {
 		RC_Script::enqueue_script('jquery-chosen');
 		RC_Style::enqueue_style('chosen');
 
-		RC_Script::enqueue_script('user_info', RC_App::apps_url('statics/js/user_info.js' , __FILE__));
+		RC_Script::enqueue_script('user_info', RC_App::apps_url('statics/js/user_info.js', __FILE__));
 		//加载生成图表的JQ插件
 		RC_Script::enqueue_script('jquery-peity');
 		
 		$account_log_jslang = array(
-				'change_desc_required'		=> __('请输入账户变动原因！')
+			'change_desc_required' => __('请输入账户变动原因！')
 		);
-		RC_Script::localize_script( 'user_info' , 'account_log_jslang' , $account_log_jslang );
+		RC_Script::localize_script('user_info', 'account_log_jslang', $account_log_jslang );
 		
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('会员列表'), RC_Uri::url('user/admin/init')));
 	}
@@ -37,30 +36,27 @@ class admin_account_log extends ecjia_admin {
 	/**
 	 * 账户明细列表
 	 */
-	public function init()
-	{
+	public function init() {
 		$this->admin_priv('account_manage');
 		
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('会员账户变动明细')));
-		ecjia_screen::get_current_screen()->add_help_tab( array(
-		'id'		=> 'overview',
-		'title'		=> __('概述'),
-		'content'	=>
-		'<p>' . __('欢迎访问ECJia智能后台会员账户变动明细页面，可以在此页面查看相应会员账户变动明细信息。') . '</p>'
-		) );
+		ecjia_screen::get_current_screen()->add_help_tab(array(
+			'id'		=> 'overview',
+			'title'		=> __('概述'),
+			'content'	=>
+			'<p>' . __('欢迎访问ECJia智能后台会员账户变动明细页面，可以在此页面查看相应会员账户变动明细信息。') . '</p>'
+		));
 		
 		ecjia_screen::get_current_screen()->set_help_sidebar(
-		'<p><strong>' . __('更多信息:') . '</strong></p>' .
-		'<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:会员列表#.E6.9F.A5.E7.9C.8B.E8.B4.A6.E7.9B.AE.E6.98.8E.E7.BB.86" target="_blank">关于会员账户变动明细帮助文档</a>') . '</p>'
+			'<p><strong>' . __('更多信息:') . '</strong></p>' .
+			'<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:会员列表#.E6.9F.A5.E7.9C.8B.E8.B4.A6.E7.9B.AE.E6.98.8E.E7.BB.86" target="_blank">关于会员账户变动明细帮助文档</a>') . '</p>'
 		);
 		
 		/* 检查参数 */
 		$user_id = empty($_REQUEST['user_id']) ? 0 : intval($_REQUEST['user_id']);
-		
 		$user = get_user_info($user_id);
 
-		if (empty($_REQUEST['account_type']) || 
-		!in_array($_REQUEST['account_type'],array('user_money', 'frozen_money', 'rank_points', 'pay_points'))) {
+		if (empty($_REQUEST['account_type']) || !in_array($_REQUEST['account_type'], array('user_money', 'frozen_money', 'rank_points', 'pay_points'))) {
 			$account_type = '';
 		} else {
 			$account_type = $_REQUEST['account_type'];
@@ -76,31 +72,28 @@ class admin_account_log extends ecjia_admin {
 		$this->assign('form_action',	RC_Uri::url('user/admin_account_log/init', array('user_id' => $user_id)));
 		$this->assign_lang();
 		$this->display('account_log_list.dwt');
-
 	}
-	
 	
 	/**
 	 * 调节帐户
 	 */
-	public function edit()
-	{
+	public function edit() {
 		$this->admin_priv('account_manage');
 		/* 检查参数 */
 		$user_id = empty($_REQUEST['user_id']) ? 0 : intval($_REQUEST['user_id']);
 		
-		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('会员账户变动明细') , RC_Uri::url('user/admin_account_log/init' , 'user_id='.$user_id)));
+		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('会员账户变动明细') , RC_Uri::url('user/admin_account_log/init', 'user_id='.$user_id)));
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('调节会员账户')));
-		ecjia_screen::get_current_screen()->add_help_tab( array(
-		'id'		=> 'overview',
-		'title'		=> __('概述'),
-		'content'	=>
-		'<p>' . __('欢迎访问ECJia智能后台调节会员帐户页面，可以在此页面编辑相应会员账户信息。') . '</p>'
-		) );
+		ecjia_screen::get_current_screen()->add_help_tab(array(
+			'id'		=> 'overview',
+			'title'		=> __('概述'),
+			'content'	=>
+			'<p>' . __('欢迎访问ECJia智能后台调节会员帐户页面，可以在此页面编辑相应会员账户信息。') . '</p>'
+		));
 		
 		ecjia_screen::get_current_screen()->set_help_sidebar(
-		'<p><strong>' . __('更多信息:') . '</strong></p>' .
-		'<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:会员列表#.E6.9F.A5.E7.9C.8B.E8.B4.A6.E7.9B.AE.E6.98.8E.E7.BB.86" target="_blank">关于调节会员帐户帮助文档</a>') . '</p>'
+			'<p><strong>' . __('更多信息:') . '</strong></p>' .
+			'<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:会员列表#.E6.9F.A5.E7.9C.8B.E8.B4.A6.E7.9B.AE.E6.98.8E.E7.BB.86" target="_blank">关于调节会员帐户帮助文档</a>') . '</p>'
 		);
 		
 		/* 检查权限 */
@@ -111,8 +104,8 @@ class admin_account_log extends ecjia_admin {
 		/* 显示模板 */
 		$this->assign('user',			$user);
 		$this->assign('ur_here',		RC_Lang::lang('add_account'));
-		$this->assign('action_link',	array('href' => RC_Uri::url('user/admin_account_log/init' , array('user_id' => $user_id)) , 'text' => RC_Lang::lang('account_list')));
-		$this->assign('form_action',	RC_Uri::url('user/admin_account_log/update' , array('user_id' => $user_id)));
+		$this->assign('action_link',	array('href' => RC_Uri::url('user/admin_account_log/init', array('user_id' => $user_id)), 'text' => RC_Lang::lang('account_list')));
+		$this->assign('form_action',	RC_Uri::url('user/admin_account_log/update', array('user_id' => $user_id)));
 		$this->assign_lang();
 		$this->display('account_log_edit.dwt');
 	}
@@ -120,12 +113,10 @@ class admin_account_log extends ecjia_admin {
 	/**
 	 * 调节会员账户
 	 */
-	public function update()
-	{
-		$this->admin_priv('account_manage' , ecjia::MSGTYPE_JSON);
+	public function update() {
+		$this->admin_priv('account_manage', ecjia::MSGTYPE_JSON);
 
 		$user_id = empty($_REQUEST['user_id']) ? 0 : intval($_REQUEST['user_id']);
-		
 		$user = get_user_info($user_id);
 		
 		if (empty($user)) {			
@@ -197,10 +188,9 @@ class admin_account_log extends ecjia_admin {
 		}
 		
 		/* 提示信息 */
-		$links[] = array('href' => RC_Uri::url('user/admin_account_log/init' , array('user_id' => $user_id)) , 'text' => RC_Lang::lang('account_list'));
-		$this->showmessage(RC_Lang::lang('log_account_change_ok') , ecjia_admin::MSGTYPE_JSON | ecjia_admin::MSGSTAT_SUCCESS , array('url' => RC_Uri::url('user/admin_account_log/edit' , array('user_id' => $user_id)),'links' => $links));
+		$links[] = array('href' => RC_Uri::url('user/admin_account_log/init', array('user_id' => $user_id)), 'text' => RC_Lang::lang('account_list'));
+		$this->showmessage(RC_Lang::lang('log_account_change_ok'), ecjia_admin::MSGTYPE_JSON | ecjia_admin::MSGSTAT_SUCCESS, array('url' => RC_Uri::url('user/admin_account_log/edit', array('user_id' => $user_id)),'links' => $links));
 	}
-
 }
 
 // end

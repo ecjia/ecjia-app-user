@@ -4,20 +4,18 @@
 */
 defined('IN_ECJIA') or exit('No permission resources.');
 
-class admin_account_manage extends ecjia_admin 
-{
+class admin_account_manage extends ecjia_admin {
 	private $db_account_log;
 	private $db_order_info;
-	public function __construct() 
-	{
+	public function __construct() {
 		parent::__construct();
 		
 		RC_Lang::load('user_account_manage');
 		
 		RC_Loader::load_app_func('user');
-		RC_Loader::load_app_func('common','goods');
-		$this->db_account_log	= RC_Loader::load_app_model('account_log_model');
-		$this->db_order_info	= RC_Loader::load_app_model('order_info_model');
+		RC_Loader::load_app_func('common', 'goods');
+		$this->db_account_log	= RC_Loader::load_app_model('account_log_model', 'user');
+		$this->db_order_info	= RC_Loader::load_app_model('order_info_model', 'user');
 		
 		RC_Script::enqueue_script('smoke');
 		RC_Script::enqueue_script('jquery-chosen');
@@ -33,30 +31,29 @@ class admin_account_manage extends ecjia_admin
 		RC_Script::enqueue_script('jquery-peity');
 		
 		$surplus_jslang = array(
-			'keywords_required'			=> __('请先输入关键字！'),
+			'keywords_required' => __('请先输入关键字！'),
 		);
-		RC_Script::localize_script( 'user_surplus' , 'surplus_jslang' , $surplus_jslang );
+		RC_Script::localize_script( 'user_surplus', 'surplus_jslang' , $surplus_jslang );
 	}
 
 	/**
 	 * 资金管理
 	 */
-	public function init()
-	{
+	public function init() {
 
 		$this->admin_priv('account_manage');
 		
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('资金管理')));
-		ecjia_screen::get_current_screen()->add_help_tab( array(
-		'id'		=> 'overview',
-		'title'		=> __('概述'),
-		'content'	=>
-		'<p>' . __('欢迎访问ECJia智能后台资金管理页面，系统中所有的资金管理都会显示在此页面中。') . '</p>'
+		ecjia_screen::get_current_screen()->add_help_tab(array(
+			'id'		=> 'overview',
+			'title'		=> __('概述'),
+			'content'	=>
+			'<p>' . __('欢迎访问ECJia智能后台资金管理页面，系统中所有的资金管理都会显示在此页面中。') . '</p>'
 		) );
 		
 		ecjia_screen::get_current_screen()->set_help_sidebar(
-		'<p><strong>' . __('更多信息:') . '</strong></p>' .
-		'<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:资金管理" target="_blank">关于资金管理帮助文档</a>') . '</p>'
+			'<p><strong>' . __('更多信息:') . '</strong></p>' .
+			'<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:资金管理" target="_blank">关于资金管理帮助文档</a>') . '</p>'
 		);
 		
 		/* 时间参数 */
@@ -102,27 +99,25 @@ class admin_account_manage extends ecjia_admin
 	/**
 	 * 积分余额订单
 	 */
-	public function surplus()
-	{
+	public function surplus() {
 
 		$this->admin_priv('account_manage');
 		
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('资金管理') , RC_Uri::url('user/admin_account_manage/init')));
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('积分余额订单')));
-		ecjia_screen::get_current_screen()->add_help_tab( array(
-		'id'		=> 'overview',
-		'title'		=> __('概述'),
-		'content'	=>
-		'<p>' . __('欢迎访问ECJia智能后台积分余额订单页面，系统中所有的积分余额订单都会显示在此列表中。') . '</p>'
-		) );
+		ecjia_screen::get_current_screen()->add_help_tab(array(
+			'id'		=> 'overview',
+			'title'		=> __('概述'),
+			'content'	=>
+			'<p>' . __('欢迎访问ECJia智能后台积分余额订单页面，系统中所有的积分余额订单都会显示在此列表中。') . '</p>'
+		));
 		
 		ecjia_screen::get_current_screen()->set_help_sidebar(
-		'<p><strong>' . __('更多信息:') . '</strong></p>' .
-		'<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:资金管理" target="_blank">关于积分余额订单帮助文档</a>') . '</p>'
+			'<p><strong>' . __('更多信息:') . '</strong></p>' .
+			'<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:资金管理" target="_blank">关于积分余额订单帮助文档</a>') . '</p>'
 		);
 		
 		$order_list = get_user_order($_REQUEST);
-		
 		/* 赋值到模板 */
 		$this->assign('order_list',		$order_list);
 		$this->assign('ur_here',		__('积分余额订单'));
@@ -132,7 +127,6 @@ class admin_account_manage extends ecjia_admin
 		$this->assign_lang();
 		$this->display('user_surplus_list.dwt');
 	}
-	
 }
 
 // end 
