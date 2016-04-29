@@ -26,12 +26,12 @@ class user_address_manage_api extends Component_Event_Api {
         }
         
         if (!empty($address['province']) && !empty($address['city']) && !empty($address['district']) && !empty($address['address'])) {
-        	$db_region = RC_Loader::load_app_model('region_model', 'user');
+        	$db_region = RC_Model::model('region_model');
         	$region_name = $db_region->where(array('region_id' => array('in' => $address['province'], $address['city'], $address['district'])))->order('region_type')->select();
         	 
-        	$province_name = $region_name[0]['region_name'];
-        	$city_name = $region_name[1]['region_name'];
-        	$district_name = $region_name[2]['region_name'];
+        	$province_name	= $region_name[0]['region_name'];
+        	$city_name		= $region_name[1]['region_name'];
+        	$district_name	= $region_name[2]['region_name'];
         	$consignee_address = $province_name.'省'.$city_name.'市'.$address['address'];
         
         	$shop_point = file_get_contents("http://api.map.baidu.com/geocoder/v2/?address='".$consignee_address."'&output=json&ak=E70324b6f5f4222eb1798c8db58a017b");

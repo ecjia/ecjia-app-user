@@ -21,8 +21,8 @@ class update_module implements ecjia_interface {
 		}
 		
 		$address['consignee']     = isset($address['consignee']) ? trim($address['consignee']) : '';
-		$address['country']       = isset($address['country']) ? intval($address['country']) : '';
-		$address['province']      = isset($address['province']) ? intval($address['province']) : '';
+// 		$address['country']       = isset($address['country']) ? intval($address['country']) : '';
+// 		$address['province']      = isset($address['province']) ? intval($address['province']) : '';
 		$address['city']      	  = isset($address['city']) ? intval($address['city']) : '';
 		$address['district']      = isset($address['district']) ? intval($address['district']) : '';
 		$address['email']         = !empty($address['email']) ? trim($address['email']) : '';
@@ -33,6 +33,9 @@ class update_module implements ecjia_interface {
 		$address['default']       = (isset($address['set_default']) && $address['set_default'] == 'true') ? 1 : 0;
 		$address['sign_building'] = isset($address['sign_building']) ? trim($address['sign_building']) : '';
 		$address['tel'] 		  = isset($address['tel']) ? trim($address['tel']) : '';
+		
+		$address['province']	  = RC_Model::model('region_model')->where(array('region_id' => $address['city']))->get_field('parent_id');
+		$address['country']		  = RC_Model::model('region_model')->where(array('region_id' => $address['province']))->get_field('parent_id');
 		
 		$result = RC_Api::api('user', 'address_manage', $address);
 		if(is_ecjia_error($result)){
