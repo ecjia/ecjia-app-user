@@ -25,7 +25,7 @@ class user_address_manage_api extends Component_Event_Api {
         	}
         }
         
-        if (!empty($address['province']) && !empty($address['city']) && !empty($address['address'])) {
+        if (!empty($address['province']) && !empty($address['city']) && !empty($address['address']) && empty($address['location'])) {
         	$db_region = RC_Model::model('region_model');
         	$region_name = $db_region->where(array('region_id' => array('in' => $address['province'], $address['city'], $address['district'])))->order('region_type')->select();
         	 
@@ -41,11 +41,13 @@ class user_address_manage_api extends Component_Event_Api {
         		$shop_point_result = $shop_point->result;
         		$location = $shop_point_result->location;
         
-        		$address['longitude'] = $location->lng;
-        		$address['latitude'] = $location->lat;
-//         		$geohash = RC_Loader::load_app_class('geohash', 'shipping');
-//         		$address['geohash'] = $geohash->encode($address['latitude'], $address['longitude']);
+        		$address['longitude']	= $location->lng;
+        		$address['latitude']	= $location->lat;
+        		unset($address['location']);
         	}
+        } else {
+        	$address['longitude']	= $address['location']['longitude'];
+        	$address['latitude']	= $address['location']['latitude'];
         }
      
         /* 获取用户地址 */
