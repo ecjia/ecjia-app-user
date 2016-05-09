@@ -190,7 +190,7 @@ class admin extends ecjia_admin {
 		}
 
 		/* 注册送积分 */
-		if (ecjia::config('register_points',ecjia::CONFIG_EXISTS)) {
+		if (ecjia::config('register_points', ecjia::CONFIG_EXISTS)) {
 			change_account_log($_SESSION['user_id'] , 0 , 0 , ecjia::config('register_points'), ecjia::config('register_points'), RC_Lang::lang('register_points'));
 		}
 
@@ -476,7 +476,7 @@ class admin extends ecjia_admin {
 		ecjia_admin::admin_log($username, 'edit', 'users');
 
 		/* 提示信息 */
-		$this->showmessage(__('会员名')."[ ". $username ." ]".__('编辑成功！'), ecjia_admin::MSGTYPE_JSON | ecjia_admin::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('user/admin/edit', "id=$user_id")));
+		$this->showmessage(__('会员名')."[ ". $username ." ]".__('编辑成功！'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('user/admin/edit', "id=$user_id")));
 	}
 	
 	/**
@@ -593,9 +593,9 @@ class admin extends ecjia_admin {
 				ecjia_admin::admin_log($row['user_name'] , 'batch_remove', 'users');
 			}		
 			
-			$this->showmessage(sprintf(RC_Lang::lang('batch_remove_success'), $count), ecjia_admin::MSGTYPE_JSON | ecjia_admin::MSGSTAT_SUCCESS , array('pjaxurl' => RC_Uri::url('user/admin/init')));
+			$this->showmessage(sprintf(RC_Lang::lang('batch_remove_success'), $count), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS , array('pjaxurl' => RC_Uri::url('user/admin/init')));
 		} else {
-			$this->showmessage(RC_Lang::lang('no_select_user'), ecjia_admin::MSGTYPE_JSON | ecjia_admin::MSGSTAT_ERROR);
+			$this->showmessage(RC_Lang::lang('no_select_user'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 	}
 	

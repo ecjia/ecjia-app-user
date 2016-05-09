@@ -153,11 +153,11 @@ class admin_account extends ecjia_admin {
 		$user_id = $this->db_users->where(array('user_name' => $username))->get_field('user_id');
 		/* 此会员是否存在 */
 		if ($user_id == 0) {
-			$this->showmessage(RC_Lang::lang('username_not_exist'), ecjia_admin::MSGTYPE_JSON | ecjia_admin::MSGSTAT_ERROR);
+			$this->showmessage(RC_Lang::lang('username_not_exist'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 		
 		if (empty($payment)) {
-			$this->showmessage(__('请选择支付方式'), ecjia_admin::MSGTYPE_JSON | ecjia_admin::MSGSTAT_ERROR);
+			$this->showmessage(__('请选择支付方式'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 		
 		/* 退款，检查余额是否足够 */
@@ -165,7 +165,7 @@ class admin_account extends ecjia_admin {
 			$user_account = get_user_surplus($user_id);
 			/* 如果扣除的余额多于此会员拥有的余额，提示 */
 			if ($amount > $user_account) {
-				$this->showmessage(RC_Lang::lang('surplus_amount_error'), ecjia_admin::MSGTYPE_JSON | ecjia_admin::MSGSTAT_ERROR);
+				$this->showmessage(RC_Lang::lang('surplus_amount_error'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 			}
 		}
 
@@ -234,7 +234,7 @@ class admin_account extends ecjia_admin {
 		$links[1]['text'] = RC_Lang::lang('continue_add');
 		$links[1]['href'] = RC_Uri::url('user/admin_account/add');
 		
-		$this->showmessage(RC_Lang::lang('add_success'), ecjia_admin::MSGTYPE_JSON | ecjia_admin::MSGSTAT_SUCCESS, array('links' => $links, 'pjaxurl' => RC_Uri::url('user/admin_account/init'))); 
+		$this->showmessage(RC_Lang::lang('add_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('links' => $links, 'pjaxurl' => RC_Uri::url('user/admin_account/init'))); 
 	}
 	
 	/**
@@ -313,7 +313,7 @@ class admin_account extends ecjia_admin {
 		$links[0]['text'] = RC_Lang::lang('back_list');
 		$links[0]['href'] = RC_Uri::url('user/admin_account/init');
 
-		$this->showmessage(RC_Lang::lang('edit_success'), ecjia_admin::MSGTYPE_JSON | ecjia_admin::MSGSTAT_SUCCESS, array('links' => $links));
+		$this->showmessage(RC_Lang::lang('edit_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('links' => $links));
 	}
 	
 	/**
@@ -402,7 +402,7 @@ class admin_account extends ecjia_admin {
 				
 				/* 如果扣除的余额多于此会员拥有的余额，提示 */
 				if ($fmt_amount > $user_account) {
-					$this->showmessage(RC_Lang::lang('surplus_amount_error'), ecjia_admin::MSGTYPE_JSON | ecjia_admin::MSGSTAT_ERROR);
+					$this->showmessage(RC_Lang::lang('surplus_amount_error'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 				}
 				
 				update_user_account($id, $amount, $admin_note, 1);
@@ -436,7 +436,7 @@ class admin_account extends ecjia_admin {
 		/* 提示信息 */
 		$links[0]['text'] = RC_Lang::lang('back_list');
 		$links[0]['href'] = RC_Uri::url('user/admin_account/init');
-		$this->showmessage(RC_Lang::lang('attradd_succed'), ecjia_admin::MSGTYPE_JSON | ecjia_admin::MSGSTAT_SUCCESS , array('links' => $links));
+		$this->showmessage(RC_Lang::lang('attradd_succed'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS , array('links' => $links));
 
 	}
 	
@@ -499,7 +499,7 @@ class admin_account extends ecjia_admin {
 				$this->showmessage(__('本次删除了').$count.__('条记录！'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('user/admin_account/init')));
 			}
 		} else {
-			$this->showmessage(__('请先选择要操作的项！'), ecjia_admin::MSGTYPE_JSON | ecjia_admin::MSGSTAT_ERROR);
+			$this->showmessage(__('请先选择要操作的项！'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 	}
 }

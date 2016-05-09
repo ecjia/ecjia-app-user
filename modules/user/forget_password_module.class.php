@@ -48,7 +48,7 @@ class forget_password_module implements ecjia_interface {
         		$tpl   = RC_Api::api('sms', 'sms_template', $tpl_name);
         		/* 判断短信模板是否存在*/
         		if (!empty($tpl)) {
-        			ecjia_api::$view_object->assign('action', __('通过短信找回密码'));
+        			ecjia_api::$view_object->assign('action', __('短信找回密码'));
         			ecjia_api::$view_object->assign('code', $code);
         			ecjia_api::$view_object->assign('service_phone', ecjia::config('service_phone'));
         			
