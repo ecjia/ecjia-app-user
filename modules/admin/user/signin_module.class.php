@@ -12,6 +12,7 @@ class signin_module implements ecjia_interface {
 		
 		$username = _POST('username');
 		$password = _POST('password');
+		$device = _POST('device', array());
 		if (empty($username) || empty($password)) {
 			$result = new ecjia_error('login_error', __('您输入的帐号信息不正确。'));
 			EM_Api::outPut($result);
@@ -19,6 +20,24 @@ class signin_module implements ecjia_interface {
 		
 		$db_admin_user = RC_Loader::load_sys_model('admin_user_model');
 		$ec_salt = $db_admin_user->where(array('user_name' => $username))->get_field('ec_salt');
+	
+		/*收银台请求处理*/
+		if (!empty($device) && is_array($device) && $device['code'] == '8001') {
+			$device_id = RC_Model::model('mobile/mobile_device_model')->where(array('device_udid' => $device['device_udid'], 'device_client' => $device['device_client'], 'device_code' => $device['device_code']))->get_field('id');
+			$admin_id = $db_admin_user->where(array('user_name' => $username))->get_field('user_id');
+			$adviser_id = RC_Model::model('achievement/adviser_model')->where(array('admin_id' => $admin_id))->get_field('id');
+			if ($device_id > 0) {
+				RC_Session::set('device_id', $device_id);
+			}
+			if ($adviser_id > 0) {
+				RC_Session::set('adviser_id', $adviser_id);
+			}
+			if (empty($adviser_id) || $adviser_id == '0') {
+				$result = new ecjia_error('login_error', __('您不是收银员。'));
+				EM_Api::outPut($result);
+			}
+		}
+		
 		/* 检查密码是否正确 */
 		if (!empty($ec_salt)) {
 			$row = $db_admin_user->field('user_id, user_name, email, password, last_login, action_list, last_login, suppliers_id, ec_salt, ru_id, role_id')
@@ -27,17 +46,6 @@ class signin_module implements ecjia_interface {
 			$row = $db_admin_user->field('user_id, user_name, email, password, last_login, action_list, last_login, suppliers_id, ec_salt, ru_id, role_id')
 						->find(array('user_name' => $_POST['username'], 'password' => md5($password)));
 		}
-		
-// 		$row = $db_admin_user->where(array('user_name' => $username))->find();
-// 		if (!empty($row['ec_salt'])) {
-// 			if (!($row['user_name'] == $username && $row['password'] == md5(md5($password) . $row['ec_salt']))) {
-// 				$row = null;
-// 			}
-// 		} else {
-// 			if (!($row['user_name'] == $username && $row['password'] == md5($password))) {
-// 				$row = null;
-// 			}
-// 		}
 		
 		if ($row) {
 			// 登录成功
@@ -51,12 +59,6 @@ class signin_module implements ecjia_interface {
 			if (!empty($row['ru_id'])) {
 				RC_Session::set('ru_id', $row['ru_id']);
 			}
-			
-// 			$_SESSION['admin_id']    		= $row['user_id'];
-// 			$_SESSION['admin_name']  		= $row['user_name'];
-// 			$_SESSION['action_list'] 		= $row['action_list'];
-// 			$_SESSION['last_check_order']  	= $row['last_login']; // 用于保存最后一次检查订单的时间
-// 			$_SESSION['suppliers_id'] 		= $row['suppliers_id'];
 			
 			if (empty($row['ec_salt'])) {
 				$ec_salt = rand(1, 9999);
@@ -113,9 +115,6 @@ class signin_module implements ecjia_interface {
 			
 			EM_Api::outPut($out);
 			
-			// 			$ecjia = RC_Loader::load_app_class('ecjiaapi', 'adminapi');
-			// 			$menu = $ecjia->display_admin_sidebar_nav();
-			// 			$out['menu'] = $menu;
 		} else {
 			$result = new ecjia_error('login_error', __('您输入的帐号信息不正确。'));
 			EM_Api::outPut($result);
