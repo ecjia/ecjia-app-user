@@ -15,9 +15,14 @@ class userinfo_module implements ecjia_interface {
 
 		$db = RC_Loader::load_model('admin_user_model');
 		$role_db = RC_Loader::load_model('role_model');
-		$user_id = $_SESSION['admin_id'];
 		
-		$result = $db->find(array('user_id' => $user_id));
+		$result = $db->find(array('user_id' => $_SESSION['admin_id']));
+		
+		if (isset($_SESSION['adviser_id']) && !empty($_SESSION['adviser_id'])) {
+			$adviser_info = RC_Model::model('achievement/adviser_model')->find(array('id' => $_SESSION['adviser_id']));
+			$result['user_name'] = $adviser_info['username'];
+			$result['email']	 = $adviser_info['email'];
+		}
 		
 		$userinfo = array(
 			'id' 		=> $result['user_id'],
