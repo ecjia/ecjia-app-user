@@ -58,7 +58,7 @@ class signin_module implements ecjia_interface {
 			}
 			
 			/* 获取device_id*/
-			$device_id = RC_Model::model('mobile/mobile_device_model')->where(array('device_udid' => $device['device_udid'], 'device_client' => $device['device_client'], 'device_code' => $device['device_code']))->get_field('id');
+			$device_id = RC_Model::model('mobile/mobile_device_model')->where(array('device_udid' => $device['udid'], 'device_client' => $device['client'], 'device_code' => $device['code']))->get_field('id');
 			RC_Session::set('device_id',	$device_id);
 				
 			if ($device['code'] == '8001') {
