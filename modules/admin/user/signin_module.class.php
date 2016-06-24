@@ -17,9 +17,7 @@ class signin_module implements ecjia_interface {
 			$result = new ecjia_error('login_error', __('您输入的帐号信息不正确。'));
 			EM_Api::outPut($result);
 		}
-		$device['code'] = '8001';
-		$device['client'] = 'android';
-		$device['udid'] = '5f3434e351a1c2aaf0e27292851bc1f18bcc0a84';
+
 		/* 收银台请求判断处理*/
 		if (!empty($device) && is_array($device) && $device['code'] == '8001') {
 			$adviser_info = RC_Model::model('achievement/adviser_model')->find(array('username' => $username));
