@@ -35,10 +35,10 @@ class signin_module implements ecjia_interface {
 	
 		/* 检查密码是否正确 */
 		if (!empty($ec_salt)) {
-			$row = RC_Model::model('admin_user_model')->field('user_id, user_name, email, password, last_login, action_list, last_login, suppliers_id, ec_salt, ru_id, role_id')
+			$row = RC_Model::model('admin_user_model')->field('user_id, user_name, email, password, last_login, action_list, last_login, suppliers_id, ec_salt, seller_id, role_id, ru_id')
 						->find(array('user_name' => $username, 'password' => md5(md5($password).$ec_salt)));
 		} else {
-			$row = RC_Model::model('admin_user_model')->field('user_id, user_name, email, password, last_login, action_list, last_login, suppliers_id, ec_salt, ru_id, role_id')
+			$row = RC_Model::model('admin_user_model')->field('user_id, user_name, email, password, last_login, action_list, last_login, suppliers_id, ec_salt, seller_id, role_id, ru_id')
 						->find(array('user_name' => $username, 'password' => md5($password)));
 		}
 		
@@ -55,6 +55,10 @@ class signin_module implements ecjia_interface {
 				RC_Session::set('ru_id', $row['ru_id']);
 			}
 			
+			if (!empty($row['seller_id'])) {
+				RC_Session::set('seller_id', $row['seller_id']);
+			}
+			
 			/* 获取device_id*/
 			$device_id = RC_Model::model('mobile/mobile_device_model')->where(array('device_udid' => $device['udid'], 'device_client' => $device['client'], 'device_code' => $device['code']))->get_field('id');
 			RC_Session::set('device_id',	$device_id);
@@ -62,6 +66,7 @@ class signin_module implements ecjia_interface {
 			if ($device['code'] == '8001') {
 				RC_Session::set('adviser_id',	$adviser_info['id']);
 				RC_Session::set('ru_id', 		$adviser_info['seller_id']);
+				RC_Session::set('seller_id',	$adviser_info['seller_id']);
 				RC_Session::set('admin_name',	$adviser_info['username']);
 			}
 			

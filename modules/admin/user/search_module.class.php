@@ -2,7 +2,7 @@
 defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * 用户查询
- * @author luchongchong
+ * @author will.chen
  *
  */
 class search_module implements ecjia_interface {
@@ -64,8 +64,8 @@ class search_module implements ecjia_interface {
 					$avatar_img = RC_Upload::upload_url().'/data/avatar/'.$dir1.'/'.$dir2.'/'.$dir3.'/'.substr($uid, -2)."_".$filename.'.jpg';
 				}
 				
-				$address = $v['address_id'] > 0 ? $region->where(array('region_id'=>$v['city']))->get_field('region_name')
-				.$region->where(array('region_id'=>$v['district']))->get_field('region_name').$v['address'] : '';
+				$address = $v['address_id'] > 0 ? $region->where(array('region_id' => $v['city']))->get_field('region_name')
+				.$region->where(array('region_id' => $v['district']))->get_field('region_name').$v['address'] : '';
 				$user_search[] = array(
 						'id'			=>	$v['user_id'],
 						'name'			=>	$v['user_name'],
