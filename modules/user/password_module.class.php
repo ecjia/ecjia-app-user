@@ -28,8 +28,9 @@ class password_module implements ecjia_interface {
 			if ($user->edit_user(array('username'=> (empty($code) ? $_SESSION['user_name'] : $user_info['user_name']), 'old_password'=>$old_password, 'password'=>$new_password), empty($code) ? 0 : 1)) {
 	        	$db = RC_Loader::load_app_model('users_model', 'user');
 	        	$db->where(array('user_id' => $user_id))->update(array('ec_salt' => 0));
-	            $user->logout();
-	            RC_Model::model('session_model')->delete(array('user_id' => $user_id));
+	        	$session_db	= RC_Loader::load_model('session_model');
+	        	$session_db->delete(array('userid' => $user_id));
+	        	$user->logout();
 	            return array();
 	        } else {
 	        	$result = new ecjia_error('edit_password_failure', __('您输入的原密码不正确！'));
