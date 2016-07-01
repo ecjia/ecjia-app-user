@@ -8,11 +8,8 @@ defined('IN_ECJIA') or exit('No permission resources.');
 class forget_password_module implements ecjia_interface {
 	
 	public function run(ecjia_api & $api) {
-		/* 判断session_id*/
-		if ( RC_Session::session_id() != EM_Api::$session['sid']) {
-			RC_Session::destroy();
-			RC_Session::init(null, EM_Api::$session['sid']);
-		}
+		
+		EM_Api::authSession(false);
 		
 		$type = _POST('type');
 		$value = _POST('value');
