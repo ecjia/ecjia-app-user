@@ -8,11 +8,7 @@ defined('IN_ECJIA') or exit('No permission resources.');
 class reset_password_module implements ecjia_interface {
 	
 	public function run(ecjia_api & $api) {
-		/* 判断session_id*/
-		if ( RC_Session::session_id() != EM_Api::$session['sid']) {
-            RC_Session::destroy();
-            RC_Session::init(null, EM_Api::$session['sid']);
-        }
+		EM_Api::authSession(false);
         
         $type = _POST('type');
         $value = _POST('value');
@@ -59,6 +55,7 @@ class reset_password_module implements ecjia_interface {
         if ($user->edit_user(array('username'=> $user_info['user_name'], 'old_password' => null, 'password' => $password), $forget_pwd = 1)) {
         	$db->where(array('user_id' => $user_id))->update(array('ec_salt' => 0));
 			$user->logout();
+			RC_Model::model('session_model')->delete(array('user_id' => $user_id));
         }
 		
         RC_Session::delete('forget_code');
