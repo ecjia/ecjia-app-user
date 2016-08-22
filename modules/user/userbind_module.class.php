@@ -9,6 +9,7 @@ class userbind_module implements ecjia_interface {
 	
 	public function run(ecjia_api & $api) {
 		
+		EM_Api::authSession(false);
 		$type = _POST('type');
 		$value = _POST('value');
 		
