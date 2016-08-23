@@ -9,6 +9,11 @@ class users_model extends Component_Model_Model {
 		$this->table_name = 'users';
 		parent::__construct();
 	}
+	
+	public function get_one_field($where, $field='*') {
+		$field = $this->where($where)->get_field($field);
+		return $field;
+	}
 }
 
 // end
