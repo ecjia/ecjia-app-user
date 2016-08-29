@@ -48,7 +48,7 @@ class signin_module implements ecjia_interface {
 		
 				'user' => $user_info
 		);
-		define('SESS_ID', RC_Session::session_id());
+		
 		update_user_info();
 		recalculate_price();
 		
