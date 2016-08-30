@@ -365,12 +365,9 @@ class admin extends ecjia_admin {
 		$this->assign('form_act',		'update');
 		$this->assign('action',			'edit');
 		$this->assign('user',			$user);
+		
 		$this->assign_lang();
 		$this->display('user_edit.dwt');
-		
-// 		$users=& init_users();
-// 		$user = $users->get_user_info($row['user_name']);
-		
 	}	
 	
 	/**
@@ -415,17 +412,15 @@ class admin extends ecjia_admin {
 			if (preg_match("/ /" , $password)) {
 				$this->showmessage(RC_Lang::lang('js_languages/passwd_balnk'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 			}
+			
+			$this->db_user->where(array('user_id' => $user_id))->update(array('ec_salt' => '0'));
 		}
 	
 		/* 信用额度*/
 		if (!is_numeric($credit_line) || $credit_line < 0 ) {
 			$this->showmessage(RC_Lang::lang('js_languages/credit_line'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
-
-		if (!empty($password)) {
-			$data = array('ec_salt' => '0');
-			$this->db_user->where(array('user_id' => $user_id))->update($data);
-		}
+		
 		/* 更新用户扩展字段的数据 */
 		$fields_arr = $this->db_reg_fields->field('id')->where(array('type' => 0, 'display' => 1))->order(array('dis_order' => 'asc', 'id' => 'asc'))->select();
 
