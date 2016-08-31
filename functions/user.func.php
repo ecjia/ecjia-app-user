@@ -93,14 +93,21 @@ function get_account_list($args = array()) {
 	if ($filter['keywords']) {
 		$where['u.user_name'] = array('like' => '%'.mysql_like_quote($filter['keywords']).'%');
 	}
+	
 	/*　时间过滤　*/
-	if (!empty($args['start_date'])) {
-		$where ['add_time'] = array('egt' => RC_Time::local_strtotime($args['start_date'])) ;
+	$start_date = RC_Time::local_strtotime($args['start_date']);
+	$end_date = RC_Time::local_strtotime($args['end_date']) + 86400;
+	
+	if (!empty($args['start_date']) && !empty($args['end_date'])) {
+		$where['add_time'] = array('egt' => $start_date, 'elt' => $end_date);
+	} else {
+		if (!empty($args['start_date'])) {
+			$where['add_time'] = array('egt' => $start_date);
+		} elseif (!empty($args['end_date'])) {
+			$where['add_time'] = array('elt' => $end_date);
+		}
 	}
-	if (!empty($args['end_date'])) {
-		$where ['add_time'] = array('elt' => RC_Time::local_strtotime($args['end_date'] + 86400)) ;
-	}
-		
+	
 	$count = $dbview->join('users')->where($where)->count();
 	
 	/* 实例化分页 */

@@ -22,34 +22,34 @@
 		<div class="accordion-group">
 			<div class="accordion-heading">
 				<div class="accordion-toggle acc-in" data-toggle="collapse" data-target="#telescopic1">
-					<strong>{t}会员信息{/t}</strong>
+					<strong>{lang key='user::user_account.user_information'}</strong>
 				</div>
 			</div>
 			<div class="accordion-body in collapse" id="telescopic1">
 				<table class="table table-oddtd m_b0">
 					<tbody class="first-td-no-leftbd">
 						<tr>
-							<td><div align="right"><strong>{$lang.user_id}：</strong></div></td>
+							<td><div align="right"><strong>{lang key='user::user_account.label_user_id'}</strong></div></td>
 							<td>
 								<!-- {if $user_name} -->
 								{$user_name}
 								<!-- {else} -->
-								{t}匿名会员{/t}
+								{lang key='user::user_account.anonymous_member'}
 								<!-- {/if} -->
 							</td>
-							<td><div align="right"><strong>{$lang.surplus_amount}：</strong></div></td>
-							<td>{t}￥{/t}{$surplus.amount}{t}元{/t}</td>				
+							<td><div align="right"><strong>{lang key='user::user_account.label_surplus_amount'}</strong></div></td>
+							<td>￥{$surplus.amount}{lang key='user::user_account.yuan'}</td>				
 						</tr>
 						<tr>
-							<td><div align="right"><strong>{$lang.process_type}：</strong></div></td>
+							<td><div align="right"><strong>{lang key='user::user_account.label_process_type'}</strong></div></td>
 							<td>
 								<!-- {if $surplus.process_type eq 0} -->
-								<b class="ecjiafc-f00">{t}充值{/t}</b>
+								<b class="ecjiafc-f00">{lang key='user::user_account.deposit'}</b>
 								<!-- {else} -->
-								{t}提现{/t}
+								{lang key='user::user_account.withdraw'}
 								<!-- {/if} -->
 							</td>
-							<td><div align="right"><strong>{$lang.pay_mothed}：</strong></div></td>
+							<td><div align="right"><strong>{lang key='user::user_account.label_pay_mothed'}</strong></div></td>
 							<td>
 								<!-- {if $surplus.payment} -->
 								{$surplus.payment}
@@ -58,7 +58,7 @@
 						</tr>
 						<!-- {if $is_check} -->
 						<tr>
-							<td><div align="right"><strong>{$lang.surplus_desc}：</strong></div></td>
+							<td><div align="right"><strong>{lang key='user::user_account.label_surplus_desc'}</strong></div></td>
 							<td colspan="3">{$surplus.user_note}</td>
 						</tr>
 						<!-- {/if} -->
@@ -74,7 +74,7 @@
 	<div class="accordion-group">
 			<div class="accordion-heading">
 				<div class="accordion-toggle acc-in" data-toggle="collapse" data-target="#telescopic2">
-					<strong>{if $is_check}{t}到款审核{/t}{else}{t}编辑备注{/t}{/if}</strong>
+					<strong>{if $is_check}{lang key='user::user_account.check'}{else}{lang key='user::user_account.edit_remark'}{/if}</strong>
 				</div>
 			</div>
 			<div class="accordion-body in collapse" id="telescopic2">
@@ -83,32 +83,37 @@
 						<tbody class="first-td-no-leftbd">
 							<!-- {if !$is_check} -->
 							<tr>
-								<td><div align="right"><strong>{$lang.surplus_desc}：</strong></div></td>
+								<td><div align="right"><strong>{lang key='user::user_account.label_surplus_desc'}</strong></div></td>
 								<td colspan="3">
 									<textarea class="span10" name="user_note" cols="55" rows="6">{$surplus.user_note}</textarea>
 								</td>
 							</tr>
 							<!-- {/if} -->
 							<tr>
-								<td><div align="right"><strong>{$lang.surplus_notic}：</strong></div></td>
+								<td><div align="right"><strong>{lang key='user::user_account.label_surplus_notic'}</strong></div></td>
 								<td colspan="3">
 									<textarea class="span10" name="admin_note" cols="55" rows="6">{$surplus.admin_note}</textarea>
 								</td>
 							</tr>
 							<tr>
-								<td><div align="right"><strong>{$lang.status}：</strong></div></td>
+								<td><div align="right"><strong>{lang key='user::user_account.label_status'}</strong></div></td>
 								<td>
-									<input type="radio" name="is_paid" value="0" {if $surplus.is_paid eq 0}checked="true"{/if} {if !$is_check}disabled="true"{/if} /><span>{$lang.unconfirm}</span>
-									<input type="radio" name="is_paid" value="1" {if $surplus.is_paid eq 1}checked="true"{/if} {if !$is_check}disabled="true"{/if} /><span>{$lang.confirm}</span>
-									<input type="radio" name="is_paid" value="2" {if $surplus.is_paid eq 2}checked="true"{/if} {if !$is_check}disabled="true"{/if} /><span>{$lang.cancel}</span>
+									<input type="radio" name="is_paid" value="0" {if $surplus.is_paid eq 0}checked="true"{/if} {if !$is_check}disabled="true"{/if} /><span>{lang key='user::user_account.unconfirm'}</span>
+									<input type="radio" name="is_paid" value="1" {if $surplus.is_paid eq 1}checked="true"{/if} {if !$is_check}disabled="true"{/if} /><span>{lang key='user::user_account.confirm'}</span>
+									<input type="radio" name="is_paid" value="2" {if $surplus.is_paid eq 2}checked="true"{/if} {if !$is_check}disabled="true"{/if} /><span>{lang key='user::user_account.cancel'}</span>
 								</td>
 							</tr>
 							<tr>
 								<td><div align="right"></div></td>
 								<td>
+								{if $id}
 									<input type="hidden" name="id" value="{$id}" />
-									<input class="btn btn-gebo" type="submit" value="{$lang.button_submit}" />&nbsp;&nbsp;&nbsp;
-									<input class="btn" type="reset" value="{$lang.button_reset}" />
+									<input type="hidden" name="user_name" value="{$user_name}" />
+									<input class="btn btn-gebo" type="submit" value="{lang key='user::user_account.submit_update'}" />
+								{else}
+									<input class="btn btn-gebo" type="submit" value="{lang key='system::system.button_submit'}" />
+								{/if}
+								
 								</td>
 							</tr>
 						</tbody>
@@ -118,4 +123,5 @@
 		</div>
 	</div>
 </div>
+
 <!-- {/block} -->

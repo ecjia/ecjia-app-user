@@ -34,7 +34,7 @@ $LANG['user_money'] 			= '用户可用资金';
 $LANG['frozen_money'] 			= '用户冻结资金';
 $LANG['surplus_info'] 			= '余额使用信息';
 $LANG['order_surplus'] 			= '交易使用余额';
-$LANG['integral_money'] 		= '积分使用余额';
+// $LANG['integral_money'] 		= '积分使用余额';
 $LANG['view'] 					= '查看';
 
 // end

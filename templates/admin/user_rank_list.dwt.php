@@ -14,13 +14,13 @@
 	<table class="table table-striped">
 		<thead>
 			<tr>
-				<th>{$lang.rank_name}</th>
-				<th>{$lang.integral_min}</th>
-				<th>{$lang.integral_max}</th>
-				<th>{$lang.discount}(%)</th>
-				<th>{$lang.show_price_short}</th>
-				<th>{$lang.special_rank}</th>
-				<th>{$lang.handler}</th>
+				<th>{lang key='user::user_rank.rank_name'}</th>
+				<th class="w100">{lang key='user::user_rank.integral_min'}</th>
+				<th class="w100">{lang key='user::user_rank.integral_max'}</th>
+				<th class="w100">{lang key='user::user_rank.discount'}(%)</th>
+				<th class="w120">{lang key='user::user_rank.show_price_short'}</th>
+				<th class="w120">{lang key='user::user_rank.special_rank'}</th>
+				<th class="w80">{lang key='system::system.handler'}</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -28,39 +28,39 @@
 			<tr>
 				<td>
 					<!-- {if $rank.rank_name} -->
-					<span class="cursor_pointer" data-trigger="editable" data-url="{url path='user/admin_rank/edit_name'}" data-name="rank_name" data-pk="{$rank.rank_id}" data-title="{t}编辑会员名称{/t}">{$rank.rank_name}</span>
+					<span class="cursor_pointer" data-trigger="editable" data-url="{url path='user/admin_rank/edit_name'}" data-name="rank_name" data-pk="{$rank.rank_id}" data-title="{lang key='user::user_rank.edit_user_name'}">{$rank.rank_name}</span>
 					<!-- {/if} -->
 				</td>
 				<td>
 					<!-- {if $rank.special_rank eq 1} -->
 						<span>{$rank.min_points}</span>
 					<!-- {else} -->
-						<span class="cursor_pointer" data-trigger="editable" data-url="{url path='user/admin_rank/edit_min_points'}" data-name="min_points" data-pk="{$rank.rank_id}" data-title="{t}编辑积分下限{/t}">{$rank.min_points}</span>
+						<span class="cursor_pointer" data-trigger="editable" data-url="{url path='user/admin_rank/edit_min_points'}" data-name="min_points" data-pk="{$rank.rank_id}" data-title="{lang key='user::user_rank.edit_integral_min'}">{$rank.min_points}</span>
 					<!-- {/if} -->
 				</td>
 				<td>
 					<!-- {if $rank.special_rank eq 1} -->
 						<span>{$rank.max_points}</span>
 					<!-- {else} -->
-						<span class="cursor_pointer" data-trigger="editable" data-url="{url path='user/admin_rank/edit_max_points'}" data-name="max_points" data-pk="{$rank.rank_id}" data-title="{t}编辑积分上限{/t}">{$rank.max_points}</span>
+						<span class="cursor_pointer" data-trigger="editable" data-url="{url path='user/admin_rank/edit_max_points'}" data-name="max_points" data-pk="{$rank.rank_id}" data-title="{lang key='user::user_rank.edit_integral_max'}">{$rank.max_points}</span>
 					<!-- {/if} -->
 				</td>
 				<td>
-					<span class="cursor_pointer" data-trigger="editable" data-url="{url path='user/admin_rank/edit_discount'}" data-name="discount" data-pk="{$rank.rank_id}" data-title="{t}编辑初始折扣率{/t}">{$rank.discount}</span>
+					<span class="cursor_pointer" data-trigger="editable" data-url="{url path='user/admin_rank/edit_discount'}" data-name="discount" data-pk="{$rank.rank_id}" data-title="{lang key='user::user_rank.edit_discount'}">{$rank.discount}</span>
 				</td>
 				<td>
-					<i class="cursor_pointer {if $rank.show_price}fontello-icon-ok{else}fontello-icon-cancel{/if}" data-trigger="toggleState" data-url="{url path='user/admin_rank/toggle_showprice'}" data-id="{$rank.rank_id}" title="点击切换状态"></i>
+					<i class="cursor_pointer {if $rank.show_price}fontello-icon-ok{else}fontello-icon-cancel{/if}" data-trigger="toggleState" data-url="{url path='user/admin_rank/toggle_showprice'}" data-id="{$rank.rank_id}" title="{lang key='user::user_rank.click_switch_status'}"></i>
 				</td>
 				<td>
-					<i class="cursor_pointer {if $rank.special_rank}fontello-icon-ok{else}fontello-icon-cancel{/if}" data-trigger="toggleState" data-url="{url path='user/admin_rank/toggle_special'}" data-id="{$rank.rank_id}" title="点击切换状态"></i>
+					<i class="cursor_pointer {if $rank.special_rank}fontello-icon-ok{else}fontello-icon-cancel{/if}" data-trigger="toggleState" data-url="{url path='user/admin_rank/toggle_special'}" data-id="{$rank.rank_id}" title="{lang key='user::user_rank.click_switch_status'}"></i>
 				</td>
 				<td align="center">
-					<a class="data-pjax no-underline" href='{url path="user/admin_rank/edit" args="id={$rank.rank_id}"}' title="{$lang.edit}"><i class="fontello-icon-edit"></i></a>
-					<a class="ajaxremove no-underline" data-toggle="ajaxremove" data-msg='{t name="{$rank.rank_name}"}您确定要删除会员等级[ %1 ]吗？{/t}' href='{url path="user/admin_rank/remove" args="id={$rank.rank_id}"}' title="{t}移除{/t}"><i class="fontello-icon-trash"></i></a>
+					<a class="data-pjax no-underline" href='{url path="user/admin_rank/edit" args="id={$rank.rank_id}"}' title="{lang key='system::system.edit'}"><i class="fontello-icon-edit"></i></a>
+					<a class="ajaxremove no-underline" data-toggle="ajaxremove" data-msg="{lang key='user::user_rank.delete_rank_confirm'}" href='{url path="user/admin_rank/remove" args="id={$rank.rank_id}"}' title="{lang key='user::user_rank.js_languages.lang_remove'}"><i class="fontello-icon-trash"></i></a>
 				</td>
 			</tr>
 			<!-- {foreachelse} -->
-			<tr><td class="no-records" colspan="10">{$lang.no_records}</td></tr>
+			<tr><td class="no-records" colspan="10">{lang key='system::system.no_records'}</td></tr>
 			<!-- {/foreach} -->
 		</tbody>
 	</table>

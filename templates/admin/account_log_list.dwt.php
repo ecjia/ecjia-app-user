@@ -10,10 +10,8 @@
 <!-- {block name="main_content"} -->
 
 <h3 class="heading">
-	<strong>{t}会员账户信息{/t}</strong>
-	
-	<small>（{$lang.label_user_name}{$user.user_name}）</small>
-	
+	<strong>{lang key='user::account_log.account_desc'}</strong>
+	<small>（{lang key='user::account_log.label_user_name'}{$user.user_name}）</small>
 	<!-- {if $action_link} -->
 	<a href="{$action_link.href}" class="btn plus_or_reply data-pjax" ><i class="fontello-icon-dollar"></i>{$action_link.text}</a>
 	<!-- {/if} -->	
@@ -26,7 +24,7 @@
 				<div class="ov_group">
 					<div class="p_line_up p_canvas">3,5,9,7,12,8,16</div>
 					<div class="ov_text">
-						{$lang.label_user_money}<br/>
+						{lang key='user::account_log.label_user_money'}<br/>
 						<span class="ecjiafc-0000FF">{$user.formated_user_money}</span>
 					</div>
 				</div>
@@ -39,7 +37,7 @@
 				<div class="ov_group">
 					<div class="p_line_down p_canvas">20,16,14,18,15,14,14,13,12,10,10,8</div>
 					<div class="ov_text">
-						{$lang.label_frozen_money}<br/>
+						{lang key='user::account_log.label_frozen_money'}<br/>
 						<span class="ecjiafc-FF0000">{$user.formated_frozen_money}</span>
 					</div>
 				</div>
@@ -52,7 +50,7 @@
 				<div class="ov_group">
 					<div class="p_bar_up p_canvas">2,4,9,7,12,8,16</div>
 					<div class="ov_text">
-						{$lang.label_rank_points}<br/>
+						{lang key='user::account_log.label_rank_points'}<br/>
 						{$user.rank_points}
 					</div>
 				</div>
@@ -65,7 +63,7 @@
 				<div class="ov_group">
 					<div class="p_bar_down p_canvas">20,15,18,14,10,13,9,7</div>
 					<div class="ov_text">
-						{$lang.label_pay_points}<br/>
+						{lang key='user::account_log.label_pay_points'}<br/>
 						{$user.pay_points}
 					</div>
 				</div>
@@ -84,13 +82,13 @@
 	<div class="choose_list span12">
 		<form method="post" action="{$form_action}" name="searchForm">
 			<select class="w120" name="account_type" id="account_type">
-				<option value="" {if $account_type eq ''}selected="selected"{/if}>{$lang.all_account}</option>
-				<option value="user_money" {if $account_type eq 'user_money'}selected="selected"{/if}>{$lang.user_money}</option>
-				<option value="frozen_money" {if $account_type eq 'frozen_money'}selected="selected"{/if}>{$lang.frozen_money}</option>
-				<option value="rank_points" {if $account_type eq 'rank_points'}selected="selected"{/if}>{$lang.rank_points}</option>
-				<option value="pay_points" {if $account_type eq 'pay_points'}selected="selected"{/if}>{$lang.pay_points}</option>
+				<option value="" {if $account_type eq ''}selected="selected"{/if}>{lang key='user::account_log.all_account'}</option>
+				<option value="user_money" {if $account_type eq 'user_money'}selected="selected"{/if}>{lang key='user::account_log.user_money'}</option>
+				<option value="frozen_money" {if $account_type eq 'frozen_money'}selected="selected"{/if}>{lang key='user::account_log.frozen_money'}</option>
+				<option value="rank_points" {if $account_type eq 'rank_points'}selected="selected"{/if}>{lang key='user::account_log.rank_points'}</option>
+				<option value="pay_points" {if $account_type eq 'pay_points'}selected="selected"{/if}>{lang key='user::account_log.pay_points'}</option>
 			</select>
-			<button class="data-pjax btn select-button" type="button">{t}筛选{/t}</button>
+			<button class="data-pjax btn select-button" type="button">{lang key='user::account_log.filter'}</button>
 		</form>
 	</div>
 </div>
@@ -99,12 +97,12 @@
 		<table class="table table-striped" id="smpl_tbl">
 			<thead>
 				<tr>
-					<th width="20%">{$lang.change_time}</th>
-					<th width="30%">{$lang.change_desc}</th>
-					<th>{$lang.user_money}</th>
-					<th>{$lang.frozen_money}</th>
-					<th>{$lang.rank_points}</th>
-					<th>{$lang.pay_points}</th>
+					<th class="w150">{lang key='user::account_log.change_time'}</th>
+					<th>{lang key='user::account_log.list_change_desc'}</th>
+					<th class="w100">{lang key='user::account_log.user_money'}</th>
+					<th class="w100">{lang key='user::account_log.frozen_money'}</th>
+					<th class="w100">{lang key='user::account_log.rank_points'}</th>
+					<th class="w130">{lang key='user::account_log.pay_points'}</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -150,7 +148,7 @@
 					</td>
 				</tr>
 				<!-- {foreachelse} -->
-				<tr><td class="no-records" colspan="10">{$lang.no_records}</td></tr>
+				<tr><td class="no-records" colspan="10">{lang key='system::system.no_records'}</td></tr>
 				<!-- {/foreach} -->
 			</tbody>
 		</table>

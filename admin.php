@@ -14,10 +14,10 @@ class admin extends ecjia_admin {
 	private $db_view;
 	private $db_view_user;
 	private $db_user_address;
+	
 	public function __construct() {
 		parent::__construct();
 
-		RC_Lang::load('admin_users');
 		RC_Loader::load_app_func('user');
 		RC_Loader::load_app_func('common', 'goods');
 
@@ -33,52 +33,50 @@ class admin extends ecjia_admin {
 		/* 加载所全局 js */
 		RC_Script::enqueue_script('jquery-validate');
 		RC_Script::enqueue_script('jquery-form');
-
-		/* 组件模块加载 */
 		RC_Script::enqueue_script('smoke');
-
 		RC_Style::enqueue_style('chosen');
 		RC_Script::enqueue_script('jquery-chosen');
-
 		RC_Style::enqueue_style('uniform-aristo');
 		RC_Script::enqueue_script('jquery-uniform');
-
 		RC_Style::enqueue_style('bootstrap-editable', RC_Uri::admin_url('statics/lib/x-editable/bootstrap-editable/css/bootstrap-editable.css'));
 		RC_Script::enqueue_script('bootstrap-editable.min', RC_Uri::admin_url('statics/lib/x-editable/bootstrap-editable/js/bootstrap-editable.min.js'));
-		
 		RC_Script::enqueue_script('user_info', RC_App::apps_url('statics/js/user_info.js', __FILE__));
-		
 		$user_jslang = array(
-			'keywords_required'			=> __('请先输入关键字！'),
-			'username_required'			=> __('请输入会员名称！'),
-			'email_required'			=> __('请输入邮件地址！'),
-			'password_required'			=> __('请输入密码！')
+			'keywords_required'		=>	RC_Lang::get('user::users.keywords_required'),
+			'username_required'		=> 	RC_Lang::get('user::users.username_required'),
+			'email_required'		=> 	RC_Lang::get('user::users.email_required'),
+			'password_required'		=> 	RC_Lang::get('user::users.password_required'),
+			'password_length'		=> 	RC_Lang::get('user::users.password_length'),
+			'password_check'		=> 	RC_Lang::get('user::users.password_check'),
+			'email_check'			=> 	RC_Lang::get('user::users.email_check'),
 		);
-		RC_Script::localize_script('user_info', 'user_jslang', $user_jslang);
+		RC_Script::localize_script('user_info', 'user_jslang', $user_jslang );
 		
-		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('会员列表'), RC_Uri::url('user/admin/init')));
+		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('user::users.user_list'), RC_Uri::url('user/admin/init')));
 	}
 
 	/**
 	 * 用户帐号列表
 	 */
 	public function init() {
-		/* 检查权限 */
 		$this->admin_priv('users_manage');
 
 		ecjia_screen::get_current_screen()->remove_last_nav_here();
-		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('会员列表')));
+		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('user::users.user_list')));
 		ecjia_screen::get_current_screen()->add_help_tab(array(
 			'id'		=> 'overview',
-			'title'		=> __('概述'),
+			'title'		=> RC_Lang::get('user::users.overview'),
 			'content'	=>
-			'<p>' . __('欢迎访问ECJia智能后台会员列表页面，系统中所有的会员都会显示在此列表中。') . '</p>'
+			'<p>' . RC_Lang::get('user::users.user_list_help') . '</p>'
 		));
 		
 		ecjia_screen::get_current_screen()->set_help_sidebar(
-			'<p><strong>' . __('更多信息:') . '</strong></p>' .
-			'<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:会员列表" target="_blank">关于会员列表帮助文档</a>') . '</p>'
+			'<p><strong>' .RC_Lang::get('user::users.more_info'). '</strong></p>' .
+			'<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:会员列表" target="_blank">'.RC_Lang::get('user::users.about_user_list').'</a>'). '</p>'
 		);
+		
+		$this->assign('ur_here',		RC_Lang::get('user::users.user_list'));
+		$this->assign('action_link',	array('text' => RC_Lang::get('system::system.04_users_add'), 'href' => RC_Uri::url('user/admin/add')));
 		
 
 		$ranks = $this->db_user_rank->field('rank_id,rank_name,min_points')->order(array('min_points' => 'asc'))->select();
@@ -86,11 +84,9 @@ class admin extends ecjia_admin {
 
 		$this->assign('user_ranks',		$ranks);
 		$this->assign('user_list',		$user_list);
-		$this->assign('ur_here',		RC_Lang::lang('03_users_list'));
-		$this->assign('action_link',	array('text' => RC_Lang::lang('04_users_add'), 'href' => RC_Uri::url('user/admin/add')));
 		$this->assign('search_action',	RC_Uri::url('user/admin/init'));
 		$this->assign('form_action',	RC_Uri::url('user/admin/batch_remove'));
-		$this->assign_lang();
+
 		$this->display('user_list.dwt');
 	}	
 
@@ -101,17 +97,17 @@ class admin extends ecjia_admin {
 		/* 检查权限 */
 		$this->admin_priv('users_manage');
 
-		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('添加会员')));
+		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('system::system.04_users_add')));
 		ecjia_screen::get_current_screen()->add_help_tab(array(
 			'id'		=> 'overview',
-			'title'		=> __('概述'),
+			'title'		=> RC_Lang::get('user::users.overview'),
 			'content'	=>
-			'<p>' . __('欢迎访问ECJia智能后台添加会员页面，可以在此添加会员信息。') . '</p>'
+			'<p>' . RC_Lang::get('user::users.user_add_help') . '</p>'
 		));
 		
 		ecjia_screen::get_current_screen()->set_help_sidebar(
-			'<p><strong>' . __('更多信息:') . '</strong></p>' .
-			'<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:添加会员" target="_blank">关于添加会员帮助文档</a>') . '</p>'
+			'<p><strong>' . RC_Lang::get('user::users.more_info') . '</strong></p>' .
+			'<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:添加会员" target="_blank">'.RC_Lang::get('user::users.about_add_user').'</a>') . '</p>'
 		);
 		
 		$user = array(
@@ -120,6 +116,10 @@ class admin extends ecjia_admin {
 			'sex'			=> 0,
 			'credit_line' 	=> 0
 		);
+		
+		$this->assign('ur_here', RC_Lang::get('system::system.04_users_add'));
+		$this->assign('action_link', array('text' => RC_Lang::get('user::users.user_list'), 'href' => RC_Uri::url('user/admin/init')));
+		
 		/* 取出注册扩展字段 */
 		$extend_info_list = $this->db_reg_fields->where(array('type' => array('lt' => 2), 'display' => 1, 'id' => array('neq' => 6)))->order(array('dis_order' => 'asc', 'id' => 'asc'))->select();
 		/* 给扩展字段加入key */
@@ -131,13 +131,12 @@ class admin extends ecjia_admin {
 		$rank_list = get_user_rank_list(true);
 
 		$this->assign('form_act',				'insert');
-		$this->assign('ur_here',				RC_Lang::lang('04_users_add'));
-		$this->assign('action_link',			array('text' => RC_Lang::lang('03_users_list'), 'href' => RC_Uri::url('user/admin/init')));
 		$this->assign('form_action',			RC_Uri::url('user/admin/insert'));
 		$this->assign('user',					$user);
 		$this->assign('special_ranks',			$rank_list);
 		$this->assign('extend_info_list',		$extend_info_list);
-		$this->assign_lang();
+		$this->assign('lang_sex', 				RC_Lang::get('user::users.sex'));
+		
 		$this->display('user_edit.dwt');
 	}
 	
@@ -163,35 +162,35 @@ class admin extends ecjia_admin {
 		/* 验证参数的合法性*/
 		/* 邮箱*/
 		if (!@ereg("^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+" , $email)) {
-			$this->showmessage(RC_Lang::lang('js_languages/invalid_email'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			$this->showmessage(RC_Lang::get('user::users.js_languages.invalid_email'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 	
 		if (!empty($password)) {
 			if (!preg_match("/^[A-Za-z0-9]+$/",$password)){
-				$this->showmessage(RC_Lang::lang('js_languages/chinese_password'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+				$this->showmessage(RC_Lang::get('user::users.js_languages.chinese_password'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 			}
 			if (empty($confirm_password)) {
-				$this->showmessage(RC_Lang::lang('js_languages/no_confirm_password'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+				$this->showmessage(RC_Lang::get('user::users.js_languages.no_confirm_password'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 			}
 			if ($password != $confirm_password ) {
-				$this->showmessage(RC_Lang::lang('js_languages/password_not_same'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+				$this->showmessage(RC_Lang::get('user::users.js_languages.password_not_same'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 			}
 			if (strlen($password) < 6 || strlen($confirm_password) < 6) {
-				$this->showmessage(RC_Lang::lang('js_languages/password_len_err'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+				$this->showmessage(RC_Lang::get('user::users.js_languages.password_len_err'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 			}
 			if (preg_match("/ /" , $password)) {
-				$this->showmessage(RC_Lang::lang('js_languages/passwd_balnk'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+				$this->showmessage(RC_Lang::get('user::users.js_languages.passwd_balnk'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 			}
 		}
 	
 		/* 信用额度*/
 		if (!is_numeric($credit_line) || $credit_line < 0 ) {
-			$this->showmessage(RC_Lang::lang('js_languages/credit_line'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			$this->showmessage(RC_Lang::get('user::users.js_languages.credit_line'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 
 		/* 注册送积分 */
 		if (ecjia::config('register_points', ecjia::CONFIG_EXISTS)) {
-			change_account_log($_SESSION['user_id'] , 0 , 0 , ecjia::config('register_points'), ecjia::config('register_points'), RC_Lang::lang('register_points'));
+			change_account_log($_SESSION['user_id'] , 0 , 0 , ecjia::config('register_points'), ecjia::config('register_points'), RC_Lang::get('user::users.register_points'));
 		}
 
 		/* 更新会员的其它信息 */
@@ -212,22 +211,23 @@ class admin extends ecjia_admin {
 
 		$max_id = $this->db_user->insert($other);
 
-		
 		/*把新注册用户的扩展信息插入数据库*/
 		$fields_arr = $this->db_reg_fields->field('id')->where(array('type' => 0 , 'display' => 1))->order(array('dis_order' => 'asc', 'id' => 'asc'))->select();
 		
 		$extend_field_str = '';	//生成扩展字段的内容字符串
 		
-		foreach ($fields_arr AS $val) {
-			$extend_field_index = 'extend_field' . $val['id'];
-			if(!empty($_POST[$extend_field_index])) {
-				$temp_field_content = strlen($_POST[$extend_field_index]) > 100 ? mb_substr($_POST[$extend_field_index], 0, 99) : $_POST[$extend_field_index];
-				$data = array (
-					'user_id'		=> $max_id,
-					'reg_field_id'	=> $val['id'],
-					'content'		=> $temp_field_content
-				);	
-				$this->db_reg_extend_info->insert($data);
+		if (!empty($fields_arr)) {
+			foreach ($fields_arr AS $val) {
+				$extend_field_index = 'extend_field' . $val['id'];
+				if(!empty($_POST[$extend_field_index])) {
+					$temp_field_content = strlen($_POST[$extend_field_index]) > 100 ? mb_substr($_POST[$extend_field_index], 0, 99) : $_POST[$extend_field_index];
+					$data = array (
+						'user_id'		=> $max_id,
+						'reg_field_id'	=> $val['id'],
+						'content'		=> $temp_field_content
+					);
+					$this->db_reg_extend_info->insert($data);
+				}
 			}
 		}
 		
@@ -235,10 +235,9 @@ class admin extends ecjia_admin {
 		ecjia_admin::admin_log($username , 'add', 'users');
 		
 		/* 提示信息 */
-		$links[] = array('text' => '返回会员列表', 'href' => RC_Uri::url('user/admin/init'));
-		$links[] = array('text' => '继续添加会员', 'href' => RC_Uri::url('user/admin/add'));
-		$this->showmessage(__('会员名')."[ ".$username." ]".__('添加成功！'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS , array('links' => $links, 'pjaxurl' => RC_Uri::url('user/admin/edit', "id=$max_id")));
-		
+		$links[] = array('text' =>RC_Lang::get('user::users.back_user_list'), 'href' => RC_Uri::url('user/admin/init'));
+		$links[] = array('text' =>RC_Lang::get('user::users.keep_add'), 'href' => RC_Uri::url('user/admin/add'));
+		$this->showmessage(RC_Lang::get('user::users.add_user_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('links' => $links, 'pjaxurl' => RC_Uri::url('user/admin/edit', array('id' => $max_id))));
 		
 // 		$users = &init_users();
 // 		if (!$users->add_user($username, $password, $email)) {
@@ -267,18 +266,21 @@ class admin extends ecjia_admin {
 		/* 检查权限 */
 		$this->admin_priv('users_manage', ecjia::MSGTYPE_JSON);
 
-		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('编辑会员')));
+		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('user::users.users_edit')));
 		ecjia_screen::get_current_screen()->add_help_tab(array(
 			'id'		=> 'overview',
-			'title'		=> __('概述'),
+			'title'		=>  RC_Lang::get('user::users.overview'),
 			'content'	=>
-			'<p>' . __('欢迎访问ECJia智能后台编辑会员页面，可以在此页面编辑相应的会员信息。') . '</p>'
+			'<p>' .  RC_Lang::get('user::users.user_edit_help') . '</p>'
 		));
 		
 		ecjia_screen::get_current_screen()->set_help_sidebar(
-			'<p><strong>' . __('更多信息:') . '</strong></p>' .
-			'<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:会员列表#.E4.BC.9A.E5.91.98.E7.BC.96.E8.BE.91" target="_blank">关于编辑会员帮助文档</a>') . '</p>'
+			'<p><strong>' . RC_Lang::get('user::users.more_info') . '</strong></p>' .
+			'<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:会员列表#.E4.BC.9A.E5.91.98.E7.BC.96.E8.BE.91" target="_blank">'.RC_Lang::get('user::users.about_edit_user').'</a>') . '</p>'
 		);
+		
+		$this->assign('ur_here', 		RC_Lang::get('user::users.users_edit'));
+		$this->assign('action_link',	array('text' => RC_Lang::get('user::users.user_list'), 'href' => RC_Uri::url('user/admin/init')));
 		
 		$row = $this->db_user->find(array('user_id' => $_GET['id']));
 		if ($row) {
@@ -313,20 +315,18 @@ class admin extends ecjia_admin {
 			}
 		}
 
-		foreach ($extend_info_list AS $key => $val) {
-// 			$val['key'] = $key+1 ;
-// 			$extend_info_list[$key] = $val;
-// 			switch ($key+1) {
-			switch ($val['id']) {
-				case 1:	 $extend_info_list[$key]['content'] = $user['msn']; break;
-				case 2:	 $extend_info_list[$key]['content'] = $user['qq']; break;
-				case 3:	 $extend_info_list[$key]['content'] = $user['office_phone']; break;
-				case 4:	 $extend_info_list[$key]['content'] = $user['home_phone']; break;
-				case 5:	 $extend_info_list[$key]['content'] = $user['mobile_phone']; break;
-				default: $extend_info_list[$key]['content'] = empty($temp_arr[$val['id']]) ? '' : $temp_arr[$val['id']] ;
+		if (!empty($extend_info_list)) {
+			foreach ($extend_info_list AS $key => $val) {
+				switch ($val['id']) {
+					case 1:	 $extend_info_list[$key]['content'] = $user['msn']; break;
+					case 2:	 $extend_info_list[$key]['content'] = $user['qq']; break;
+					case 3:	 $extend_info_list[$key]['content'] = $user['office_phone']; break;
+					case 4:	 $extend_info_list[$key]['content'] = $user['home_phone']; break;
+					case 5:	 $extend_info_list[$key]['content'] = $user['mobile_phone']; break;
+					default: $extend_info_list[$key]['content'] = empty($temp_arr[$val['id']]) ? '' : $temp_arr[$val['id']] ;
+				}
 			}
 		}
-		
 		$this->assign('extend_info_list', $extend_info_list);
 
 		/* 当前会员推荐信息 */
@@ -334,7 +334,7 @@ class admin extends ecjia_admin {
 		$this->assign('affiliate', $affiliate);
 		
 		empty($affiliate) && $affiliate = array();
-		if(empty($affiliate['config']['separate_by'])) {
+		if (empty($affiliate['config']['separate_by'])) {
 			//推荐注册分成
 			$affdb = array();
 			$num = count($affiliate['item']);
@@ -358,15 +358,14 @@ class admin extends ecjia_admin {
 			}
 		}
 
-		$this->assign('ur_here',		__("编辑会员"));
-		$this->assign('action_link',	array('text' => RC_Lang::lang('03_users_list'), 'href' => RC_Uri::url('user/admin/init')));
-		$this->assign('form_action',	RC_Uri::url('user/admin/update'));
+		$this->assign('lang_sex', RC_Lang::get('user::users.sex'));
 		$this->assign('special_ranks',	get_user_rank_list(true));
 		$this->assign('form_act',		'update');
 		$this->assign('action',			'edit');
 		$this->assign('user',			$user);
 		
-		$this->assign_lang();
+		$this->assign('form_action',	RC_Uri::url('user/admin/update'));
+		
 		$this->display('user_edit.dwt');
 	}	
 	
@@ -393,32 +392,31 @@ class admin extends ecjia_admin {
 		/* 验证参数的合法性*/
 		/* 邮箱*/
 		if (!@ereg("^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+",$email)) {
-			$this->showmessage(RC_Lang::lang('js_languages/invalid_email'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			$this->showmessage(RC_Lang::get('user::users.js_languages.invalid_email'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 		/* 密码 */
 		if (!empty($password)) {
 			if (!preg_match("/^[A-Za-z0-9]+$/",$password)){
-				$this->showmessage(RC_Lang::lang('js_languages/chinese_password'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+				$this->showmessage(RC_Lang::get('user::users.js_languages.chinese_password'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 			}
 			if (empty($confirm_password)) {
-				$this->showmessage(RC_Lang::lang('js_languages/no_confirm_password'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+				$this->showmessage(RC_Lang::get('user::users.js_languages.no_confirm_password'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 			}
 			if ($password != $confirm_password ) {
-				$this->showmessage(RC_Lang::lang('js_languages/password_not_same'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+				$this->showmessage(RC_Lang::get('user::users.js_languages.password_not_same'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 			}
 			if (strlen($password) < 6 || strlen($confirm_password) < 6) {
-				$this->showmessage(RC_Lang::lang('js_languages/password_len_err'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+				$this->showmessage(RC_Lang::get('user::users.js_languages.password_len_err'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 			}
-			if (preg_match("/ /" , $password)) {
-				$this->showmessage(RC_Lang::lang('js_languages/passwd_balnk'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			if (preg_match("/ /", $password)) {
+				$this->showmessage(RC_Lang::get('user::users.js_languages.passwd_balnk'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 			}
-			
 			$this->db_user->where(array('user_id' => $user_id))->update(array('ec_salt' => '0'));
 		}
 	
 		/* 信用额度*/
 		if (!is_numeric($credit_line) || $credit_line < 0 ) {
-			$this->showmessage(RC_Lang::lang('js_languages/credit_line'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			$this->showmessage(RC_Lang::get('user::users.js_languages.credit_line'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 		
 		/* 更新用户扩展字段的数据 */
@@ -471,7 +469,9 @@ class admin extends ecjia_admin {
 		ecjia_admin::admin_log($username, 'edit', 'users');
 
 		/* 提示信息 */
-		$this->showmessage(__('会员名')."[ ". $username ." ]".__('编辑成功！'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('user/admin/edit', "id=$user_id")));
+		$links[0]['text']	= RC_Lang::get('user::users.back_user_list');
+		$links[0]['href']	= RC_Uri::url('user/admin/init');
+		$this->showmessage(RC_Lang::get('user::users.edit_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('links' => $links, 'pjaxurl' => RC_Uri::url('user/admin/edit', "id=$user_id")));
 	}
 	
 	/**
@@ -481,18 +481,20 @@ class admin extends ecjia_admin {
 		/* 检查权限 */
 		$this->admin_priv('users_manage');
 	
-		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('会员详情')));
+		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('user::users.user_info')));
 		ecjia_screen::get_current_screen()->add_help_tab(array(
 			'id'		=> 'overview',
-			'title'		=> __('概述'),
+			'title'		=>	RC_Lang::get('user::users.overview'),
 			'content'	=>
-			'<p>' . __('欢迎访问ECJia智能后台会员详情页面，可以在此页面查看相应的会员详细信息。') . '</p>'
+			'<p>' . RC_Lang::get('user::users.user_view_help') . '</p>'
 		));
 		
 		ecjia_screen::get_current_screen()->set_help_sidebar(
-			'<p><strong>' . __('更多信息:') . '</strong></p>' .
-			'<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:会员列表#.E8.AF.A6.E7.BB.86.E4.BF.A1.E6.81.AF" target="_blank">关于会员详情帮助文档</a>') . '</p>'
+			'<p><strong>' . RC_Lang::get('user::users.more_info'). '</strong></p>' .
+			'<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:会员列表#.E8.AF.A6.E7.BB.86.E4.BF.A1.E6.81.AF" target="_blank">'.RC_Lang::get('user::users.about_view_user').'</a>') . '</p>'
 		);
+		$this->assign('ur_here', RC_Lang::get('user::users.user_info'));
+		$this->assign('action_link', array('text' => RC_Lang::get('user::users.user_list'), 'href' => RC_Uri::url('user/admin/init')));
 		
 		$id = !empty($_GET['id']) ? intval($_GET['id']) : 0;
 		$keywords = !empty($_GET['keywords']) ? trim($_GET['keywords']) : '';
@@ -504,7 +506,7 @@ class admin extends ecjia_admin {
 		}
 
 		if (empty($row)) {
-			$this->showmessage ('没有查询到该会员的信息！', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR );
+			$this->showmessage(RC_Lang::get('user::users.user_info_confirm'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR );
 		}
 		
 		/* 获得用户等级名 */
@@ -531,7 +533,7 @@ class admin extends ecjia_admin {
 			$user['office_phone']			= $row['office_phone'];
 			$user['home_phone']				= $row['home_phone'];
 			$user['mobile_phone']			= $row['mobile_phone'];
-			$user['is_validated']			= $row['is_validated'] == 0 ? '未验证' : '已验证';
+			$user['is_validated']			= $row['is_validated'] == 0 ? RC_Lang::get('user::users.not_validated') : RC_Lang::get('user::users.is_validated');
 			$user['last_time']				= $row['last_time'] == '0000-00-00 00:00:00' ? '1970-01-01 00:00:00':$row['last_time'];
 			$user['last_ip']				= $row['last_ip'];
 			
@@ -551,12 +553,10 @@ class admin extends ecjia_admin {
 			}
 		}
 	
-		$this->assign('ur_here',		__("会员详情"));
-		$this->assign('action_link',	array('text' => RC_Lang::lang('03_users_list'), 'href' => RC_Uri::url('user/admin/init')));
 		$this->assign('user',			$user);
 		$this->assign('order_list',		$order);
 		$this->assign('address_list',	$address_list);
-		$this->assign_lang();
+
 		$this->display('user_info.dwt');
 		
 // 		$users=& init_users();
@@ -572,7 +572,7 @@ class admin extends ecjia_admin {
 		$this->admin_priv('users_drop', ecjia::MSGTYPE_JSON);
 		
 		if (!empty($_SESSION['ru_id'])) {
-			$this->showmessage(__('入驻商家没有操作权限，请登陆商家后台操作！'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			$this->showmessage(RC_Lang::lang('user::user_account.merchants_notice'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 		if (isset($_POST['checkboxes'])) {
 			$idArr = explode(',', $_POST['checkboxes']);
@@ -588,44 +588,9 @@ class admin extends ecjia_admin {
 				ecjia_admin::admin_log($row['user_name'] , 'batch_remove', 'users');
 			}		
 			
-			$this->showmessage(sprintf(RC_Lang::lang('batch_remove_success'), $count), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS , array('pjaxurl' => RC_Uri::url('user/admin/init')));
+			$this->showmessage(sprintf(RC_Lang::get('user::users.batch_remove_success'), $count), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('user/admin/init')));
 		} else {
-			$this->showmessage(RC_Lang::lang('no_select_user'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
-		}
-	}
-	
-	/**
-	 * 编辑用户名
-	 */
-	public function edit_username() {
-		/* 检查权限 */
-		$this->admin_priv('users_manage', ecjia::MSGTYPE_JSON);
-		
-		if (!empty($_SESSION['ru_id'])) {
-			$this->showmessage(__('入驻商家没有操作权限，请登陆商家后台操作！'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
-		}
-		$username	= trim($_POST['value']);
-		$id			= intval($_POST['pk']);
-
-		if (empty($username)) {
-			$this->showmessage(__('会员名不为空'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR );
-		}
-		
-		/* 编辑名称 根据id获取之前的名称 */
-		$old_name = $this->db_user->where(array('user_id' => $id))->get_field('user_name');
-		if (!empty($username)) {
-			if ($username != $old_name) {
-				if ($this->db_user->where(array('user_name' => $username))->count() == 0) {
-					if ($this->db_user->where(array('user_id' => $id))->update(array('user_name' => $username))) {
-						ecjia_admin::admin_log(addslashes($username), 'edit', 'users');
-						$this->showmessage(RC_Lang::lang('edit_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
-					}
-				} else {
-					$this->showmessage(RC_Lang::lang('username_exists'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR );
-				}
-			}
-		} else {
-			$this->showmessage(RC_Lang::lang('not_empty'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR );
+			$this->showmessage(RC_Lang::get('user::users.no_select_user'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 	}
 	
@@ -637,14 +602,14 @@ class admin extends ecjia_admin {
 		$this->admin_priv('users_manage', ecjia::MSGTYPE_JSON);
 		
 		if (!empty($_SESSION['ru_id'])) {
-			$this->showmessage(__('入驻商家没有操作权限，请登陆商家后台操作！'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			$this->showmessage(RC_Lang::lang('user::user_account.merchants_notice'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 		$id	= intval($_REQUEST['pk']);
 		$email	= trim($_REQUEST['value']);
 
 		/* 验证邮箱*/
 		if (!@ereg("^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+", $email)) {
-			$this->showmessage(RC_Lang::lang('js_languages/invalid_email'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			$this->showmessage(RC_Lang::get('user::users.js_languages.invalid_email'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 
 		/* 编辑email 根据id获取之前的email */
@@ -655,17 +620,17 @@ class admin extends ecjia_admin {
 					if ($this->db_user->where(array('user_id' => $id))->update(array('email' => $email))) {
 						
 						$user_name = $this->db_user->where(array('user_id' => $id))->get_field('user_name');
-						ecjia_admin::admin_log($user_name.'，'.'修改邮件地址为 '.addslashes($email), 'edit', 'users');
 						
-						$this->showmessage(RC_Lang::lang('edit_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
+						ecjia_admin::admin_log($user_name.RC_Lang::get('user::users.mailbox_information'), 'edit', 'users');
+						
+						$this->showmessage(RC_Lang::get('user::users.edit_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
 					}
-					
 				} else {
-					$this->showmessage(RC_Lang::lang('email_exists'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR );
+					$this->showmessage(RC_Lang::get('user::users.email_exists'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 				}
 			}
 		} else {
-			$this->showmessage(RC_Lang::lang('not_empty'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR );
+			$this->showmessage(RC_Lang::get('user::users.email_required'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 	}
 
@@ -684,10 +649,9 @@ class admin extends ecjia_admin {
     	$user->remove_user($username); //已经删除用户所有数据
     	
 		/* 记录管理员操作 */
-		ecjia_admin::admin_log(addslashes($username), 'remove', 'users');
+		ecjia_admin::admin_log(addslashes($user_info['user_name']), 'remove', 'users');
 		
-		/* 提示信息 */
-		$this->showmessage(__('会员名')."[ ". $username ." ]".__('删除成功！'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
+		$this->showmessage(RC_Lang::get('user::users.delete_user_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
 	}
 	
 	/**
@@ -697,18 +661,21 @@ class admin extends ecjia_admin {
 		/* 检查权限 */
 		$this->admin_priv('users_manage');
 	
-		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('收货地址')));
-		ecjia_screen::get_current_screen()->add_help_tab(array(
+		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('user::users.address_list')));
+		ecjia_screen::get_current_screen()->add_help_tab( array(
 			'id'		=> 'overview',
-			'title'		=> __('概述'),
+			'title'		=> RC_Lang::get('user::users.overview'),
 			'content'	=>
-			'<p>' . __('欢迎访问ECJia智能后台收货地址页面，可以在此查看相应会员的收货地址信息。') . '</p>'
+			'<p>' .RC_Lang::get('user::users.user_address_help').'</p>'
 		));
 		
 		ecjia_screen::get_current_screen()->set_help_sidebar(
-			'<p><strong>' . __('更多信息:') . '</strong></p>' .
-			'<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:会员列表#.E6.94.B6.E8.B4.A7.E5.9C.B0.E5.9D.80" target="_blank">关于收货地址帮助文档</a>') . '</p>'
+			'<p><strong>' . RC_Lang::get('user::users.more_info')  . '</strong></p>' .
+			'<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:会员列表#.E6.94.B6.E8.B4.A7.E5.9C.B0.E5.9D.80" target="_blank">'.RC_Lang::get('user::users.about_address_user').'</a>') . '</p>'
 		);
+		
+		$this->assign('ur_here', RC_Lang::get('user::users.address_list'));
+		$this->assign('action_link', array('text' => RC_Lang::get('user::users.user_list'), 'href' => RC_Uri::url('user/admin/init')));
 		
 		$id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 		$user_name = $this->db_user->where(array('user_id' => $id))->get_field('user_name');
@@ -744,9 +711,7 @@ class admin extends ecjia_admin {
 		$this->assign('address_list',	$row);
 		$this->assign('id',			 	$id);
 		$this->assign('user_name',		$user_name);
-		$this->assign('ur_here',		__('收货地址'));
-		$this->assign('action_link',	array('text' => RC_Lang::lang('03_users_list'), 'href' => RC_Uri::url('user/admin/init')));
-		$this->assign_lang();
+
 		$this->display('user_address_list.dwt');
 	}
 	

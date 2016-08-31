@@ -9,7 +9,7 @@
 
 <!-- {block name="main_content"} -->
 <div class="form-div">
-	<div class="alert alert-info" ><!-- {$lang.user_help} --></div>
+	<div class="alert alert-info" >{lang key='user::integrate.user_help'}</div>
 </div>
 
 <div>
@@ -26,8 +26,8 @@
 			<table class="table" id="smpl_tbl">
 				<thead>
 					<tr>
-						<th class="w100">{t}名称{/t}</th>
-						<th>{t}描述{/t}</th>
+						<th class="w100">{lang key='user::integrate.integrate_name'}</th>
+						<th>{lang key='user::integrate.integrate_desc'}</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -37,14 +37,14 @@
 						<td class="first-cell">{$integrate.format_description}
 							<br/>
 						<!-- {if $integrate.activate eq 1} -->
-							<a class="cursor_pointer data-pjax" id="setup" href='{url path="user/admin_integrate/setup" args="code={$integrate.code}"}'>{t}设置{/t}</a>
+							<a class="cursor_pointer data-pjax" id="setup" href='{url path="user/admin_integrate/setup" args="code={$integrate.code}"}'>{lang key='user::integrate.set_up'}</a>
 						<!-- {else} -->
-							<a class="install cursor_pointer" href='{url path="user/admin_integrate/activate" args="code={$integrate.code}"}' >{t}启用{/t}</a>
+							<a class="install cursor_pointer" href='{url path="user/admin_integrate/activate" args="code={$integrate.code}"}'>{lang key='user::integrate.enable'}</a>
 						<!-- {/if} -->
 						</td>
 					</tr>
 					<!-- {foreachelse} -->
-					<tr><td class="no-records" colspan="10">{$lang.no_records}</td></tr>
+					<tr><td class="no-records" colspan="10">{lang key='system::system.no_records'}</td></tr>
 					<!-- {/foreach} -->
 				</tbody>
 			</table>

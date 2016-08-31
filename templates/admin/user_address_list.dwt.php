@@ -8,17 +8,17 @@
 		<!-- {if $action_link} -->
 		<a class="btn plus_or_reply data-pjax" href="{$action_link.href}"><i class="fontello-icon-reply"></i>{$action_link.text}</a>
 		<!-- {/if} -->
-		<small>（{t}当前会员：{/t}{$user_name}）</small>
+		<small>（{lang key='user::users.current_members'}{$user_name}）</small>
 	</h3>
 </div>
 
 <ul class="nav nav-pills">
 	<!-- {if $smarty.get.type eq 1} -->
-		<li><a class="data-pjax" href='{url path="user/admin/address_list" args="id={$id}"}'>全部地址 <span class="badge badge-info">{$count}</span> </a></li>
-		<li class="active"><a>默认地址 <span class="badge badge-info">{$default_count}</span></a></li>
+		<li><a class="data-pjax" href='{url path="user/admin/address_list" args="id={$id}"}'>{lang key='user::users.full_address'}<span class="badge badge-info">{$count}</span> </a></li>
+		<li class="active"><a>{lang key='user::users.default_address_two'}<span class="badge badge-info">{$default_count}</span></a></li>
 	<!-- {else} -->
-		<li class="active"><a>全部地址 <span class="badge badge-info">{$count}</span></a></li>
-		<li><a class="data-pjax" href='{url path="user/admin/address_list" args="type=1&id={$id}"}'>默认地址 <span class="badge badge-info">{$default_count}</span> </a></li>
+		<li class="active"><a>{lang key='user::users.full_address'} <span class="badge badge-info">{$count}</span></a></li>
+		<li><a class="data-pjax" href='{url path="user/admin/address_list" args="type=1&id={$id}"}'>{lang key='user::users.default_address_two'} <span class="badge badge-info">{$default_count}</span> </a></li>
 	<!-- {/if} -->
 </ul>
 
@@ -26,11 +26,11 @@
 	<table class="table table-striped" id="smpl_tbl">
 		<thead>
 			<tr>
-				<th>{t}收货人{/t}</th>
-				<th>{t}所在地区{/t}</th>
-				<th>{t}详细地址{/t}</th>
-				<th>{t}邮编{/t}</th>
-				<th class="w200">{t}电话/手机{/t}</th>
+				<th>{lang key='user::users.receiver_name'}</th>
+				<th>{lang key='user::users.region'}</th>
+				<th>{lang key='user::users.address'}</th>
+				<th>{lang key='user::users.zip_code'}</th>
+				<th class="w200">{lang key='user::users.telephone_phone'}</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -43,13 +43,13 @@
 				<td>{$val.address|escape}</td>
 				<td>{$val.zipcode|escape}</td>
 				<td>
-					{$lang.tel}：{$val.tel}<br/>
-					{$lang.mobile}：{$val.mobile}
+					{lang key='user::users.tel'}：{$val.tel}<br/>
+					{lang key='user::users.mobile'}：{$val.mobile}
 				</td>
 				<!-- <td>{$lang.best_time}：{$val.best_time|escape}<br/>{$lang.sign_building}：{$val.sign_building|escape}<br/>email：{$val.email}</td> -->
 			</tr>
 			<!-- {foreachelse} -->
-			<tr><td class="no-records" colspan="10">{t}该会员暂无收货地址{/t}</td></tr>
+			<tr><td class="no-records" colspan="10">{lang key='user::users.no_address'}</td></tr>
 			<!-- {/foreach} -->
 		</tbody>
 	</table>

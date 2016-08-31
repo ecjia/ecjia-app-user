@@ -20,10 +20,10 @@
 <div class="row-fluid">
 	<div class="choose_list span12">
 		<form class="f_l" name="searchForm" action="{$form_action}" method="post">
-			<input class="date f_l w230" name="start_date" type="text" value="{$start_date}" placeholder="开始时间">
-			<span class="f_l">至</span>
-			<input class="date f_l w230" name="end_date" type="text" value="{$end_date}" placeholder="结束时间">
-			<button class="btn select-button" type="button">{t}筛选{/t}</button>
+			<input class="date f_l w230" name="start_date" type="text" value="{$start_date}" placeholder="{lang key='user::user_account_manage.start_date'}">
+			<span class="f_l">{lang key='user::user_account_manage.to'}</span>
+			<input class="date f_l w230" name="end_date" type="text" value="{$end_date}" placeholder="{lang key='user::user_account_manage.end_date'}">
+			<button class="btn select-button" type="button">{lang key='user::user_account_manage.filter'}</button>
 		</form>
 	</div>
 </div>
@@ -33,7 +33,7 @@
 	<div class="span6  move-mod" >
 		<div class="move-mod-group">
 			<div class="heading clearfix move-mod-head">
-				<h3 class="pull-left">{$lang.user_account_info}</h3>
+				<h3 class="pull-left">{lang key='user::user_account_manage.user_account_info'}</h3>
 			</div>
 
 			<div class="manage_box">
@@ -42,16 +42,16 @@
 					<div class="ov_text">
 						<strong>{$account.voucher_amount}</strong>
 						<a target="_blank" href='{url path="user/admin_account/init" args="process_type=0&is_paid=1&start_date={$start_date}&end_date={$end_date}"}'>
-							{$lang.user_add_money}
+							{lang key='user::user_account_manage.user_add_money'}
 						</a>
 					</div>
 				</div>
 				<div class="ov_group">
 					<div class="p_bar_down p_canvas">20,15,18,14,10,13,9,7</div>
 					<div class="ov_text">
-						<strong>{$account.voucher_amount}</strong> 
+						<strong>{$account.to_cash_amount}</strong> 
 						<a target="_blank" href='{url path="user/admin_account/init" args="process_type=1&is_paid=1&start_date={$start_date}&end_date={$end_date}"}'>
-							{$lang.user_repay_money}
+							{lang key='user::user_account_manage.user_repay_money'}
 						</a>
 					</div>
 				</div>
@@ -60,7 +60,7 @@
 					<div class="ov_text">
 						<strong>{$account.user_money}</strong> 
 						<a target="_blank" href='{url path="user/admin/init"}'>
-							{$lang.user_money}
+							{lang key='user::user_account_manage.user_money'}
 						</a>
 					</div>
 				</div>
@@ -69,7 +69,7 @@
 					<div class="ov_text">
 						<strong class="red">{$account.frozen_money}</strong> 
 						<a target="_blank" href='{url path="user/admin/init"}'>
-							{$lang.frozen_money}
+							{lang key='user::user_account_manage.frozen_money'}
 						</a>
 					</div>
 				</div>
@@ -81,7 +81,7 @@
 	<div class="span6  move-mod" >
 		<div class="move-mod-group">
 			<div class="heading clearfix move-mod-head">
-				<h3 class="pull-left">{$lang.surplus_info}</h3>
+				<h3 class="pull-left">{lang key='user::user_account_manage.surplus_info'}</h3>
 			</div>
 			<div class="manage_box">
 				<div class="ov_group">
@@ -89,7 +89,7 @@
 					<div class="ov_text">
 						<strong>{$account.surplus}</strong> 
 						<a target="_blank" href='{url path="user/admin_account_manage/surplus" args="start_date={$start_date}&end_date={$end_date}"}'>
-							{$lang.order_surplus}
+							{lang key='user::user_account_manage.order_surplus'}
 						</a>
 					</div>
 				</div>
@@ -98,7 +98,7 @@
 					<div class="ov_text">
 						<strong>{$account.integral_money}</strong> 
 						<a target="_blank" href='{url path="user/admin_account_manage/surplus" args="start_date={$start_date}&end_date={$end_date}"}'>
-							{$lang.integral_money}
+							{lang key='user::user_account_manage.integral_money'}
 						</a>
 					</div>
 				</div>

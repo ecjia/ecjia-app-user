@@ -20,44 +20,44 @@
 	<form action="{$form_action}" name="searchForm" method="post">
 		<div class="wspan12">
 			<div class="top_right f_r">
-				<input class="w150" type="text" name="keywords" value="{$list.filter.keywords}" placeholder="请输入会员名称"/>
-				<button class="btn m_l5" type="submit">{$lang.button_search}</button>
+				<input type="text" name="keywords" value="{$list.filter.keywords}" placeholder="{lang key='user::user_account.user_name_keyword'}"/>
+				<button class="btn m_l5" type="submit">{lang key='system::system.button_search'}</button>
 			</div>
 		</div>
 		
 		<div class="btn-group f_l m_t10">
 			<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-				<i class="fontello-icon-cog"></i>{t}批量操作{/t}
+				<i class="fontello-icon-cog"></i>{lang key='user::user_account.bulk_operations'}
 				<span class="caret"></span>
 			</a>
 			<ul class="dropdown-menu">
-				<li><a data-toggle="ecjiabatch" data-idClass=".checkbox:checked" data-url="{$batch_action}" data-msg="已完成的申请无法被删除，你确定要删除选中的列表吗？" data-noSelectMsg="请先选中要操作的项！" data-name="checkboxes" href="javascript:;"><i class="fontello-icon-trash"></i>{t}批量删除{/t}</a></li>
+				<li><a data-toggle="ecjiabatch" data-idClass=".checkbox:checked" data-url="{$batch_action}" data-msg="{lang key='user::user_account.application_confirm'}" data-noSelectMsg="{lang key='user::user_account.select_operated_confirm'}" data-name="checkboxes" href="javascript:;"><i class="fontello-icon-trash"></i>{lang key='user::user_account.batch_deletes'}</a></li>
 			</ul>
 		</div>
 		
 		<div class="choose_list f_r m_t10">
 			<select class="w80" name="process_type">
-			<option value="-1" >{$lang.process_type}</option>
-			<option value="0" {if $list.filter.process_type eq 0} selected="selected" {/if}>{$lang.surplus_type_0}</option>
-			<option value="1" {if $smarty.get.process_type eq 1} selected="selected" {/if} >{$lang.surplus_type_1}</option>
+			<option value="-1" >{lang key='user::user_account.process_type'}</option>
+			<option value="0" {if $list.filter.process_type eq 0} selected="selected" {/if}>{lang key='user::user_account.surplus_type.0'}</option>
+			<option value="1" {if $smarty.get.process_type eq 1} selected="selected" {/if} >{lang key='user::user_account.surplus_type.1'}</option>
 			</select>
 			<select class="w120" name="payment">
-				<option value="">{$lang.pay_mothed}</option>
+				<option value="">{lang key='user::user_account.pay_mothed'}</option>
 				<!-- {foreach from=$payment item=item} -->
 				<option value="{$item.pay_name}" {if $list.filter.payment eq $item.pay_name} selected="selected" {/if}>{$item.pay_name}</option> 
 				<!-- {/foreach} -->
 			</select>
 			<select class="w80" name="is_paid">
-				<option value="-1">{$lang.status}</option>
-				<option value="0" {if $list.filter.is_paid eq 0} selected="selected" {/if}>{$lang.unconfirm}</option>
-				<option value="1" {if $smarty.get.is_paid eq 1} selected="selected" {/if}>{$lang.confirm}</option>
-				<option value="2" {if $smarty.get.is_paid eq 2} selected="selected" {/if}>{$lang.cancel}</option>
+				<option value="-1">{lang key='user::user_account.status'}</option>
+				<option value="0" {if $list.filter.is_paid eq 0} selected="selected" {/if}>{lang key='user::user_account.unconfirm'}</option>
+				<option value="1" {if $smarty.get.is_paid eq 1} selected="selected" {/if}>{lang key='user::user_account.confirm'}</option>
+				<option value="2" {if $smarty.get.is_paid eq 2} selected="selected" {/if}>{lang key='user::user_account.cancel'}</option>
 			</select>
-			<input class="date f_l w150" name="start_date" type="text" value="{$smarty.get.start_date}" placeholder="开始时间">
-			<span class="f_l">至</span>
-			<input class="date f_l w150" name="end_date" type="text" value="{$smarty.get.end_date}" placeholder="结束时间">
+			<input class="date f_l w150" name="start_date" type="text" value="{$smarty.get.start_date}" placeholder="{lang key='user::user_account.start_date'}">
+			<span class="f_l">{lang key='user::user_account.to'}</span>
+			<input class="date f_l w150" name="end_date" type="text" value="{$smarty.get.end_date}" placeholder="{lang key='user::user_account.end_date'}">
 			
-			<button class="btn select-button" type="button">{t}筛选{/t}</button>
+			<button class="btn select-button" type="button">{lang key='user::user_account.filter'}</button>
 		</div>
 		
 	</form>
@@ -68,13 +68,13 @@
 			<thead>
 				<tr>
 					<th class="table_checkbox"><input type="checkbox" data-toggle="selectall" data-children=".checkbox"/></th>
-					<th>{$lang.user_id}</th>
-					<th>{$lang.surplus_amount}</th>
-					<th>{$lang.process_type}</th>
-					<th>{$lang.pay_mothed}</th>
-					<th>{$lang.status}</th>
-					<th>{$lang.add_date}</th>
-					<th>{$lang.handler}</th>
+					<th>{lang key='user::user_account.user_id'}</th>
+					<th>{lang key='user::user_account.surplus_amount'}</th>
+					<th class="w110">{lang key='user::user_account.pay_mothed'}</th>
+					<th class="w50">{lang key='user::user_account.process_type'}</th>
+					<th class="w80">{lang key='user::user_account.status'}</th>
+					<th class="w130">{lang key='user::user_account.add_date'}</th>
+					<th class="w80">{lang key='system::system.handler'}</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -87,27 +87,28 @@
 						<input type="checkbox" value="{$item.id}" disabled="disabled" />
 						<!-- {/if} -->
 					</td>
-					<td>{if $item.user_name}{$item.user_name}{else}{$lang.no_user}{/if}</td>
+					<td>{if $item.user_name}{$item.user_name}{else}{lang key='user::user_account.no_user'}{/if}</td>
 					<td align="right">{$item.surplus_amount}</td>
-					<td align="center">{$item.process_type_name}</td>
 					<td>{if $item.payment}{$item.payment}{/if}</td>
-					<td align="center">{if $item.is_paid eq 1}{$lang.confirm}{elseif $item.is_paid eq 0}{$lang.unconfirm}{else}{$lang.cancel}{/if}</td>
+					<td align="center">{$item.process_type_name}</td>
+					<td align="center">{if $item.is_paid eq 1}{lang key='user::user_account.confirm'}{elseif $item.is_paid eq 0}{lang key='user::user_account.unconfirm'}{else}{lang key='user::user_account.cancel'}{/if}</td>
 					<td align="center">{$item.add_date}</td>
 					<td align="center">
 						<!-- {if $item.is_paid eq 1} -->
-						<a class="data-pjax no-underline" href='{url path="user/admin_account/edit" args="id={$item.id}"}' title="{t}编辑{/t}"><i class="fontello-icon-edit"></i></a>
+						<a class="data-pjax no-underline" href='{url path="user/admin_account/edit" args="id={$item.id}"}' title="{lang key='system::system.edit'}"><i class="fontello-icon-edit"></i></a>
 						<!-- {else} -->
-						<a class="data-pjax no-underline" href='{url path="user/admin_account/check" args="id={$item.id}"}' title="{$lang.check}" ><i class="fontello-icon-doc-text"></i></a>
-						<a class="ajaxremove no-underline" data-toggle="ajaxremove" data-msg="{t}您确定要删除会员[{$item.user_name}]的充值提现记录吗？{/t}" href='{url path="user/admin_account/remove" args="id={$item.id}"}' title="{t}移除{/t}"><i class="fontello-icon-trash"></i></a>
+						<a class="data-pjax no-underline" href='{url path="user/admin_account/check" args="id={$item.id}"}' title="{lang key='user::user_account.check'}" ><i class="fontello-icon-doc-text"></i></a>
+						<a class="ajaxremove no-underline" data-toggle="ajaxremove" data-msg="{lang key='user::user_account.delete_surplus_confirm'}" href='{url path="user/admin_account/remove" args="id={$item.id}"}' title="{lang key='user::user_account.delete'}"><i class="fontello-icon-trash"></i></a>
 						<!-- {/if} -->
 					</td>
 				</tr>
 				<!-- {foreachelse}-->
-				<tr><td class="no-records" colspan="10">{$lang.no_records}</td></tr>
+				<tr><td class="no-records" colspan="10">{lang key='system::system.no_records'}</td></tr>
 				<!-- {/foreach} -->
 			</tbody>
 		</table>
 		<!-- {$list.page} -->
 	</div>
 </div>
+
 <!-- {/block} -->
