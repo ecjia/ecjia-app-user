@@ -548,7 +548,7 @@ class admin extends ecjia_admin {
 			if (!empty($order)) {
 				foreach ($order as $k => $v) {
 					$order[$k]['add_time']	 = RC_Time::local_date(ecjia::config('time_format'), $v['add_time']);
-					$order[$k]['status']	 = RC_Lang::lang("os/$v[order_status]") . ',' . RC_Lang::lang("ps/$v[pay_status]") . ',' . RC_Lang::lang("ss/$v[shipping_status]");
+					$order[$k]['status']	 = RC_Lang::get('orders::order.os.'.$v['order_status']) . ',' .RC_Lang::get('orders::order.ps.'.$v['pay_status']) . ',' . RC_Lang::get('orders::order.ss.'.$v['shipping_status']);
 				}
 			}
 		}
@@ -572,7 +572,7 @@ class admin extends ecjia_admin {
 		$this->admin_priv('users_drop', ecjia::MSGTYPE_JSON);
 		
 		if (!empty($_SESSION['ru_id'])) {
-			$this->showmessage(RC_Lang::lang('user::user_account.merchants_notice'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			$this->showmessage(RC_Lang::get('user::user_account.merchants_notice'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 		if (isset($_POST['checkboxes'])) {
 			$idArr = explode(',', $_POST['checkboxes']);
@@ -602,7 +602,7 @@ class admin extends ecjia_admin {
 		$this->admin_priv('users_manage', ecjia::MSGTYPE_JSON);
 		
 		if (!empty($_SESSION['ru_id'])) {
-			$this->showmessage(RC_Lang::lang('user::user_account.merchants_notice'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			$this->showmessage(RC_Lang::get('user::user_account.merchants_notice'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 		$id	= intval($_REQUEST['pk']);
 		$email	= trim($_REQUEST['value']);

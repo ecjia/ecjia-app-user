@@ -106,10 +106,7 @@ class admin_account extends ecjia_admin {
 		);
 		$this->assign('ur_here',		RC_Lang::get('user::user_account.surplus_add'));
 		$this->assign('action_link',	array('href' => RC_Uri::url('user/admin_account/init'), 'text' => RC_Lang::get('user::user_account.recharge_withdrawal_apply')));
-		
-		$ur_here  = RC_Lang::lang('surplus_add');
-		$id		 = isset($_GET['id']) ? intval($_GET['id']) : 0;
-		
+				
 		/* 获得支付方式列表, 不包括“货到付款” */
 		$payment = get_payment();
 		
@@ -185,7 +182,7 @@ class admin_account extends ecjia_admin {
 		
 		/* 更新会员余额数量 */
 		if ($is_paid == 1) {
-			$change_desc = $amount > 0 ? RC_Lang::lang('surplus_type_0') : RC_Lang::lang('surplus_type_1');
+			$change_desc = $amount > 0 ? RC_Lang::get('user::user_account.surplus_type.0') : RC_Lang::get('user::user_account.surplus_type.1');
 			$change_type = $amount > 0 ? ACT_SAVING : ACT_DRAWING;
 			change_account_log($user_id , $amount , 0 , 0 , 0 , $change_desc , $change_type);
 		}

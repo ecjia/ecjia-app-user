@@ -128,7 +128,7 @@ function get_account_list($args = array()) {
 			foreach ($list AS $key => $value) {
 				$list[$key]['surplus_amount']		= price_format(abs($value['amount']), false);
 				$list[$key]['add_date']				= RC_Time::local_date(ecjia::config('time_format'), $value['add_time']);
-				$list[$key]['process_type_name']	= RC_Lang::lang('surplus_type_' . $value['process_type']);
+				$list[$key]['process_type_name']	= RC_Lang::get('user::user_account.surplus_type.'.$value['process_type']);
 				/* php 过滤html标签 */
 				$list[$key]['payment']				= empty($pay_name[$value['payment']]) ? strip_tags($value['payment']) : strip_tags($pay_name[$value['payment']]);
 			}
