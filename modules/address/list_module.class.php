@@ -7,8 +7,8 @@ defined('IN_ECJIA') or exit('No permission resources.');
  */
 class list_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
+    	
     	$this->authSession();	
-			
 		$user_id = $_SESSION['user_id'];
 		
 		$db_user_address = RC_Loader::load_app_model('user_address_model', 'user');
@@ -24,9 +24,7 @@ class list_module extends api_front implements api_interface {
 		$field = 'ua.*, IFNULL(u.address_id, 0) as is_default_address';
 		$consignee_list = $dbview_user_address->field($field)->where(array('ua.user_id' => $user_id))->order(array('is_default_address' => 'desc', 'address_id' => 'desc'))->limit($page_row->limit())->select();
 // 		$consignee_list = $db_user_address->where(array('user_id' => $user_id))->order(array('address_id' => 'desc'))->limit(5)->select();
-		
-
-		
+	
 		$result = array();
 		if (!empty($consignee_list)) {
 			foreach ($consignee_list as $key => $value) {
@@ -64,6 +62,5 @@ class list_module extends api_front implements api_interface {
 		return $result;
 	}
 }
-
 
 // end

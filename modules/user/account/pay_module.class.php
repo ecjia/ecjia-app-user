@@ -6,9 +6,9 @@ defined('IN_ECJIA') or exit('No permission resources.');
  *
  */
 class pay_module extends api_front implements api_interface {
-    public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
+    public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {
+    		
     	$this->authSession();	
-    	
  		//变量初始化
  		$account_id = $this->requestData('account_id', 0);
  		$payment_id = $this->requestData('payment_id', 0);
@@ -83,16 +83,10 @@ class pay_module extends api_front implements api_interface {
  *
  * @return  int
  */
-function get_surplus_info($account_id)
-{
+function get_surplus_info($account_id) {
 	$db = RC_Loader::load_app_model('user_account_model', 'user');
 	
 	return $db->find(array('id' => $account_id));
-	
-// 	$sql = 'SELECT * FROM ' .$GLOBALS['ecs']->table('user_account').
-// 	" WHERE id = '$surplus_id'";
-
-// 	return $GLOBALS['db']->getRow($sql);
 }
 
 // end

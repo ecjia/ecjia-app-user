@@ -7,8 +7,8 @@ defined('IN_ECJIA') or exit('No permission resources.');
  */
 class integral_record_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
+    	
     	$this->authSession();	
- 		
  		$size = EM_Api::$pagination['count'];
  		$page = EM_Api::$pagination['page'];
  		$user_id = $_SESSION['user_id'];

@@ -6,12 +6,11 @@ defined('IN_ECJIA') or exit('No permission resources.');
  *
  */
 class deposit_module extends api_front implements api_interface {
-    public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
+    public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {
+    		
     	$this->authSession();	
- 		
  		$amount = $this->requestData('amount');
  		$user_note = $this->requestData('note', '');
- 		
  		$account_id = $this->requestData('account_id', 0);
  		$payment_id = $this->requestData('payment_id', 0);
  		$user_id = $_SESSION['user_id'];
@@ -106,13 +105,12 @@ class deposit_module extends api_front implements api_interface {
  *
  * @return  int
  */
-function em_update_user_account($surplus)
-{
+function em_update_user_account($surplus) {
 	$db = RC_Loader::load_app_model('user_account_model', 'user');
 	$data = array(
-			'amount'	=> $surplus['amount'],
-			'user_note'	=> $surplus['user_note'],
-			'payment'	=> $surplus['payment'],
+		'amount'	=> $surplus['amount'],
+		'user_note'	=> $surplus['user_note'],
+		'payment'	=> $surplus['payment'],
 	);
 	$db->where(array('id' => $surplus['account_id']))->update($data);
 

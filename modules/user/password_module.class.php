@@ -7,8 +7,8 @@ defined('IN_ECJIA') or exit('No permission resources.');
  */
 class password_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
-    	$this->authSession();	
     	
+    	$this->authSession();	
  		RC_Loader::load_app_class('integrate', 'user', false);
  		$user = integrate::init_users();
  		

@@ -7,11 +7,10 @@ defined('IN_ECJIA') or exit('No permission resources.');
  */
 class forget_password_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
+    	
     	$this->authSession();	
-        
         $type = $this->requestData('type');
         $value = $this->requestData('value');
-
         if (empty($type) || empty($value)) {
         	EM_Api::outPut(101);
         }
@@ -82,8 +81,7 @@ class forget_password_module extends api_front implements api_interface {
         } else {
         	return new ecjia_error('send_code_error', __('验证码发送失败！'));
         }
-        
-        
+
 	}
 }
 

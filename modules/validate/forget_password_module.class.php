@@ -7,8 +7,8 @@ defined('IN_ECJIA') or exit('No permission resources.');
  */
 class forget_password_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
+    	
     	$this->authSession();	
-		
 		$type = $this->requestData('type');
 		$value = $this->requestData('value');
 		$code = $this->requestData('code');

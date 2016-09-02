@@ -7,10 +7,9 @@ defined('IN_ECJIA') or exit('No permission resources.');
  */
 class delete_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
+    	
     	$this->authSession();	
-		
 		$address_id = $this->requestData('address_id', 0);
-		
 		if (empty($address_id)) {
 			EM_Api::outPut(101);
 		} 
@@ -28,9 +27,9 @@ class delete_module extends api_front implements api_interface {
  * @param integer $id
  * @return boolean
  */
-function drop_consignee($id)
-{
+function drop_consignee($id) {
     $db_user_address = RC_Loader::load_app_model('user_address_model', 'user');
+    
     $uid = $db_user_address->where(array('address_id' => $id))->get_field('user_id');
     if (!empty($uid)) {
         if ($uid != $_SESSION['user_id']) {
@@ -43,6 +42,5 @@ function drop_consignee($id)
         return false;
     }
 }
-
 
 // end

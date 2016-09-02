@@ -3,14 +3,13 @@ defined('IN_ECJIA') or exit('No permission resources.');
 
 class signup_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
-    	$this->authSession();	
     	
+    	$this->authSession();	
 		if (ecjia::config('shop_reg_closed')) {
 			EM_Api::outPut(11);
 		}
 		
 		RC_Loader::load_app_class('integrate', 'user', false);
-		
 		$username = $this->requestData('name');
 		$password = $this->requestData('password');
 		$email = $this->requestData('email');

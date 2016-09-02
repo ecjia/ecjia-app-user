@@ -7,8 +7,8 @@ defined('IN_ECJIA') or exit('No permission resources.');
  */
 class list_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
-    	$this->authSession();	
     	
+    	$this->authSession();	
 		RC_Loader::load_app_func('collection', 'user');
 		RC_Loader::load_app_func('global', 'api');
 		$db_collect_goods = RC_Loader::load_app_model('collect_goods_model', 'goods');

@@ -6,9 +6,9 @@ defined('IN_ECJIA') or exit('No permission resources.');
  *
  */
 class delete_module extends api_front implements api_interface {
-    public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
+    public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {
+    		
     	$this->authSession();	
-    	
 		$collection_id = $this->requestData('rec_id');
 		$goods_id = $this->requestData('goods_id', 0);
 		if (empty($collection_id) && !goods_id) {
@@ -22,7 +22,6 @@ class delete_module extends api_front implements api_interface {
 			$collection_id = explode(',', $collection_id);
 			$db_collect_goods->where(array('rec_id' => $collection_id, 'user_id' => $_SESSION['user_id']))->delete();
 		}
-	
 		EM_Api::outPut(array());
 	}
 }

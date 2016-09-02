@@ -6,9 +6,9 @@ defined('IN_ECJIA') or exit('No permission resources.');
  *
  */
 class snsbind_module extends api_front implements api_interface {
-    public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
+    public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {
+    		
     	$this->authSession();	
-    
 		$name = $this->requestData('name');
 		$open_id = $this->requestData('id');
 		$type = $this->requestData('type');

@@ -7,8 +7,8 @@ defined('IN_ECJIA') or exit('No permission resources.');
  */
 class info_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
+    	
     	$this->authSession();	
-		
 		$id = $this->requestData('address_id', 0);
 		if(empty($id)){
 			EM_Api::outPut(101);

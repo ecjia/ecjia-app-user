@@ -6,9 +6,9 @@ defined('IN_ECJIA') or exit('No permission resources.');
  *
  */
 class add_module extends api_front implements api_interface {
-    public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
+    public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {
+    		
     	$this->authSession();	
-		
 		$address = $this->requestData('address', array());
 		
 		$address['user_id']       = $_SESSION['user_id'];
@@ -34,9 +34,7 @@ class add_module extends api_front implements api_interface {
 			return $result;
 		}
 		return array('address_id' => $result);
-	}
-	
-	
+	}	
 }
 
 // end

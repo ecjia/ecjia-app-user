@@ -7,8 +7,8 @@ defined('IN_ECJIA') or exit('No permission resources.');
  */
 class raply_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
+    	
     	$this->authSession();	
- 		
  		$amount = $this->requestData('amount');
  		$user_note = $this->requestData('note', '');
  		$amount = floatval($amount);
