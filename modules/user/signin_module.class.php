@@ -11,8 +11,8 @@ class signin_module extends api_front implements api_interface {
 		RC_Loader::load_app_func('user','user');
 		RC_Loader::load_app_func('cart','cart');
 		
-		$name = _POST('name');
-		$password = _POST('password');
+		$name = $this->requestData('name');
+		$password = $this->requestData('password');
 		
 		$is_mobile = false;
 
@@ -54,7 +54,7 @@ class signin_module extends api_front implements api_interface {
 		
 		//修正咨询信息
 		if($_SESSION['user_id'] > 0) {
-			$device = _POST('device', array());
+			$device = $this->requestData('device', array());
 			$device_id = $device['udid'];
 			$device_client = $device['client'];
 			$db_term_relation = RC_Loader::load_model('term_relationship_model');

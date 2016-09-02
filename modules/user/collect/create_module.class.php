@@ -9,7 +9,7 @@ class create_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	$this->authSession();	
 		
-		$goods_id = _POST('goods_id', 0);
+		$goods_id = $this->requestData('goods_id', 0);
 		if (!$goods_id) {
 			EM_Api::outPut(101);
 		}

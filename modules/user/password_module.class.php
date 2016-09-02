@@ -12,10 +12,10 @@ class password_module extends api_front implements api_interface {
  		RC_Loader::load_app_class('integrate', 'user', false);
  		$user = integrate::init_users();
  		
- 		$old_password = _POST('password', '');
- 		$new_password = _POST('new_password', '');
- 		$code		  = _POST('code', '');
-		$user_id	  = _POST('uid', $_SESSION['user_id']);
+ 		$old_password = $this->requestData('password', '');
+ 		$new_password = $this->requestData('new_password', '');
+ 		$code		  = $this->requestData('code', '');
+		$user_id	  = $this->requestData('uid', $_SESSION['user_id']);
 	    
 		if (strlen($new_password) < 6) {
 	    	$result = new ecjia_error('password_shorter', __('- 登录密码不能少于 6 个字符。'));

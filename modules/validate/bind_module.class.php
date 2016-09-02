@@ -9,9 +9,9 @@ class bind_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	$this->authSession();	
     	
-		$type = _POST('type');
-		$value = _POST('value');
-		$code = _POST('code');
+		$type = $this->requestData('type');
+		$value = $this->requestData('value');
+		$code = $this->requestData('code');
 		
 		$type_array = array('mobile');
 		//判断值是否为空，且type是否是在此类型中

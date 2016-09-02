@@ -9,7 +9,7 @@ class setDefault_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	$this->authSession();	
 			
-		$address_id = _POST('address_id', 0);
+		$address_id = $this->requestData('address_id', 0);
 		if (empty($address_id)) {
 			EM_Api::outPut(101);
 		}

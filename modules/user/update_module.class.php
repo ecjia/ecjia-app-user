@@ -9,7 +9,7 @@ class update_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	$this->authSession();	
 
-		$img = _POST('avatar_img');
+		$img = $this->requestData('avatar_img');
  		
  		$db = RC_Loader::load_app_model('users_model', 'user');
  		$userinfo = $db->field('user_name')->find(array('user_id' => $_SESSION['user_id']));

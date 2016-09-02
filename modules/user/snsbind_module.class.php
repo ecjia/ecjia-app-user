@@ -9,9 +9,9 @@ class snsbind_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	$this->authSession();	
     
-		$name = _POST('name');
-		$open_id = _POST('id');
-		$type = _POST('type');
+		$name = $this->requestData('name');
+		$open_id = $this->requestData('id');
+		$type = $this->requestData('type');
 		
 		$login_type = array('weixin', 'qq');
 		

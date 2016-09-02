@@ -11,7 +11,7 @@ class integral_module extends api_front implements api_interface {
     	
 		RC_Loader::load_app_func('order','orders');
 		
-		$integral = _POST('integral', 0);
+		$integral = $this->requestData('integral', 0);
 		if (!$integral) {
 			EM_Api::outPut(101);
 		}

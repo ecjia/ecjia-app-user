@@ -11,9 +11,9 @@ class update_module extends api_front implements api_interface {
 		
  		$db_user_address = RC_Loader::load_app_model('user_address_model', 'user');
 		
-		$address = _POST('address', array());
+		$address = $this->requestData('address', array());
 		$address['user_id'] = $_SESSION['user_id'];
-		$address['address_id']     = _POST('address_id', 0);
+		$address['address_id']     = $this->requestData('address_id', 0);
 		if (empty($address['address_id'])) {
 			EM_Api::outPut(101);
 		}

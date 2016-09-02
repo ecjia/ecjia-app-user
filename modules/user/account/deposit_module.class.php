@@ -9,11 +9,11 @@ class deposit_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	$this->authSession();	
  		
- 		$amount = _POST('amount');
- 		$user_note = _POST('note', '');
+ 		$amount = $this->requestData('amount');
+ 		$user_note = $this->requestData('note', '');
  		
- 		$account_id = _POST('account_id', 0);
- 		$payment_id = _POST('payment_id', 0);
+ 		$account_id = $this->requestData('account_id', 0);
+ 		$payment_id = $this->requestData('payment_id', 0);
  		$user_id = $_SESSION['user_id'];
  		
  		$amount = floatval($amount);

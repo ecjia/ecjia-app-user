@@ -9,7 +9,7 @@ class add_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	$this->authSession();	
 		
-		$address = _POST('address', array());
+		$address = $this->requestData('address', array());
 		
 		$address['user_id']       = $_SESSION['user_id'];
 		$address['consignee']     = isset($address['consignee']) ? trim($address['consignee']) : '';

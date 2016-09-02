@@ -9,8 +9,8 @@ class raply_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	$this->authSession();	
  		
- 		$amount = _POST('amount');
- 		$user_note = _POST('note', '');
+ 		$amount = $this->requestData('amount');
+ 		$user_note = $this->requestData('note', '');
  		$amount = floatval($amount);
 		if ($amount <= 0) {
  			$result = new ecjia_error('amount_gt_zero', __('请在“金额”栏输入大于0的数字！'));

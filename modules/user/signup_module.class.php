@@ -11,13 +11,13 @@ class signup_module extends api_front implements api_interface {
 		
 		RC_Loader::load_app_class('integrate', 'user', false);
 		
-		$username = _POST('name');
-		$password = _POST('password');
-		$email = _POST('email');
-		$fileld = _POST('field', array());//post的json格式：{"0":{"value":"15247258752","id":5}}
-		$device = _POST('device', array());
+		$username = $this->requestData('name');
+		$password = $this->requestData('password');
+		$email = $this->requestData('email');
+		$fileld = $this->requestData('field', array());//post的json格式：{"0":{"value":"15247258752","id":5}}
+		$device = $this->requestData('device', array());
 		$device_client = $device['client'];
-		$mobile = _POST('mobile');
+		$mobile = $this->requestData('mobile');
 		
 		$other = array();
 		$filelds = array();
@@ -108,7 +108,7 @@ class signup_module extends api_front implements api_interface {
 			
 			//修正咨询信息
 			if($_SESSION['user_id'] > 0) {
-				$device = _POST('device', array());
+				$device = $this->requestData('device', array());
 				$device_id = $device['udid'];
 				$device_client = $device['client'];
 				$db_term_relation = RC_Loader::load_model('term_relationship_model');

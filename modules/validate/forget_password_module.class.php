@@ -9,9 +9,9 @@ class forget_password_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	$this->authSession();	
 		
-		$type = _POST('type');
-		$value = _POST('value');
-		$code = _POST('code');
+		$type = $this->requestData('type');
+		$value = $this->requestData('value');
+		$code = $this->requestData('code');
 		
 		if (empty($type) || empty($value) || empty($code)) {
         	EM_Api::outPut(101);

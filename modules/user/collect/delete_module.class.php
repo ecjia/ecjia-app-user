@@ -9,8 +9,8 @@ class delete_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	$this->authSession();	
     	
-		$collection_id = _POST('rec_id');
-		$goods_id = _POST('goods_id', 0);
+		$collection_id = $this->requestData('rec_id');
+		$goods_id = $this->requestData('goods_id', 0);
 		if (empty($collection_id) && !goods_id) {
 			EM_Api::outPut(101);
 		}

@@ -14,7 +14,7 @@ class list_module extends api_front implements api_interface {
 		$db_collect_goods = RC_Loader::load_app_model('collect_goods_model', 'goods');
 		$page = EM_Api::$pagination;
  		$user_id = $_SESSION['user_id'];
-		$rec_id = _POST('rec_id', 0);
+		$rec_id = $this->requestData('rec_id', 0);
 		
 		$where = array('user_id'=>$user_id);
 		if ($rec_id) {

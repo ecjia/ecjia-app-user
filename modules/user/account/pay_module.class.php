@@ -10,8 +10,8 @@ class pay_module extends api_front implements api_interface {
     	$this->authSession();	
     	
  		//变量初始化
- 		$account_id = _POST('account_id', 0);
- 		$payment_id = _POST('payment_id', 0);
+ 		$account_id = $this->requestData('account_id', 0);
+ 		$payment_id = $this->requestData('payment_id', 0);
 	
  		if ($account_id <= 0 || $payment_id <= 0) {
 	    	EM_Api::outPut(101);

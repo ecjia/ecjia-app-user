@@ -9,9 +9,9 @@ class reset_password_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	$this->authSession();	
         
-        $type = _POST('type');
-        $value = _POST('value');
-		$password = _POST('password');
+        $type = $this->requestData('type');
+        $value = $this->requestData('value');
+		$password = $this->requestData('password');
         if (empty($type) || empty($value) || empty($password)) {
         	EM_Api::outPut(101);
         }

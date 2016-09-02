@@ -12,7 +12,7 @@ class record_module extends api_front implements api_interface {
  		$size = EM_Api::$pagination['count'];
  		$page = EM_Api::$pagination['page'];
  		$user_id = $_SESSION['user_id'];
- 		$process_type = _POST('type' ,'');
+ 		$process_type = $this->requestData('type' ,'');
  		$type = array('', 'deposit', 'raply');
 		if (!in_array($process_type, $type)) {
 			EM_Api::outPut(101);

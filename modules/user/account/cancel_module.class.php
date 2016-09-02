@@ -9,7 +9,7 @@ class cancel_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	$this->authSession();	
  		
- 		$id = _POST('account_id' , 0);
+ 		$id = $this->requestData('account_id' , 0);
  		$user_id = $_SESSION['user_id'];
  		
  		if ($id <= 0 || $user_id == 0) {
