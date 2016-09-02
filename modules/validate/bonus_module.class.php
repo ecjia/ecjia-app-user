@@ -11,7 +11,7 @@ class bonus_module extends api_front implements api_interface {
     	$this->authSession();	
  		RC_Loader::load_app_func('order','orders');
  		RC_Loader::load_app_func('cart','cart');
- 		$bonus_sn = trim($this->requestData('bonus_sn'));
+ 		$bonus_sn = $this->requestData('bonus_sn');
 		if (is_numeric($bonus_sn)) {
 			RC_Loader::load_app_func('bonus','bonus');
 			$bonus = bonus_info(0, $bonus_sn);

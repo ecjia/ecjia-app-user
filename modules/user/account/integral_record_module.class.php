@@ -12,7 +12,6 @@ class integral_record_module extends api_front implements api_interface {
  		$size = EM_Api::$pagination['count'];
  		$page = EM_Api::$pagination['page'];
  		$user_id = $_SESSION['user_id'];
-//  		$type = empty($_POST['type']) ? 'income' : $_POST['expenses'];
  		$type = $this->requestData('type', 'income');
  		$user_id = 33;
 		$where = array();
