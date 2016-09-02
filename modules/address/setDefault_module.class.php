@@ -5,11 +5,9 @@ defined('IN_ECJIA') or exit('No permission resources.');
  * @author royalwang
  *
  */
-class setDefault_module implements ecjia_interface {
-	
-	public function run(ecjia_api & $api) {
-
-		EM_Api::authSession();	
+class setDefault_module extends api_front implements api_interface {
+    public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
+    	$this->authSession();	
 			
 		$address_id = _POST('address_id', 0);
 		if (empty($address_id)) {

@@ -5,11 +5,9 @@ defined('IN_ECJIA') or exit('No permission resources.');
  * @author royalwang
  *
  */
-class update_module implements ecjia_interface {
-	
-	public function run(ecjia_api & $api) {
-		
-		EM_Api::authSession();
+class update_module extends api_front implements api_interface {
+    public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
+    	$this->authSession();	
 		
  		$db_user_address = RC_Loader::load_app_model('user_address_model', 'user');
 		

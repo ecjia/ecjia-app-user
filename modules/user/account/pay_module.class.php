@@ -5,11 +5,10 @@ defined('IN_ECJIA') or exit('No permission resources.');
  * @author royalwang
  *
  */
-class pay_module implements ecjia_interface {
-	
-	public function run(ecjia_api & $api) {
-
- 		EM_Api::authSession();
+class pay_module extends api_front implements api_interface {
+    public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
+    	$this->authSession();	
+    	
  		//变量初始化
  		$account_id = _POST('account_id', 0);
  		$payment_id = _POST('payment_id', 0);

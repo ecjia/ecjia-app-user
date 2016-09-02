@@ -5,11 +5,9 @@ defined('IN_ECJIA') or exit('No permission resources.');
  * @author royalwang
  *
  */
-class record_module implements ecjia_interface {
-	
-	public function run(ecjia_api & $api) {
-
- 		EM_Api::authSession();
+class record_module extends api_front implements api_interface {
+    public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
+    	$this->authSession();	
  		
  		$size = EM_Api::$pagination['count'];
  		$page = EM_Api::$pagination['page'];

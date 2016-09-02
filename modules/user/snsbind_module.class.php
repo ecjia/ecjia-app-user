@@ -5,9 +5,9 @@ defined('IN_ECJIA') or exit('No permission resources.');
  * @author will.chen
  *
  */
-class snsbind_module implements ecjia_interface {
-	
-	public function run(ecjia_api & $api) {
+class snsbind_module extends api_front implements api_interface {
+    public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
+    	$this->authSession();	
     
 		$name = _POST('name');
 		$open_id = _POST('id');

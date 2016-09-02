@@ -5,11 +5,9 @@ defined('IN_ECJIA') or exit('No permission resources.');
  * @author will.chen
  *
  */
-class forget_password_module implements ecjia_interface {
-	
-	public function run(ecjia_api & $api) {
-		
-		EM_Api::authSession(false);
+class forget_password_module extends api_front implements api_interface {
+    public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
+    	$this->authSession();	
 		
 		$type = _POST('type');
 		$value = _POST('value');

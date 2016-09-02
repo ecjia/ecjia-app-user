@@ -1,9 +1,10 @@
 <?php
 defined('IN_ECJIA') or exit('No permission resources.');
 
-class signup_module implements ecjia_interface {
-	
-	public function run(ecjia_api & $api) {
+class signup_module extends api_front implements api_interface {
+    public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
+    	$this->authSession();	
+    	
 		if (ecjia::config('shop_reg_closed')) {
 			EM_Api::outPut(11);
 		}
