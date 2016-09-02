@@ -6,15 +6,13 @@ defined('IN_ECJIA') or exit('No permission resources.');
  * @author will
  *
  */
-class password_module implements ecjia_interface {
-	
-	public function run(ecjia_api & $api) {
-		
+class password_module extends api_admin implements api_interface {
+    public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {
+    		
+		$this->authadminSession();
 		$new_password = _POST('password');
-		
 		$adminid = _POST('uid', 0);
 		$admin_name = _POST('user_name');
-		 
 		if (empty($new_password) || $adminid == 0 ) {
 			$result = new ecjia_error('post_error', __('提交信息有误!'));
 			EM_Api::outPut($result);

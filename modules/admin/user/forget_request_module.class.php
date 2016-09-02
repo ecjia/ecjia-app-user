@@ -6,10 +6,10 @@ defined('IN_ECJIA') or exit('No permission resources.');
  * @author will
  *
  */
-class forget_request_module implements ecjia_interface {
-	
-	public function run(ecjia_api & $api) {
-		
+class forget_request_module extends api_admin implements api_interface {
+    public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {
+    		
+		$this->authadminSession();
 		$admin_username = _POST('username');
 		$type = _POST('type');
 		$type_info    = _POST('type_info');

@@ -5,11 +5,11 @@ defined('IN_ECJIA') or exit('No permission resources.');
  * @author will.chen
  *
  */
-class search_module implements ecjia_interface {
-	public function run(ecjia_api & $api) {
-
+class search_module extends api_admin implements api_interface {
+    public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {
+    		
+		$this->authadminSession();
 		$ecjia = RC_Loader::load_app_class('api_admin', 'api');
-		$ecjia->authadminSession();
 		$result = $ecjia->admin_priv('users_manage');
 		if (is_ecjia_error($result)) {
 			EM_Api::outPut($result);

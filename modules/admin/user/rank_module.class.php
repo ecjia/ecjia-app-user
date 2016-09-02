@@ -6,13 +6,11 @@ defined('IN_ECJIA') or exit('No permission resources.');
  * @author will
  *
  */
-class rank_module implements ecjia_interface {
-	
-	public function run(ecjia_api & $api) {
-		
+class rank_module extends api_admin implements api_interface {
+    public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {
+    		
+		$this->authadminSession();
 		$ecjia = RC_Loader::load_app_class('api_admin', 'api');
-		$ecjia->authadminSession();
-		
 		$db_user_rank = RC_Loader::load_app_model('user_rank_model', 'user');
 		$result = $db_user_rank->order(array('rank_id' => 'desc'))->select();
 		
