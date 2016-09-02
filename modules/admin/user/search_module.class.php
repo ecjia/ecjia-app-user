@@ -14,7 +14,7 @@ class search_module extends api_admin implements api_interface {
 		if (is_ecjia_error($result)) {
 			EM_Api::outPut($result);
 		}
-		$keywords = _POST('keywords');
+		$keywords = $this->requestData('keywords');
 		if (empty($keywords)) {
 			EM_Api::outPut(101);
 		}

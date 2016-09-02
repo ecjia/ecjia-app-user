@@ -10,9 +10,9 @@ class forget_request_module extends api_admin implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {
     		
 		$this->authadminSession();
-		$admin_username = _POST('username');
-		$type = _POST('type');
-		$type_info    = _POST('type_info');
+		$admin_username = $this->requestData('username');
+		$type = $this->requestData('type');
+		$type_info    = $this->requestData('type_info');
 		
 		if (empty($admin_username) || empty($type_info)) {
 			$result = new ecjia_error('empty_error', __('请填写用户相关信息！'));

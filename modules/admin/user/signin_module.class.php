@@ -11,9 +11,9 @@ class signin_module extends api_admin implements api_interface {
     		
 		$this->authadminSession();
 		
-		$username	= _POST('username');
-		$password	= _POST('password');
-		$device		= _POST('device', array());
+		$username	= $this->requestData('username');
+		$password	= $this->requestData('password');
+		$device		= $this->requestData('device', array());
 		if (empty($username) || empty($password)) {
 			$result = new ecjia_error('login_error', __('您输入的帐号信息不正确。'));
 			EM_Api::outPut($result);
@@ -73,7 +73,7 @@ class signin_module extends api_admin implements api_interface {
 			
 			if (empty($row['ec_salt'])) {
 				$ec_salt = rand(1, 9999);
-				$new_possword = md5(md5($_POST['password']) . $ec_salt);
+				$new_possword = md5(md5($this->requestData('password')) . $ec_salt);
 				$data = array(
 						'ec_salt'	=> $ec_salt,
 						'password'	=> $new_possword
@@ -118,7 +118,7 @@ class signin_module extends api_admin implements api_interface {
 			//修正关联设备号
 			$result = ecjia_app::validate_application('mobile');
 			if (!is_ecjia_error($result)) {
-				$device = _POST('device', array());
+				$device = $this->requestData('device', array());
 				if (!empty($device['udid']) && !empty($device['client']) && !empty($device['code'])) {
 					$db_mobile_device = RC_Loader::load_app_model('mobile_device_model', 'mobile');
 					$device_data = array(

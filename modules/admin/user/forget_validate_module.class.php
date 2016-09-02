@@ -12,8 +12,8 @@ class forget_validate_module extends api_admin implements api_interface {
 		$this->authadminSession();
 		$ecjia = RC_Loader::load_app_class('api_admin', 'api');
 		$ecjia->passwordSession();
-		$code = _POST('code');
-		$type = _POST('type');
+		$code = $this->requestData('code');
+		$type = $this->requestData('type');
 		$time = RC_Time::gmtime() - 6000*3;//三分有效期
 		if (empty($code)) {
 			$result = new ecjia_error('code_empty_error', __('请填写校验码！'));

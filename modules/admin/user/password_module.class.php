@@ -10,9 +10,9 @@ class password_module extends api_admin implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {
     		
 		$this->authadminSession();
-		$new_password = _POST('password');
-		$adminid = _POST('uid', 0);
-		$admin_name = _POST('user_name');
+		$new_password = $this->requestData('password');
+		$adminid = $this->requestData('uid', 0);
+		$admin_name = $this->requestData('user_name');
 		if (empty($new_password) || $adminid == 0 ) {
 			$result = new ecjia_error('post_error', __('提交信息有误!'));
 			EM_Api::outPut($result);
