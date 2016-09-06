@@ -47,7 +47,7 @@ class admin_account extends ecjia_admin {
 		);
 		RC_Script::localize_script('admin_account', 'account_jslang', $account_jslang);
 		
-		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('充值提现申请'), RC_Uri::url('user/admin_account/init')));
+		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('user::user_account.recharge_withdrawal_apply'), RC_Uri::url('user/admin_account/init')));
 	}
 
 	/**
