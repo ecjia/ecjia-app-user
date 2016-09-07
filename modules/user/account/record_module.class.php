@@ -8,9 +8,9 @@ defined('IN_ECJIA') or exit('No permission resources.');
 class record_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	
-    	$this->authSession();	
- 		$size = EM_Api::$pagination['count'];
- 		$page = EM_Api::$pagination['page'];
+    	$this->authSession();
+    	$size = $this->requestData('pagination.count', 15);
+    	$page = $this->requestData('pagination.page', 1);
  		$user_id = $_SESSION['user_id'];
  		$process_type = $this->requestData('type' ,'');
  		$type = array('', 'deposit', 'raply');

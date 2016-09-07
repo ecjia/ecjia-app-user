@@ -9,8 +9,8 @@ class integral_record_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	
     	$this->authSession();	
- 		$size = EM_Api::$pagination['count'];
- 		$page = EM_Api::$pagination['page'];
+ 		$size = $this->requestData('pagination.count', 15);
+        $page = $this->requestData('pagination.page', 1);
  		$user_id = $_SESSION['user_id'];
  		$type = $this->requestData('type', 'income');
  		$user_id = 33;

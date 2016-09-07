@@ -12,7 +12,8 @@ class list_module extends api_front implements api_interface {
 		RC_Loader::load_app_func('collection', 'user');
 		RC_Loader::load_app_func('global', 'api');
 		$db_collect_goods = RC_Loader::load_app_model('collect_goods_model', 'goods');
-		$page = EM_Api::$pagination;
+		$size = $this->requestData('pagination.count', 15);
+		$page = $this->requestData('pagination.page', 1);
  		$user_id = $_SESSION['user_id'];
 		$rec_id = $this->requestData('rec_id', 0);
 		
@@ -25,9 +26,9 @@ class list_module extends api_front implements api_interface {
 		//加载分页类
 		RC_Loader::load_sys_class('ecjia_page', false);
 		//实例化分页
-		$page_row = new ecjia_page($record_count, $page['count'], 6, '', $page['page']);
+		$page_row = new ecjia_page($record_count, $size, 6, '', $page);
 		
-		$goods_list = EM_get_collection_goods($user_id, $page['count'], $page['page'], $rec_id);
+		$goods_list = EM_get_collection_goods($user_id, $size, $page, $rec_id);
 		
 		$data = array();
 		if (!empty($goods_list)) {

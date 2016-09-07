@@ -15,11 +15,12 @@ class list_module extends api_front implements api_interface {
 		$dbview_user_address = RC_Loader::load_app_model('user_address_user_viewmodel', 'user');
 		$db_region = RC_Loader::load_app_model('region_model','shipping');
 		
-		$page = EM_Api::$pagination;
+		$size = $this->requestData('pagination.count', 15);
+		$page = $this->requestData('pagination.page', 1);
 		$record_count = $db_user_address->where(array('user_id' => $user_id))->count();
 		
 		//实例化分页
-		$page_row = new ecjia_page($record_count, $page['count'], 6, '', $page['page']);
+		$page_row = new ecjia_page($record_count, $size, 6, '', $page);
 		
 		$field = 'ua.*, IFNULL(u.address_id, 0) as is_default_address';
 		$consignee_list = $dbview_user_address->field($field)->where(array('ua.user_id' => $user_id))->order(array('is_default_address' => 'desc', 'address_id' => 'desc'))->limit($page_row->limit())->select();
