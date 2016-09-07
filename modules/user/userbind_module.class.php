@@ -59,7 +59,7 @@ class userbind_module extends api_front implements api_interface {
 				return array('registered' => 0);
 			} else {
 				$result = new ecjia_error('sms_error', __('短信发送失败！'));//$response['description']
-				EM_Api::outPut($result);
+				return $result;
 			}
 		}
 		

@@ -142,7 +142,6 @@ class signup_module extends api_front implements api_interface {
 				}
 			}
 			
-			EM_Api::outPut($out);
 			return $out;
 		}
 //		$api->init_session();

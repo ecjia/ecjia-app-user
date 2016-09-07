@@ -16,12 +16,12 @@ class forget_request_module extends api_admin implements api_interface {
 		
 		if (empty($admin_username) || empty($type_info)) {
 			$result = new ecjia_error('empty_error', __('请填写用户相关信息！'));
-			EM_Api::outPut($result);
+			return $result;
 		}
 		if ($type == "email") {
 			if (RC_Validate::_email('mail',$type_info) !== true) {
 				$result = new ecjia_error('email_error', __('邮箱格式不正确！'));
-				EM_Api::outPut($result);
+				return $result;
 			}
 			$db = RC_Loader::load_model('admin_user_model');
 			
@@ -41,17 +41,17 @@ class forget_request_module extends api_admin implements api_interface {
 							'sid' => RC_Session::session_id(),
 					);
 					
-					EM_Api::outPut($data);
+					return $data;
 					
 				} else {
 					$result = new ecjia_error('post_email_error', __('邮件发送失败！'));
-					EM_Api::outPut($result);
+					return $result;
 				}
 			}
 		} else {
 			/* 提示信息 */
 			$result = new ecjia_error('userinfo_error', __('用户名与其信息不匹配！'));
-			EM_Api::outPut($result);
+			return $result;
 		}
 	    
 		

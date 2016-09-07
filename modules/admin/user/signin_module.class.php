@@ -16,7 +16,7 @@ class signin_module extends api_admin implements api_interface {
 		$device		= $this->requestData('device', array());
 		if (empty($username) || empty($password)) {
 			$result = new ecjia_error('login_error', __('您输入的帐号信息不正确。'));
-			EM_Api::outPut($result);
+			return $result;
 		}
 
 		/* 收银台请求判断处理*/
@@ -130,10 +130,10 @@ class signin_module extends api_admin implements api_interface {
 				}
 			}
 			
-			EM_Api::outPut($out);
+			return $out;
 		} else {
 			$result = new ecjia_error('login_error', __('您输入的帐号信息不正确。'));
-			EM_Api::outPut($result);
+			return $result;
 		}
 	    
 	}

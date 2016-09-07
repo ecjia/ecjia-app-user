@@ -33,7 +33,7 @@ class create_module extends api_front implements api_interface {
 			if ($data === false) {
 				EM_Api::outPut(8);
 			} else {
-				EM_Api::outPut(array());
+				return array();
 			}
 		}	
 	}

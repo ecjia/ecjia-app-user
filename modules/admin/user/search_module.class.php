@@ -12,7 +12,7 @@ class search_module extends api_admin implements api_interface {
 		$ecjia = RC_Loader::load_app_class('api_admin', 'api');
 		$result = $ecjia->admin_priv('users_manage');
 		if (is_ecjia_error($result)) {
-			EM_Api::outPut($result);
+			return $result;
 		}
 		$keywords = $this->requestData('keywords');
 		if (empty($keywords)) {

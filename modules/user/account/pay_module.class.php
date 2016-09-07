@@ -61,7 +61,7 @@ class pay_module extends api_front implements api_interface {
 	        	
 	        $result = $handler->get_code(payment_abstract::PAYCODE_PARAM);
 	        if (is_ecjia_error($result)) {
-	        	EM_Api::outPut($result);
+	        	return $result;
 	        } else {
 	        	$order['payment'] = $result;
 	        }
@@ -70,7 +70,7 @@ class pay_module extends api_front implements api_interface {
 	    } else {
 	    	/* 重新选择支付方式 */
 	    	$result = new ecjia_error('select_payment_pls_again', __('支付方式无效，请重新选择支付方式！'));
- 			EM_Api::outPut($result);
+ 			return $result;
 	    }
 	}
 }

@@ -63,9 +63,9 @@ class record_module extends api_front implements api_interface {
 				$account_list[$key]['pay_status'] = $value['pay_status'];
 				$account_list[$key]['add_time'] = $value['add_time'];
  			}
- 			EM_Api::outPut($account_list, $pager);
+ 			return array('data' => $account_list, 'pager' => $pager);
  		} else {
- 			EM_Api::outPut('', $pager);
+ 			return array('data' => array(), 'pager' => $pager);
  		}
 	}
 }

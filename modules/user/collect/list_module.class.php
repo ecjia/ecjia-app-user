@@ -88,7 +88,7 @@ class list_module extends api_front implements api_interface {
 				"more" => $page_row->total_pages > $page['page'] ? 1 : 0,
 		);
 
-		EM_Api::outPut($data, $pager);
+		return array('data' => $list, 'pager' => $pager);
 		
 		// 		$pager = get_pager('collection', array(), $record_count, $page['page'], $page['count']);
 		// 		EM_Api::outPut($data, array(

@@ -49,9 +49,9 @@ class integral_record_module extends api_front implements api_interface {
  					'change_desc'			=> $val['change_desc'],	
  				);
  			}
- 			EM_Api::outPut($data, $pager);
+ 			return array('data' => $data, 'pager' => $pager);
  		} else {
- 			EM_Api::outPut(array(), $pager);
+ 			return array('data' => array(), 'pager' => $pager);
  		}
 	}
 }

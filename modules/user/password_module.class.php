@@ -19,7 +19,7 @@ class password_module extends api_front implements api_interface {
 	    
 		if (strlen($new_password) < 6) {
 	    	$result = new ecjia_error('password_shorter', __('- 登录密码不能少于 6 个字符。'));
-	    	EM_Api::outPut($result);
+	    	return $result;
 	    }
 	
 	    $user_info = $user->get_profile_by_id($user_id); //论坛记录
@@ -40,7 +40,7 @@ class password_module extends api_front implements api_interface {
 	    }
 	    
 		if (is_ecjia_error($result)) {
-			EM_Api::outPut($result);
+			return $result;
 		}
 	}
 }

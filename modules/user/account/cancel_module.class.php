@@ -18,7 +18,7 @@ class cancel_module extends api_front implements api_interface {
  		RC_Loader::load_app_func('user', 'user');
  		$result = del_user_account($id, $user_id);
  		if ($result) {
- 			EM_Api::outPut(array());
+ 			return array();
  		} else {
  			EM_Api::outPut(8);
  		}

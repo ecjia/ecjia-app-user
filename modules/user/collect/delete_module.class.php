@@ -22,7 +22,7 @@ class delete_module extends api_front implements api_interface {
 			$collection_id = explode(',', $collection_id);
 			$db_collect_goods->where(array('rec_id' => $collection_id, 'user_id' => $_SESSION['user_id']))->delete();
 		}
-		EM_Api::outPut(array());
+		return array();
 	}
 }
 

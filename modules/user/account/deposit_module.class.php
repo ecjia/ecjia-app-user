@@ -18,7 +18,7 @@ class deposit_module extends api_front implements api_interface {
  		$amount = floatval($amount);
  		if ($amount <= 0) {
  			$result = new ecjia_error('amount_gt_zero', __('请在“金额”栏输入大于0的数字！'));
- 			EM_Api::outPut($result);
+ 			return $result;
  		}
  		
  		/* 变量初始化 */
@@ -33,7 +33,7 @@ class deposit_module extends api_front implements api_interface {
  		
  		if ($surplus['payment_id'] <= 0) {
  			$result = new ecjia_error('select_payment_pls', __('请选择支付方式！'));
- 			EM_Api::outPut($result);
+ 			return $result;
  		}
  		
  		$payment_method = RC_Loader::load_app_class('payment_method', 'payment');
@@ -87,7 +87,7 @@ class deposit_module extends api_front implements api_interface {
  		
 //  		$result = $handler->get_code(payment_abstract::PAYCODE_PARAM);
 //  		if (is_ecjia_error($result)) {
-//  			EM_Api::outPut($result);
+//  			return $result;
 //  		} else {
 //  			$order['payment'] = $result;
 //  			$order['payment']['account_id'] = $surplus['account_id'];

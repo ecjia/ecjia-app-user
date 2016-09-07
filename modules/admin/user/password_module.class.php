@@ -15,12 +15,12 @@ class password_module extends api_admin implements api_interface {
 		$admin_name = $this->requestData('user_name');
 		if (empty($new_password) || $adminid == 0 ) {
 			$result = new ecjia_error('post_error', __('提交信息有误!'));
-			EM_Api::outPut($result);
+			return $result;
 		}
 		
 		if (strlen($new_password) < 6 ) { 
 			$result = new ecjia_error('passwordlength_error', __('请输入至少6位数密码！'));
-			EM_Api::outPut($result);
+			return $result;
 		}
 		
 		$db = RC_Loader::load_model('admin_user_model');
@@ -30,7 +30,7 @@ class password_module extends api_admin implements api_interface {
 		
 		if ($admin_name == $name) {
 			$result = new ecjia_error('info_error', __('信息错误！'));
-			EM_Api::outPut($result);
+			return $result;
 		} else {
 			// 更新管理员的密码
 			$ec_salt = rand(1, 9999);
@@ -43,10 +43,10 @@ class password_module extends api_admin implements api_interface {
 		
 			if ($result) {
 				$data['data'] = __('密码修改成功!');
-				EM_Api::outPut($data);
+				return $data;
 			} else {
 				$result = new ecjia_error('update_error', __('密码修改失败!'));
-				EM_Api::outPut($result);
+				return $result;
 			}
 		}
 	    

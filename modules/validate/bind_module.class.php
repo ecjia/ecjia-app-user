@@ -24,18 +24,18 @@ class bind_module extends api_front implements api_interface {
  		if ($_SESSION['bindcode_lifetime'] + 180 < RC_Time::gmtime()) {
  			//过期
  			$result = new ecjia_error('code_timeout', __('验证码已过期，请重新获取！'));
- 			EM_Api::outPut($result);
+ 			return $result;
  		}
  		//判断校验码是否正确
  		if ($code != $_SESSION['bind_code'] ) {
  			$result = new ecjia_error('code_error', __('验证码错误，请重新填写！'));
- 			EM_Api::outPut($result);
+ 			return $result;
  		}
  		
  		//校验其他信息
  		if ($type != $_SESSION['bind_type'] || $value != $_SESSION['bind_value']) {
  			$result = new ecjia_error('msg_error', __('信息错误，请重新获取验证码'));
- 			EM_Api::outPut($result);
+ 			return $result;
  		}
  		
  		if ($type == 'mobile') {

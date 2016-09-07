@@ -74,7 +74,7 @@ class bonus_module extends api_front implements api_interface {
 		}
 
 		$out = array('bonus'=>$result['total']['bonus'], 'bonus_formated'=>$result['total']['bonus_formated']);
-		EM_Api::outPut($out);
+		return $out;
 	}
 }
 
