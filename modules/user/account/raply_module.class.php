@@ -42,7 +42,7 @@ class raply_module extends api_front implements api_interface {
  		
  		/* 如果成功提交 */
  		if ($surplus['account_id'] > 0) {
- 			return array('data' => "您的提现申请已成功提交，请等待管理员的审核！")
+ 			return array('data' => "您的提现申请已成功提交，请等待管理员的审核！");
  		} else {
  			$result = new ecjia_error('process_false', __('此次操作失败，请返回重试！'));
  			return $result;
