@@ -8,7 +8,7 @@ class get_password extends ecjia_front {
 	public function __construct() {	
 		parent::__construct();	
 		
-  		$this->db_users = RC_Loader::load_app_model('users_model','user');
+  		$this->db_users = RC_Model::model('user/users_model');
   		/* js加载ecjia.js*/
   		$this->assign('ecjia_js', RC_Uri::admin_url('statics/ecjia.js/ecjia.js'));
   		/* js与css加载路径*/

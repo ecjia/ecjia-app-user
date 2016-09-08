@@ -13,8 +13,8 @@ class admin_reg_fields extends ecjia_admin {
 		
 		RC_Loader::load_app_func('user');
 		RC_Loader::load_app_func('common', 'goods');
-		$this->db_reg_fields		= RC_Loader::load_app_model('reg_fields_model', 'user');
-		$this->db_reg_extend_info	= RC_Loader::load_app_model('reg_extend_info_model', 'user');
+		$this->db_reg_fields		= RC_Model::model('user/reg_fields_model');
+		$this->db_reg_extend_info	= RC_Model::model('user/reg_extend_info_model');
 		
 		/* 加载所需js */
 		RC_Script::enqueue_script('jquery-validate');

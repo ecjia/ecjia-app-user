@@ -45,8 +45,8 @@ class user_account_change_log_api extends Component_Event_Api {
      */
     private function log_account_change($user_id, $user_money = 0, $frozen_money = 0, $rank_points = 0, $pay_points = 0, $change_desc = '', $change_type = ACT_OTHER) {
         // 链接数据库
-        $db_account_log = RC_Loader::load_app_model ('account_log_model', 'user');
-        $db_users = RC_Loader::load_app_model ('users_model', 'user');
+        $db_account_log = RC_Model::model('user/account_log_model');
+        $db_users 		= RC_Model::model('user/users_model');
         /* 插入帐户变动记录 */
         $account_log = array (
             'user_id'		=> $user_id,

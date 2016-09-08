@@ -16,7 +16,7 @@ function EM_get_collection_goods($user_id, $num = 10, $start = 1, $rec_id = 0) {
     	$where = array_merge($where,array('c.rec_id'=>array('lt'=>$rec_id)));
     } 
     
-	$dbview = RC_Loader::load_app_model('collect_goods_viewmodel', 'user');
+	$dbview = RC_Model::model('user/collect_goods_viewmodel');
 	$res = $dbview->join(array('goods','member_price'))->where($where)->order(array('c.rec_id' => 'desc'))->limit(($start - 1) * $num , $num)->select();
 
     $goods_list = array();

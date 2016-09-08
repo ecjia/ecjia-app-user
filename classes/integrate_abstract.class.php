@@ -98,7 +98,7 @@ abstract class integrate_abstract
         $quiet = empty($cfg['quiet']) ? 0 : 1;
 
         /* 初始化数据库 */
-        $this->db = RC_Loader::load_app_model($this->user_table . '_model', 'user');
+        $this->db = RC_Model::model($this->user_table . '_model');
     }
 
     /**
@@ -208,7 +208,7 @@ abstract class integrate_abstract
      */
     public function edit_user($cfg)
     {
-//     	$db = RC_Loader::load_app_model('users_model','user');
+//     	$db = RC_Model::model('users_model','user');
         if (empty($cfg['username'])) {
             return false;
         } else {
@@ -275,16 +275,16 @@ abstract class integrate_abstract
     {
         $post_id = $id;
         
-        $db_order_info      = RC_Loader::load_app_model('order_info_model', 'orders');
-        $db_order_goods     = RC_Loader::load_app_model('order_goods_model','orders');
-        $db_booking_goods   = RC_Loader::load_app_model('booking_goods_model','goods');
-        $db_collect_goods   = RC_Loader::load_app_model('collect_goods_model','goods');
-        $db_feedback        = RC_Loader::load_app_model('feedback_model', 'feedback');
-        $db_user_address    = RC_Loader::load_app_model('user_address_model','user');
-        $db_user_bonus      = RC_Loader::load_app_model('user_bonus_model','bonus');
-        $db_user_account    = RC_Loader::load_app_model('user_account_model','user');
-        $db_tag             = RC_Loader::load_app_model('tag_model','goods');
-        $db_account_log     = RC_Loader::load_app_model('account_log_model','user');
+        $db_order_info      = RC_Model::model('orders/order_info_model');
+        $db_order_goods     = RC_Model::model('orders/order_goods_model');
+        $db_booking_goods   = RC_Model::model('goods/booking_goods_model');
+        $db_collect_goods   = RC_Model::model('goods/collect_goods_model');
+        $db_feedback        = RC_Model::model('feedback/feedback_model');
+        $db_user_address    = RC_Model::model('user/user_address_model');
+        $db_user_bonus      = RC_Model::model('bonus/user_bonus_model');
+        $db_user_account    = RC_Model::model('user/user_account_model');
+        $db_tag             = RC_Model::model('goods/tag_model');
+        $db_account_log     = RC_Model::model('user/account_log_model');
 
         /* 如果需要同步或是ecjia插件执行这部分代码 */
         if ($this->need_sync || (isset($this->is_ecjia) && $this->is_ecjia)) {
@@ -567,7 +567,7 @@ abstract class integrate_abstract
      */
     public function sync($username, $password='', $md5password='')
     {
-//     	$db = RC_Loader::load_app_model('users_model','user');
+//     	$db = RC_Model::model('user/users_model');
     	
         if ((!empty($password)) && empty($md5password)) {
             $md5password = md5($password);

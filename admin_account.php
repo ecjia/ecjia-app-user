@@ -21,11 +21,11 @@ class admin_account extends ecjia_admin {
 		RC_Loader::load_app_func('global');
 		assign_adminlog();
 		
-		$this->db_payment		= RC_Loader::load_app_model('payment_model', 'payment');
-		$this->db_user_account	= RC_Loader::load_app_model('user_account_model', 'user');
-		$this->db_users			= RC_Loader::load_app_model('users_model', 'user');
-		$this->db_pay_log		= RC_Loader::load_app_model('pay_log_model', 'orders');
-		$this->db_view			= RC_Loader::load_app_model('user_account_user_viewmodel');
+		$this->db_payment		= RC_Model::model('payment/payment_model');
+		$this->db_user_account	= RC_Model::model('user/user_account_model');
+		$this->db_users			= RC_Model::model('user/users_model');
+		$this->db_pay_log		= RC_Model::model('orders/pay_log_model');
+		$this->db_view			= RC_Model::model('user/user_account_user_viewmodel');
 		
 		/* 加载所需js */
 		RC_Script::enqueue_script('jquery-validate');
@@ -393,7 +393,7 @@ class admin_account extends ecjia_admin {
 	 * ajax删除一条信息
 	 */
 	public function remove() {
-		$db_view = RC_Loader::load_app_model('user_account_viewmodel');
+		$db_view = RC_Model::model('user_account_viewmodel');
 		/* 检查权限 */
 		$this->admin_priv('surplus_manage', ecjia::MSGTYPE_JSON);
 		

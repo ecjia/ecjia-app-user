@@ -12,7 +12,7 @@ class admin_integrate extends ecjia_admin {
 		RC_Loader::load_app_func('user');
 		
 		$this->integrate = RC_Loader::load_app_class('integrate', 'user');
-		$this->db_user = RC_Loader::load_app_model('users_model');
+		$this->db_user = RC_Model::model('user/users_model');
 
 		/* 加载所全局 js/css */
 		RC_Script::enqueue_script('jquery-validate');

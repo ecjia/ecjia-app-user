@@ -24,7 +24,7 @@ class user_get_user_list_api extends Component_Event_Api {
 	 * @param   object  $filters    过滤条件
 	 */
 	private function get_user_list($options) {
-		$db_user = RC_Loader::load_app_model('users_model', 'user');
+		$db_user = RC_Model::model('user/users_model');
 		
 		$filter['keywords']		= empty($options['keywords'])		? ''		: trim($options['keywords']);
 		$filter['rank']			= empty($options['rank'])			? 0			: intval($options['rank']);
@@ -36,7 +36,7 @@ class user_get_user_list_api extends Component_Event_Api {
 			$where[] = "(user_name LIKE '%" . mysql_like_quote($filter['keywords']) ."%' or email like '%".$filter['keywords'] ."%'or mobile_phone like '%".$filter['keywords'] ."%')"; 
 		}
 		if ($filter['rank']) {
-			$db_user_rank = RC_Loader::load_app_model('user_rank_model', 'user');
+			$db_user_rank = RC_Model::model('user/user_rank_model');
 			$row = $db_user_rank->field(array('min_points', 'max_points', 'special_rank'))->where(array('rank_id' => $filter['rank']))->find();
 			if ($row['special_rank'] > 0) {
 				$where['user_rank'] = $filter['rank'];

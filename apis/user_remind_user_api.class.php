@@ -9,7 +9,7 @@ class user_remind_user_api extends Component_Event_Api {
 	
 	public function call(&$options) {
 		
-		$db_user = RC_Loader::load_app_model('users_model', 'user');
+		$db_user = RC_Model::model('user/users_model');
 		if (empty($_SESSION['last_check'])) {
 			RC_Session::set('last_check', RC_Time::gmtime());
 			return array('new_user_count' => 0);

@@ -26,7 +26,7 @@ class user_address_manage_api extends Component_Event_Api {
         }
         
         if (!empty($address['province']) && !empty($address['city']) && !empty($address['address']) && empty($address['location'])) {
-        	$db_region = RC_Model::model('region_model');
+        	$db_region = RC_Model::model('user/region_model');
         	$region_name = $db_region->where(array('region_id' => array('in' => $address['province'], $address['city'], $address['district'])))->order('region_type')->select();
         	 
         	$province_name	= $region_name[0]['region_name'];
@@ -51,7 +51,7 @@ class user_address_manage_api extends Component_Event_Api {
         }
      
         /* 获取用户地址 */
-        $db_user_address = RC_Loader::load_app_model('user_address_model', 'user');
+        $db_user_address = RC_Model::model('user/user_address_model');
         $user_address = $db_user_address->where(array('address_id' => $address['address_id'], 'user_id' => $_SESSION['user_id']))->get_field('address_id');
         
         if ($address['address_id'] != $user_address) {
@@ -90,7 +90,7 @@ class user_address_manage_api extends Component_Event_Api {
      */
     private function update_address($address)
     {
-    	$db_user_address = RC_Loader::load_app_model('user_address_model', 'user');
+    	$db_user_address = RC_Model::model('user/user_address_model');
     
     	$address_id = 0;
     	if (isset($address['address_id'])) {
@@ -108,7 +108,7 @@ class user_address_manage_api extends Component_Event_Api {
     	}
     
     	if (isset($address['default']) && $address['default'] > 0 && isset($address['user_id'])) {
-    		$db_user = RC_Loader::load_app_model('users_model', 'user');
+    		$db_user = RC_Model::model('user/users_model');
     		$db_user->where(array('user_id' => $address['user_id']))->update(array('address_id' => $address_id));
     	}
     

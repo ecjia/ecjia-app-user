@@ -21,14 +21,14 @@ class admin extends ecjia_admin {
 		RC_Loader::load_app_func('user');
 		RC_Loader::load_app_func('common', 'goods');
 
-		$this->db_user				= RC_Loader::load_app_model('users_model');
-		$this->db_order				= RC_Loader::load_app_model('order_info_model', 'orders');
-		$this->db_user_rank			= RC_Loader::load_app_model('user_rank_model');
-		$this->db_reg_fields		= RC_Loader::load_app_model('reg_fields_model');
-		$this->db_reg_extend_info	= RC_Loader::load_app_model('reg_extend_info_model');
-		$this->db_view				= RC_Loader::load_app_model('user_address_viewmodel');
-		$this->db_view_user			= RC_Loader::load_app_model('user_viewmodel');
-		$this->db_user_address		= RC_Loader::load_app_model('user_address_user_viewmodel', 'user');
+		$this->db_user				= RC_Model::model('user/users_model');
+		$this->db_order				= RC_Model::model('orders/order_info_model');
+		$this->db_user_rank			= RC_Model::model('user/user_rank_model');
+		$this->db_reg_fields		= RC_Model::model('user/reg_fields_model');
+		$this->db_reg_extend_info	= RC_Model::model('user/reg_extend_info_model');
+		$this->db_view				= RC_Model::model('user/user_address_viewmodel');
+		$this->db_view_user			= RC_Model::model('user/user_viewmodel');
+		$this->db_user_address		= RC_Model::model('user/user_address_user_viewmodel');
 
 		/* 加载所全局 js */
 		RC_Script::enqueue_script('jquery-validate');

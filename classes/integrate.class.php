@@ -170,7 +170,7 @@ class integrate  {
 	  * @return bool $bool
 	  */
     public function register($username, $password, $email, $other = array()) {
-        $db_user = RC_Loader::load_app_model('users_model', 'user');
+        $db_user = RC_Model::model('user/users_model');
         
         /* 检查注册是否关闭 */
         if (ecjia::config('shop_reg_closed', ecjia::CONFIG_EXISTS)) {

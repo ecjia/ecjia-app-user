@@ -13,8 +13,8 @@ class admin_rank extends ecjia_admin {
 
 		RC_Loader::load_app_func('user');
 		RC_Loader::load_app_func('common', 'goods');
-		$this->db_user		= RC_Loader::load_app_model('users_model');
-		$this->db_user_rank	= RC_Loader::load_app_model('user_rank_model');
+		$this->db_user		= RC_Model::model('user/users_model');
+		$this->db_user_rank	= RC_Model::model('user/user_rank_model');
 		
 		/* 加载全局js/css */
 		RC_Script::enqueue_script('jquery-validate');

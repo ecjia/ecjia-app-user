@@ -14,8 +14,8 @@ class admin_account_manage extends ecjia_admin {
 		RC_Loader::load_app_func('user');
 		RC_Loader::load_app_func('common', 'goods');
 		
-		$this->db_account_log	= RC_Loader::load_app_model('account_log_model', 'user');
-		$this->db_order_info	= RC_Loader::load_app_model('order_info_model', 'user');
+		$this->db_account_log	= RC_Model::model('user/account_log_model');
+		$this->db_order_info	= RC_Model::model('user/order_info_model');
 		
 		RC_Script::enqueue_script('smoke');
 		RC_Script::enqueue_script('jquery-chosen');

@@ -13,7 +13,7 @@ defined('IN_ECJIA') or exit('No permission resources.');
  * @return void
  */
 function get_user_list($args = array()) {
-	$db_user = RC_Loader::load_app_model('users_model', 'user');
+	$db_user = RC_Model::model('user/users_model');
 	
 	$filter['keywords']		= empty($args['keywords'])		? ''		: trim($args['keywords']);
 	$filter['rank']			= empty($args['rank'])			? 0			: intval($args['rank']);
@@ -56,7 +56,7 @@ function get_payment($cod_fee = 0) {
  * @param unknown $args
  */
 function get_account_list($args = array()) {
-	$dbview = RC_Loader::load_app_model('user_account_user_viewmodel', 'user');
+	$dbview = RC_Model::model('user_account_user_viewmodel');
 	$payment_method = RC_Loader::load_app_class('payment_method', 'payment');
 	
 	$filter['user_id']		= empty($args['user_id'])			? 0  : intval($args['user_id']);
@@ -147,7 +147,7 @@ function get_account_list($args = array()) {
  * @return  int
  */
 function insert_user_account($surplus, $amount) {
-	$db = RC_Loader::load_app_model('user_account_model', 'user');
+	$db = RC_Model::model('user/user_account_model');
 	$data = array(
 		'user_id'		=> $surplus['user_id'] ,
 		'admin_user'	=> '' ,
@@ -176,7 +176,7 @@ function insert_user_account($surplus, $amount) {
  * @return  int
  */
 function update_user_account($id, $amount, $admin_note, $is_paid) {
-	$db = RC_Loader::load_app_model('user_account_model', 'user');
+	$db = RC_Model::model('user/user_account_model');
 
 	$data = array(
 		'admin_user'	=> $_SESSION['admin_name'],
@@ -198,7 +198,7 @@ function update_user_account($id, $amount, $admin_note, $is_paid) {
  * @return  boolen
  */
 function del_user_account($rec_id, $user_id) {
-	$db = RC_Loader::load_app_model('user_account_model', 'user');
+	$db = RC_Model::model('user/user_account_model');
 	
 	return $db->where(array('is_paid' => 0, 'id' => $rec_id, 'user_id' => $user_id))->delete();
 }
@@ -210,7 +210,7 @@ function del_user_account($rec_id, $user_id) {
  * @return  int
  */
 function get_user_surplus($user_id) {
-	$db_account_log = RC_Loader::load_app_model('account_log_model', 'user');
+	$db_account_log = RC_Model::model('user/account_log_model');
 	return $db_account_log->where(array('user_id' => $user_id))->sum('user_money');
 }
 
@@ -225,7 +225,7 @@ function get_user_surplus($user_id) {
  * @return  array
  */
 function get_account_log($user_id, $num, $start, $process_type = '') {
-	$db = RC_Loader::load_app_model('user_account_model', 'user');
+	$db = RC_Model::model('user/user_account_model');
 	$account_log = array();
 	
 	$where = array(
@@ -239,7 +239,7 @@ function get_account_log($user_id, $num, $start, $process_type = '') {
 	
 	if (!empty($res)) {
 		RC_Loader::load_sys_func('global');
-		$payment_db = RC_Loader::load_app_model('payment_model', 'payment');
+		$payment_db = RC_Model::model('payment/payment_model');
 		foreach ($res as $key=>$rows) {
 			$rows['add_time']         = RC_Time::local_date(ecjia::config('time_format'), $rows['add_time']);
 			$rows['admin_note']       = nl2br(htmlspecialchars($rows['admin_note']));
@@ -288,7 +288,7 @@ function get_account_log($user_id, $num, $start, $process_type = '') {
  */
 function get_account_log_list($user_id, $account_type = '') {
 
-	$db_account_log = RC_Loader::load_app_model('account_log_model', 'user');
+	$db_account_log = RC_Model::model('user/account_log_model');
 	/* 检查参数 */
 	$where['user_id'] = $user_id;
 	if (in_array($account_type, array('user_money', 'frozen_money', 'rank_points', 'pay_points'))) {
@@ -323,7 +323,7 @@ function get_account_log_list($user_id, $account_type = '') {
  */
 function get_total_amount ($start_date, $end_date, $type = 0) {
 
-	$dbview = RC_Loader::load_app_model('user_account_user_viewmodel', 'user');
+	$dbview = RC_Model::model('user/user_account_user_viewmodel');
 	$dbview->view =array(
 		'users' => array(
 			'type'		=> Component_Model_View::TYPE_LEFT_JOIN,
@@ -349,7 +349,7 @@ function get_total_amount ($start_date, $end_date, $type = 0) {
  * @return void
  */
 function get_user_order($args = array()) {
-	$dbview = RC_Loader::load_app_model('order_user_viewmodel', 'user');
+	$dbview = RC_Model::model('user/order_user_viewmodel');
 
 	$filter['keywords']		= empty($_REQUEST['keywords'])		? '' : trim($_REQUEST['keywords']);
 	$filter['start_date']	= empty($args['start_date'])		? '' : $args['start_date'];
@@ -404,7 +404,7 @@ function get_user_order($args = array()) {
  */
 function get_user_info($user_id) {
 	RC_Loader::load_app_func('common', 'goods');
-	$db_users = RC_Loader::load_app_model("users_model", "user");
+	$db_users = RC_Model::model('user/users_model');
 	$user = $db_users->find(array('user_id' => $user_id));
 
 	unset($user['question']);
@@ -424,7 +424,7 @@ function get_user_info($user_id) {
  * @return  array     rank_id=>rank_name
  */
 function get_user_rank_list($is_special = false) {
-	$db = RC_Loader::load_app_model('user_rank_model', 'user');
+	$db = RC_Model::model('user/user_rank_model');
 
 	$rank_list = array();
 	if ($is_special) {
@@ -461,8 +461,8 @@ function get_user_rank_list($is_special = false) {
  */
 function change_account_log($user_id, $user_money = 0, $frozen_money = 0, $rank_points = 0, $pay_points = 0, $change_desc = '', $change_type = ACT_OTHER) {
 	// 链接数据库
-	$db_account_log = RC_Loader::load_app_model ( "account_log_model", "user" );
-	$db_users = RC_Loader::load_app_model ( "users_model", "user" );
+	$db_account_log = RC_Model::model('user/account_log_model');
+	$db_users = RC_Model::model('user/users_model');
 	/* 插入帐户变动记录 */
 	$account_log = array (
 		'user_id'		=> $user_id,
@@ -493,11 +493,11 @@ function change_account_log($user_id, $user_money = 0, $frozen_money = 0, $rank_
  */
 function update_user_info() {
 	// 链接数据库
-	$dbview = RC_Loader::load_app_model('user_viewmodel', 'user');
-	$db_users = RC_Loader::load_app_model('users_model', 'user');
-	$db_user_bonus = RC_Loader::load_app_model('user_bonus_model', 'bonus');
-	$db_bonus_type = RC_Loader::load_app_model('bonus_type_model', 'bonus');
-	$db_user_rank = RC_Loader::load_app_model('user_rank_model', 'user');
+	$dbview = RC_Model::model('user/user_viewmodel');
+	$db_users = RC_Model::model('user/users_model');
+	$db_user_bonus = RC_Model::model('bonus/user_bonus_model');
+	$db_bonus_type = RC_Model::model('bonus/bonus_type_model');
+	$db_user_rank = RC_Model::model('user/user_rank_model');
 
 	if (! $_SESSION['user_id']) {
 		return false;
@@ -580,8 +580,8 @@ function update_user_info() {
  * @return  bool
  */
 function update_address($address) {
-	$db_user = RC_Loader::load_app_model('users_model', 'user');
-	$db_user_address = RC_Loader::load_app_model('user_address_model', 'user');
+	$db_user = RC_Model::model('users_model', 'user');
+	$db_user_address = RC_Model::model('user/user_address_model');
 
 	$address_id = intval($address['address_id']);
 	unset($address['address_id']);
@@ -603,10 +603,10 @@ function update_address($address) {
 }
 
 function EM_user_info($user_id) {
-	$db_collect_goods = RC_Loader::load_app_model('collect_goods_model', 'goods');
-// 	$db_order_info = RC_Loader::load_app_model('order_info_model', 'orders');
-	$db_user_rank = RC_Loader::load_app_model('user_rank_model', 'user');
-	$db_orderinfo_view = RC_Loader::load_app_model('order_info_viewmodel', 'orders');
+	$db_collect_goods = RC_Model::model('goods/collect_goods_model');
+// 	$db_order_info = RC_Model::model('order_info_model', 'orders');
+	$db_user_rank = RC_Model::model('user/user_rank_model');
+	$db_orderinfo_view = RC_Model::model('orders/order_info_viewmodel');
 	
 	$db_orderinfo_view->view = array(
 		'order_info' => array(
@@ -689,7 +689,7 @@ function EM_user_info($user_id) {
  *用户钱包，暂时只返回可用的红包
  */
 function em_get_user_bouns_list($user_id) {
-	$db = RC_Loader::load_app_model('user_bonus_type_viewmodel', 'bonus');
+	$db = RC_Model::model('bonus/user_bonus_type_viewmodel');
 	$db->view = array(
 		'bonus_type' 	=> array(
 			'type' 	=> Component_Model_View::TYPE_LEFT_JOIN,

@@ -12,7 +12,7 @@ class user_user_stats_api extends Component_Event_Api {
         $stats = RC_Cache::app_cache_get($cache_key, 'user');
         if (!$stats) {
     	
-			$db_user = RC_Loader::load_app_model ('users_model', 'user');
+			$db_user = RC_Model::model('user/users_model');
 	        /* 获取会员总数*/
 			$stats['total'] = $db_user->count();
 			RC_Cache::app_cache_set($cache_key, $stats, 'user', 120);//2小时缓存
