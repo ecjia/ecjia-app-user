@@ -213,6 +213,8 @@ return array(
 	
 	/*menu*/
 	'user_manage'			=> 'Member',
+	'user_update'			=> 'Update member',
+	'user_delete'			=> 'Delete member',
 	'surplus_reply'			=> 'Recharge And Withdrawals Apply',
 	'account_manage'		=> 'Funds Management',
 	'reg_fields'			=> 'Register Options Settings',
@@ -221,7 +223,6 @@ return array(
 	/*权限*/
 	'user_account_manage'	=> 'Member Account Management',
 	'surplus_manage'		=> 'Member Balance Management',
-	'users_manage'			=> 'Members Add / Edit',
 	'user_rank_manage'		=> 'Member Level Management',
 	'sync_users'			=> 'Member Data Synchronization',
 	

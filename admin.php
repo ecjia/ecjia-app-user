@@ -59,7 +59,7 @@ class admin extends ecjia_admin {
 	 * 用户帐号列表
 	 */
 	public function init() {
-		$this->admin_priv('users_manage');
+		$this->admin_priv('user_manage', ecjia::MSGTYPE_JSON);
 
 		ecjia_screen::get_current_screen()->remove_last_nav_here();
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('user::users.user_list')));
@@ -94,8 +94,7 @@ class admin extends ecjia_admin {
 	 * 添加会员帐号
 	 */
 	public function add() {
-		/* 检查权限 */
-		$this->admin_priv('users_manage');
+		$this->admin_priv('user_update', ecjia::MSGTYPE_JSON);
 
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('system::system.04_users_add')));
 		ecjia_screen::get_current_screen()->add_help_tab(array(
@@ -144,8 +143,8 @@ class admin extends ecjia_admin {
 	 * 添加会员帐号
 	 */
 	public function insert() {
-		/* 检查权限 */
-		$this->admin_priv('users_manage', ecjia::MSGTYPE_JSON);
+		$this->admin_priv('user_update', ecjia::MSGTYPE_JSON);
+		
 		RC_Loader::load_app_class('integrate', 'user', false);
 		$user = integrate::init_users();
 		
@@ -238,33 +237,13 @@ class admin extends ecjia_admin {
 		$links[] = array('text' =>RC_Lang::get('user::users.back_user_list'), 'href' => RC_Uri::url('user/admin/init'));
 		$links[] = array('text' =>RC_Lang::get('user::users.keep_add'), 'href' => RC_Uri::url('user/admin/add'));
 		$this->showmessage(RC_Lang::get('user::users.add_user_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('links' => $links, 'pjaxurl' => RC_Uri::url('user/admin/edit', array('id' => $max_id))));
-		
-// 		$users = &init_users();
-// 		if (!$users->add_user($username, $password, $email)) {
-// 			/* 插入会员数据失败 */
-// 			if ($users->error == ERR_INVALID_USERNAME) {
-// 				$msg = RC_Lang::lang('username_invalid');
-// 			} elseif ($users->error == ERR_USERNAME_NOT_ALLOW) {
-// 				$msg = RC_Lang::lang('username_not_allow');
-// 			} elseif ($users->error == ERR_USERNAME_EXISTS) {
-// 				$msg = RC_Lang::lang('username_exists');
-// 			} elseif ($users->error == ERR_INVALID_EMAIL) {
-// 				$msg = RC_Lang::lang('email_invalid');
-// 			} elseif ($users->error == ERR_EMAIL_NOT_ALLOW) {
-// 				$msg = RC_Lang::lang('email_not_allow');
-// 			} elseif ($users->error == ERR_EMAIL_EXISTS) {
-// 				$msg = RC_Lang::lang('email_exists');
-// 			}
-// 			$this->showmessage($msg , ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
-// 		}
 	}
 	
 	/**
 	 * 编辑用户帐号
 	 */
 	public function edit() {
-		/* 检查权限 */
-		$this->admin_priv('users_manage', ecjia::MSGTYPE_JSON);
+		$this->admin_priv('user_update', ecjia::MSGTYPE_JSON);
 
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('user::users.users_edit')));
 		ecjia_screen::get_current_screen()->add_help_tab(array(
@@ -373,8 +352,8 @@ class admin extends ecjia_admin {
 	 * 更新用户帐号
 	 */
 	public function update() {
-		/* 检查权限 */
-		$this->admin_priv('users_manage', ecjia::MSGTYPE_JSON);
+		$this->admin_priv('user_update', ecjia::MSGTYPE_JSON);
+		
 		RC_Loader::load_app_class('integrate', 'user', false);
 		$user = integrate::init_users();
 
@@ -478,8 +457,7 @@ class admin extends ecjia_admin {
 	 * 用户详情页面
 	 */
 	public function info() {
-		/* 检查权限 */
-		$this->admin_priv('users_manage');
+		$this->admin_priv('users_manage', ecjia::MSGTYPE_JSON);
 	
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('user::users.user_info')));
 		ecjia_screen::get_current_screen()->add_help_tab(array(
@@ -558,9 +536,6 @@ class admin extends ecjia_admin {
 		$this->assign('address_list',	$address_list);
 
 		$this->display('user_info.dwt');
-		
-// 		$users=& init_users();
-// 		$user = $users->get_user_info($row['user_name']);
 	}
 	
 	
@@ -568,8 +543,7 @@ class admin extends ecjia_admin {
 	 * 批量删除会员帐号
 	 */
 	public function batch_remove() {
-		/* 检查权限 */
-		$this->admin_priv('users_drop', ecjia::MSGTYPE_JSON);
+		$this->admin_priv('user_delete', ecjia::MSGTYPE_JSON);
 		
 		if (!empty($_SESSION['ru_id'])) {
 			$this->showmessage(RC_Lang::get('user::user_account.merchants_notice'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
@@ -598,8 +572,7 @@ class admin extends ecjia_admin {
 	 * 编辑email
 	 */
 	public function edit_email() {
-		/* 检查权限 */
-		$this->admin_priv('users_manage', ecjia::MSGTYPE_JSON);
+		$this->admin_priv('user_update', ecjia::MSGTYPE_JSON);
 		
 		if (!empty($_SESSION['ru_id'])) {
 			$this->showmessage(RC_Lang::get('user::user_account.merchants_notice'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
@@ -638,7 +611,6 @@ class admin extends ecjia_admin {
 	 * 删除会员帐号
 	 */
 	public function remove() {
-		/* 检查权限 */
 		$this->admin_priv('users_drop', ecjia::MSGTYPE_JSON);
 		
 		$user_id = $_GET['id'];
@@ -658,7 +630,6 @@ class admin extends ecjia_admin {
 	 * 收货地址查看
 	 */
 	public function address_list() {
-		/* 检查权限 */
 		$this->admin_priv('users_manage');
 	
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('user::users.address_list')));
@@ -714,98 +685,6 @@ class admin extends ecjia_admin {
 
 		$this->display('user_address_list.dwt');
 	}
-	
-	/**
-	 * 脱离推荐关系
-	 */
-// 	public function remove_parent()
-// 	{
-// 		/* 检查权限 */
-// 		$this->admin_priv('users_manage');
-		
-// 		$data = array('parent_id' => 0);
-// 		$this->db_user->where(array('user_id'=>$_GET['id']))->update($data);
-
-// 		/* 记录管理员操作 */
-// 		$username = $this->db_user->where(array('user_id'=>$_GET['id']))->get_field('user_name');
-// 		ecjia_admin::admin_log(addslashes($username), 'edit', 'users');
-
-// 		/* 提示信息 */
-// 		$link[] = array('text' => RC_Lang::lang('go_back'), 'href' => RC_Uri::url('user/admin/init'));
-// 		$this->showmessage(sprintf(RC_Lang::lang('update_success'), $username), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
-
-// //		$sql = "UPDATE " . $ecs->table('users') . " SET parent_id = 0 WHERE user_id = '" . $_GET['id'] . "'";
-// //		$db->query($sql);
-		
-// //		$sql = "SELECT user_name FROM " . $ecs->table('users') . " WHERE user_id = '" . $_GET['id'] . "'";
-// //		$username = $db->getOne($sql);
-		
-// //		$link[] = array('text' => RC_Lang::lang('go_back'), 'href'=>'index.php?m=user&c=admin&a=init');
-// //		sys_msg(sprintf($_LANG['update_success'], $username), 0, $link);	
-// 	}
-
-	/**
-	 * 查看用户推荐会员列表
-	 */
-// 	public function aff_list()
-// 	{
-// 		/* 检查权限 */
-// 		$this->admin_priv('users_manage');
-
-// 		$auid = $_GET['auid'];
-// 		$user_list['user_list'] = array();
-
-// 		$affiliate = unserialize(ecjia::config('affiliate'));
-// 		$this->assign('affiliate', $affiliate);
-
-// 		empty($affiliate) && $affiliate = array();
-
-// 		$num = count($affiliate['item']);
-// 		$up_uid = "'$auid'";
-// 		$all_count = 0;
-// 		for ($i = 1; $i<=$num; $i++) {
-// 			$count = 0;
-// 			if ($up_uid) {
-// 				$data = $this->db_user->field('user_id')->in(array('parent_id'=>$up_uid))->select();	
-// 				$up_uid = '';
-// 				foreach ($data as $key => $rt) {
-// 					$up_uid .= $up_uid ? ",'$rt[user_id]'" : "'$rt[user_id]'";
-// 					$count++;
-// 				}
-// 			}
-// 			$all_count += $count;
-// 			if ($count) {
-// 				$data = $this->db_user->field('user_id,user_name,'.$i.'|level,email,is_validated,user_money,frozen_money,rank_points,pay_points,reg_time')->in(array('user_id' => $up_uid))->order(array('level'=>'asc','user_id'=>'asc'))->select();	
-// 				$user_list['user_list'] = array_merge($user_list['user_list'], $data);
-// 			}
-// 		}
-// 		$temp_count = count($user_list['user_list']);
-// 		for ($i=0; $i<$temp_count; $i++) {
-// 			$user_list['user_list'][$i]['reg_time'] = RC_Time::local_date(ecjia::config('date_format'), $user_list['user_list'][$i]['reg_time']);
-// 		}
-
-// 		$user_list['record_count']		= $all_count;
-// 		$this->assign('ur_here',		RC_Lang::lang('03_users_list'));
-// 		$this->assign('action_link',	array('text' => RC_Lang::lang('back_note'), 'href'=>RC_Uri::url('m=user&c=edit&id=$auid')));
-// 		$this->assign('user_list',		$user_list['user_list']);
-// 		$this->assign('record_count',	$user_list['record_count']);
-// 		$this->assign('full_page',		1);
-
-// 		$this->display('affiliate_list.htm');
-
-// //		$sql = "SELECT user_id FROM " . $ecs->table('users') . " WHERE parent_id IN($up_uid)";
-// //		$query = $db->query($sql);
-// //		while ($rt = $db->fetch_array($query))
-
-// //		$sql = "SELECT user_id, user_name, '$i' AS level, email, is_validated, user_money, frozen_money, rank_points, pay_points, reg_time ".
-// //				" FROM " . $GLOBALS['ecs']->table('users') . " WHERE user_id IN($up_uid)" .
-// //				" ORDER by level, user_id";
-
-// //		$user_list['user_list'] = array_merge($user_list['user_list'], $db->getAll($sql));
-
-// //		$this->assign('action_link',array('text' => RC_Lang::lang('back_note'), 'href'=>"users.php?act=edit&id=$auid"));
-// 	}
-
 }
 
 // end

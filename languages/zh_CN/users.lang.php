@@ -213,6 +213,8 @@ return array(
 	
 	/*menu*/
 	'user_manage'			=> '会员管理',
+	'user_update'			=> '更新会员',
+	'user_delete'			=> '删除会员',
 	'surplus_reply'			=> '充值和提现申请',
 	'account_manage'		=> '资金管理',
 	'reg_fields'			=> '会员注册项设置',
@@ -221,7 +223,6 @@ return array(
 	/*权限*/
 	'user_account_manage'	=> '会员账户管理',
 	'surplus_manage'		=> '会员余额管理',
-	'users_manage'			=> '会员添加/编辑',
 	'user_rank_manage'		=> '会员等级管理',
 	'sync_users'			=> '同步会员数据',
 	
