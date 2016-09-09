@@ -11,7 +11,7 @@ class setDefault_module extends api_front implements api_interface {
     	$this->authSession();	
 		$address_id = $this->requestData('address_id', 0);
 		if (empty($address_id)) {
-			EM_Api::outPut(101);
+			return new ecjia_error(101, '参数错误');
 		}
 		
 		$db_user_address = RC_Loader::load_app_model('user_address_model','user');
@@ -19,7 +19,7 @@ class setDefault_module extends api_front implements api_interface {
 		
 		$arr = $db_user_address->find(array('address_id' => $address_id, 'user_id' => $_SESSION['user_id']));
 		if (empty($arr)) {
-			EM_Api::outPut(8);
+			return new ecjia_error(8, 'fail');
 		}
 		
 		/* 保存到session */

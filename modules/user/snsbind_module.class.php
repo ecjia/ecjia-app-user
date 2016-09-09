@@ -16,7 +16,7 @@ class snsbind_module extends api_front implements api_interface {
 		$login_type = array('weixin', 'qq');
 		
 		if (!in_array($type, $login_type) || empty($open_id) || empty($name)) {
-			EM_Api::outPut(101);
+			return new ecjia_error(101, '参数错误');
 		}
 		$db = RC_Loader::load_app_model('users_model', 'user');
 		$result = check_user($open_id, $type);
@@ -50,10 +50,10 @@ class snsbind_module extends api_front implements api_interface {
 				if ($out) {
 					return $out;
 				} else {
-					EM_Api::outPut(6);
+					return new ecjia_error(6, '密码错误');
 				}
 			} else {
-				EM_Api::outPut(8);
+				return new ecjia_error(8, 'fail');
 			}
 		} else {
 			if($result['aite_id'] == $open_id) {
@@ -78,7 +78,7 @@ class snsbind_module extends api_front implements api_interface {
 				}
 				return $out;
 			} else {
-				EM_Api::outPut(6);
+				return new ecjia_error(6, '密码错误');
 			}
 			
 		}

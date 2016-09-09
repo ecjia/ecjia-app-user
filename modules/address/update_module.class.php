@@ -14,7 +14,7 @@ class update_module extends api_front implements api_interface {
 		$address['user_id'] = $_SESSION['user_id'];
 		$address['address_id']     = $this->requestData('address_id', 0);
 		if (empty($address['address_id'])) {
-			EM_Api::outPut(101);
+			return new ecjia_error(101, '参数错误');
 		}
 		
 		$address['consignee']     = isset($address['consignee']) ? trim($address['consignee']) : '';

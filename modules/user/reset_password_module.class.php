@@ -13,7 +13,7 @@ class reset_password_module extends api_front implements api_interface {
         $value = $this->requestData('value');
 		$password = $this->requestData('password');
         if (empty($type) || empty($value) || empty($password)) {
-        	EM_Api::outPut(101);
+        	return new ecjia_error(101, '参数错误');
         }
         $db = RC_Loader::load_app_model('users_model', 'user');
         if ($type == 'mobile') {

@@ -15,7 +15,7 @@ class record_module extends api_front implements api_interface {
  		$process_type = $this->requestData('type' ,'');
  		$type = array('', 'deposit', 'raply');
 		if (!in_array($process_type, $type)) {
-			EM_Api::outPut(101);
+			return new ecjia_error(101, '参数错误');
 		}
  		$db = RC_Loader::load_app_model('user_account_model', 'user');
  		

@@ -12,7 +12,7 @@ class delete_module extends api_front implements api_interface {
 		$collection_id = $this->requestData('rec_id');
 		$goods_id = $this->requestData('goods_id', 0);
 		if (empty($collection_id) && !goods_id) {
-			EM_Api::outPut(101);
+			return new ecjia_error(101, '参数错误');
 		}
 		$db_collect_goods = RC_Loader::load_app_model('collect_goods_model','goods');
 		

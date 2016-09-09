@@ -11,14 +11,14 @@ class create_module extends api_front implements api_interface {
     	$this->authSession();	
 		$goods_id = $this->requestData('goods_id', 0);
 		if (!$goods_id) {
-			EM_Api::outPut(101);
+			return new ecjia_error(101, '参数错误');
 		}
 		
 		RC_Loader::load_app_func('goods', 'goods');
 		$goods = get_goods_info($goods_id);
 
 		if (!$goods) {
-			EM_Api::outPut(13);
+			return new ecjia_error(13, '不存在的信息');
 		}
 		/* 检查是否已经存在于用户的收藏夹 */
 		
@@ -26,12 +26,12 @@ class create_module extends api_front implements api_interface {
         $count = $db_collect_goods->where(array('user_id' => $_SESSION['user_id'] , 'goods_id' => $goods_id))->count();
 
 		if ($count > 0) {
-			EM_Api::outPut(10007);
+			return new ecjia_error(10007, '您已收藏过此商品');
 		} else {
 			$time = RC_Time::gmtime();
 			$data = $db_collect_goods->insert(array('user_id' => $_SESSION['user_id'] , 'goods_id' => $goods_id , 'add_time' => $time));
 			if ($data === false) {
-				EM_Api::outPut(8);
+				return new ecjia_error(8, 'fail');
 			} else {
 				return array();
 			}

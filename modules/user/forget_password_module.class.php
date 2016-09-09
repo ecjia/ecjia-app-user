@@ -12,7 +12,7 @@ class forget_password_module extends api_front implements api_interface {
         $type = $this->requestData('type');
         $value = $this->requestData('value');
         if (empty($type) || empty($value)) {
-        	EM_Api::outPut(101);
+        	return new ecjia_error(101, '参数错误');
         }
         $db = RC_Loader::load_app_model('users_model', 'user');
         if ($type == 'mobile') {

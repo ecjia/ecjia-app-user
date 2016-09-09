@@ -13,14 +13,14 @@ class cancel_module extends api_front implements api_interface {
  		$user_id = $_SESSION['user_id'];
  		
  		if ($id <= 0 || $user_id == 0) {
- 			EM_Api::outPut(101);
+ 			return new ecjia_error(101, '参数错误');
  		}
  		RC_Loader::load_app_func('user', 'user');
  		$result = del_user_account($id, $user_id);
  		if ($result) {
  			return array();
  		} else {
- 			EM_Api::outPut(8);
+ 			return new ecjia_error(8, 'fail');
  		}
 	}
 }

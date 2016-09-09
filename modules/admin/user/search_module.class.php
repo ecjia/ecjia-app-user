@@ -16,7 +16,7 @@ class search_module extends api_admin implements api_interface {
 		}
 		$keywords = $this->requestData('keywords');
 		if (empty($keywords)) {
-			EM_Api::outPut(101);
+			return new ecjia_error(101, '参数错误');
 		}
 		
 		$db_user = RC_Loader::load_app_model('user_viewmodel', 'user');

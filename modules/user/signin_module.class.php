@@ -33,7 +33,7 @@ class signin_module extends api_front implements api_interface {
 		/* 如果不是手机号码*/
 		if (!$is_mobile) {
 			if (!$user->login($name, $password)) {
-				EM_Api::outPut(6);
+				return new ecjia_error(6, '密码错误');
 			}
 		}
 		

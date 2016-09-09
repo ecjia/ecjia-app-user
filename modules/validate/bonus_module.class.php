@@ -70,7 +70,7 @@ class bonus_module extends api_front implements api_interface {
 			$result['total'] = $total;
 		}
 		if (!empty($result['error'])) {
-			EM_Api::outPut(101);
+			return new ecjia_error(101, '参数错误');
 		}
 
 		$out = array('bonus'=>$result['total']['bonus'], 'bonus_formated'=>$result['total']['bonus_formated']);

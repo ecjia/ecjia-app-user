@@ -11,7 +11,7 @@ class info_module extends api_front implements api_interface {
     	$this->authSession();	
 		$id = $this->requestData('address_id', 0);
 		if(empty($id)){
-			EM_Api::outPut(101);
+			return new ecjia_error(101, '参数错误');
 		}
 
 		RC_Loader::load_app_func('order','orders');
@@ -24,7 +24,7 @@ class info_module extends api_front implements api_interface {
 
 		/* 验证地址id */
 		if (empty($arr)) {
-		    EM_Api::outPut(13);
+		    return new ecjia_error(13, '不存在的信息');
 		}
 		
 		$consignee = get_consignee($user_id); // 取得默认地址

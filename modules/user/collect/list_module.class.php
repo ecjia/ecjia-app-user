@@ -91,7 +91,7 @@ class list_module extends api_front implements api_interface {
 		return array('data' => $list, 'pager' => $pager);
 		
 		// 		$pager = get_pager('collection', array(), $record_count, $page['page'], $page['count']);
-		// 		EM_Api::outPut($data, array(
+		// 		return array('data' => $data, 'pager' => array(
 		// 			"total"  => $record_count,
 		// 			"count"  => count($data),
 		// 			"more"   => intval($pager['page_count'] > $pager['page'])

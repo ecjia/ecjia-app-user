@@ -13,14 +13,14 @@ class integral_module extends api_front implements api_interface {
 		
 		$integral = $this->requestData('integral', 0);
 		if (!$integral) {
-			EM_Api::outPut(101);
+			return new ecjia_error(101, '参数错误');
 		}
 		$integral_to_p =  value_of_integral($integral);
 		return array(
 			"bonus" => $integral_to_p,
 			"bonus_formated" => price_format($integral_to_p, false)
 		);
-		EM_Api::outPut(101);
+		return new ecjia_error(101, '参数错误');
 	}
 }
 

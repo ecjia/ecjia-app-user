@@ -11,10 +11,10 @@ class delete_module extends api_front implements api_interface {
     	$this->authSession();	
 		$address_id = $this->requestData('address_id', 0);
 		if (empty($address_id)) {
-			EM_Api::outPut(101);
+			return new ecjia_error(101, '参数错误');
 		} 
 		if (!drop_consignee($address_id)) {
-			EM_Api::outPut(8);
+			return new ecjia_error(8, 'fail');
 		}
 		return array();		
 	}

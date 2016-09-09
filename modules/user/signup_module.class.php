@@ -6,7 +6,7 @@ class signup_module extends api_front implements api_interface {
     	
     	$this->authSession();	
 		if (ecjia::config('shop_reg_closed')) {
-			EM_Api::outPut(11);
+			return new ecjia_error(11, '用户名或email已使用');
 		}
 		
 		RC_Loader::load_app_class('integrate', 'user', false);
@@ -59,14 +59,14 @@ class signup_module extends api_front implements api_interface {
 			$db_user = RC_Loader::load_app_model('users_model', 'user');
 			$mobile_count = $db_user->where(array('mobile_phone' => $other['mobile_phone']))->count();
 			if ($mobile_count > 0 ) {
-				EM_Api::outPut(11);
+				return new ecjia_error(11, '用户名或email已使用');
 			}
 		} else {
 			$other['mobile_phone'] = '';
 		}
 		
 		if (register($username, $password, $email, $other) === false) {
-			EM_Api::outPut(11);
+			return new ecjia_error(11, '用户名或email已使用');
 		} else {
 			$db = RC_Loader::load_app_model('reg_extend_info_model','user');
 			$db_reg_fields = RC_Loader::load_app_model('reg_fields_model','user');
@@ -185,29 +185,28 @@ function register($username, $password, $email, $other = array())
 
     /* 检查注册是否关闭 */
     if (ecjia::config('shop_reg_closed', ecjia::CONFIG_EXISTS)) {
-    	EM_Api::outPut(99999);
+    	return new ecjia_error(99999, '该网店暂停注册');
     }
     /* 检查username */
     if (empty($username)) {
-        EM_Api::outPut(200);
+        return new ecjia_error(200, '用户名不能为空');
     } else {
         if (preg_match('/\'\/^\\s*$|^c:\\\\con\\\\con$|[%,\\*\\"\\s\\t\\<\\>\\&\'\\\\]/', $username)) {
-			EM_Api::outPut(201);
+			return new ecjia_error(201, '用户名含有敏感字符');
         }
     }
     
     /* 检查email */
     if (empty($email)) {
-		EM_Api::outPut(203);
+		return new ecjia_error(203, 'email不能为空');
     } else {
         if (!is_email($email)) {
-        	EM_Api::outPut(204);
+        	return new ecjia_error(204, '不是合法的email地址');
         }
     }
     
     if (admin_registered($username)) {
-		EM_Api::outPut(202);
-        return false;
+		return new ecjia_error(202, '用户名 已经存在');
     }
 
     RC_Loader::load_app_class('integrate', 'user', false);
