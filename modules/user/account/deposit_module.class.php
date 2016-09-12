@@ -106,7 +106,7 @@ class deposit_module extends api_front implements api_interface {
  * @return  int
  */
 function em_update_user_account($surplus) {
-	$db = RC_Loader::load_app_model('user_account_model', 'user');
+	$db = RC_Model::model('user/user_account_model');
 	$data = array(
 		'amount'	=> $surplus['amount'],
 		'user_note'	=> $surplus['user_note'],

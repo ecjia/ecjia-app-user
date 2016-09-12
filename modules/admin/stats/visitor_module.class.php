@@ -40,7 +40,7 @@ function visitor($start_date, $end_date)
 	$start_date = RC_Time::local_strtotime($start_date. ' 00:00:00');
 	$end_date	= RC_Time::local_strtotime($end_date. ' 23:59:59');
 
-	$db_stats = RC_Loader::load_app_model('stats_model', 'stats');
+	$db_stats = RC_Model::model('stats/stats_model');
 
 	/* 计算出有多少天*/
 	$day = round(($end_date - $start_date)/(24*60*60));

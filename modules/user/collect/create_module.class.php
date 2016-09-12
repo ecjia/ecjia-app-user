@@ -22,7 +22,7 @@ class create_module extends api_front implements api_interface {
 		}
 		/* 检查是否已经存在于用户的收藏夹 */
 		
-		$db_collect_goods = RC_Loader::load_app_model('collect_goods_model','goods');
+		$db_collect_goods = RC_Model::model('goods/collect_goods_model');
         $count = $db_collect_goods->where(array('user_id' => $_SESSION['user_id'] , 'goods_id' => $goods_id))->count();
 
 		if ($count > 0) {

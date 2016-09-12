@@ -56,7 +56,7 @@ class signup_module extends api_front implements api_interface {
 		
 		$other['mobile_phone'] = empty($mobile) ? $other['mobile_phone'] : $mobile;
 		if (is_numeric($other['mobile_phone']) && strlen($other['mobile_phone']) == 11 && preg_match( '/^1[3|4|5|7|8][0-9]\d{8}$/', $other['mobile_phone'])) {
-			$db_user = RC_Loader::load_app_model('users_model', 'user');
+			$db_user = RC_Model::model('user/users_model');
 			$mobile_count = $db_user->where(array('mobile_phone' => $other['mobile_phone']))->count();
 			if ($mobile_count > 0 ) {
 				return new ecjia_error(11, '用户名或email已使用');
@@ -68,8 +68,8 @@ class signup_module extends api_front implements api_interface {
 		if (register($username, $password, $email, $other) === false) {
 			return new ecjia_error(11, '用户名或email已使用');
 		} else {
-			$db = RC_Loader::load_app_model('reg_extend_info_model','user');
-			$db_reg_fields = RC_Loader::load_app_model('reg_fields_model','user');
+			$db = RC_Model::model('user/reg_extend_info_model');
+			$db_reg_fields = RC_Model::model('user/reg_fields_model');
 			
 			/*把新注册用户的扩展信息插入数据库*/
 	        $fields_arr = $db_reg_fields->field('id')->where(array('type' => 0 , 'display' => 1))->order(array('dis_order' => 'asc' ,'id' => 'asc'))->select();
@@ -122,7 +122,7 @@ class signup_module extends api_front implements api_interface {
 				$db_term_relation->where(array('item_key2' => 'device_udid', 'item_value2' => $device_id))->update(array('item_key2' => '', 'item_value2' => ''));
 			
 				if(!empty($object_id)) {
-					$db = RC_Loader::load_app_model('feedback_model', 'feedback');
+					$db = RC_Model::model('feedback/feedback_model');
 					$db->where(array('msg_id' => $object_id, 'msg_area' => '4'))->update(array('user_id' => $_SESSION['user_id'], 'user_name' => $_SESSION['user_name']));
 					$db->where(array('parent_id' => $object_id, 'msg_area' => '4'))->update(array('user_id' => $_SESSION['user_id'], 'user_name' => $_SESSION['user_name']));
 				}
@@ -131,7 +131,7 @@ class signup_module extends api_front implements api_interface {
 				$result = ecjia_app::validate_application('mobile');
 				if (!is_ecjia_error($result)) {
 					if (!empty($device['udid']) && !empty($device['client']) && !empty($device['code'])) {
-						$db_mobile_device = RC_Loader::load_app_model('mobile_device_model', 'mobile');
+						$db_mobile_device = RC_Model::model('mobile/mobile_device_model');
 						$device_data = array(
 								'device_udid'	=> $device['udid'],
 								'device_client'	=> $device['client'],
@@ -181,7 +181,7 @@ class signup_module extends api_front implements api_interface {
  */
 function register($username, $password, $email, $other = array())
 {
-    $db_user = RC_Loader::load_app_model('users_model', 'user');
+    $db_user = RC_Model::model('user/users_model');
 
     /* 检查注册是否关闭 */
     if (ecjia::config('shop_reg_closed', ecjia::CONFIG_EXISTS)) {
@@ -345,7 +345,7 @@ function admin_registered ($adminname) {
  * @return int
  **/
 function get_affiliate() {
-	$db = RC_Loader::load_app_model('users_model', 'user');
+	$db = RC_Model::model('user/users_model');
     if (!empty($_COOKIE['ECJIA[affiliate_uid]'])) {
         $uid = intval($_COOKIE['ECJIA[affiliate_uid]']);
         $user_id = $db->where(array('user_id' => $uid))->get_field('user_id');

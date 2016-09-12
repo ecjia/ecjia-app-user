@@ -18,7 +18,7 @@ class snsbind_module extends api_front implements api_interface {
 		if (!in_array($type, $login_type) || empty($open_id) || empty($name)) {
 			return new ecjia_error(101, '参数错误');
 		}
-		$db = RC_Loader::load_app_model('users_model', 'user');
+		$db = RC_Model::model('user/users_model');
 		$result = check_user($open_id, $type);
 		
 		$info_user_id = $type .'_'.$open_id; //  加个标识！！！防止 其他的标识 一样  // 以后的ID 标识 将以这种形式 辨认
@@ -87,7 +87,7 @@ class snsbind_module extends api_front implements api_interface {
 
 /*检测用户名是否存在*/
 function check_user($openid, $type){
-	$db = RC_Loader::load_app_model('users_model', 'user');
+	$db = RC_Model::model('user/users_model');
 	
 	$info_user_id = $type .'_'.$openid; //  加个标识！！！防止 其他的标识 一样  // 以后的ID 标识 将以这种形式 辨认
 	$row = $db->field('user_name,password,aite_id')->find(array('aite_id' => $info_user_id));
@@ -101,7 +101,7 @@ function action_login($user_name, $open_id){
 	RC_Loader::load_app_func('user', 'user');
 	RC_Loader::load_app_func('cart', 'cart');
 	
-	$db = RC_Loader::load_app_model('users_model', 'user');
+	$db = RC_Model::model('user/users_model');
 	$row = $db->find(array('aite_id' => $open_id));
 	if (empty($row)) {
 		return false;

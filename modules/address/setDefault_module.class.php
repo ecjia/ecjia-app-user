@@ -14,8 +14,8 @@ class setDefault_module extends api_front implements api_interface {
 			return new ecjia_error(101, '参数错误');
 		}
 		
-		$db_user_address = RC_Loader::load_app_model('user_address_model','user');
-		$db_users = RC_Loader::load_app_model('users_model', 'user');
+		$db_user_address = RC_Model::model('user/user_address_model');
+		$db_users = RC_Model::model('user/users_model');
 		
 		$arr = $db_user_address->find(array('address_id' => $address_id, 'user_id' => $_SESSION['user_id']));
 		if (empty($arr)) {

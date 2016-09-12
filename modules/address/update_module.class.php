@@ -9,7 +9,7 @@ class update_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	
     	$this->authSession();	
- 		$db_user_address = RC_Loader::load_app_model('user_address_model', 'user');
+ 		$db_user_address = RC_Model::model('user/user_address_model');
 		$address = $this->requestData('address', array());
 		$address['user_id'] = $_SESSION['user_id'];
 		$address['address_id']     = $this->requestData('address_id', 0);

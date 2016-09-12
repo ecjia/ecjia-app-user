@@ -16,7 +16,7 @@ class signin_module extends api_front implements api_interface {
 
 		/* 判断是否为手机号*/
 		if (is_numeric($name) && strlen($name) == 11 && preg_match( '/^1[3|4|5|7|8][0-9]\d{8}$/', $name)) {
-			$db_user = RC_Loader::load_app_model('users_model', 'user');
+			$db_user = RC_Model::model('user/users_model');
 			$user_count = $db_user->where(array('mobile_phone' => $name))->count();
 			if ($user_count > 1) {
 				return new ecjia_error('user_repeat', '用户重复，请与管理员联系！');
@@ -67,7 +67,7 @@ class signin_module extends api_front implements api_interface {
 			$db_term_relation->where(array('item_key2' => 'device_udid', 'item_value2' => $device_id))->update(array('item_key2' => '', 'item_value2' => ''));
 				
 			if(!empty($object_id)) {
-				$db = RC_Loader::load_app_model('feedback_model', 'feedback');
+				$db = RC_Model::model('feedback/feedback_model');
 				$db->where(array('msg_id' => $object_id, 'msg_area' => '4'))->update(array('user_id' => $_SESSION['user_id'], 'user_name' => $_SESSION['user_name']));
 				$db->where(array('parent_id' => $object_id, 'msg_area' => '4'))->update(array('user_id' => $_SESSION['user_id'], 'user_name' => $_SESSION['user_name']));
 			}
@@ -76,7 +76,7 @@ class signin_module extends api_front implements api_interface {
 			$result = ecjia_app::validate_application('mobile');
 			if (!is_ecjia_error($result)) {
 				if (!empty($device['udid']) && !empty($device['client']) && !empty($device['code'])) {
-					$db_mobile_device = RC_Loader::load_app_model('mobile_device_model', 'mobile');
+					$db_mobile_device = RC_Model::model('mobile/mobile_device_model');
 					$device_data = array(
 							'device_udid'	=> $device['udid'],
 							'device_client'	=> $device['client'],

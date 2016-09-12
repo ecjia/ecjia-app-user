@@ -26,7 +26,7 @@ class password_module extends api_front implements api_interface {
 	   
 	    if (($user_info && (!empty($code) && md5($user_info['user_id'] . ecjia::config('hash_code') . $user_info['reg_time']) == $code)) || ($_SESSION['user_id']>0 && $_SESSION['user_id'] == $user_id && $user->check_user($_SESSION['user_name'], $old_password))) {
 			if ($user->edit_user(array('username'=> (empty($code) ? $_SESSION['user_name'] : $user_info['user_name']), 'old_password'=>$old_password, 'password'=>$new_password), empty($code) ? 0 : 1)) {
-	        	$db = RC_Loader::load_app_model('users_model', 'user');
+	        	$db = RC_Model::model('user/users_model');
 	        	$db->where(array('user_id' => $user_id))->update(array('ec_salt' => 0));
 	        	$session_db	= RC_Loader::load_model('session_model');
 	        	$session_db->delete(array('userid' => $user_id));

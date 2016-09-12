@@ -49,7 +49,7 @@ class pay_module extends api_front implements api_interface {
 	        $order['order_amount']   = strval($order['surplus_amount'] + $payment_info['pay_fee']);
 	
 	        //如果支付费用改变了，也要相应的更改pay_log表的order_amount
-	        $pay_db = RC_Loader::load_app_model('pay_log_model', 'orders');
+	        $pay_db = RC_Model::model('orders/pay_log_model');
 	        $order_amount = $pay_db-> where(array('log_id' => $order['log_id']))->get_field('order_amount');
 	        if ($order_amount <> $order['order_amount']) {
 	        	$pay_db->where(array('log_id' => $order['log_id']))->update(array('order_amount' => $order['order_amount']));
@@ -84,7 +84,7 @@ class pay_module extends api_front implements api_interface {
  * @return  int
  */
 function get_surplus_info($account_id) {
-	$db = RC_Loader::load_app_model('user_account_model', 'user');
+	$db = RC_Model::model('user/user_account_model');
 	
 	return $db->find(array('id' => $account_id));
 }

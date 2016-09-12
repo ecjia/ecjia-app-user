@@ -11,7 +11,7 @@ class rank_module extends api_admin implements api_interface {
     		
 		$this->authadminSession();
 		$ecjia = RC_Loader::load_app_class('api_admin', 'api');
-		$db_user_rank = RC_Loader::load_app_model('user_rank_model', 'user');
+		$db_user_rank = RC_Model::model('user/user_rank_model');
 		$result = $db_user_rank->order(array('rank_id' => 'desc'))->select();
 		
 		$user_rank = array();

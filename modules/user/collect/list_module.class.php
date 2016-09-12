@@ -11,7 +11,7 @@ class list_module extends api_front implements api_interface {
     	$this->authSession();	
 		RC_Loader::load_app_func('collection', 'user');
 		RC_Loader::load_app_func('global', 'api');
-		$db_collect_goods = RC_Loader::load_app_model('collect_goods_model', 'goods');
+		$db_collect_goods = RC_Model::model('goods/collect_goods_model');
 		$size = $this->requestData('pagination.count', 15);
 		$page = $this->requestData('pagination.page', 1);
  		$user_id = $_SESSION['user_id'];
@@ -32,7 +32,7 @@ class list_module extends api_front implements api_interface {
 		
 		$data = array();
 		if (!empty($goods_list)) {
-			$mobilebuy_db = RC_Loader::load_app_model('goods_activity_model', 'goods');
+			$mobilebuy_db = RC_Model::model('goods/goods_activity_model');
 			foreach ($goods_list as $key => $value) {
 				$temp = API_DATA("SIMPLEGOODS", $value);
 				

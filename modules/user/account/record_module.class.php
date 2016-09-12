@@ -17,7 +17,7 @@ class record_module extends api_front implements api_interface {
 		if (!in_array($process_type, $type)) {
 			return new ecjia_error(101, '参数错误');
 		}
- 		$db = RC_Loader::load_app_model('user_account_model', 'user');
+ 		$db = RC_Model::model('user/user_account_model');
  		
  		$where = array(
  				'user_id' => $user_id,

@@ -14,7 +14,7 @@ class delete_module extends api_front implements api_interface {
 		if (empty($collection_id) && !goods_id) {
 			return new ecjia_error(101, '参数错误');
 		}
-		$db_collect_goods = RC_Loader::load_app_model('collect_goods_model','goods');
+		$db_collect_goods = RC_Model::model('goods/collect_goods_model');
 		
 		if ($goods_id > 0) {
 			$db_collect_goods->where(array('goods_id' => $goods_id, 'user_id' => $_SESSION['user_id']))->delete();

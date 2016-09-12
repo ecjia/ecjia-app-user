@@ -18,8 +18,8 @@ class info_module extends api_front implements api_interface {
 		
 		$user_id = $_SESSION['user_id'];
 
-		$db_user_address = RC_Loader::load_app_model('user_address_model','user');
-		$db_region = RC_Loader::load_app_model('region_model', 'shipping');
+		$db_user_address = RC_Model::model('user/user_address_model');
+		$db_region = RC_Model::model('shipping/region_model');
 		$arr = $db_user_address->find(array('address_id' => $id, 'user_id' => $user_id));
 
 		/* 验证地址id */

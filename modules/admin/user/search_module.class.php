@@ -19,8 +19,8 @@ class search_module extends api_admin implements api_interface {
 			return new ecjia_error(101, '参数错误');
 		}
 		
-		$db_user = RC_Loader::load_app_model('user_viewmodel', 'user');
-		$region  = RC_Loader::load_app_model('region_model','shipping');
+		$db_user = RC_Model::model('user/user_viewmodel');
+		$region = RC_Model::model('shipping/region_model');
 		$db_user->view = array(
 				'user_rank' => array(
 						'type'		=> Component_Model_View::TYPE_LEFT_JOIN,

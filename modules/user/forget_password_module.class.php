@@ -14,7 +14,7 @@ class forget_password_module extends api_front implements api_interface {
         if (empty($type) || empty($value)) {
         	return new ecjia_error(101, '参数错误');
         }
-        $db = RC_Loader::load_app_model('users_model', 'user');
+        $db = RC_Model::model('user/users_model');
         if ($type == 'mobile') {
         	$user_count = $db->where(array('mobile_phone' => $value))->count();
         	//如果用户数量大于1

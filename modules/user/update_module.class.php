@@ -11,7 +11,7 @@ class update_module extends api_front implements api_interface {
     	$this->authSession();	
 		$img = $this->requestData('avatar_img');
  		
- 		$db = RC_Loader::load_app_model('users_model', 'user');
+ 		$db = RC_Model::model('user/users_model');
  		$userinfo = $db->field('user_name')->find(array('user_id' => $_SESSION['user_id']));
  		
  		$uid = $_SESSION['user_id'];

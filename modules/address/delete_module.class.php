@@ -28,7 +28,7 @@ class delete_module extends api_front implements api_interface {
  * @return boolean
  */
 function drop_consignee($id) {
-    $db_user_address = RC_Loader::load_app_model('user_address_model', 'user');
+    $db_user_address = RC_Model::model('user/user_address_model');
     
     $uid = $db_user_address->where(array('address_id' => $id))->get_field('user_id');
     if (!empty($uid)) {

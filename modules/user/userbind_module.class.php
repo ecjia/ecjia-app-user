@@ -18,7 +18,7 @@ class userbind_module extends api_front implements api_interface {
 			return new ecjia_error(101, '参数错误');
 		}
 		
-		$db_user = RC_Loader::load_app_model('users_model', 'user');
+		$db_user = RC_Model::model('user/users_model');
 		//设置session用于校验校验码
 		$code = rand(100000, 999999);
 		RC_Loader::load_app_class('integrate', 'user', false);

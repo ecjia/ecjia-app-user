@@ -120,7 +120,7 @@ class signin_module extends api_admin implements api_interface {
 			if (!is_ecjia_error($result)) {
 				$device = $this->requestData('device', array());
 				if (!empty($device['udid']) && !empty($device['client']) && !empty($device['code'])) {
-					$db_mobile_device = RC_Loader::load_app_model('mobile_device_model', 'mobile');
+					$db_mobile_device = RC_Model::model('mobile/mobile_device_model');
 					$device_data = array(
 							'device_udid'	=> $device['udid'],
 							'device_client'	=> $device['client'],
