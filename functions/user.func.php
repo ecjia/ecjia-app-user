@@ -56,7 +56,7 @@ function get_payment($cod_fee = 0) {
  * @param unknown $args
  */
 function get_account_list($args = array()) {
-	$dbview = RC_Model::model('user_account_user_viewmodel');
+	$dbview = RC_Model::model('user/user_account_user_viewmodel');
 	$payment_method = RC_Loader::load_app_class('payment_method', 'payment');
 	
 	$filter['user_id']		= empty($args['user_id'])			? 0  : intval($args['user_id']);
@@ -69,13 +69,15 @@ function get_account_list($args = array()) {
 
 	$filter['sort_by']		= empty($_REQUEST['sort_by'])		? 'add_time' : trim($_REQUEST['sort_by']);
 	$filter['sort_order']	= empty($_REQUEST['sort_order'])	? 'DESC' : trim($_REQUEST['sort_order']);
-
+	$db_user_account = RC_DB::table('user_account as ua')->leftJoin('users as u', RC_DB::raw('ua.user_id'), '=', RC_DB::raw('u.user_id'));
 	$where = array();
 	if ($filter['user_id'] > 0) {
 		$where['ua.user_id'] = $filter['user_id'];
+		$db_user_account->where(RC_DB::raw('ua.user_id'), $filter['user_id']);
 	}
 	if ($filter['process_type'] != -1) {
 		$where['ua.process_type'] = $filter['process_type'];
+		$db_user_account->where(RC_DB::raw('process_type'), $filter['process_type']);
 	} 
 	if ($filter['payment']) {
 		$payment = $payment_method->payment_info_by_name($filter['payment']);
@@ -83,15 +85,18 @@ function get_account_list($args = array()) {
 		if(!empty($payment) && is_array($payment)) {
 			foreach ($payment as $key => $value) {
 				array_push($where['ua.payment'], $value['pay_name'], $value['pay_code']);
+				$db_user_account->whereIn(RC_DB::raw('ua.payment'), array($value['pay_name'], $value['pay_code']));
 			}
 		}
 	}
 	if ($filter['is_paid'] != -1) {
 		$where['ua.is_paid'] = $filter['is_paid'];
+		$db_user_account->where(RC_DB::raw('is_paid'), $filter['is_paid']);
 	}
 
 	if ($filter['keywords']) {
 		$where['u.user_name'] = array('like' => '%'.mysql_like_quote($filter['keywords']).'%');
+		$db_user_account->whereIn(RC_DB::raw('u.user_name'), '%', '%'.mysql_like_quote($filter['keywords']).'%');
 	}
 	
 	/*　时间过滤　*/
@@ -100,16 +105,21 @@ function get_account_list($args = array()) {
 	
 	if (!empty($args['start_date']) && !empty($args['end_date'])) {
 		$where['add_time'] = array('egt' => $start_date, 'elt' => $end_date);
+		$db_user_account->where('add_time', '>=', $start_date)
+			->where('add_time', '<=', $end_date);
 	} else {
 		if (!empty($args['start_date'])) {
 			$where['add_time'] = array('egt' => $start_date);
+			$db_user_account->where('add_time', '>=', $start_date);
 		} elseif (!empty($args['end_date'])) {
 			$where['add_time'] = array('elt' => $end_date);
+			$db_user_account->where('add_time', '<=', $end_date);
 		}
 	}
 	
-	$count = $dbview->join('users')->where($where)->count();
-	
+//	$count = $dbview->join('users')->where($where)->count();
+	$count = $db_user_account->count();
+
 	/* 实例化分页 */
 	$page = new ecjia_page($count, 15, 6);
 
@@ -120,10 +130,12 @@ function get_account_list($args = array()) {
 		if (!empty($payment_list) && is_array($payment_list)) {
 			foreach ($payment_list as $key => $value) {
 				$pay_name[$value['pay_code']] = $value['pay_name'];
+
 			}
 		}
-		
+
 		$list = $dbview->join('users')->where($where)->order(array($filter['sort_by'] => $filter['sort_order']))->limit($page->limit())->select();
+
 		if (!empty($list)) {
 			foreach ($list AS $key => $value) {
 				$list[$key]['surplus_amount']		= price_format(abs($value['amount']), false);
