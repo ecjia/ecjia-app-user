@@ -46,29 +46,25 @@ class signin_module extends api_admin implements api_interface {
 		if ($row) {
 			// 登录成功
 			/* 设置session信息 */
-			RC_Session::set('admin_id',		$row['user_id']);
-			RC_Session::set('admin_name',	$row['user_name']);
-			RC_Session::set('action_list',	$row['action_list']);
-			RC_Session::set('last_check_order', $row['last_login']);// 用于保存最后一次检查订单的时间
-			RC_Session::set('suppliers_id', $row['suppliers_id']);
-			RC_Session::set('action_list',	$row['action_list']);
-			if (!empty($row['ru_id'])) {
-				RC_Session::set('ru_id', $row['ru_id']);
-			}
+			$_SESSION['admin_id']	= $row['user_id'];
+			$_SESSION['admin_name']	= $row['user_name'];
+			$_SESSION['action_list']	= $row['action_list'];
+			$_SESSION['last_check_order']	= $row['last_login'];
+			$_SESSION['suppliers_id']	= $row['suppliers_id'];
 			
 			if (!empty($row['seller_id'])) {
-				RC_Session::set('seller_id', $row['seller_id']);
+				$_SESSION['seller_id']	= $row['seller_id'];
 			}
 			
 			/* 获取device_id*/
 			$device_id = RC_Model::model('mobile/mobile_device_model')->where(array('device_udid' => $device['udid'], 'device_client' => $device['client'], 'device_code' => $device['code']))->get_field('id');
-			RC_Session::set('device_id',	$device_id);
-				
+			$_SESSION['device_id']	= $row['device_id'];
+
+			
 			if ($device['code'] == '8001') {
-				RC_Session::set('adviser_id',	$adviser_info['id']);
-				RC_Session::set('ru_id', 		$adviser_info['seller_id']);
-				RC_Session::set('seller_id',	$adviser_info['seller_id']);
-				RC_Session::set('admin_name',	$adviser_info['username']);
+				$_SESSION['adviser_id']	= $row['id'];
+				$_SESSION['seller_id']	= $row['seller_id'];
+				$_SESSION['admin_name']	= $row['username'];
 			}
 			
 			if (empty($row['ec_salt'])) {
