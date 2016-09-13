@@ -608,21 +608,13 @@ function EM_user_info($user_id) {
 	$db_user_rank = RC_Model::model('user/user_rank_model');
 	$db_orderinfo_view = RC_Model::model('orders/order_info_viewmodel');
 	
-	$db_orderinfo_view->view = array(
-		'order_info' => array(
-			'type'	=> Component_Model_View::TYPE_LEFT_JOIN,
-			'alias'	=> 'oii',
-			'on'	=> 'oi.order_id = oii.main_order_id'
-		)
-	);
-	
 	RC_Loader::load_app_func('order', 'orders');
 	$user_info = user_info($user_id);
 	$collection_num = $db_collect_goods->where(array('user_id' => $user_id))->order(array('add_time' => 'desc'))->count();
-	$await_pay = $db_orderinfo_view->join(array('order_info'))->where(array('oi.user_id' => $user_id, 'oii.order_id is null', EM_order_query_sql('await_pay', 'oi.')))->count('*');
-	$await_ship = $db_orderinfo_view->join(array('order_info'))->where(array('oi.user_id' => $user_id, 'oii.order_id is null', EM_order_query_sql('await_ship', 'oi.')))->count('*');
-	$shipped = $db_orderinfo_view->join(array('order_info'))->where(array('oi.user_id' => $user_id, 'oii.order_id is null', EM_order_query_sql('shipped', 'oi.')))->count('*');
-	$finished = $db_orderinfo_view->join(array('order_info'))->where(array('oi.user_id' => $user_id, 'oii.order_id is null', EM_order_query_sql('finished', 'oi.')))->count('*');
+	$await_pay = $db_orderinfo_view->join(array('order_info'))->where(array('oi.user_id' => $user_id, EM_order_query_sql('await_pay', 'oi.')))->count('*');
+	$await_ship = $db_orderinfo_view->join(array('order_info'))->where(array('oi.user_id' => $user_id, EM_order_query_sql('await_ship', 'oi.')))->count('*');
+	$shipped = $db_orderinfo_view->join(array('order_info'))->where(array('oi.user_id' => $user_id, EM_order_query_sql('shipped', 'oi.')))->count('*');
+	$finished = $db_orderinfo_view->join(array('order_info'))->where(array('oi.user_id' => $user_id, EM_order_query_sql('finished', 'oi.')))->count('*');
 	/* 取得用户等级 */
 	if ($user_info['user_rank'] == 0) {
 		// 非特殊等级，根据等级积分计算用户等级（注意：不包括特殊等级）
@@ -635,7 +627,7 @@ function EM_user_info($user_id) {
 	if (!empty($row)) {
 		$user_info['user_rank_name'] = $row['rank_name'];
 	} else {
-		$user_info['user_rank_name']='非特殊等级';
+		$user_info['user_rank_name'] = '非特殊等级';
 	}
 	$row = $db_user_rank->find(array('special_rank' => 0 , 'min_points' => 0));
 

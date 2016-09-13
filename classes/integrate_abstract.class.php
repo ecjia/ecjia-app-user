@@ -119,7 +119,7 @@ abstract class integrate_abstract
             }
             $this->set_session($username);
             $this->set_cookie($username, $remember);
-
+            
             return true;
         } else {
             return false;
