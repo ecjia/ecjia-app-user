@@ -83,7 +83,6 @@ class admin_account extends ecjia_admin {
 		
 		$this->assign('form_action',	RC_Uri::url('user/admin_account/init'));
 		$this->assign('batch_action',	RC_Uri::url('user/admin_account/batch_remove'));
-
 		$this->display('admin_account_list.dwt');
 	}
 	
@@ -139,7 +138,7 @@ class admin_account extends ecjia_admin {
 			$this->showmessage(RC_Lang::get('user::user_account.js_languages.deposit_amount_error'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 		
-		$user_id = $this->db_users->where(array('user_name' => $username))->get_field('user_id');
+		$user_id = RC_DB::table('users')->where('user_name', $username)->pluck('user_id');
 		/* 此会员是否存在 */
 		if ($user_id == 0) {
 			$this->showmessage(RC_Lang::get('user::user_account.username_not_exist'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
@@ -178,7 +177,7 @@ class admin_account extends ecjia_admin {
 			$data['pay_time']		= RC_Time::gmtime();
 		}
 		
-		$this->db_user_account->insert($data);
+		RC_DB::table('user_account')->insert($data);
 		
 		/* 更新会员余额数量 */
 		if ($is_paid == 1) {
@@ -191,8 +190,7 @@ class admin_account extends ecjia_admin {
 		if ($process_type == 0 && $is_paid == 0) {
 			/* 取支付方式信息 */
 			$payment_info = array();
-			$payment_info = $this->db_payment->find(array('pay_name' => $payment ,'enabled' => '1'));
-			
+			$payment_info = RC_DB::table('payment')->where('pay_name', $payment)->where('enabled', 1)->first();
 			RC_Loader::load_app_func('order', 'orders');
 			/* 计算支付手续费用 */
 			$pay_fee	= pay_fee($payment_info['pay_id'], $amount, 0);
@@ -205,7 +203,7 @@ class admin_account extends ecjia_admin {
 				'order_type'	=> PAY_SURPLUS,
 				'is_paid'		=> 0,
 			);
-			$this->db_pay_log->insert($data);
+			RC_DB::table('pay_log')->insert($data);
 		}
 		if ($process_type == 0) {
 			$account = RC_Lang::get('user::user_account.deposit');
@@ -248,10 +246,10 @@ class admin_account extends ecjia_admin {
 	
 		/* 查询当前的预付款信息 */
 		$account = array();
-		$account = $this->db_user_account->find(array('id' => $id));
+		$account = RC_DB::table('user_account')->where('id', $id)->first();
 		
 		$account['add_time'] = RC_Time::local_date(ecjia::config('time_format'), $account['add_time']);
-		$user_name = $this->db_users->where(array('user_id' => $account['user_id']))->get_field('user_name');
+		$user_name = RC_DB::table('users')->where('user_id', $account['user_id'])->pluck('user_name');
 		
 		$account['user_note']	= htmlspecialchars($account['user_note']);
 		$account['payment']		= strip_tags($account['payment']);
@@ -283,9 +281,10 @@ class admin_account extends ecjia_admin {
 			'admin_note'	=> $admin_note,
 			'user_note'		=> $user_note
 		);
-		$this->db_user_account->where(array('id' => $id))->update($data);
+		RC_DB::table('user_account')->where('id', $id)->update($data);
 		
-		$info = $this->db_user_account->find(array('id' => $id));
+		$info = RC_DB::table('user_account')->where('id', $id)->first();
+		
 		if ($info['process_type'] == 0) {
 			$account = RC_Lang::get('user::user_account.deposit');
 		} else {
@@ -313,14 +312,13 @@ class admin_account extends ecjia_admin {
 
 		/* 查询当前的预付款信息 */
 		$account = array();
-		$account = $this->db_user_account->find(array('id' => $id));
+		$account = RC_DB::table('user_account')->where('id', $id)->first();
 		
 		$account['add_time'] = RC_Time::local_date(ecjia::config('time_format'), $account['add_time']);
 		$account['user_note']	= htmlspecialchars($account['user_note']);
 		
-		$user_name = $this->db_users->where(array('user_id' => $account['user_id']))->get_field('user_name');
-		$payment_name = $this->db_payment->where(array('pay_code'=>$account['payment']))->get_field('pay_name');
-		
+		$user_name = RC_DB::table('users')->where('user_id', $account['user_id'])->pluck('user_name');
+		$payment_name = RC_DB::table('payment')->where('pay_code', $account['payment'])->pluck('pay_name');
 		$account['payment']	= empty($payment_name) ? strip_tags($account['payment']) : strip_tags($payment_name);
 		$account['amount']	= abs($account['amount']);
 		
@@ -347,7 +345,7 @@ class admin_account extends ecjia_admin {
 
 		/* 查询当前的预付款信息 */
 		$account	= array();
-		$account	= $this->db_user_account->find(array('id' => $id));
+		$account	= RC_DB::table('user_account')->where('id', $id)->first();
 		$amount		= $account['amount'];
 		
 		/* 如果是退款申请, 并且已完成,更新此条记录,扣除相应的余额 */
@@ -379,7 +377,7 @@ class admin_account extends ecjia_admin {
 				'admin_note'	=> $admin_note,
 				'is_paid'		=> $is_paid,
 			);
-			$this->db_user_account->where(array('id' => $id))->update($data);
+			RC_DB::table('user_account')->where('id', $id)->update($data);
 		}
 		
 		ecjia_admin::admin_log('(' . addslashes(RC_Lang::get('user::user_account.check')) . ')' . $admin_note, 'check', 'user_surplus');
@@ -398,11 +396,10 @@ class admin_account extends ecjia_admin {
 		$this->admin_priv('surplus_manage', ecjia::MSGTYPE_JSON);
 		
 		$id 		= intval($_REQUEST['id']);
-		$data 		= $db_view->join('user_account')->field('ua.amount, ua.process_type')->find(array('ua.id' => $id));
+// 		$data 		= $db_view->join('user_account')->field('ua.amount, ua.process_type')->find(array('ua.id' => $id));
 		$user_name 	= empty($data['user_name']) ? RC_Lang::get('user::users.no_name') : $data['user_name'];
 		
-		$this->db_user_account->where(array('id' => $id))->delete();
-		
+		RC_DB::table('user_account')->where('id', $id)->delete();
 		ecjia_admin::admin_log(addslashes($user_name), 'remove', 'user_account');
 		$this->showmessage(RC_Lang::get('user::user_account.drop_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
 	}
@@ -421,9 +418,14 @@ class admin_account extends ecjia_admin {
 		if (isset($_POST['checkboxes'])) {
 			$idArr = explode(',', $_POST['checkboxes']);
 			$count = count($idArr);
-			$data = $this->db_view->field('ua.amount, ua.process_type')->in(array('ua.id' => $idArr))->select();
+			$data = RC_DB::table('user_account AS ua')
+			->leftJoin('users as u', RC_DB::raw('ua.user_id'), '=', RC_DB::raw('u.user_id'))
+			->select(RC_DB::raw('ua.amount, ua.process_type'))
+			->whereIn(RC_DB::raw('ua.id'), $idArr)
+			->get();
+			_dump($data, 1);
 			
-			if ($this->db_user_account->where(array('id' => $idArr))->delete()) {
+			if (RC_DB::table('user_account')->where('id', $idArr)->delete()) {
 				foreach ($data as $v) {
 					if ($v['process_type'] == 1) {
 						$amount = (-1) * $v['amount'];
