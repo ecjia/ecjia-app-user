@@ -97,7 +97,6 @@ return array(
 	'amount_required'			=> '请输入金额',
 	'check_time'				=> '开始时间不得大于结束时间！',
 	
-	'merchants_notice'			=> '入驻商家没有操作权限，请登陆商家后台操作！',
 	'user_name_is'				=> '会员名称是%s，',
 	'money_is'					=> '金额是%s',
 	'delete_record_count'		=> '本次删除了 %s 条记录',
