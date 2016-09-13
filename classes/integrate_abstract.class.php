@@ -98,7 +98,8 @@ abstract class integrate_abstract
         $quiet = empty($cfg['quiet']) ? 0 : 1;
 
         /* 初始化数据库 */
-        $this->db = RC_Model::model($this->user_table . '_model');
+        $this->db = RC_Model::model('user/'.$this->user_table . '_model');
+        
     }
 
     /**
