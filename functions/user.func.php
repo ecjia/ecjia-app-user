@@ -134,7 +134,8 @@ function get_account_list($args = array()) {
 			}
 		}
 
-		$list = $dbview->join('users')->where($where)->order(array($filter['sort_by'] => $filter['sort_order']))->limit($page->limit())->select();
+//		$list = $dbview->join('users')->where($where)->order(array($filter['sort_by'] => $filter['sort_order']))->limit($page->limit())->select();
+		$list = $db_user_account->orderBy($filter['sort_by'], $filter['sort_order'])->take(15)->skip($page->start_id-1)->select(RC_DB::raw('ua.*'), RC_DB::raw('u.user_name'))->get();
 
 		if (!empty($list)) {
 			foreach ($list AS $key => $value) {
@@ -417,7 +418,8 @@ function get_user_order($args = array()) {
 function get_user_info($user_id) {
 	RC_Loader::load_app_func('common', 'goods');
 	$db_users = RC_Model::model('user/users_model');
-	$user = $db_users->find(array('user_id' => $user_id));
+//	$user = $db_users->find(array('user_id' => $user_id));
+	$user = RC_DB::table('users')->where('user_id', $user_id)->first();
 
 	unset($user['question']);
 	unset($user['answer']);
@@ -486,14 +488,20 @@ function change_account_log($user_id, $user_money = 0, $frozen_money = 0, $rank_
 		'change_desc'	=> $change_desc,
 		'change_type'	=> $change_type
 	);
-	$db_account_log->insert ( $account_log );
+
+//	$db_account_log->insert ( $account_log );
+	RC_DB::table('account_log')->insertGetId($account_log);
 
 	/* 更新用户信息 */
 	$step = $user_money.", frozen_money = frozen_money + ('$frozen_money')," .
 	" rank_points = rank_points + ('$rank_points')," .
 	" pay_points = pay_points + ('$pay_points')";
 
-	$db_users->inc('user_money' , 'user_id='.$user_id , $step);
+//	$db_users->inc('user_money' , 'user_id='.$user_id , $step);
+	RC_DB::table('users')
+			->where('user_id', $user_id)
+			->increment('user_money', $step);
+
 }
 
 // TODO:以下从api移入
