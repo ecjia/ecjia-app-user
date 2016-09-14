@@ -60,7 +60,9 @@ class admin_reg_fields extends ecjia_admin {
 		$this->assign('ur_here',		RC_Lang::get('user::reg_fields.21_reg_fields'));
 		$this->assign('action_link',	array('text' => RC_Lang::get('user::reg_fields.add_reg_field'), 'href' => RC_Uri::url('user/admin_reg_fields/add')));
 		
-		$fields = $this->db_reg_fields->order(array('dis_order' => 'asc', 'id' => 'asc'))->select();
+//		$fields = $this->db_reg_fields->order(array('dis_order' => 'asc', 'id' => 'asc'))->select();
+		$fields = RC_DB::table('reg_fields')->orderBy('dis_order', 'asc')->orderBy('id', 'asc')->get();
+
 		$this->assign('reg_fields', $fields);
 		
 		$this->display('reg_fields_list.dwt');
@@ -108,9 +110,10 @@ class admin_reg_fields extends ecjia_admin {
 		$dis_order		= trim($_POST['reg_field_order']);
 		$display		= trim($_POST['reg_field_display']);
 		$is_need		= trim($_POST['reg_field_need']);
-		
 		/* 检查是否存在重名的会员注册项 */
-		if ($this->db_reg_fields->where(array('reg_field_name' => $field_name))->count() != 0){
+//		if ($this->db_reg_fields->where(array('reg_field_name' => $field_name))->count() != 0){
+		if ( RC_DB::table('reg_fields')->where('reg_field_name', $field_name)->count() != 0){
+
 			$this->showmessage(sprintf(RC_Lang::get('user::reg_fields.field_name_exist'), $field_name), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 		
@@ -120,8 +123,8 @@ class admin_reg_fields extends ecjia_admin {
 			'display'			=> $display,
 			'is_need'			=> $is_need,
 		);
-		$max_id = $this->db_reg_fields->insert($data);
-		
+//		$max_id = $this->db_reg_fields->insert($data);
+		$max_id = RC_DB::table('reg_fields')->insertGetId($data);
 		ecjia_admin::admin_log($field_name, 'add', 'reg_fields');
 		$links[] = array('text' => RC_Lang::get('user::reg_fields.back_list'), 'href' => RC_Uri::url('user/admin_reg_fields/init'));
 		$links[] = array('text' => RC_Lang::get('user::reg_fields.add_continue'), 'href' => RC_Uri::url('user/admin_reg_fields/add'));
@@ -150,8 +153,11 @@ class admin_reg_fields extends ecjia_admin {
 		$this->assign('ur_here', RC_Lang::get('user::reg_fields.edit_reg_field'));
 		$this->assign('action_link', array('text' => RC_Lang::get('user::reg_fields.21_reg_fields'), 'href' => RC_Uri::url('user/admin_reg_fields/init')));
 		
-		$reg_field = $this->db_reg_fields->field('id as reg_field_id, reg_field_name, dis_order as reg_field_order, display as reg_field_display, is_need as reg_field_need')->find(array('id' => $_REQUEST['id']));
-		
+//		$reg_field = $this->db_reg_fields->field('id as reg_field_id, reg_field_name, dis_order as reg_field_order, display as reg_field_display, is_need as reg_field_need')->find(array('id' => $_REQUEST['id']));
+		$reg_field = RC_DB::table('reg_fields')
+				->where('id', $_REQUEST['id'])->select('id as reg_field_id', 'reg_field_name', 'dis_order as reg_field_order', 'display as reg_field_display', 'is_need as reg_field_need')
+				->first();
+
 		$this->assign('reg_field',		$reg_field);
 		$this->assign('form_action',	RC_Uri::url('user/admin_reg_fields/update'));
 		
@@ -172,11 +178,13 @@ class admin_reg_fields extends ecjia_admin {
 		$id				= $_POST['id'];
 		
 		/* 根据id获取之前的名字  */
-		$old_name = $this->db_reg_fields->where(array('id' => $id ))->get_field('reg_field_name');
+//		$old_name = $this->db_reg_fields->where(array('id' => $id ))->get_field('reg_field_name');
+		$old_name = RC_DB::table('reg_fields')->where('id', $id)->pluck('reg_field_name');
+
 		/* 检查是否存在重名的会员注册项 */
-		
 		if ($field_name != $old_name) {
-			if ($this->db_reg_fields->where(array('reg_field_name' => $field_name))->count() != 0) {
+//			if ($this->db_reg_fields->where(array('reg_field_name' => $field_name))->count() != 0) {
+			if (RC_DB::table('reg_fields')->where('reg_field_name', $field_name)->count() != 0) {
 				$this->showmessage(sprintf(RC_Lang::get('user::reg_fields.field_name_exist'), $field_name),  ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 			}
 		}
@@ -187,8 +195,9 @@ class admin_reg_fields extends ecjia_admin {
 			'display'			=> $display,
 			'is_need'			=> $is_need,
 		);
-		$this->db_reg_fields->where(array('id' => $id))->update($data);
-		
+//		$this->db_reg_fields->where(array('id' => $id))->update($data);
+		RC_DB::table('reg_fields')->where('id', $id)->update($data);
+
 		ecjia_admin::admin_log($field_name, 'edit', 'reg_fields');
 		$links[] = array('text' => RC_Lang::get('user::reg_fields.back_list'), 'href' => RC_Uri::url('user/admin_reg_fields/init'));
 		$this->showmessage(RC_Lang::get('user::reg_fields.edit_field_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('links' => $links, 'pjaxurl' => RC_Uri::url('user/admin_reg_fields/edit', "id=$id")));
@@ -201,11 +210,14 @@ class admin_reg_fields extends ecjia_admin {
 		$this->admin_priv('reg_fields', ecjia::MSGTYPE_JSON);
 		
 		$field_id	= intval($_GET['id']);
-		$field_name = $this->db_reg_fields->where(array('id' => $field_id))->get_field('reg_field_name');
-		
-		if ($this->db_reg_fields->where(array('id' => $field_id))->delete()) {
+//		$field_name = $this->db_reg_fields->where(array('id' => $field_id))->get_field('reg_field_name');
+		$field_name = RC_DB::table('reg_fields')->where('id', $field_id)->pluck('reg_field_name');
+
+//		if ($this->db_reg_fields->where(array('id' => $field_id))->delete()) {
+		if ( RC_DB::table('reg_fields')->where('id', $field_id)->delete() ) {
 			/* 删除会员扩展信息表的相应信息 */
-			$this->db_reg_extend_info->where(array('reg_field_id' => $field_id))->delete();
+//			$this->db_reg_extend_info->where(array('reg_field_id' => $field_id))->delete();
+			RC_DB::table('reg_extend_info')->where('reg_field_id', $field_id)->delete();
 			ecjia_admin::admin_log(addslashes($field_name), 'remove', 'reg_fields');
 			$this->showmessage(RC_Lang::get('user::reg_fields.drop_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
 		}	
@@ -229,15 +241,18 @@ class admin_reg_fields extends ecjia_admin {
 		}
 		
 		/* 验证名称,根据id获取之前的名字  */
-		$old_name = $this->db_reg_fields->where(array('id' => $id))->get_field('reg_field_name');
-		
+//		$old_name = $this->db_reg_fields->where(array('id' => $id))->get_field('reg_field_name');
+		$old_name = RC_DB::table('reg_fields')->where('id', $id)->pluck('reg_field_name');
+
 		if ($val != $old_name) {
-			if ($this->db_reg_fields->where(array('reg_field_name' => $val))->count() != 0) {
+//			if ($this->db_reg_fields->where(array('reg_field_name' => $val))->count() != 0) {
+			if (RC_DB::table('reg_fields')->where('reg_field_name', $val)->count() != 0) {
 				$this->showmessage(sprintf(RC_Lang::get('user::reg_fields.field_name_exist'), htmlspecialchars($val)), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 			}
 		}
 
-		if ($this->db_reg_fields->where(array('id' => $id))->update(array('reg_field_name' => $val))) {
+//		if ($this->db_reg_fields->where(array('id' => $id))->update(array('reg_field_name' => $val))) {
+		if (RC_DB::table('reg_fields')->where('id', $id)->update(array('reg_field_name' => $val))) {
 			/* 管理员日志 */
 			ecjia_admin::admin_log($val, 'edit', 'reg_fields');
 			$this->showmessage(RC_Lang::get('user::reg_fields.edit_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
@@ -262,8 +277,10 @@ class admin_reg_fields extends ecjia_admin {
 		if (!is_numeric($val) || empty($val) || $val < 0 || strpos($val, '.') > 0 ) {
 			$this->showmessage(RC_Lang::get('user::reg_fields.order_not_num'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
-
-		if ($this->db_reg_fields->where(array('id' => $id))->update(array('dis_order' => $val))) {
+//		$this->db_reg_fields->where(array('id' => $id))->update(array('dis_order' => $val));
+		RC_DB::table('reg_fields')->where('id', $id)->update(array('dis_order' => $val));
+//		if ($this->db_reg_fields->where(array('id' => $id))->update(array('dis_order' => $val))) {
+		if ( RC_DB::table('reg_fields')->where('id', $id)->update(array('dis_order' => $val)) == 0 ) {
 			$this->showmessage(RC_Lang::get('user::reg_fields.edit_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('user/admin_reg_fields/init')));
 		} else {
 			$this->showmessage(RC_Lang::get('user::reg_fields.edit_fail'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
@@ -282,8 +299,9 @@ class admin_reg_fields extends ecjia_admin {
 
 		$id		 = intval($_POST['id']);
 		$is_dis = intval($_POST['val']);
-		
-		if ($this->db_reg_fields->where(array('id' => $id))->update(array('display' => $is_dis))) {
+
+//		if ($this->db_reg_fields->where(array('id' => $id))->update(array('display' => $is_dis))) {
+		if (RC_DB::table('reg_fields')->where('id', $id)->update(array('display' => $is_dis))) {
 			$this->showmessage(RC_Lang::get('user::reg_fields.change_ok'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('content' => $is_dis));
 		} else {
 			$this->showmessage(RC_Lang::get('user::reg_fields.edit_fail'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
@@ -301,8 +319,8 @@ class admin_reg_fields extends ecjia_admin {
 		}
 		$id			= intval($_POST['id']);
 		$is_need	= intval($_POST['val']);
-		
-		if ($this->db_reg_fields->where(array('id' => $id))->update(array('is_need' => $is_need))) {
+//		if ($this->db_reg_fields->where(array('id' => $id))->update(array('is_need' => $is_need))) {
+		if (RC_DB::table('reg_fields')->where('id', $id)->update(array('is_need' => $is_need))) {
 			$this->showmessage(RC_Lang::get('user::reg_fields.change_ok'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('content' => $is_need));
 		} else {
 			$this->showmessage(RC_Lang::get('user::reg_fields.edit_fail'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
