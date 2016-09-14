@@ -423,7 +423,6 @@ class admin_account extends ecjia_admin {
 			->select(RC_DB::raw('ua.amount, ua.process_type'))
 			->whereIn(RC_DB::raw('ua.id'), $idArr)
 			->get();
-			_dump($data, 1);
 			
 			if (RC_DB::table('user_account')->where('id', $idArr)->delete()) {
 				foreach ($data as $v) {
