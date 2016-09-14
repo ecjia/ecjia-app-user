@@ -278,7 +278,6 @@ abstract class integrate_abstract
         
         $db_order_info      = RC_Model::model('orders/order_info_model');
         $db_order_goods     = RC_Model::model('orders/order_goods_model');
-        $db_booking_goods   = RC_Model::model('goods/booking_goods_model');
         $db_collect_goods   = RC_Model::model('goods/collect_goods_model');
         $db_feedback        = RC_Model::model('feedback/feedback_model');
         $db_user_address    = RC_Model::model('user/user_address_model');
@@ -308,8 +307,6 @@ abstract class integrate_abstract
                 	$db_order_goods->in(array('order_id' => $col_order_id))->delete();
                 }
 
-                //删除用户
-                $db_booking_goods->in(array('user_id' => $col))->delete();
                 //删除会员收藏商品
                 $db_collect_goods->in(array('user_id' => $col))->delete();
                 //删除用户留言
