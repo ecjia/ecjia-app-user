@@ -79,7 +79,9 @@ class admin extends ecjia_admin {
 		$this->assign('action_link',	array('text' => RC_Lang::get('system::system.04_users_add'), 'href' => RC_Uri::url('user/admin/add')));
 		
 
-		$ranks = $this->db_user_rank->field('rank_id,rank_name,min_points')->order(array('min_points' => 'asc'))->select();
+//		$ranks = $this->db_user_rank->field('rank_id,rank_name,min_points')->order(array('min_points' => 'asc'))->select();
+		$ranks = RC_DB::table('user_rank')->select('rank_id', 'rank_name', 'min_points')->orderBy('min_points', 'asc')->get();
+
 		$user_list = get_user_list($_REQUEST);
 
 		$this->assign('user_ranks',		$ranks);
@@ -120,7 +122,14 @@ class admin extends ecjia_admin {
 		$this->assign('action_link', array('text' => RC_Lang::get('user::users.user_list'), 'href' => RC_Uri::url('user/admin/init')));
 		
 		/* 取出注册扩展字段 */
-		$extend_info_list = $this->db_reg_fields->where(array('type' => array('lt' => 2), 'display' => 1, 'id' => array('neq' => 6)))->order(array('dis_order' => 'asc', 'id' => 'asc'))->select();
+//		$extend_info_list = $this->db_reg_fields->where(array('type' => array('lt' => 2), 'display' => 1, 'id' => array('neq' => 6)))->order(array('dis_order' => 'asc', 'id' => 'asc'))->select();
+		$extend_info_list = RC_DB::table('reg_fields')->where('type', '<', 2)
+				->where('display', 1)
+				->where('id', '!=', 6)
+				->orderBy('dis_order', 'asc')
+				->orderBy('id', 'asc')
+				->get();
+
 		/* 给扩展字段加入key */
 		foreach ($extend_info_list as $key => $val) {
 			$val['key'] = $key+1 ;
@@ -208,11 +217,19 @@ class admin extends ecjia_admin {
 		$other['home_phone']	= isset($_POST['extend_field4']) ? htmlspecialchars(trim($_POST['extend_field4'])) : '';
 		$other['mobile_phone']	= isset($_POST['extend_field5']) ? htmlspecialchars(trim($_POST['extend_field5'])) : '';
 
-		$max_id = $this->db_user->insert($other);
+//		$max_id = $this->db_user->insert($other);
+		$max_id = RC_DB::table('users')->insertGetId($other);
 
 		/*把新注册用户的扩展信息插入数据库*/
-		$fields_arr = $this->db_reg_fields->field('id')->where(array('type' => 0 , 'display' => 1))->order(array('dis_order' => 'asc', 'id' => 'asc'))->select();
-		
+//		$fields_arr = $this->db_reg_fields->field('id')->where(array('type' => 0 , 'display' => 1))->order(array('dis_order' => 'asc', 'id' => 'asc'))->select();
+		$fields_arr = RC_DB::table('reg_fields')
+				->where('type', 0)
+				->where('display', 1)
+				->orderBy('dis_order', 'asc')
+				->orderBy('id', 'asc')
+				->select('id')
+				->get();
+
 		$extend_field_str = '';	//生成扩展字段的内容字符串
 		
 		if (!empty($fields_arr)) {
@@ -225,7 +242,8 @@ class admin extends ecjia_admin {
 						'reg_field_id'	=> $val['id'],
 						'content'		=> $temp_field_content
 					);
-					$this->db_reg_extend_info->insert($data);
+//					$this->db_reg_extend_info->insert($data);
+					RC_DB::table('reg_extend_info')->insert($data);
 				}
 			}
 		}
@@ -261,7 +279,9 @@ class admin extends ecjia_admin {
 		$this->assign('ur_here', 		RC_Lang::get('user::users.users_edit'));
 		$this->assign('action_link',	array('text' => RC_Lang::get('user::users.user_list'), 'href' => RC_Uri::url('user/admin/init')));
 		
-		$row = $this->db_user->find(array('user_id' => $_GET['id']));
+//		$row = $this->db_user->find(array('user_id' => $_GET['id']));
+		$row = RC_DB::table('users')->where('user_id', $_GET['id'])->first();
+
 		if ($row) {
 			$user['user_id']				= $row['user_id'];
 			$user['email']					= $row['email'];
@@ -284,8 +304,16 @@ class admin extends ecjia_admin {
 		} 
 
 		/* 取出注册扩展字段 */
-		$extend_info_list	= $this->db_reg_fields->where(array('type' => array('lt' => 2), 'display' => 1 , 'id' => array('neq' => 6)))->order(array('dis_order' => 'asc', 'id' => 'asc'))->select();
-		$extend_info_arr	= $this->db_reg_extend_info->field('reg_field_id, content')->where(array('user_id' => $user['user_id']))->select();
+//		$extend_info_list	= $this->db_reg_fields->where(array('type' => array('lt' => 2), 'display' => 1 , 'id' => array('neq' => 6)))->order(array('dis_order' => 'asc', 'id' => 'asc'))->select();
+		$extend_info_list = RC_DB::table('reg_fields')
+				->where('type', '<', 2)
+				->where('display', 1)
+				->where('id', '!=', 6)
+				->orderBy('dis_order', 'asc')
+				->orderBy('id', 'asc')
+				->get();
+//		$extend_info_arr	= $this->db_reg_extend_info->field('reg_field_id, content')->where(array('user_id' => $user['user_id']))->select();
+		$extend_info_arr = RC_DB::table('reg_extend_info')->where('user_id', $user['user_id'])->select('reg_field_id', 'content')->get();
 
 		$temp_arr = array();
 		if (isset($extend_info_arr)) {
@@ -317,11 +345,14 @@ class admin extends ecjia_admin {
 			//推荐注册分成
 			$affdb = array();
 			$num = count($affiliate['item']);
-			$up_uid = "'$_GET[id]'";
+			$up_uid = $_GET['id'];
 			for ($i = 1 ; $i <=$num ;$i++) {
 				$count = 0;
 				if ($up_uid) {
-					$data = $this->db_user->field('user_id')->in(array('parent_id' => $up_uid))->select();
+//					$data = $this->db_user->field('user_id')->in(array('parent_id' => $up_uid))->select();
+					$up_uid = explode(',', $up_uid);
+					$data = RC_DB::table('users')->whereIn('parent_id', $up_uid)->select('user_id')->get();
+
 					$up_uid = '';
 					if(!empty($data)) {
 						foreach ($data as $key => $rt) {
@@ -390,7 +421,8 @@ class admin extends ecjia_admin {
 			if (preg_match("/ /", $password)) {
 				$this->showmessage(RC_Lang::get('user::users.js_languages.passwd_balnk'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 			}
-			$this->db_user->where(array('user_id' => $user_id))->update(array('ec_salt' => '0'));
+//			$this->db_user->where(array('user_id' => $user_id))->update(array('ec_salt' => '0'));
+			RC_DB::table('users')->where('user_id', $user_id)->update(array('ec_salt' => '0'));
 		}
 	
 		/* 信用额度*/
@@ -399,7 +431,13 @@ class admin extends ecjia_admin {
 		}
 		
 		/* 更新用户扩展字段的数据 */
-		$fields_arr = $this->db_reg_fields->field('id')->where(array('type' => 0, 'display' => 1))->order(array('dis_order' => 'asc', 'id' => 'asc'))->select();
+//		$fields_arr = $this->db_reg_fields->field('id')->where(array('type' => 0, 'display' => 1))->order(array('dis_order' => 'asc', 'id' => 'asc'))->select();
+		$fields_arr = RC_DB::table('reg_fields')
+				->where('type', 0)
+				->where('display', 1)
+				->orderBy('dis_order', 'asc')
+				->orderBy('id', 'asc')
+				->get();
 
 		/* 循环更新扩展用户信息 */
 		if (!empty($fields_arr)) {
@@ -407,18 +445,21 @@ class admin extends ecjia_admin {
 				$extend_field_index = 'extend_field' . $val['id'];
 				if(isset($_POST[$extend_field_index])) {
 					$temp_field_content = strlen($_POST[$extend_field_index]) > 100 ? mb_substr($_POST[$extend_field_index], 0, 99) : $_POST[$extend_field_index];
-					$sql_one = $this->db_reg_extend_info->find(array('reg_field_id' => $val['id'] , 'user_id' => $user_id));
+//					$sql_one = $this->db_reg_extend_info->find(array('reg_field_id' => $val['id'] , 'user_id' => $user_id));
+					$sql_one = RC_DB::table('reg_extend_info')->where('reg_field_id', $val['id'])->where('user_id', $user_id)->first();
 					/* 如果之前没有记录，则插入 */
 					if($sql_one) {
 						$data = array('content' => $temp_field_content);
-						$this->db_reg_extend_info->where(array('reg_field_id' => $val['id'] , 'user_id' => $user_id))->update($data);
+//						$this->db_reg_extend_info->where(array('reg_field_id' => $val['id'] , 'user_id' => $user_id))->update($data);
+						RC_DB::table('reg_extend_info')->where('reg_field_id', $val['id'])->where('user_id', $user_id)->update($data);
 					} else {
 						$data = array(
 							'user_id'		=> $user_id,
 							'reg_field_id'	=> $val['id'],
 							'content'		=> $temp_field_content,
 						);
-						$this->db_reg_extend_info->insert($data);
+//						$this->db_reg_extend_info->insert($data);
+						RC_DB::table('reg_extend_info')->insert($data);
 					}
 				}
 			}
@@ -442,7 +483,8 @@ class admin extends ecjia_admin {
 		$other['home_phone']	= isset($_POST['extend_field4']) ? htmlspecialchars(trim($_POST['extend_field4'])) : '';
 		$other['mobile_phone']	= isset($_POST['extend_field5']) ? htmlspecialchars(trim($_POST['extend_field5'])) : '';
 		
-		$this->db_user->where(array('user_id' => $user_id))->update($other);
+//		$this->db_user->where(array('user_id' => $user_id))->update($other);
+		RC_DB::table('users')->where('user_id', $user_id)->update($other);
 		
 		/* 记录管理员操作 */
 		ecjia_admin::admin_log($username, 'edit', 'users');
@@ -478,9 +520,15 @@ class admin extends ecjia_admin {
 		$keywords = !empty($_GET['keywords']) ? trim($_GET['keywords']) : '';
 
 		if (!empty($keywords)) {
-			$row = $this->db_user->find("user_id = '$keywords' or user_name = '$keywords' or email = '$keywords'");
+//			$row = $this->db_user->find("user_id = '$keywords' or user_name = '$keywords' or email = '$keywords'");
+			$row = RC_DB::table('users')->where('user_id', $keywords)
+					->orWhere('user_name', $keywords)
+					->orWhere('email', $keywords)
+					->first();
+
 		} else {
-			$row = $this->db_user->find(array('user_id' => $id));
+//			$row = $this->db_user->find(array('user_id' => $id));
+			$row =RC_DB::table('users')->where('user_id', $id)->first();
 		}
 
 		if (empty($row)) {
@@ -488,8 +536,9 @@ class admin extends ecjia_admin {
 		}
 		
 		/* 获得用户等级名 */
-		$user['user_rank'] = $this->db_user_rank->where(array('rank_id' => $row['user_rank']))->get_field('rank_name');
-	
+//		$user['user_rank'] = $this->db_user_rank->where(array('rank_id' => $row['user_rank']))->get_field('rank_name');
+		$user['user_rank'] = RC_DB::table('user_rank')->where('rank_id', $row['user_rank'])->pluck('rank_name');
+
 		if ($row) {
 			$user['user_id']				= $row['user_id'];
 			$user['user_name']				= $row['user_name'];
@@ -518,10 +567,22 @@ class admin extends ecjia_admin {
 			/* 用户地址列表*/
 			$field = array("ua.*,IF(address_id=".$row['address_id'].",1,0) as default_address,IFNULL(c.region_name, '') as country_name, IFNULL(p.region_name, '') as province_name,IFNULL(t.region_name, '') as city_name,IFNULL(d.region_name, '') as district_name");
 
-			$address_list = $this->db_view->field($field)->where(array('user_id' => $row['user_id'] ))->order('default_address desc')->limit(5)->select();
-		
-			/* 查找用户前5条订单 */
-			$order = $this->db_order->where(array('user_id' => $row['user_id'] ))->order(array('add_time' => 'desc'))->limit(5)->select();
+//			$address_list = $this->db_view->field($field)->where(array('user_id' => $row['user_id'] ))->order('default_address desc')->limit(5)->select();
+			$address_list = RC_DB::table('user_address as ua')
+					->leftJoin('region as c', RC_DB::raw('c.region_id'), '=', RC_DB::raw('ua.country'))
+					->leftJoin('region as p', RC_DB::raw('p.region_id'), '=', RC_DB::raw('ua.province'))
+					->leftJoin('region as t', RC_DB::raw('t.region_id'), '=', RC_DB::raw('ua.city'))
+					->leftJoin('region as d', RC_DB::raw('d.region_id'), '=', RC_DB::raw('ua.district'))
+					->where('user_id', $row['user_id'])
+					->orderBy('default_address', 'desc')
+					->selectRaw("ua.*,IF(address_id=".$row['address_id'].",1,0) as default_address,IFNULL(c.region_name, '') as country_name, IFNULL(p.region_name, '') as province_name,IFNULL(t.region_name, '') as city_name,IFNULL(d.region_name, '') as district_name")
+					->take(5)
+					->get();
+
+//			/* 查找用户前5条订单 */
+//			$order = $this->db_order->where(array('user_id' => $row['user_id'] ))->order(array('add_time' => 'desc'))->limit(5)->select();
+			$order = RC_DB::table('order_info')->where('user_id', $row['user_id'])->orderBy('add_time', 'desc')->take(5)->get();
+
 			RC_Lang::load('orders/order');
 			if (!empty($order)) {
 				foreach ($order as $k => $v) {
@@ -551,7 +612,8 @@ class admin extends ecjia_admin {
 		if (isset($_POST['checkboxes'])) {
 			$idArr = explode(',', $_POST['checkboxes']);
 			$count = count($idArr);
-			$data = $this->db_user->field('user_name')->where(array('user_id' => $idArr))->select();
+//			$data = $this->db_user->field('user_name')->where(array('user_id' => $idArr))->select();
+			$data = RC_DB::table('users')->whereIn('user_id', $idArr)->select('user_name')->get();
 
 			/* 通过插件来删除用户 */
 			RC_Loader::load_app_class('integrate', 'user', false);
@@ -586,14 +648,19 @@ class admin extends ecjia_admin {
 		}
 
 		/* 编辑email 根据id获取之前的email */
-		$old_email = $this->db_user->where(array('user_id' => $id))->get_field('email');
+//		$old_email = $this->db_user->where(array('user_id' => $id))->get_field('email');
+		$old_email = RC_DB::table('users')->where('user_id', $id)->pluck('email');
+
 		if (!empty($email)) {
 			if ($email != $old_email) {
-				if ($this->db_user->where(array('email' => $email))->count() == 0) {
-					if ($this->db_user->where(array('user_id' => $id))->update(array('email' => $email))) {
-						
-						$user_name = $this->db_user->where(array('user_id' => $id))->get_field('user_name');
-						
+//				if ($this->db_user->where(array('email' => $email))->count() == 0) {
+				if (RC_DB::table('users')->where('email', $email)->count() == 0) {
+//					if ($this->db_user->where(array('user_id' => $id))->update(array('email' => $email))) {
+					if (RC_DB::table('users')->where('user_id', $id)->update(array('email' => $email))) {
+
+//						$user_name = $this->db_user->where(array('user_id' => $id))->get_field('user_name');
+						$user_name = RC_DB::table('users')->where('user_id', $id)->pluck('user_name');
+
 						ecjia_admin::admin_log($user_name.RC_Lang::get('user::users.mailbox_information'), 'edit', 'users');
 						
 						$this->showmessage(RC_Lang::get('user::users.edit_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
@@ -614,8 +681,9 @@ class admin extends ecjia_admin {
 		$this->admin_priv('users_drop', ecjia::MSGTYPE_JSON);
 		
 		$user_id = $_GET['id'];
-		$username = $this->db_user->where(array('user_id' => $user_id))->get_field('user_name');
-		
+//		$username = $this->db_user->where(array('user_id' => $user_id))->get_field('user_name');
+		$username = RC_DB::table('users')->where('user_id', $user_id)->pluck('user_name');
+
 		RC_Loader::load_app_class('integrate', 'user', false);
 		$user = integrate::init_users();
     	$user->remove_user($username); //已经删除用户所有数据
@@ -649,11 +717,19 @@ class admin extends ecjia_admin {
 		$this->assign('action_link', array('text' => RC_Lang::get('user::users.user_list'), 'href' => RC_Uri::url('user/admin/init')));
 		
 		$id = isset($_GET['id']) ? intval($_GET['id']) : 0;
-		$user_name = $this->db_user->where(array('user_id' => $id))->get_field('user_name');
+//		$user_name = $this->db_user->where(array('user_id' => $id))->get_field('user_name');
+		$user_name = RC_DB::table('users')->where('user_id', $id)->pluck('user_name');
+
 		$act = !empty($_GET['type']) ? intval($_GET['type']) : '';
 		
 		/* 取用户默认地址id */
-		$address_id = $this->db_user_address->find(array('u.user_id' => $id));
+//		$address_id = $this->db_user_address->find(array('u.user_id' => $id));
+		$address_id = RC_DB::table('user_address as ua')
+				->leftJoin('users as u', RC_DB::raw('ua.address_id'), '=', RC_DB::raw('u.address_id'))
+				->where(RC_DB::raw('u.user_id'), $id)
+				->select(RC_DB::raw('ua.*'))
+				->first();
+
 		$default_address_count = empty($address_id['address_id']) ? 0 : 1;
 		
 		$field = '';
@@ -664,7 +740,16 @@ class admin extends ecjia_admin {
 			$order = array('default_address' => 'desc');
 		} 
 		
-		$row = $this->db_view->field($field)->where(array('user_id' => $id ))->order($order)->select();
+//		$row = $this->db_view->field($field)->where(array('user_id' => $id ))->order($order)->select();
+		$row = RC_DB::table('user_address as ua')
+				->leftJoin('region as c', RC_DB::raw('c.region_id'), '=', RC_DB::raw('ua.country'))
+				->leftJoin('region as p', RC_DB::raw('p.region_id'), '=', RC_DB::raw('ua.province'))
+				->leftJoin('region as t', RC_DB::raw('t.region_id'), '=', RC_DB::raw('ua.city'))
+				->leftJoin('region as d', RC_DB::raw('d.region_id'), '=', RC_DB::raw('ua.district'))
+				->where('user_id', $id)
+				->orderBy('default_address', 'desc')
+				->selectRaw("ua.*,IF(address_id=".$address_id['address_id'].",1,0) as default_address,IFNULL(c.region_name, '') as country_name, IFNULL(p.region_name, '') as province_name,IFNULL(t.region_name, '') as city_name,IFNULL(d.region_name, '') as district_name")
+				->get();
 		$count = count($row);
 
 		if ($act) {
