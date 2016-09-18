@@ -430,7 +430,9 @@ class admin_rank extends ecjia_admin {
 		$rank_id	= intval($_POST['id']);
 		$is_special	= intval($_POST['val']);
 		
+// 		if ($this->db_user_rank->where(array('rank_id' => $rank_id))->update(array('special_rank' => $is_special))) {
 		if (RC_DB::table('user_rank')->where('rank_id', $rank_id)->update(array('special_rank' => $is_special))) {
+// 			$rank_name = $this->db_user_rank->where(array('rank_id' => $rank_id))->get_field('rank_name');
 			$rank_name = RC_DB::table('user_rank')->where('rank_id', $rank_id)->pluck('rank_name');
 			
 			if ($is_special == 1) {
@@ -439,7 +441,7 @@ class admin_rank extends ecjia_admin {
 				ecjia_admin::admin_log($rank_name.'，'.RC_Lang::get('user::user_rank.hide_price_short'),  'edit', 'user_rank');
 			}
 			
-			$this->showmessage(RC_Lang::get('user::user_rank.change_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('content' => $is_show));
+			$this->showmessage(RC_Lang::get('user::user_rank.change_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('content' => $is_show, 'pjaxurl' => RC_Uri::url('user/admin_rank/init')));
 		} else {
 			$this->showmessage(RC_Lang::get('user::user_rank.edit_fail'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
