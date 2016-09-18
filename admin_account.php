@@ -418,13 +418,16 @@ class admin_account extends ecjia_admin {
 		if (isset($_POST['checkboxes'])) {
 			$idArr = explode(',', $_POST['checkboxes']);
 			$count = count($idArr);
+// 			$data = $this->db_view->field('ua.amount, ua.process_type')->in(array('ua.id' => $idArr))->select();
 			$data = RC_DB::table('user_account AS ua')
 			->leftJoin('users as u', RC_DB::raw('ua.user_id'), '=', RC_DB::raw('u.user_id'))
-			->select(RC_DB::raw('ua.amount, ua.process_type'))
+			->select(RC_DB::raw('ua.*, u.user_name'))
 			->whereIn(RC_DB::raw('ua.id'), $idArr)
 			->get();
+
 			
-			if (RC_DB::table('user_account')->where('id', $idArr)->delete()) {
+// 			if ($this->db_user_account->where(array('id' => $idArr))->delete()) {
+			if (RC_DB::table('user_account')->whereIn('id', $idArr)->delete()) {
 				foreach ($data as $v) {
 					if ($v['process_type'] == 1) {
 						$amount = (-1) * $v['amount'];
