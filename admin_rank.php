@@ -330,7 +330,6 @@ class admin_rank extends ecjia_admin {
 		/* 查找该ID 对应的积分上限值,验证是否大于上限  */
 // 		$max_points = $this->db_user_rank->where(array('rank_id' =>$rank_id))->get_field('max_points');
 		$max_points = RC_DB::table('user_rank')->where('rank_id', $rank_id)->pluck('max_points');
-		_dump($val, 1);
 
 		if ($val >= $max_points ) {
 			$this->showmessage(RC_Lang::get('user::user_rank.js_languages.integral_max_small'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
