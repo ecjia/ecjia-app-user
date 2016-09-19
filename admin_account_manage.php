@@ -74,7 +74,6 @@ class admin_account_manage extends ecjia_admin {
 		$account = $money_list = array();
 		$account['voucher_amount'] = get_total_amount($start_date, $end_date);		//	充值总额
 		$account['to_cash_amount'] = get_total_amount($start_date, $end_date, 1);	//	提现总额
-// 		_dump($account['voucher_amount'], 1);
 		
 //		$money_list = $this->db_account_log->field('IFNULL(SUM(user_money), 0)|user_money, IFNULL(SUM(frozen_money), 0)|frozen_money')->find(array('change_time' => array('egt' => $start_date , 'lt' => $end_date + 86400)));
 		$db_account_log = RC_DB::table('account_log');
