@@ -38,7 +38,7 @@ class admin_account_manage extends ecjia_admin {
 	 * 资金管理
 	 */
 	public function init() {
-		$this->admin_priv('account_manage');
+		$this->admin_priv('account_manage', ecjia::MSGTYPE_JSON);
 		
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('user::user_account_manage.user_account_manage')));
 		ecjia_screen::get_current_screen()->add_help_tab(array(
@@ -74,7 +74,8 @@ class admin_account_manage extends ecjia_admin {
 		$account = $money_list = array();
 		$account['voucher_amount'] = get_total_amount($start_date, $end_date);		//	充值总额
 		$account['to_cash_amount'] = get_total_amount($start_date, $end_date, 1);	//	提现总额
-
+// 		_dump($account['voucher_amount'], 1);
+		
 //		$money_list = $this->db_account_log->field('IFNULL(SUM(user_money), 0)|user_money, IFNULL(SUM(frozen_money), 0)|frozen_money')->find(array('change_time' => array('egt' => $start_date , 'lt' => $end_date + 86400)));
 		$db_account_log = RC_DB::table('account_log');
 		$money_list = $db_account_log->select(RC_DB::raw('IFNULL(SUM(user_money), 0) AS user_money, IFNULL(SUM(frozen_money), 0) AS frozen_money'))
@@ -108,7 +109,7 @@ class admin_account_manage extends ecjia_admin {
 	 * 积分余额订单
 	 */
 	public function surplus() {
-		$this->admin_priv('account_manage');
+		$this->admin_priv('account_manage', ecjia::MSGTYPE_JSON);
 		
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('user::user_account_manage.user_account_manage'), RC_Uri::url('user/admin_account_manage/init')));
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('user::user_account_manage.integral_order')));
