@@ -41,7 +41,7 @@ class admin_reg_fields extends ecjia_admin {
 	 * 会员注册项列表
 	 */
 	public function init() {
-		$this->admin_priv('reg_fields');
+		$this->admin_priv('reg_fields', ecjia::MSGTYPE_JSON);
 		
 		ecjia_screen::get_current_screen()->remove_last_nav_here();
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('user::reg_fields.21_reg_fields')));
@@ -72,7 +72,7 @@ class admin_reg_fields extends ecjia_admin {
 	 * 添加会员注册项
 	 */
 	public function add() {
-		$this->admin_priv('reg_fields');
+		$this->admin_priv('reg_fields', ecjia::MSGTYPE_JSON);
 		
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('user::reg_fields.add_reg_field')));
 		ecjia_screen::get_current_screen()->add_help_tab(array(
@@ -136,7 +136,7 @@ class admin_reg_fields extends ecjia_admin {
 	 * 编辑会员注册项
 	 */
 	public function edit() {
-		$this->admin_priv('reg_fields');
+		$this->admin_priv('reg_fields', ecjia::MSGTYPE_JSON);
 		
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('user::reg_fields.edit_reg_field')));
 		ecjia_screen::get_current_screen()->add_help_tab(array(

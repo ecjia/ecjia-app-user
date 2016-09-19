@@ -39,7 +39,7 @@ class admin_integrate extends ecjia_admin {
 	 * 会员数据整合插件列表
 	 */
 	public function init() {
-	    $this->admin_priv('integrate_users');
+	    $this->admin_priv('integrate_users', ecjia::MSGTYPE_JSON);
 		
 		RC_Script::enqueue_script('jquery-dataTables-bootstrap');
 		RC_Script::enqueue_script('jquery-dataTables-sorting');
@@ -86,7 +86,7 @@ class admin_integrate extends ecjia_admin {
 	 * 设置会员数据整合插件
 	 */
 	public function setup() {
-	    $this->admin_priv('integrate_users');
+	    $this->admin_priv('integrate_users', ecjia::MSGTYPE_JSON);
 	
 	    $this->assign('ur_here',      RC_Lang::get('user::integrate.integrate_setup'));
 	    $this->assign('action_link',  array('text' => RC_Lang::get('user::integrate.back_integration'), 'href' => RC_Uri::url('user/admin_integrate/init')));
@@ -115,7 +115,7 @@ class admin_integrate extends ecjia_admin {
 	 * 启用会员数据整合插件
 	 */
 	public function activate() {
-        $this->admin_priv('integrate_users');
+        $this->admin_priv('integrate_users', ecjia::MSGTYPE_JSON);
 
 		$code = strval($_GET['code']);
 
@@ -145,7 +145,7 @@ class admin_integrate extends ecjia_admin {
 	 * 保存整合填写的配置资料
 	 */
 	public function save_config() {
-		$code = strval($_POST['code']);
+		$code = strval($_POST['code'], ecjia::MSGTYPE_JSON);
 
 		if ($code != 'ecjia' && $code != 'ucenter' && $code != 'ecshop') {
 		    $this->showmessage(RC_Lang::get('user::integrate.support_UCenter'), ecjia::MSGSTAT_ERROR | ecjia::MSGTYPE_JSON);

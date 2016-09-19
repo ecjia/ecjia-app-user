@@ -54,7 +54,7 @@ class admin_account extends ecjia_admin {
 	 * 充值提现申请列表
 	 */
 	public function init() {
-		$this->admin_priv('surplus_manage');
+		$this->admin_priv('surplus_manage', ecjia::MSGTYPE_JSON);
 		
 		RC_Loader::load_app_func('global');
 		
@@ -90,7 +90,7 @@ class admin_account extends ecjia_admin {
 	 * 添加充值提现
 	 */
 	public function add() {
-		$this->admin_priv('surplus_manage');
+		$this->admin_priv('surplus_manage', ecjia::MSGTYPE_JSON);
 	
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('user::user_account.surplus_add')));
 		ecjia_screen::get_current_screen()->add_help_tab(array(
@@ -225,7 +225,7 @@ class admin_account extends ecjia_admin {
 	 * 编辑充值提现申请
 	 */
 	public function edit() {
-		$this->admin_priv('surplus_manage');
+		$this->admin_priv('surplus_manage', ecjia::MSGTYPE_JSON);
 	
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('user::user_account.surplus_edit')));
 		ecjia_screen::get_current_screen()->add_help_tab(array(
@@ -302,7 +302,7 @@ class admin_account extends ecjia_admin {
 	 * 审核会员余额页面
 	 */
 	public function check() {
-		$this->admin_priv('surplus_manage');
+		$this->admin_priv('surplus_manage', ecjia::MSGTYPE_JSON);
 	
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('user::user_account.check')));
 		$this->assign('ur_here', RC_Lang::get('user::user_account.check'));
@@ -392,7 +392,7 @@ class admin_account extends ecjia_admin {
 	 * ajax删除一条信息
 	 */
 	public function remove() {
-		$db_view = RC_Model::model('user_account_viewmodel');
+		$db_view = RC_Model::model('user_account_viewmodel', ecjia::MSGTYPE_JSON);
 		/* 检查权限 */
 		$this->admin_priv('surplus_manage', ecjia::MSGTYPE_JSON);
 		
