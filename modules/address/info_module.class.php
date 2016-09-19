@@ -8,15 +8,19 @@ defined('IN_ECJIA') or exit('No permission resources.');
 class info_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	
-    	$this->authSession();	
+    	$this->authSession();
+    	
 		$id = $this->requestData('address_id', 0);
-		if(empty($id)){
-			return new ecjia_error(101, '参数错误');
+		if(intval($id) < 1){
+			return new ecjia_error( 'invalid_parameter', RC_Lang::get ('system::system.invalid_parameter' ));
 		}
-
-		RC_Loader::load_app_func('order','orders');
 		
 		$user_id = $_SESSION['user_id'];
+		if (!$user_id) {
+		    return new ecjia_error(100, 'Invalid session' );
+		}
+		
+		RC_Loader::load_app_func('order', 'orders');
 
 		$db_user_address = RC_Model::model('user/user_address_model');
 		$db_region = RC_Model::model('shipping/region_model');
@@ -28,20 +32,8 @@ class info_module extends api_front implements api_interface {
 		}
 		
 		$consignee = get_consignee($user_id); // 取得默认地址
-		$result['id']         = $arr['address_id'];
-		$result['consignee']  = $arr['consignee'];
-		$result['email']      = $arr['email'];
 		
-		$result['country']    = $arr['country'];
-		$result['province']   = $arr['province'];
-		$result['city']       = $arr['city'];
-		$result['district']   = $arr['district'];
-		$result['location']	  = array(
-									'longitude' => $arr['longitude'],
-									'latitude'	=> $arr['latitude'],
-								);
-		
-		$ids = array($result['country'], $result['province'], $result['city'], $result['district']);
+		$ids = array($arr['country'], $arr['province'], $arr['city'], $arr['district']);
 		$ids = array_filter($ids);
 
 		$data = $db_region->in(array('region_id' => implode(',', $ids)))->select();
@@ -51,25 +43,36 @@ class info_module extends api_front implements api_interface {
 			$out[$val['region_id']] = $val['region_name'];
 		}
 		
-		$result['country_name']   = isset($out[$result['country']]) ? $out[$result['country']] : '';
-		$result['province_name']  = isset($out[$result['province']]) ? $out[$result['province']] : '';
-		$result['city_name']      = isset($out[$result['city']]) ? $out[$result['city']] : '';
-		$result['district_name']  = isset($out[$result['district']]) ? $out[$result['district']] : '';
-		
-		$result['address']        = $arr['address'];
-		$result['address_info']   = $arr['address_info'];
-		$result['zipcode']        = $arr['zipcode'];
-		$result['mobile']         = $arr['mobile'];
-		$result['sign_building']  = $arr['sign_building'];
-		$result['best_time']      = $arr['best_time'];
-		$result['default_address']= $arr['default_address'];
-		$result['tel']            = $arr['tel'];
-		
-		if ($arr['address_id'] == $consignee['address_id']) {
-			$result['default_address'] = 1;
-		} else {
-			$result['default_address'] = 0;
-		}
+		$result = array(
+		    'id'         => $arr['address_id'],
+		    'consignee'  => $arr['consignee'],
+		    'email'      => $arr['email'],
+		    
+		    'country'    => $arr['country'],
+		    'province'   => $arr['province'],
+		    'city'       => $arr['city'],
+		    'district'   => $arr['district'],
+		    'location'	 => array(
+		        'longitude' => $arr['longitude'],
+		        'latitude'	=> $arr['latitude'],
+		    ),
+		    
+		    'country_name'   => isset($out[$arr['country']]) ? $out[$arr['country']] : '',
+		    'province_name'  => isset($out[$arr['province']]) ? $out[$arr['province']] : '',
+		    'city_name'      => isset($out[$arr['city']]) ? $out[$arr['city']] : '',
+		    'district_name'  => isset($out[$arr['district']]) ? $out[$arr['district']] : '',
+		    
+		    'address'        => $arr['address'],
+		    'address_info'   => $arr['address_info'],
+		    'zipcode'        => $arr['zipcode'],
+		    'mobile'         => $arr['mobile'],
+		    'sign_building'  => $arr['sign_building'],
+		    'best_time'      => $arr['best_time'],
+		    'default_address'=> $arr['default_address'],
+		    'tel'            => $arr['tel'],
+		    
+		    'default_address'=> $arr['address_id'] == $consignee['address_id'] ? 1 :0,
+		);
 		
 		return $result;		
 	}

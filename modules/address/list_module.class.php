@@ -10,6 +10,9 @@ class list_module extends api_front implements api_interface {
     	
     	$this->authSession();	
 		$user_id = $_SESSION['user_id'];
+		if (!$user_id) {
+		    return new ecjia_error(100, 'Invalid session' );
+		}
 		
 		$db_user_address = RC_Model::model('user/user_address_model');
 		$dbview_user_address = RC_Model::model('user/user_address_user_viewmodel');
@@ -60,6 +63,7 @@ class list_module extends api_front implements api_interface {
 				}
 			}
 		}
+		
 		return $result;
 	}
 }
