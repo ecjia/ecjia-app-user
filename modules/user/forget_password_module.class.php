@@ -8,13 +8,15 @@ defined('IN_ECJIA') or exit('No permission resources.');
 class forget_password_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	
-    	$this->authSession();	
+    	$this->authSession();
         $type = $this->requestData('type');
         $value = $this->requestData('value');
         if (empty($type) || empty($value)) {
-        	return new ecjia_error(101, '参数错误');
+        	return new ecjia_error( 'invalid_parameter', RC_Lang::get ('system::system.invalid_parameter' ));
         }
+        
         $db = RC_Model::model('user/users_model');
+        
         if ($type == 'mobile') {
         	$user_count = $db->where(array('mobile_phone' => $value))->count();
         	//如果用户数量大于1
@@ -67,8 +69,7 @@ class forget_password_module extends api_front implements api_interface {
         		ecjia_api::$view_object->assign('code', $code);
         		ecjia_api::$view_object->assign('service_phone', ecjia::config('service_phone'));
         		$content = ecjia_api::$controller->fetch_string($tpl['template_content']);
-        		$response = RC_Mail::send_mail(ecjia::config('shop_name'), ecjia::config('service_email'), $tpl['template_subject'], $content, $tpl['is_html']);
-        		
+        		$response = RC_Mail::send_mail(ecjia::config('shop_name'), $value, $tpl['template_subject'], $content, $tpl['is_html']);
         	}
         }
         
