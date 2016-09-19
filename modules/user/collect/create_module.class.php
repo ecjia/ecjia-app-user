@@ -13,6 +13,10 @@ class create_module extends api_front implements api_interface {
 		if (!$goods_id) {
 			return new ecjia_error(101, '参数错误');
 		}
+		$user_id = $_SESSION['user_id'];
+		if (!$user_id) {
+		    return new ecjia_error(100, 'Invalid session' );
+		}
 		
 		RC_Loader::load_app_func('goods', 'goods');
 		$goods = get_goods_info($goods_id);
@@ -23,13 +27,13 @@ class create_module extends api_front implements api_interface {
 		/* 检查是否已经存在于用户的收藏夹 */
 		
 		$db_collect_goods = RC_Model::model('goods/collect_goods_model');
-        $count = $db_collect_goods->where(array('user_id' => $_SESSION['user_id'] , 'goods_id' => $goods_id))->count();
+        $count = $db_collect_goods->where(array('user_id' => $user_id, 'goods_id' => $goods_id))->count();
 
 		if ($count > 0) {
 			return new ecjia_error(10007, '您已收藏过此商品');
 		} else {
 			$time = RC_Time::gmtime();
-			$data = $db_collect_goods->insert(array('user_id' => $_SESSION['user_id'] , 'goods_id' => $goods_id , 'add_time' => $time));
+			$data = $db_collect_goods->insert(array('user_id' => $user_id, 'goods_id' => $goods_id, 'add_time' => $time));
 			if ($data === false) {
 				return new ecjia_error(8, 'fail');
 			} else {

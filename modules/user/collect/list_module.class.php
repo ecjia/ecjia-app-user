@@ -9,17 +9,22 @@ class list_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	
     	$this->authSession();	
+		
+		$size = $this->requestData('pagination.count', 15);
+		$page = $this->requestData('pagination.page', 1);
+        $user_id = $_SESSION['user_id'];
+		if (!$user_id) {
+		    return new ecjia_error(100, 'Invalid session' );
+		}
+		$rec_id = $this->requestData('rec_id', 0);
+		
 		RC_Loader::load_app_func('collection', 'user');
 		RC_Loader::load_app_func('global', 'api');
 		$db_collect_goods = RC_Model::model('goods/collect_goods_model');
-		$size = $this->requestData('pagination.count', 15);
-		$page = $this->requestData('pagination.page', 1);
- 		$user_id = $_SESSION['user_id'];
-		$rec_id = $this->requestData('rec_id', 0);
 		
 		$where = array('user_id'=>$user_id);
 		if ($rec_id) {
-			$where = array_merge($where,array('rec_id'=>array('lt'=>$rec_id)));
+			$where = array_merge($where, array('rec_id'=>array('lt'=>$rec_id)));
 		}
 		
 		$record_count = $db_collect_goods->where($where)->count();
@@ -88,7 +93,7 @@ class list_module extends api_front implements api_interface {
 				"more" => $page_row->total_pages > $page['page'] ? 1 : 0,
 		);
 
-		return array('data' => $list, 'pager' => $pager);
+		return array('data' => $data, 'pager' => $pager);
 		
 		// 		$pager = get_pager('collection', array(), $record_count, $page['page'], $page['count']);
 		// 		return array('data' => $data, 'pager' => array(
