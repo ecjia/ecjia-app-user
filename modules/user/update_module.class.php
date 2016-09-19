@@ -11,9 +11,9 @@ class update_module extends api_front implements api_interface {
     	$this->authSession();	
 		$img = $this->requestData('avatar_img');
 		$uid = $_SESSION['user_id'];
-		if (!$uid) {
-		    return new ecjia_error(100, 'Invalid session' );
-		}
+// 		if (!$uid) {
+// 		    return new ecjia_error(100, 'Invalid session' );
+// 		}
  		
  		$db = RC_Model::model('user/users_model');
  		$userinfo = $db->field('user_name')->find(array('user_id' => $uid));
@@ -26,13 +26,20 @@ class update_module extends api_front implements api_interface {
  		$dir2 = substr($uid, 3, 2);
  		$dir3 = substr($uid, 5, 2);
  		
+ 		if (empty($userinfo)) {
+ 		    return new ecjia_error('user_error', __('用户信息错误！'));
+ 		}
+ 		
  		$filename = md5($userinfo['user_name']);
 
  		$path = RC_Upload::upload_path() . 'data' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . $dir1 . DIRECTORY_SEPARATOR . $dir2 . DIRECTORY_SEPARATOR . $dir3;
  		$filename_path = $path. DIRECTORY_SEPARATOR . substr($uid, -2)."_".$filename.'.jpg';
  		
- 		//创建目录 		
- 		RC_Dir::create($path);
+ 		//创建目录
+ 		$result = RC_Filesystem::mkdir($path, 0777, true, true);
+ 			
+ 		//删除原有图片
+ 		RC_Filesystem::delete($filename_path);
 
  		@unlink($filename_path);//删除原有图片
  		$img = base64_decode($img);
