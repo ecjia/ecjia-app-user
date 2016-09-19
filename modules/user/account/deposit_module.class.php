@@ -20,6 +20,9 @@ class deposit_module extends api_front implements api_interface {
  			$result = new ecjia_error('amount_gt_zero', __('请在“金额”栏输入大于0的数字！'));
  			return $result;
  		}
+ 		if (!$user_id) {
+ 		    return new ecjia_error(100, 'Invalid session' );
+ 		}
  		
  		/* 变量初始化 */
  		$surplus = array(
@@ -42,6 +45,9 @@ class deposit_module extends api_front implements api_interface {
  		$payment_info = array();
  		$payment_info = $payment_method->payment_info($surplus['payment_id']);
 //  		$surplus['payment'] = $payment_info['pay_name'];
+        if (empty($payment_info)) {
+            return new ecjia_error('payment_not_exist', __('支付方式不存在，请重新选择'));
+        }
  		$surplus['payment'] = $payment_info['pay_code'];
  		
  		if ($surplus['account_id'] > 0) {
