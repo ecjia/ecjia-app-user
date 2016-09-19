@@ -17,6 +17,9 @@ class raply_module extends api_front implements api_interface {
  			return $result;
  		}
  		$user_id = $_SESSION['user_id'];
+ 		if (!$user_id) {
+ 		    return new ecjia_error(100, 'Invalid session' );
+ 		}
  		/* 变量初始化 */
  		$surplus = array(
  				'user_id'      => $user_id,
