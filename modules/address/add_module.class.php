@@ -7,9 +7,13 @@ defined('IN_ECJIA') or exit('No permission resources.');
  */
 class add_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {
-    		
+        
     	$this->authSession();	
 		$address = $this->requestData('address', array());
+		$user_id = $_SESSION['user_id'];
+		if (empty($address) || empty($user_id)) {
+		    return new ecjia_error( 'invalid_parameter', RC_Lang::get ('system::system.invalid_parameter' ));
+		}
 		
 		$address['user_id']       = $_SESSION['user_id'];
 		$address['consignee']     = isset($address['consignee']) ? trim($address['consignee']) : '';
@@ -26,8 +30,8 @@ class add_module extends api_front implements api_interface {
 		$address['sign_building'] = isset($address['sign_building']) ? trim($address['sign_building']) : '';
 		$address['tel'] 		  = isset($address['tel']) ? trim($address['tel']) : '';
 		
-		$address['province']	  = RC_Model::model('region_model')->where(array('region_id' => $address['city']))->get_field('parent_id');
-		$address['country']		  = RC_Model::model('region_model')->where(array('region_id' => $address['province']))->get_field('parent_id');
+		$address['province']	  = RC_Model::model('user/region_model')->where(array('region_id' => $address['city']))->get_field('parent_id');
+		$address['country']		  = RC_Model::model('user/region_model')->where(array('region_id' => $address['province']))->get_field('parent_id');
 		$result = RC_Api::api('user', 'address_manage', $address);
 	
 		if (is_ecjia_error($result)) {

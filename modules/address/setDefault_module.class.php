@@ -10,21 +10,22 @@ class setDefault_module extends api_front implements api_interface {
     	
     	$this->authSession();	
 		$address_id = $this->requestData('address_id', 0);
-		if (empty($address_id)) {
-			return new ecjia_error(101, '参数错误');
+		$user_id = $_SESSION['user_id'];
+		if (empty($address_id) || empty($user_id)) {
+			return new ecjia_error( 'invalid_parameter', RC_Lang::get ('system::system.invalid_parameter' ));
 		}
 		
 		$db_user_address = RC_Model::model('user/user_address_model');
 		$db_users = RC_Model::model('user/users_model');
 		
-		$arr = $db_user_address->find(array('address_id' => $address_id, 'user_id' => $_SESSION['user_id']));
+		$arr = $db_user_address->find(array('address_id' => $address_id, 'user_id' => $user_id));
 		if (empty($arr)) {
 			return new ecjia_error(8, 'fail');
 		}
 		
 		/* 保存到session */
 // 		$_SESSION['flow_consignee'] = rc_addslashes($arr);
-		$db_users->where(array('user_id' => $_SESSION['user_id']))->update(array('address_id' => $address_id));
+		$db_users->where(array('user_id' => $user_id))->update(array('address_id' => $address_id));
 		return array();
 	}
 }

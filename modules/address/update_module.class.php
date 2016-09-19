@@ -9,13 +9,15 @@ class update_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	
     	$this->authSession();	
- 		$db_user_address = RC_Model::model('user/user_address_model');
+ 		
 		$address = $this->requestData('address', array());
 		$address['user_id'] = $_SESSION['user_id'];
 		$address['address_id']     = $this->requestData('address_id', 0);
-		if (empty($address['address_id'])) {
-			return new ecjia_error(101, '参数错误');
+		if (empty($address['address_id']) || empty($address['user_id'])) {
+			return new ecjia_error( 'invalid_parameter', RC_Lang::get ('system::system.invalid_parameter' ));
 		}
+		
+		$db_user_address = RC_Model::model('user/user_address_model');
 		
 		$address['consignee']     = isset($address['consignee']) ? trim($address['consignee']) : '';
 // 		$address['country']       = isset($address['country']) ? intval($address['country']) : '';
@@ -31,8 +33,8 @@ class update_module extends api_front implements api_interface {
 		$address['sign_building'] = isset($address['sign_building']) ? trim($address['sign_building']) : '';
 		$address['tel'] 		  = isset($address['tel']) ? trim($address['tel']) : '';
 		
-		$address['province']	  = RC_Model::model('region_model')->where(array('region_id' => $address['city']))->get_field('parent_id');
-		$address['country']		  = RC_Model::model('region_model')->where(array('region_id' => $address['province']))->get_field('parent_id');
+		$address['province']	  = RC_Model::model('user/region_model')->where(array('region_id' => $address['city']))->get_field('parent_id');
+		$address['country']		  = RC_Model::model('user/region_model')->where(array('region_id' => $address['province']))->get_field('parent_id');
 		
 		$result = RC_Api::api('user', 'address_manage', $address);
 		if(is_ecjia_error($result)){

@@ -11,13 +11,9 @@ class info_module extends api_front implements api_interface {
     	$this->authSession();
     	
 		$id = $this->requestData('address_id', 0);
-		if(intval($id) < 1){
-			return new ecjia_error( 'invalid_parameter', RC_Lang::get ('system::system.invalid_parameter' ));
-		}
-		
 		$user_id = $_SESSION['user_id'];
-		if (!$user_id) {
-		    return new ecjia_error(100, 'Invalid session' );
+		if(intval($id) < 1 || empty($user_id)){
+			return new ecjia_error( 'invalid_parameter', RC_Lang::get ('system::system.invalid_parameter' ));
 		}
 		
 		RC_Loader::load_app_func('order', 'orders');
