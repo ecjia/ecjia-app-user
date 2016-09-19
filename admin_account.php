@@ -319,6 +319,7 @@ class admin_account extends ecjia_admin {
 		
 		$user_name = RC_DB::table('users')->where('user_id', $account['user_id'])->pluck('user_name');
 		$payment_name = RC_DB::table('payment')->where('pay_code', $account['payment'])->pluck('pay_name');
+		
 		$account['payment']	= empty($payment_name) ? strip_tags($account['payment']) : strip_tags($payment_name);
 		$account['amount']	= abs($account['amount']);
 		

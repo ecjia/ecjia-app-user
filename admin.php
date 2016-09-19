@@ -123,17 +123,15 @@ class admin extends ecjia_admin {
 		
 		/* 取出注册扩展字段 */
 //		$extend_info_list = $this->db_reg_fields->where(array('type' => array('lt' => 2), 'display' => 1, 'id' => array('neq' => 6)))->order(array('dis_order' => 'asc', 'id' => 'asc'))->select();
-		$extend_info_list = RC_DB::table('reg_fields')->where('type', '<', 2)
-				->where('display', 1)
-				->where('id', '!=', 6)
-				->orderBy('dis_order', 'asc')
-				->orderBy('id', 'asc')
-				->get();
+		$extend_info_list = RC_DB::table('reg_fields')->where('type', '<', 2)->where('display', 1)->where('id', '!=', 6)
+				->orderBy('dis_order', 'asc')->orderBy('id', 'asc')->get();
 
 		/* 给扩展字段加入key */
-		foreach ($extend_info_list as $key => $val) {
-			$val['key'] = $key+1 ;
-			$extend_info_list[$key] = $val;	
+		if (!empty($extend_info_list)) {
+			foreach ($extend_info_list as $key => $val) {
+				$val['key'] = $key+1 ;
+				$extend_info_list[$key] = $val;
+			}
 		}
 		
 		$rank_list = get_user_rank_list(true);
@@ -222,13 +220,8 @@ class admin extends ecjia_admin {
 
 		/*把新注册用户的扩展信息插入数据库*/
 //		$fields_arr = $this->db_reg_fields->field('id')->where(array('type' => 0 , 'display' => 1))->order(array('dis_order' => 'asc', 'id' => 'asc'))->select();
-		$fields_arr = RC_DB::table('reg_fields')
-				->where('type', 0)
-				->where('display', 1)
-				->orderBy('dis_order', 'asc')
-				->orderBy('id', 'asc')
-				->select('id')
-				->get();
+		$fields_arr = RC_DB::table('reg_fields')->where('type', 0)->where('display', 1)
+				->orderBy('dis_order', 'asc')->orderBy('id', 'asc')->select('id')->get();
 
 		$extend_field_str = '';	//生成扩展字段的内容字符串
 		
@@ -388,16 +381,16 @@ class admin extends ecjia_admin {
 		RC_Loader::load_app_class('integrate', 'user', false);
 		$user = integrate::init_users();
 
-		$username			= empty($_POST['username'])				? '' : trim($_POST['username']);
+		$username			= empty($_POST['username'])				? '' 	: trim($_POST['username']);
 		$user_id			= trim($_POST['id']);
 		$password			= trim($_POST['newpassword']);
-		$confirm_password	= empty($_POST['confirm_password'])		? '' : trim($_POST['confirm_password']);
-		$email				= empty($_POST['email'])				? '' : trim($_POST['email']);
-		$sex				= empty($_POST['sex'])					? 0: intval($_POST['sex']);
-		$sex				= in_array($sex, array(0, 1, 2))		? $sex : 0;
-		$birthday			= empty($_POST['birthday'])			 	? '' : $_POST['birthday'];
-		$rank				= empty($_POST['user_rank'])			? 0: intval($_POST['user_rank']);
-		$credit_line		= empty($_POST['credit_line'])			? 0: trim($_POST['credit_line']);
+		$confirm_password	= empty($_POST['confirm_password'])		? '' 	: trim($_POST['confirm_password']);
+		$email				= empty($_POST['email'])				? '' 	: trim($_POST['email']);
+		$sex				= empty($_POST['sex'])					? 0		: intval($_POST['sex']);
+		$sex				= in_array($sex, array(0, 1, 2))		? $sex 	: 0;
+		$birthday			= empty($_POST['birthday'])			 	? '' 	: $_POST['birthday'];
+		$rank				= empty($_POST['user_rank'])			? 0		: intval($_POST['user_rank']);
+		$credit_line		= empty($_POST['credit_line'])			? 0		: trim($_POST['credit_line']);
 
 		/* 验证参数的合法性*/
 		/* 邮箱*/
@@ -421,7 +414,6 @@ class admin extends ecjia_admin {
 			if (preg_match("/ /", $password)) {
 				$this->showmessage(RC_Lang::get('user::users.js_languages.passwd_balnk'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 			}
-//			$this->db_user->where(array('user_id' => $user_id))->update(array('ec_salt' => '0'));
 			RC_DB::table('users')->where('user_id', $user_id)->update(array('ec_salt' => '0'));
 		}
 	
@@ -432,12 +424,8 @@ class admin extends ecjia_admin {
 		
 		/* 更新用户扩展字段的数据 */
 //		$fields_arr = $this->db_reg_fields->field('id')->where(array('type' => 0, 'display' => 1))->order(array('dis_order' => 'asc', 'id' => 'asc'))->select();
-		$fields_arr = RC_DB::table('reg_fields')
-				->where('type', 0)
-				->where('display', 1)
-				->orderBy('dis_order', 'asc')
-				->orderBy('id', 'asc')
-				->get();
+		$fields_arr = RC_DB::table('reg_fields')->where('type', 0)->where('display', 1)
+				->orderBy('dis_order', 'asc')->orderBy('id', 'asc')->get();
 
 		/* 循环更新扩展用户信息 */
 		if (!empty($fields_arr)) {
@@ -445,12 +433,10 @@ class admin extends ecjia_admin {
 				$extend_field_index = 'extend_field' . $val['id'];
 				if(isset($_POST[$extend_field_index])) {
 					$temp_field_content = strlen($_POST[$extend_field_index]) > 100 ? mb_substr($_POST[$extend_field_index], 0, 99) : $_POST[$extend_field_index];
-//					$sql_one = $this->db_reg_extend_info->find(array('reg_field_id' => $val['id'] , 'user_id' => $user_id));
 					$sql_one = RC_DB::table('reg_extend_info')->where('reg_field_id', $val['id'])->where('user_id', $user_id)->first();
 					/* 如果之前没有记录，则插入 */
 					if($sql_one) {
 						$data = array('content' => $temp_field_content);
-//						$this->db_reg_extend_info->where(array('reg_field_id' => $val['id'] , 'user_id' => $user_id))->update($data);
 						RC_DB::table('reg_extend_info')->where('reg_field_id', $val['id'])->where('user_id', $user_id)->update($data);
 					} else {
 						$data = array(
@@ -458,7 +444,6 @@ class admin extends ecjia_admin {
 							'reg_field_id'	=> $val['id'],
 							'content'		=> $temp_field_content,
 						);
-//						$this->db_reg_extend_info->insert($data);
 						RC_DB::table('reg_extend_info')->insert($data);
 					}
 				}
@@ -483,7 +468,6 @@ class admin extends ecjia_admin {
 		$other['home_phone']	= isset($_POST['extend_field4']) ? htmlspecialchars(trim($_POST['extend_field4'])) : '';
 		$other['mobile_phone']	= isset($_POST['extend_field5']) ? htmlspecialchars(trim($_POST['extend_field5'])) : '';
 		
-//		$this->db_user->where(array('user_id' => $user_id))->update($other);
 		RC_DB::table('users')->where('user_id', $user_id)->update($other);
 		
 		/* 记录管理员操作 */
@@ -492,7 +476,7 @@ class admin extends ecjia_admin {
 		/* 提示信息 */
 		$links[0]['text']	= RC_Lang::get('user::users.back_user_list');
 		$links[0]['href']	= RC_Uri::url('user/admin/init');
-		$this->showmessage(RC_Lang::get('user::users.edit_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('links' => $links, 'pjaxurl' => RC_Uri::url('user/admin/edit', "id=$user_id")));
+		$this->showmessage(RC_Lang::get('user::users.edit_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('links' => $links, 'pjaxurl' => RC_Uri::url('user/admin/edit', array('id' => $user_id))));
 	}
 	
 	/**
@@ -575,7 +559,7 @@ class admin extends ecjia_admin {
 					->leftJoin('region as d', RC_DB::raw('d.region_id'), '=', RC_DB::raw('ua.district'))
 					->where('user_id', $row['user_id'])
 					->orderBy('default_address', 'desc')
-					->selectRaw("ua.*,IF(address_id=".$row['address_id'].",1,0) as default_address,IFNULL(c.region_name, '') as country_name, IFNULL(p.region_name, '') as province_name,IFNULL(t.region_name, '') as city_name,IFNULL(d.region_name, '') as district_name")
+					->selectRaw("ua.*, IF(address_id=".$row['address_id'].",1,0) as default_address, IFNULL(c.region_name, '') as country_name, IFNULL(p.region_name, '') as province_name, IFNULL(t.region_name, '') as city_name, IFNULL(d.region_name, '') as district_name")
 					->take(5)
 					->get();
 
@@ -583,7 +567,6 @@ class admin extends ecjia_admin {
 //			$order = $this->db_order->where(array('user_id' => $row['user_id'] ))->order(array('add_time' => 'desc'))->limit(5)->select();
 			$order = RC_DB::table('order_info')->where('user_id', $row['user_id'])->orderBy('add_time', 'desc')->take(5)->get();
 
-			RC_Lang::load('orders/order');
 			if (!empty($order)) {
 				foreach ($order as $k => $v) {
 					$order[$k]['add_time']	 = RC_Time::local_date(ecjia::config('time_format'), $v['add_time']);
@@ -612,7 +595,6 @@ class admin extends ecjia_admin {
 		if (isset($_POST['checkboxes'])) {
 			$idArr = explode(',', $_POST['checkboxes']);
 			$count = count($idArr);
-//			$data = $this->db_user->field('user_name')->where(array('user_id' => $idArr))->select();
 			$data = RC_DB::table('users')->whereIn('user_id', $idArr)->select('user_name')->get();
 
 			/* 通过插件来删除用户 */
@@ -647,27 +629,17 @@ class admin extends ecjia_admin {
 			$this->showmessage(RC_Lang::get('user::users.js_languages.invalid_email'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 
-		/* 编辑email 根据id获取之前的email */
-//		$old_email = $this->db_user->where(array('user_id' => $id))->get_field('email');
-		$old_email = RC_DB::table('users')->where('user_id', $id)->pluck('email');
-
 		if (!empty($email)) {
-			if ($email != $old_email) {
-//				if ($this->db_user->where(array('email' => $email))->count() == 0) {
-				if (RC_DB::table('users')->where('email', $email)->count() == 0) {
-//					if ($this->db_user->where(array('user_id' => $id))->update(array('email' => $email))) {
-					if (RC_DB::table('users')->where('user_id', $id)->update(array('email' => $email))) {
+			if (RC_DB::table('users')->where('email', $email)->where('user_id', '!=', $id)->count() == 0) {
+				if (RC_DB::table('users')->where('user_id', $id)->update(array('email' => $email))) {
+					$user_name = RC_DB::table('users')->where('user_id', $id)->pluck('user_name');
+					
+					ecjia_admin::admin_log($user_name.RC_Lang::get('user::users.mailbox_information'), 'edit', 'users');
 
-//						$user_name = $this->db_user->where(array('user_id' => $id))->get_field('user_name');
-						$user_name = RC_DB::table('users')->where('user_id', $id)->pluck('user_name');
-
-						ecjia_admin::admin_log($user_name.RC_Lang::get('user::users.mailbox_information'), 'edit', 'users');
-						
-						$this->showmessage(RC_Lang::get('user::users.edit_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
-					}
-				} else {
-					$this->showmessage(RC_Lang::get('user::users.email_exists'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+					$this->showmessage(RC_Lang::get('user::users.edit_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
 				}
+			} else {
+				$this->showmessage(RC_Lang::get('user::users.email_exists'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 			}
 		} else {
 			$this->showmessage(RC_Lang::get('user::users.email_required'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
@@ -681,7 +653,6 @@ class admin extends ecjia_admin {
 		$this->admin_priv('users_drop', ecjia::MSGTYPE_JSON);
 		
 		$user_id = $_GET['id'];
-//		$username = $this->db_user->where(array('user_id' => $user_id))->get_field('user_name');
 		$username = RC_DB::table('users')->where('user_id', $user_id)->pluck('user_name');
 
 		RC_Loader::load_app_class('integrate', 'user', false);
@@ -735,21 +706,23 @@ class admin extends ecjia_admin {
 		$field = '';
 		$order = array();
 		/* 用户地址列表*/
+		$db_user_address = RC_DB::table('user_address as ua')
+			->leftJoin('region as c', RC_DB::raw('c.region_id'), '=', RC_DB::raw('ua.country'))
+			->leftJoin('region as p', RC_DB::raw('p.region_id'), '=', RC_DB::raw('ua.province'))
+			->leftJoin('region as t', RC_DB::raw('t.region_id'), '=', RC_DB::raw('ua.city'))
+			->leftJoin('region as d', RC_DB::raw('d.region_id'), '=', RC_DB::raw('ua.district'));
+		
 		if ($address_id) {
-			$field = array("ua.*,IF(address_id=".$address_id['address_id'].",1,0) as default_address,IFNULL(c.region_name, '') as country_name, IFNULL(p.region_name, '') as province_name,IFNULL(t.region_name, '') as city_name,IFNULL(d.region_name, '') as district_name");
-			$order = array('default_address' => 'desc');
+// 			$field = array("ua.*, IF(address_id=".$address_id['address_id'].",1,0) as default_address, IFNULL(c.region_name, '') as country_name, IFNULL(p.region_name, '') as province_name, IFNULL(t.region_name, '') as city_name, IFNULL(d.region_name, '') as district_name");
+// 			$order = array('default_address' => 'desc');
+			$db_user_address
+				->orderBy('default_address', 'desc')
+				->selectRaw("ua.*,IF(address_id=".$address_id['address_id'].",1,0) as default_address,IFNULL(c.region_name, '') as country_name, IFNULL(p.region_name, '') as province_name,IFNULL(t.region_name, '') as city_name,IFNULL(d.region_name, '') as district_name");
 		} 
 		
 //		$row = $this->db_view->field($field)->where(array('user_id' => $id ))->order($order)->select();
-		$row = RC_DB::table('user_address as ua')
-				->leftJoin('region as c', RC_DB::raw('c.region_id'), '=', RC_DB::raw('ua.country'))
-				->leftJoin('region as p', RC_DB::raw('p.region_id'), '=', RC_DB::raw('ua.province'))
-				->leftJoin('region as t', RC_DB::raw('t.region_id'), '=', RC_DB::raw('ua.city'))
-				->leftJoin('region as d', RC_DB::raw('d.region_id'), '=', RC_DB::raw('ua.district'))
-				->where('user_id', $id)
-				->orderBy('default_address', 'desc')
-				->selectRaw("ua.*,IF(address_id=".$address_id['address_id'].",1,0) as default_address,IFNULL(c.region_name, '') as country_name, IFNULL(p.region_name, '') as province_name,IFNULL(t.region_name, '') as city_name,IFNULL(d.region_name, '') as district_name")
-				->get();
+		$row = $db_user_address->where('user_id', $id)->get();
+		
 		$count = count($row);
 
 		if ($act) {

@@ -11,16 +11,32 @@ defined('IN_ECJIA') or exit('No permission resources.');
  * @return  array   $arr
  */
 function EM_get_collection_goods($user_id, $num = 10, $start = 1, $rec_id = 0) {
-    $where = array('c.user_id'=>$user_id);
+	$user_rank = $_SESSION['user_rank'];
+	$db_collect_goods = RC_DB::table('collect_goods as c')
+		->leftJoin('goods as g', RC_DB::raw('g.goods_id'), '=', RC_DB::raw('c.goods_id'))
+		->leftJoin('member_price as mp', function($join) use ($user_rank) {
+			$join->on(RC_DB::raw('mp.goods_id'), '=', RC_DB::raw('g.goods_id'))->on(RC_DB::raw('mp.user_rank'), '=', RC_DB::raw($user_rank));
+	});
+	
+//     $where = array('c.user_id' => $user_id);
+    $db_collect_goods->where(RC_DB::raw('c.user_id'), $user_id);
+    
     if ($rec_id) {
-    	$where = array_merge($where,array('c.rec_id'=>array('lt'=>$rec_id)));
+//     	$where = array_merge($where, array('c.rec_id' => array('lt' => $rec_id)));
+    	$db_collect_goods->where(RC_DB::raw('c.rec_id'), '<=', $rec_id);
     } 
     
-	$dbview = RC_Model::model('user/collect_goods_viewmodel');
-	$res = $dbview->join(array('goods','member_price'))->where($where)->order(array('c.rec_id' => 'desc'))->limit(($start - 1) * $num , $num)->select();
+// 	$dbview = RC_Model::model('user/collect_goods_viewmodel');
+// 	$res = $dbview->join(array('goods', 'member_price'))->where($where)->order(array('c.rec_id' => 'desc'))->limit(($start - 1) * $num , $num)->select();
+
+	$res = $db_collect_goods
+		->selectRaw("g.original_img, g.goods_id, g.goods_name, g.market_price, g.shop_price, g.goods_thumb, g.goods_img, g.original_img, g.goods_brief, g.goods_type AS org_price, IFNULL(mp.user_price, g.shop_price * '".$_SESSION['discount']."') AS shop_price, g.promote_price, g.promote_start_date, g.promote_end_date, c.rec_id, c.is_attention, g.click_count")
+		->orderby(RC_DB::raw('c.rec_id'), 'desc')
+		->take($num)
+		->skip(($start - 1) * $num)
+		->get();
 
     $goods_list = array();
-
     if (!empty($res)) {
         foreach ($res as $row) {
             if ($row['promote_price'] > 0) {

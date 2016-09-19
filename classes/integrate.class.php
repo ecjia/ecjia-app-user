@@ -287,9 +287,11 @@ class integrate  {
      */
     public function check_admin_registered($adminname) {
         //$db = RC_Loader::load_model('admin_user_model');
-		$db = RC_Model::model('admin_user_model');
-        $res = $db->where(array('user_name' => $adminname))->count();
-        return $res;
+// 		$db = RC_Model::model('admin_user_model');
+//         $res = $db->where(array('user_name' => $adminname))->count();
+//         return $res;
+        
+        return RC_DB::table('admin_user')->where('user_name', $adminname)->count();
     }
 }
 

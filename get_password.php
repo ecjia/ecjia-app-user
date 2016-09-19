@@ -85,7 +85,7 @@ class get_password extends ecjia_front {
 				exit;
 			}
 //			$userinfo = $this->db_users->field('user_id, user_name, email, passwd_question, passwd_answer')->find(array('mobile_phone' => $username));
-			$userinfo =  RC_DB::table('users')->where('mobile_phone', $username)->select('user_id', 'user_name', 'email', 'passwd_question', 'passwd_answer')->get();
+			$userinfo =  RC_DB::table('users')->where('mobile_phone', $username)->select('user_id', 'user_name', 'email', 'passwd_question', 'passwd_answer')->first();
 		}
 		
 		if (empty($userinfo)) {
@@ -322,9 +322,10 @@ class get_password extends ecjia_front {
 				if ($user->edit_user(array('username'=> (empty($code) ? $_SESSION['user_name'] : $user_info['user_name']), 'old_password'=>$old_password, 'password'=>$new_password), $forget_pwd = 1)) {
 					
 					$data = array(
-							'ec_salt' => '0'		
+						'ec_salt' => '0'		
 					);
-					$this->db_users->where(array('user_id' => $user_id))->update($data);
+// 					$this->db_users->where(array('user_id' => $user_id))->update($data);
+					RC_DB::table('users')->where('user_id', $user_id)->update($data);
 					$user->logout();
 					$this->assign('action', 'success');
 					$this->display('forget_password.dwt');
