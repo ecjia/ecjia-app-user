@@ -8,7 +8,12 @@ defined('IN_ECJIA') or exit('No permission resources.');
 class password_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	
-    	$this->authSession();	
+    	$this->authSession();
+    	$user_id = $_SESSION['user_id'];
+    	if (!$user_id) {
+    	    return new ecjia_error(100, 'Invalid session' );
+    	}
+    	
  		RC_Loader::load_app_class('integrate', 'user', false);
  		$user = integrate::init_users();
  		
@@ -28,7 +33,7 @@ class password_module extends api_front implements api_interface {
 			if ($user->edit_user(array('username'=> (empty($code) ? $_SESSION['user_name'] : $user_info['user_name']), 'old_password'=>$old_password, 'password'=>$new_password), empty($code) ? 0 : 1)) {
 	        	$db = RC_Model::model('user/users_model');
 	        	$db->where(array('user_id' => $user_id))->update(array('ec_salt' => 0));
-	        	$session_db	= RC_Loader::load_model('session_model');
+	        	$session_db	= RC_Model::model('user/user_session_model');
 	        	$session_db->delete(array('userid' => $user_id));
 	        	$user->logout();
 	            return array();

@@ -10,11 +10,13 @@ class update_module extends api_front implements api_interface {
     		
     	$this->authSession();	
 		$img = $this->requestData('avatar_img');
+		$uid = $_SESSION['user_id'];
+		if (!$uid) {
+		    return new ecjia_error(100, 'Invalid session' );
+		}
  		
  		$db = RC_Model::model('user/users_model');
- 		$userinfo = $db->field('user_name')->find(array('user_id' => $_SESSION['user_id']));
- 		
- 		$uid = $_SESSION['user_id'];
+ 		$userinfo = $db->field('user_name')->find(array('user_id' => $uid));
  		
  		$uid = abs(intval($uid));//保证uid为绝对的正整数
  		
@@ -26,7 +28,7 @@ class update_module extends api_front implements api_interface {
  		
  		$filename = md5($userinfo['user_name']);
 
- 		$path = RC_Upload::upload_path() . 'data' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR .$dir1 . DIRECTORY_SEPARATOR . $dir2 . DIRECTORY_SEPARATOR . $dir3;
+ 		$path = RC_Upload::upload_path() . 'data' . DIRECTORY_SEPARATOR . 'avatar' . DIRECTORY_SEPARATOR . $dir1 . DIRECTORY_SEPARATOR . $dir2 . DIRECTORY_SEPARATOR . $dir3;
  		$filename_path = $path. DIRECTORY_SEPARATOR . substr($uid, -2)."_".$filename.'.jpg';
  		
  		//创建目录 		
@@ -38,7 +40,7 @@ class update_module extends api_front implements api_interface {
 
  		RC_Loader::load_app_func('user', 'user');
  		
- 		$user_info = EM_user_info($_SESSION['user_id']);
+ 		$user_info = EM_user_info($uid);
  		return $user_info;
  		
 	}

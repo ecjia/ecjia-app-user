@@ -15,7 +15,7 @@ class userbind_module extends api_front implements api_interface {
 		$type_array = array('mobile');
 		//判断值是否为空，且type是否是在此类型中
 		if ( empty($type) || empty($value) || !in_array($type, $type_array)) {
-			return new ecjia_error(101, '参数错误');
+			return new ecjia_error( 'invalid_parameter', RC_Lang::get ('system::system.invalid_parameter' ));
 		}
 		
 		$db_user = RC_Model::model('user/users_model');

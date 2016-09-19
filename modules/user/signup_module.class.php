@@ -53,7 +53,6 @@ class signup_module extends api_front implements api_interface {
 			$email = $device_client.'_'.$code.'@mobile.com';
 		}
 		
-		
 		$other['mobile_phone'] = empty($mobile) ? $other['mobile_phone'] : $mobile;
 		if (is_numeric($other['mobile_phone']) && strlen($other['mobile_phone']) == 11 && preg_match( '/^1[3|4|5|7|8][0-9]\d{8}$/', $other['mobile_phone'])) {
 			$db_user = RC_Model::model('user/users_model');

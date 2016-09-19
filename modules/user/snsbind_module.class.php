@@ -16,7 +16,7 @@ class snsbind_module extends api_front implements api_interface {
 		$login_type = array('weixin', 'qq');
 		
 		if (!in_array($type, $login_type) || empty($open_id) || empty($name)) {
-			return new ecjia_error(101, '参数错误');
+			return new ecjia_error( 'invalid_parameter', RC_Lang::get ('system::system.invalid_parameter' ));
 		}
 		$db = RC_Model::model('user/users_model');
 		$result = check_user($open_id, $type);
