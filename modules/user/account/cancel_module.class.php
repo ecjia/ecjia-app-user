@@ -11,10 +11,10 @@ class cancel_module extends api_front implements api_interface {
     	$this->authSession();	
  		$id = $this->requestData('account_id' , 0);
  		$user_id = $_SESSION['user_id'];
- 		
  		if ($id <= 0 || $user_id == 0) {
- 			return new ecjia_error(101, '参数错误');
+ 			return new ecjia_error( 'invalid_parameter', RC_Lang::get ('system::system.invalid_parameter' ));
  		}
+ 		
  		RC_Loader::load_app_func('user', 'user');
  		$result = del_user_account($id, $user_id);
  		if ($result) {
