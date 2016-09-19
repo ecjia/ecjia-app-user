@@ -13,14 +13,14 @@ class integral_module extends api_front implements api_interface {
 		
 		$integral = $this->requestData('integral', 0);
 		if (!$integral) {
-			return new ecjia_error(101, '参数错误');
+			return new ecjia_error( 'invalid_parameter', RC_Lang::get ('system::system.invalid_parameter' ));
 		}
 		$integral_to_p =  value_of_integral($integral);
 		return array(
 			"bonus" => $integral_to_p,
 			"bonus_formated" => price_format($integral_to_p, false)
 		);
-		return new ecjia_error(101, '参数错误');
+		return new ecjia_error( 'invalid_parameter', RC_Lang::get ('system::system.invalid_parameter' ));
 	}
 }
 

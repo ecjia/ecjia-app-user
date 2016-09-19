@@ -16,7 +16,7 @@ class bind_module extends api_front implements api_interface {
 		$type_array = array('mobile');
 		//判断值是否为空，且type是否是在此类型中
 		if ( empty($type) || empty($value) || empty($code) || !in_array($type, $type_array)) {
-			return new ecjia_error(101, '参数错误');
+			return new ecjia_error( 'invalid_parameter', RC_Lang::get ('system::system.invalid_parameter' ));
 		}
  		//判断校验码是否过期
  		if ($_SESSION['bindcode_lifetime'] + 180 < RC_Time::gmtime()) {

@@ -14,7 +14,7 @@ class forget_password_module extends api_front implements api_interface {
 		$code = $this->requestData('code');
 		
 		if (empty($type) || empty($value) || empty($code)) {
-        	return new ecjia_error(101, '参数错误');
+        	return new ecjia_error( 'invalid_parameter', RC_Lang::get ('system::system.invalid_parameter' ));
         }
         $db = RC_Model::model('user/users_model');
         if ($type == 'mobile') {
@@ -35,7 +35,7 @@ class forget_password_module extends api_front implements api_interface {
         
         /* 判断code是否正确*/
         if ($code != $_SESSION['forget_code']) {
-        	return new ecjia_error('code_error', __('验证码错误！'));
+        	return new ecjia_error('code_error'.$_SESSION['forget_code'], __('验证码错误！'));
         }
         
         /* 判断code有效期*/
@@ -44,7 +44,7 @@ class forget_password_module extends api_front implements api_interface {
         	return new ecjia_error('code_expiry_error', __('验证码过期，请重新获取验证码！'));
         }
         
-        RC_Session::set('forget_code_validated', 1);
+        $_SESSION['forget_code_validated'] = 1;
         return array();
 	}
 }
