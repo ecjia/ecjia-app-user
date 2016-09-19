@@ -6,17 +6,19 @@ defined('IN_ECJIA') or exit('No permission resources.');
  *
  */
 class delete_module extends api_front implements api_interface {
-    public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
+    public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {
     	
-    	$this->authSession();	
+    	$this->authSession();
 		$address_id = $this->requestData('address_id', 0);
-		if (empty($address_id)) {
-			return new ecjia_error(101, '参数错误');
-		} 
-		if (!drop_consignee($address_id)) {
+		$user_id = $_SESSION['user_id'];
+		if (empty($address_id) || empty($user_id)) {
+			return new ecjia_error( 'invalid_parameter', RC_Lang::get ('system::system.invalid_parameter' ));
+		}
+		
+		if (!drop_consignee($address_id, $user_id)) {
 			return new ecjia_error(8, 'fail');
 		}
-		return array();		
+		return array();
 	}
 }
 
@@ -27,20 +29,8 @@ class delete_module extends api_front implements api_interface {
  * @param integer $id
  * @return boolean
  */
-function drop_consignee($id) {
-    $db_user_address = RC_Model::model('user/user_address_model');
-    
-    $uid = $db_user_address->where(array('address_id' => $id))->get_field('user_id');
-    if (!empty($uid)) {
-        if ($uid != $_SESSION['user_id']) {
-            return false;
-        } else {
-            $res = $db_user_address->where(array('address_id' => $id))->delete();
-            return $res;
-        }
-    } else {
-        return false;
-    }
+function drop_consignee($id, $user_id) {
+    return RC_Model::model('user/user_address_model')->where(array('address_id' => $id, 'user_id' => $user_id))->delete();
 }
 
 // end
