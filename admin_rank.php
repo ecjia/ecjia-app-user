@@ -250,8 +250,9 @@ class admin_rank extends ecjia_admin {
 			'special_rank'	=> $special_rank,
 			'show_price'	=> $show_price,
 		);
+// 		$this->db_user_rank->where(array('rank_id' => $id))->update($data);
+		RC_DB::table('user_rank')->where('rank_id', $id)->update($data);
 		
-		RC_DB::table('user_rank', $id)->update($data);
 		
 		ecjia_admin::admin_log($rank_name, 'edit', 'user_rank');
 		$links[] = array('text' => RC_Lang::get('user::user_rank.back_list'), 'href' => RC_Uri::url('user/admin_rank/init'));
@@ -265,11 +266,14 @@ class admin_rank extends ecjia_admin {
 
 		$this->admin_priv('user_rank', ecjia::MSGTYPE_JSON);
 		$rank_id = intval($_GET['id']);
+// 		$rank_name = $this->db_user_rank->where(array('rank_id' => $rank_id))->get_field('rank_name');
 		$rank_name = RC_DB::table('user_rank')->where('rank_id', $rank_id)->pluck('rank_name');
+
+// 		if ($this->db_user_rank->where(array('rank_id' => $rank_id))->delete()) {
 		if (RC_DB::table('user_rank')->where('rank_id', $rank_id)->delete()) {
 			/* 更新会员表的等级字段 */
 // 			$this->db_user->where(array('user_rank' => $rank_id))->update(array('user_rank' => 0));
-			RC_DB::table('user_rank', $rank_id)->update(array('user_rank' => 0));
+			RC_DB::table('users')->where('user_rank', $rank_id)->update(array('user_rank' => 0));
 			
 			ecjia_admin::admin_log($rank_name, 'remove', 'user_rank');	
 			$this->showmessage(RC_Lang::get('user::user_rank.rank')."[ ".$rank_name." ]".RC_Lang::get('user::user_rank.delete_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
@@ -290,7 +294,7 @@ class admin_rank extends ecjia_admin {
 
 		/* 验证名称 ,根据id获取之前的名字  */
 		$old_name = RC_DB::table('user_rank')->where('rank_id', $rank_id)->pluck('rank_name');
-		
+
 		if (empty($val)) {
 			$this->showmessage(RC_Lang::get('user::user_rank.rank_name_confirm'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
@@ -324,11 +328,14 @@ class admin_rank extends ecjia_admin {
 			$this->showmessage(RC_Lang::get('user::user_rank.js_languages.integral_min_invalid'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 		/* 查找该ID 对应的积分上限值,验证是否大于上限  */
+// 		$max_points = $this->db_user_rank->where(array('rank_id' =>$rank_id))->get_field('max_points');
 		$max_points = RC_DB::table('user_rank')->where('rank_id', $rank_id)->pluck('max_points');
+
 		if ($val >= $max_points ) {
 			$this->showmessage(RC_Lang::get('user::user_rank.js_languages.integral_max_small'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 		/* 验证是否存在 */
+// 		if ($this->db_user_rank->where(array('min_points' => $val, 'rank_id' => $rank_id))->count() != 0) {
 		if (RC_DB::table('user_rank')
 		->where('min_points', $val)
 		->where('rank_id', $rank_id)
@@ -336,7 +343,10 @@ class admin_rank extends ecjia_admin {
 			$this->showmessage(sprintf(RC_Lang::get('user::user_rank.integral_min_exists'), $val), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 		
+// 		if ($this->db_user_rank->where(array('rank_id' => $rank_id))->update(array('min_points' => $val))) {
 		if (RC_DB::table('user_rank')->where('rank_id', $rank_id)->update(array('min_points' => $val))) {
+
+// 			$rank_name = $this->db_user_rank->where(array('rank_id' => $rank_id))->get_field('rank_name');
 			$rank_name =RC_DB::table('user_rank')->where('rank_id', $rank_id)->pluck('rank_name');
 			ecjia_admin::admin_log($rank_name, 'edit', 'user_rank');
 			
@@ -420,7 +430,9 @@ class admin_rank extends ecjia_admin {
 		$rank_id	= intval($_POST['id']);
 		$is_special	= intval($_POST['val']);
 		
+// 		if ($this->db_user_rank->where(array('rank_id' => $rank_id))->update(array('special_rank' => $is_special))) {
 		if (RC_DB::table('user_rank')->where('rank_id', $rank_id)->update(array('special_rank' => $is_special))) {
+// 			$rank_name = $this->db_user_rank->where(array('rank_id' => $rank_id))->get_field('rank_name');
 			$rank_name = RC_DB::table('user_rank')->where('rank_id', $rank_id)->pluck('rank_name');
 			
 			if ($is_special == 1) {
@@ -429,7 +441,7 @@ class admin_rank extends ecjia_admin {
 				ecjia_admin::admin_log($rank_name.'，'.RC_Lang::get('user::user_rank.hide_price_short'),  'edit', 'user_rank');
 			}
 			
-			$this->showmessage(RC_Lang::get('user::user_rank.change_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('content' => $is_show));
+			$this->showmessage(RC_Lang::get('user::user_rank.change_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('content' => $is_show, 'pjaxurl' => RC_Uri::url('user/admin_rank/init')));
 		} else {
 			$this->showmessage(RC_Lang::get('user::user_rank.edit_fail'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}

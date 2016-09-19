@@ -9,16 +9,16 @@ class user_account_change_log_api extends Component_Event_Api {
     
     public function call(&$options) {
         if (!is_array($options) || !isset($options['user_id'])) {
-            return new ecjia_error('invalid_parameter', '参数无效');
+            return new ecjia_error('invalid_parameter', RC_Lang::get('users.users.invalid_parameter'));
         }
         
-        $user_id = $options['user_id'];
-        $user_money = isset($options['user_money']) ? $options['user_money'] : 0;
-        $frozen_money = isset($options['frozen_money']) ? $options['frozen_money'] : 0;
-        $rank_points = isset($options['rank_points']) ? $options['rank_points'] : 0;
-        $pay_points = isset($options['pay_points']) ? $options['pay_points'] : 0;
-        $change_desc = isset($options['change_desc']) ? $options['change_desc'] : '';
-        $change_type = isset($options['change_type']) ? $options['change_type'] : ACT_OTHER;
+        $user_id 		= $options['user_id'];
+        $user_money 	= isset($options['user_money']) 	? $options['user_money'] 	: 0;
+        $frozen_money 	= isset($options['frozen_money']) 	? $options['frozen_money'] 	: 0;
+        $rank_points 	= isset($options['rank_points']) 	? $options['rank_points'] 	: 0;
+        $pay_points 	= isset($options['pay_points']) 	? $options['pay_points'] 	: 0;
+        $change_desc 	= isset($options['change_desc']) 	? $options['change_desc'] 	: '';
+        $change_type 	= isset($options['change_type']) 	? $options['change_type'] 	: ACT_OTHER;
         
         return $this->log_account_change($user_id, $user_money, $frozen_money, $rank_points, $pay_points, $change_desc, $change_type);
     }
@@ -45,8 +45,9 @@ class user_account_change_log_api extends Component_Event_Api {
      */
     private function log_account_change($user_id, $user_money = 0, $frozen_money = 0, $rank_points = 0, $pay_points = 0, $change_desc = '', $change_type = ACT_OTHER) {
         // 链接数据库
-        $db_account_log = RC_Model::model('user/account_log_model');
-        $db_users 		= RC_Model::model('user/users_model');
+//         $db_account_log = RC_Model::model('user/account_log_model');
+//         $db_users 		= RC_Model::model('user/users_model');
+
         /* 插入帐户变动记录 */
         $account_log = array (
             'user_id'		=> $user_id,
@@ -58,7 +59,8 @@ class user_account_change_log_api extends Component_Event_Api {
             'change_desc'	=> $change_desc,
             'change_type'	=> $change_type
         );
-        $db_account_log->insert($account_log);
+//         $db_account_log->insert($account_log);
+        RC_DB::table('account_log')->insert($account_log);
     
         /* 更新用户信息 */
         // 	TODO: 暂时先恢复之前的写法
@@ -73,7 +75,8 @@ class user_account_change_log_api extends Component_Event_Api {
         " rank_points = rank_points + ('$rank_points')," .
         " pay_points = pay_points + ('$pay_points')";
     
-        $db_users->inc('user_money' , 'user_id='.$user_id , $step);
+//         $db_users->inc('user_money' , 'user_id='.$user_id , $step);
+        RC_DB::table('users')->where('user_id', $user_id)->increment('user_money', $step);
     }
 }
 
