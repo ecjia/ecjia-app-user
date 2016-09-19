@@ -46,7 +46,7 @@ class deposit_module extends api_front implements api_interface {
  		$payment_info = $payment_method->payment_info($surplus['payment_id']);
 //  		$surplus['payment'] = $payment_info['pay_name'];
         if (empty($payment_info)) {
-            return new ecjia_error('payment_not_exist', __('支付方式不存在，请重新选择'));
+            $result = new ecjia_error('select_payment_pls_again', __('支付方式无效，请重新选择支付方式！'));
         }
  		$surplus['payment'] = $payment_info['pay_code'];
  		

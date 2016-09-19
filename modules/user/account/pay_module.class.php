@@ -12,15 +12,21 @@ class pay_module extends api_front implements api_interface {
  		//变量初始化
  		$account_id = $this->requestData('account_id', 0);
  		$payment_id = $this->requestData('payment_id', 0);
+ 		$user_id = $_SESSION['user_id'];
 	
  		if ($account_id <= 0 || $payment_id <= 0) {
 	    	return new ecjia_error(101, '参数错误');
 	    }
+	    if (!$user_id) {
+	        return new ecjia_error(100, 'Invalid session' );
+	    }
 	    
 	    //获取单条会员帐目信息
-	    $order = array();
-	    $order = get_surplus_info($account_id);
-	
+	    $order = get_surplus_info($account_id, $user_id);
+	    if (empty($order)) {
+	        return new ecjia_error('deposit_log_not_exist', '充值记录不存在');
+	    }
+	    
 	    $payment_method = RC_Loader::load_app_class('payment_method', 'payment');
 	    //支付方式的信息
 	    $payment_info = array();
@@ -83,10 +89,10 @@ class pay_module extends api_front implements api_interface {
  *
  * @return  int
  */
-function get_surplus_info($account_id) {
+function get_surplus_info($account_id, $user_id) {
 	$db = RC_Model::model('user/user_account_model');
 	
-	return $db->find(array('id' => $account_id));
+	return $db->find(array('id' => $account_id, 'user_id' => $user_id));
 }
 
 // end
