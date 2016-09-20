@@ -39,12 +39,12 @@ class userbind_module extends api_front implements api_interface {
 			if (empty($tpl)) {
 			    return new ecjia_error('sms_tpl_error', '短信模板错误');
 			}
-			ecjia_admin::$controller->assign('code', $code);
-			ecjia_admin::$controller->assign('mobile', $value);
-			ecjia_admin::$controller->assign('shopname', ecjia::config('shop_name'));
-			ecjia_admin::$controller->assign('service_phone', ecjia::config('service_phone'));
+			ecjia_api::$controller->assign('code', $code);
+			ecjia_api::$controller->assign('mobile', $value);
+			ecjia_api::$controller->assign('shopname', ecjia::config('shop_name'));
+			ecjia_api::$controller->assign('service_phone', ecjia::config('service_phone'));
 			$time = RC_Time::gmtime();
-			ecjia_admin::$controller->assign('time', RC_Time::local_date(ecjia::config('date_format'), $time));
+			ecjia_api::$controller->assign('time', RC_Time::local_date(ecjia::config('date_format'), $time));
 			
 			$content = ecjia_api::$controller->fetch_string($tpl['template_content']);
 			$options = array(

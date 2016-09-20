@@ -44,9 +44,9 @@ class forget_password_module extends api_front implements api_interface {
         		$tpl   = RC_Api::api('sms', 'sms_template', $tpl_name);
         		/* 判断短信模板是否存在*/
         		if (!empty($tpl)) {
-        			ecjia_api::$view_object->assign('action', __('短信找回密码'));
-        			ecjia_api::$view_object->assign('code', $code);
-        			ecjia_api::$view_object->assign('service_phone', ecjia::config('service_phone'));
+        			ecjia_api::$controller->assign('action', __('短信找回密码'));
+        			ecjia_api::$controller->assign('code', $code);
+        			ecjia_api::$controller->assign('service_phone', ecjia::config('service_phone'));
         			
         			$content = ecjia_api::$controller->fetch_string($tpl['template_content']);
         			$options = array(
@@ -65,9 +65,9 @@ class forget_password_module extends api_front implements api_interface {
         	$tpl   = RC_Api::api('mail', 'mail_template', $tpl_name);
         	/* 判断短信模板是否存在*/
         	if (!empty($tpl)) {
-        		ecjia_api::$view_object->assign('action', __('通过短信找回密码'));
-        		ecjia_api::$view_object->assign('code', $code);
-        		ecjia_api::$view_object->assign('service_phone', ecjia::config('service_phone'));
+        		ecjia_api::$controller->assign('action', __('通过短信找回密码'));
+        		ecjia_api::$controller->assign('code', $code);
+        		ecjia_api::$controller->assign('service_phone', ecjia::config('service_phone'));
         		$content = ecjia_api::$controller->fetch_string($tpl['template_content']);
         		$response = RC_Mail::send_mail(ecjia::config('shop_name'), $value, $tpl['template_subject'], $content, $tpl['is_html']);
         	}
