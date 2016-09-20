@@ -35,7 +35,7 @@ class forget_password_module extends api_front implements api_interface {
         
         /* 判断code是否正确*/
         if ($code != $_SESSION['forget_code']) {
-        	return new ecjia_error('code_error'.$_SESSION['forget_code'], __('验证码错误！'));
+        	return new ecjia_error('code_error', __('验证码错误！'));
         }
         
         /* 判断code有效期*/
