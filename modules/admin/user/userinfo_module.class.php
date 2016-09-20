@@ -11,7 +11,7 @@ class userinfo_module extends api_admin implements api_interface {
     		
 		$this->authadminSession();
 		$ecjia = RC_Loader::load_app_class('api_admin', 'api');
-		$db = RC_Loader::load_model('admin_user_model');
+		$db = RC_Model::model('user/admin_user_model');
 		$role_db = RC_Loader::load_model('role_model');
 		
 		$result = $db->find(array('user_id' => $_SESSION['admin_id']));

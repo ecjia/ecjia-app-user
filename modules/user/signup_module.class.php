@@ -329,7 +329,7 @@ function register($username, $password, $email, $other = array())
  * @return boolean
  */
 function admin_registered ($adminname) {
-    $db = RC_Loader::load_model('admin_user_model');
+    $db = RC_Model::model('user/admin_user_model');
     $res = $db->where(array('user_name' => $adminname))->count();
     return $res;
 }

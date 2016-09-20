@@ -93,7 +93,7 @@ class signin_module extends api_admin implements api_interface {
 						'uid' => $_SESSION['admin_id']
 					),
 			);
-			$role_db = RC_Loader::load_model('role_model');
+			$role_db = RC_Model::model('user/admin_user_model');
 			$role_name = $role_db->where(array('role_id' => $row['role_id']))->get_field('role_name');
 			
 			$out['userinfo'] = array(

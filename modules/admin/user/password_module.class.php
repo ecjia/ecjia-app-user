@@ -23,7 +23,7 @@ class password_module extends api_admin implements api_interface {
 			return $result;
 		}
 		
-		$db = RC_Loader::load_model('admin_user_model');
+		$db = RC_Model::model('user/admin_user_model');
 		/* 以用户的原密码，与code的值匹配 */
 		$name = $db->field('user_name')->where(array('user_id' => $adminid))->find();
 		
