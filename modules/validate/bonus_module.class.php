@@ -12,6 +12,11 @@ class bonus_module extends api_front implements api_interface {
  		RC_Loader::load_app_func('order','orders');
  		RC_Loader::load_app_func('cart','cart');
  		$bonus_sn = $this->requestData('bonus_sn');
+ 		
+ 		if (empty($_SESSION['user_id'])) {
+ 		    return new ecjia_error(100, 'Invalid session' );
+ 		}
+ 		
 		if (is_numeric($bonus_sn)) {
 			RC_Loader::load_app_func('bonus','bonus');
 			$bonus = bonus_info(0, $bonus_sn);
@@ -55,7 +60,7 @@ class bonus_module extends api_front implements api_interface {
 			/* 计算订单的费用 */
 			$total = order_fee($order, $cart_goods, $consignee);
 
-			if($total['goods_price']<$bonus['min_goods_amount']) {
+			if($total['goods_price'] < $bonus['min_goods_amount']) {
 				$order['bonus_id'] = '';
 				/* 重新计算订单 */
 				$total = order_fee($order, $cart_goods, $consignee);
