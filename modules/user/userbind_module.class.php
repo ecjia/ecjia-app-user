@@ -1,7 +1,7 @@
 <?php
 defined('IN_ECJIA') or exit('No permission resources.');
 /**
- * 用户注册绑定请求
+ * 手机快速注册/用户账户关联注册（手机、邮箱等）
  * @author will.chen
  *
  */
@@ -35,12 +35,16 @@ class userbind_module extends api_front implements api_interface {
 			//发送短信
 			$tpl_name = 'sms_register_validate';
 			$tpl   = RC_Api::api('sms', 'sms_template', $tpl_name);
-			ecjia_api::$view_object->assign('code', $code);
-			ecjia_api::$view_object->assign('mobile', $value);
-			ecjia_api::$view_object->assign('shopname', ecjia::config('shop_name'));
-			ecjia_api::$view_object->assign('service_phone', ecjia::config('service_phone'));
+			/* 判断短信模板是否存在*/
+			if (empty($tpl)) {
+			    return new ecjia_error('sms_tpl_error', '短信模板错误');
+			}
+			ecjia_admin::$controller->assign('code', $code);
+			ecjia_admin::$controller->assign('mobile', $value);
+			ecjia_admin::$controller->assign('shopname', ecjia::config('shop_name'));
+			ecjia_admin::$controller->assign('service_phone', ecjia::config('service_phone'));
 			$time = RC_Time::gmtime();
-			ecjia_api::$view_object->assign('time', RC_Time::local_date(ecjia::config('date_format'), $time));
+			ecjia_admin::$controller->assign('time', RC_Time::local_date(ecjia::config('date_format'), $time));
 			
 			$content = ecjia_api::$controller->fetch_string($tpl['template_content']);
 			$options = array(
@@ -58,7 +62,7 @@ class userbind_module extends api_front implements api_interface {
 				$_SESSION['bind_type'] = $type;
 				return array('registered' => 0);
 			} else {
-				$result = new ecjia_error('sms_error', __('短信发送失败！'));//$response['description']
+				$result = new ecjia_error('sms_error', __('短信发送失败！'));
 				return $result;
 			}
 		}
