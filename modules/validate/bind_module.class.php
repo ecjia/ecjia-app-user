@@ -19,7 +19,7 @@ class bind_module extends api_front implements api_interface {
 			return new ecjia_error( 'invalid_parameter', RC_Lang::get ('system::system.invalid_parameter' ));
 		}
  		//判断校验码是否过期
- 		if ($_SESSION['bindcode_lifetime'] + 180 < RC_Time::gmtime()) {
+ 		if ($_SESSION['bindcode_lifetime'] + 1800 < RC_Time::gmtime()) {
  			//过期
  			$result = new ecjia_error('code_timeout', __('验证码已过期，请重新获取！'));
  			return $result;
