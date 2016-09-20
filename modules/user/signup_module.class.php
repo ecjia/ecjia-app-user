@@ -6,12 +6,15 @@ class signup_module extends api_front implements api_interface {
     	
     	$this->authSession();	
 		if (ecjia::config('shop_reg_closed')) {
-			return new ecjia_error(11, '用户名或email已使用');
+			return new ecjia_error(11, '注册已关闭');
 		}
 		
 		RC_Loader::load_app_class('integrate', 'user', false);
 		$username = $this->requestData('name');
 		$password = $this->requestData('password');
+		if (empty($username) || empty($password)) {
+		    return new ecjia_error( 'invalid_parameter', RC_Lang::get ('system::system.invalid_parameter' ));
+		}
 		$email = $this->requestData('email');
 		$fileld = $this->requestData('field', array());//post的json格式：{"0":{"value":"15247258752","id":5}}
 		$device = $this->requestData('device', array());
@@ -58,13 +61,17 @@ class signup_module extends api_front implements api_interface {
 			$db_user = RC_Model::model('user/users_model');
 			$mobile_count = $db_user->where(array('mobile_phone' => $other['mobile_phone']))->count();
 			if ($mobile_count > 0 ) {
-				return new ecjia_error(11, '用户名或email已使用');
+				return new ecjia_error(11, '手机号已使用');
 			}
 		} else {
 			$other['mobile_phone'] = '';
 		}
 		
-		if (register($username, $password, $email, $other) === false) {
+		$rs_register = register($username, $password, $email, $other);
+		if ( $rs_register !== true) {
+		    if (is_ecjia_error($rs_register)) {
+		        return $rs_register;
+		    }
 			return new ecjia_error(11, '用户名或email已使用');
 		} else {
 			$db = RC_Model::model('user/reg_extend_info_model');
@@ -180,8 +187,6 @@ class signup_module extends api_front implements api_interface {
  */
 function register($username, $password, $email, $other = array())
 {
-    $db_user = RC_Model::model('user/users_model');
-
     /* 检查注册是否关闭 */
     if (ecjia::config('shop_reg_closed', ecjia::CONFIG_EXISTS)) {
     	return new ecjia_error(99999, '该网店暂停注册');
@@ -208,6 +213,7 @@ function register($username, $password, $email, $other = array())
 		return new ecjia_error(202, '用户名 已经存在');
     }
 
+    $db_user = RC_Model::model('user/users_model');
     RC_Loader::load_app_class('integrate', 'user', false);
     $user = &integrate::init_users();
     if (!$user->add_user($username, $password, $email)) {
