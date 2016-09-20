@@ -109,7 +109,7 @@ class signup_module extends api_front implements api_interface {
 				$device = $this->requestData('device', array());
 				$device_id = $device['udid'];
 				$device_client = $device['client'];
-				$db_term_relation = RC_Loader::load_model('term_relationship_model');
+				$db_term_relation = RC_Model::model('goods/term_relationship_model');
 			
 				$object_id = $db_term_relation->where(array(
 						'object_type'	=> 'ecjia.feedback',
