@@ -19,6 +19,7 @@ class signin_module extends api_admin implements api_interface {
 			return $result;
 		}
 
+		$db_user = RC_Model::model('user/admin_user_model');
 		/* 收银台请求判断处理*/
 		if (!empty($device) && is_array($device) && $device['code'] == '8001') {
 			$adviser_info = RC_Model::model('achievement/adviser_model')->find(array('username' => $username));
@@ -26,20 +27,20 @@ class signin_module extends api_admin implements api_interface {
 				$result = new ecjia_error('login_error', __('您输入的帐号信息不正确。'));
 				return $result;
 			}
-			$admin_info = RC_Model::model('admin_user_model')->field(array('user_name', 'ec_salt'))->find(array('user_id' => $adviser_info['admin_id']));
+			$admin_info = $db_user->field(array('user_name', 'ec_salt'))->find(array('user_id' => $adviser_info['admin_id']));
 			$username	= $admin_info['user_name'];
 			$ec_salt	= $admin_info['ec_salt'];
 		} else {
-			$ec_salt = RC_Model::model('admin_user_model')->where(array('user_name' => $username))->get_field('ec_salt');
+			$ec_salt = $db_user->where(array('user_name' => $username))->get_field('ec_salt');
 		}
 		
 	
 		/* 检查密码是否正确 */
 		if (!empty($ec_salt)) {
-			$row = RC_Model::model('admin_user_model')->field('user_id, user_name, email, password, last_login, action_list, last_login, suppliers_id, ec_salt, seller_id, role_id, ru_id')
+			$row = $db_user->field('user_id, user_name, email, password, last_login, action_list, last_login, suppliers_id, ec_salt, seller_id, role_id, ru_id')
 						->find(array('user_name' => $username, 'password' => md5(md5($password).$ec_salt)));
 		} else {
-			$row = RC_Model::model('admin_user_model')->field('user_id, user_name, email, password, last_login, action_list, last_login, suppliers_id, ec_salt, seller_id, role_id, ru_id')
+			$row = $db_user->field('user_id, user_name, email, password, last_login, action_list, last_login, suppliers_id, ec_salt, seller_id, role_id, ru_id')
 						->find(array('user_name' => $username, 'password' => md5($password)));
 		}
 		
@@ -74,7 +75,7 @@ class signin_module extends api_admin implements api_interface {
 						'ec_salt'	=> $ec_salt,
 						'password'	=> $new_possword
 				);
-				RC_Model::model('admin_user_model')->where(array('user_id' => $_SESSION['admin_id']))->update($data);
+				$db_user->where(array('user_id' => $_SESSION['admin_id']))->update($data);
 			}
 		
 			if ($row['action_list'] == 'all' && empty($row['last_login'])) {
@@ -85,7 +86,7 @@ class signin_module extends api_admin implements api_interface {
 					'last_login' 	=> RC_Time::gmtime(),
 					'last_ip'		=> RC_Ip::client_ip(),
 			);
-			RC_Model::model('admin_user_model')->where(array('user_id' => $_SESSION['admin_id']))->update($data);
+			$db_user->where(array('user_id' => $_SESSION['admin_id']))->update($data);
 		
 			$out = array(
 					'session' => array(
@@ -93,8 +94,8 @@ class signin_module extends api_admin implements api_interface {
 						'uid' => $_SESSION['admin_id']
 					),
 			);
-			$role_db = RC_Model::model('user/admin_user_model');
-			$role_name = $role_db->where(array('role_id' => $row['role_id']))->get_field('role_name');
+			$db_role = RC_Loader::load_model('role_model');
+			$role_name = $db_role->where(array('role_id' => $row['role_id']))->get_field('role_name');
 			
 			$out['userinfo'] = array(
 					'id' 			=> $row['user_id'],

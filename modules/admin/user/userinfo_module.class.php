@@ -10,9 +10,13 @@ class userinfo_module extends api_admin implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {
     		
 		$this->authadminSession();
-		$ecjia = RC_Loader::load_app_class('api_admin', 'api');
+		
+		if (!$_SESSION['admin_id']) {
+		    return new ecjia_error(100, 'Invalid session' );
+		}
+		
 		$db = RC_Model::model('user/admin_user_model');
-		$role_db = RC_Loader::load_model('role_model');
+		$db_role = RC_Loader::load_model('role_model');
 		
 		$result = $db->find(array('user_id' => $_SESSION['admin_id']));
 		
@@ -28,7 +32,7 @@ class userinfo_module extends api_admin implements api_interface {
 			'email'		=> $result['email'],
 			'last_login' 	=> RC_Time::local_date(ecjia::config('time_format'), $result['last_login']),
 			'last_ip'		=> RC_Ip::area($result['last_ip']),
-			'role_name'		=> $role_db->where(array('role_id' => $result['role_id']))->get_field('role_name'),
+			'role_name'		=> $db_role->where(array('role_id' => $result['role_id']))->get_field('role_name'),
 			'avator_img'	=> RC_Uri::admin_url('statics/images/admin_avatar.png'),
 		);
 		
