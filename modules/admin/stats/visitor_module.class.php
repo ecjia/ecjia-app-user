@@ -7,10 +7,9 @@ defined('IN_ECJIA') or exit('No permission resources.');
  */
 class visitor_module extends api_admin implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {
-    		
+
 		$this->authadminSession();
-		$ecjia = RC_Loader::load_app_class('api_admin', 'api');
-		$result = $ecjia->admin_priv('flow_stats');
+		$result = $this->admin_priv('flow_stats');
 		if (is_ecjia_error($result)) {
 			return $result;
 		}
@@ -22,6 +21,7 @@ class visitor_module extends api_admin implements api_interface {
 		}
 		$cache_key = 'admin_stats_visitor_'.md5($start_date.$end_date);
 		$data = RC_Cache::app_cache_get($cache_key, 'api');
+        
 		if (empty($data)) {
 			$response = visitor($start_date, $end_date);
 			RC_Cache::app_cache_set($cache_key, $response, 'api', 60);
@@ -31,12 +31,12 @@ class visitor_module extends api_admin implements api_interface {
 		}
 		return $response;
 	}
-	
+
 }
 function visitor($start_date, $end_date)
 {
 	$type = $start_date == $end_date ? 'time' : 'day';
-	
+
 	$start_date = RC_Time::local_strtotime($start_date. ' 00:00:00');
 	$end_date	= RC_Time::local_strtotime($end_date. ' 23:59:59');
 
@@ -47,9 +47,9 @@ function visitor($start_date, $end_date)
 	/* 计算时间刻度*/
 	$group_scale = ($end_date+1-$start_date)/6;
 	$stats_scale = ($end_date+1-$start_date)/30;
-	
+
 	$where = array();
-	
+
 // 	/* 判断请求时间，一天按小时返回*/
 // 	if ($type == 'day') {
 // 		$field = "CONCAT(FROM_UNIXTIME(access_time, '%Y-%m-%d'), ' 00:00:00') as new_day,count(DISTINCT ip_address) as visitors";
@@ -57,13 +57,13 @@ function visitor($start_date, $end_date)
 // 		$field = "CONCAT(FROM_UNIXTIME(access_time, '%Y-%m-%d %H'), ':00:00') as new_day,count(DISTINCT ip_address) as visitors";
 // 	}
 // 	$arr = $db_stats->field("count(visit_times) as visit_times,count(DISTINCT ip_address) as visitor_number")->where($where)->find();
-	
+
 // 	$total_visitors	= $arr['visitor_number'];
 // 	$visit_times	= $arr['visit_times'];
 // 	$web_visitors	= $arr['visitor_number'];
-	
+
 	$field = 'count(visit_times) as visit_times,count(DISTINCT ip_address) as visitor_number';
-	
+
 	$total_visitors = $visit_times = $web_visitors = 0;
 	$stats = $group = array();
 	$temp_start_time = $start_date;
@@ -83,7 +83,7 @@ function visitor($start_date, $end_date)
 						->group('ip_address')
 						->order(array('access_time' => 'asc'))
 						->select();
-		
+
 		if (!empty($result)) {
 			foreach ($result as $val) {
 				$temp_total_visitors += $val['visitor_number'];
@@ -107,7 +107,7 @@ function visitor($start_date, $end_date)
 		$temp_start_time += $stats_scale;
 		$j++;
 	}
-	
+
 	$i = 1;
 	$temp_group = $start_date;
 	while ($i <= 7) {
@@ -125,8 +125,8 @@ function visitor($start_date, $end_date)
 		$temp_group += $group_scale;
 		$i++;
 	}
-	
-	
+
+
 
 	$mobile_visitors = round($total_visitors*0.2);//先做虚拟的
 	$data = array(
