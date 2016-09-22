@@ -283,7 +283,7 @@ abstract class integrate_abstract
         $db_user_address    = RC_Model::model('user/user_address_model');
         $db_user_bonus      = RC_Model::model('bonus/user_bonus_model');
         $db_user_account    = RC_Model::model('user/user_account_model');
-        $db_tag             = RC_Model::model('goods/tag_model');
+//         $db_tag             = RC_Model::model('goods/tag_model');
         $db_account_log     = RC_Model::model('user/account_log_model');
 
         /* 如果需要同步或是ecjia插件执行这部分代码 */
@@ -318,7 +318,7 @@ abstract class integrate_abstract
                 //删除用户帐号金额
                 $db_user_account->in(array('user_id' => $col))->delete();
                 //删除用户标记
-                $db_tag->in(array('user_id' => $col))->delete();
+//                 $db_tag->in(array('user_id' => $col))->delete();
                 //删除用户日志
                 $db_account_log->in(array('user_id' => $col))->delete();
             }

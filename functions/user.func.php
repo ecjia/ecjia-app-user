@@ -82,6 +82,7 @@ function get_account_list($args = array()) {
 	$filter['sort_by']		= empty($_REQUEST['sort_by'])		? 'add_time' : trim($_REQUEST['sort_by']);
 	$filter['sort_order']	= empty($_REQUEST['sort_order'])	? 'DESC' : trim($_REQUEST['sort_order']);
 	$db_user_account = RC_DB::table('user_account as ua')->leftJoin('users as u', RC_DB::raw('ua.user_id'), '=', RC_DB::raw('u.user_id'));
+	
 // 	$where = array();
 	if ($filter['user_id'] > 0) {
 // 		$where['ua.user_id'] = $filter['user_id'];
@@ -109,7 +110,7 @@ function get_account_list($args = array()) {
 
 	if ($filter['keywords']) {
 // 		$where['u.user_name'] = array('like' => '%'.mysql_like_quote($filter['keywords']).'%');
-		$db_user_account->where(RC_DB::raw('u.user_name'), '%', '%'.mysql_like_quote($filter['keywords']).'%');
+		$db_user_account->where(RC_DB::raw('u.user_name'), 'like', '%'.mysql_like_quote($filter['keywords']).'%');
 	}
 	
 	/*　时间过滤　*/

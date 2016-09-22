@@ -41,10 +41,11 @@
             $("form[name='searchForm']").on('submit', function (e) {
                 e.preventDefault();
                 var keywords = $("input[name='keywords']").val();
-                if (keywords == '') {
-                    return false;
+                var url = $("form[name='searchForm']").attr('action');
+                
+                if (keywords != '') {
+                    url += '&keywords=' + keywords;
                 }
-                var url = $("form[name='searchForm']").attr('action') + '&keywords=' + keywords;
                 ecjia.pjax(url);
             });
         }
