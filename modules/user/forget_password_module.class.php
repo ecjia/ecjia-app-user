@@ -63,7 +63,7 @@ class forget_password_module extends api_front implements api_interface {
         if ($type == 'email') {
         	$tpl_name = 'email_verifying_authentication';
         	$tpl   = RC_Api::api('mail', 'mail_template', $tpl_name);
-        	/* 判断短信模板是否存在*/
+            /* 判断短信模板是否存在*/
         	if (!empty($tpl)) {
         		ecjia_api::$controller->assign('action', __('通过短信找回密码'));
         		ecjia_api::$controller->assign('code', $code);
@@ -72,7 +72,6 @@ class forget_password_module extends api_front implements api_interface {
         		$response = RC_Mail::send_mail(ecjia::config('shop_name'), $value, $tpl['template_subject'], $content, $tpl['is_html']);
         	}
         }
-        
         /* 判断是否发送成功*/
         if ($response === true) {
         	$time = RC_Time::gmtime();

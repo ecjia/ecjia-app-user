@@ -215,7 +215,7 @@ function register($username, $password, $email, $other = array())
 
     $db_user = RC_Model::model('user/users_model');
     RC_Loader::load_app_class('integrate', 'user', false);
-    $user = &integrate::init_users();
+    $user = integrate::init_users();
     if (!$user->add_user($username, $password, $email)) {
 //        if ($user->error == ERR_INVALID_USERNAME) {
 //            ecjia::$error->add(sprintf($GLOBALS['_LANG']['username_invalid'], $username));
