@@ -2,7 +2,7 @@
 defined('IN_ECJIA') or exit('No permission resources.');
 
 /**
- * 管理员登录
+ * 管理员退出
  * @author will
  *
  */

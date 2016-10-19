@@ -18,7 +18,6 @@ class signin_module extends api_admin implements api_interface {
 			return $result;
 		}
 
-		$db_user = RC_DB::table('staff_user')->where('mobile', $mobile)->first();RC_Model::model('user/admin_user_model');
 		/* 收银台请求判断处理*/
 		if (!empty($device) && is_array($device) && $device['code'] == '8001') {
 			$adviser_info = RC_Model::model('achievement/adviser_model')->find(array('username' => $username));
