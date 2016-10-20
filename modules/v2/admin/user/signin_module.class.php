@@ -100,7 +100,6 @@ function signin_merchant($username, $password, $device) {
          
         if ($device['code'] == '8001') {
             $_SESSION['adviser_id']	= $row['user_id'];
-            $_SESSION['store_id']	= $row['store_id'];
             $_SESSION['admin_name']	= $row['mobile'];
         }
          

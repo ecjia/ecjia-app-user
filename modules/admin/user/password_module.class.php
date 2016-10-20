@@ -18,7 +18,7 @@ class password_module extends api_admin implements api_interface {
 			return $result;
 		}
 		
-		if (strlen($new_password) < 6 ) { 
+		if (strlen($new_password) < 6 ) {
 			$result = new ecjia_error('passwordlength_error', __('请输入至少6位数密码！'));
 			return $result;
 		}
