@@ -139,7 +139,7 @@ function signin_merchant($username, $password, $device) {
             'last_login' 	=> RC_Time::local_date(ecjia::config('time_format'), $row['last_login']),
             'last_ip'		=> RC_Ip::area($row['last_ip']),
             'role_name'		=> !empty($role_name) ? $role_name : '',
-            'avator_img'	=> RC_Upload::upload_url($row['avatar']),
+            'avator_img'	=> $row['avatar'] ? RC_Upload::upload_url($row['avatar']) : null,
         );
          
         if ($device['code'] == '8001') {
