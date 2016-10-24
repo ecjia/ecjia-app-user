@@ -12,7 +12,7 @@ class record_module extends api_front implements api_interface {
     	$size = $this->requestData('pagination.count', 15);
     	$page = $this->requestData('pagination.page', 1);
  		$user_id = $_SESSION['user_id'];
- 		$process_type = $this->requestData('type' ,'');
+ 		$process_type = $this->requestData('type');
  		$type = array('', 'deposit', 'raply');
 		if (!in_array($process_type, $type)) {
 			return new ecjia_error( 'invalid_parameter', RC_Lang::get ('system::system.invalid_parameter' ));

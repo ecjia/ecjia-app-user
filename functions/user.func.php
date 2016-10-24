@@ -269,8 +269,8 @@ function get_account_log($user_id, $num, $start, $process_type = '') {
 	if (!empty($process_type)) {
 		$where['process_type'] = $process_type == 'deposit' ? 0 : 1;
 	}
-// 	$res = $db->where($where)->order(array('add_time' => 'desc'))->limit($start->limit())->select();
-	$res = RC_DB::table('user_account')->orderBy('add_time', 'desc')->select();
+	$res = $db->where($where)->order(array('add_time' => 'desc'))->limit($start->limit())->select();
+	//$res = RC_DB::table('user_account')->orderBy('add_time', 'desc')->select();
 	
 	if (!empty($res)) {
 		RC_Loader::load_sys_func('global');
