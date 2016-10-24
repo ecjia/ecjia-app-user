@@ -152,7 +152,7 @@ return array(
 	'bulk_operations'	=>	'批量操作',
 	'filter'			=>	'筛选',
 	'serach'			=>	'搜索',
-	'serach_condition'	=>	'请输入会员名称/邮箱/手机号',
+	'serach_condition'	=>	'请输入会员名称/邮箱',
 	'select_user'		=> 	'请先选中要删除的用户',
 	'delete_confirm'	=>	'删除会员将清除该会员的所有信息，您确定要这么做吗？',
 	'details'			=>	'详细信息',
