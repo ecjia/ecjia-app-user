@@ -8,11 +8,14 @@ defined('IN_ECJIA') or exit('No permission resources.');
 class update_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {
     		
-    	if ($_SESSION['user_id'] <= 0) {
-			return new ecjia_error(100, 'Invalid session');
-		}
+        //如果用户登录获取其session
+        $this->authSession();
+        $user_id = $_SESSION['user_id'];
+    	if ($user_id <= 0) {
+    		return new ecjia_error(100, 'Invalid session');
+    	}
 		$img = $this->requestData('avatar_img');
-		$uid = $_SESSION['user_id'];
+		$uid = $user_id;
  		
  		$db = RC_Model::model('user/users_model');
  		$userinfo = $db->field('user_name')->find(array('user_id' => $uid));
