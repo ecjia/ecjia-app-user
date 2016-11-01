@@ -96,7 +96,6 @@ function signin_merchant($username, $password, $device) {
         /* 获取device_id*/
         $device_id = RC_Model::model('mobile/mobile_device_model')->where(array('device_udid' => $device['udid'], 'device_client' => $device['client'], 'device_code' => $device['code']))->get_field('id');
         $_SESSION['device_id']	= $row['device_id'];
-    
          
         if ($device['code'] == '8001') {
             $_SESSION['adviser_id']	= $row['user_id'];
@@ -149,7 +148,7 @@ function signin_merchant($username, $password, $device) {
          
         //修正关联设备号
         $result = ecjia_app::validate_application('mobile');
-        if (!is_ecjia_error($result)) {
+        /* if (!is_ecjia_error($result)) {
             if (!empty($device['udid']) && !empty($device['client']) && !empty($device['code'])) {
                 $db_mobile_device = RC_Model::model('mobile/mobile_device_model');
                 $device_data = array(
@@ -159,7 +158,7 @@ function signin_merchant($username, $password, $device) {
                 );
                 $db_mobile_device->where($device_data)->update(array('user_id' => $_SESSION['admin_id'], 'is_admin' => 1));
             }
-        }
+        } */
          
         return $out;
     } else {
@@ -268,7 +267,7 @@ function signin_admin($username, $password, $device) {
         	
         //修正关联设备号
         $result = ecjia_app::validate_application('mobile');
-        if (!is_ecjia_error($result)) {
+        /* if (!is_ecjia_error($result)) {
             if (!empty($device['udid']) && !empty($device['client']) && !empty($device['code'])) {
                 $db_mobile_device = RC_Model::model('mobile/mobile_device_model');
                 $device_data = array(
@@ -278,7 +277,7 @@ function signin_admin($username, $password, $device) {
                 );
                 $db_mobile_device->where($device_data)->update(array('user_id' => $_SESSION['admin_id'], 'is_admin' => 1));
             }
-        }
+        } */
         	
         return $out;
     } else {
