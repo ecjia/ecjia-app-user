@@ -361,6 +361,8 @@ class admin extends ecjia_admin {
 			}
 		}
 
+		
+		
 		$this->assign('lang_sex', RC_Lang::get('user::users.sex'));
 		$this->assign('special_ranks',	get_user_rank_list(true));
 		$this->assign('form_act',		'update');
