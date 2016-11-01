@@ -285,7 +285,7 @@ abstract class integrate_abstract
         $db_user_address    = RC_Loader::load_app_model('user_address_model', 'user');
         $db_user_bonus      = RC_Loader::load_app_model('user_bonus_model', 'bonus');
         $db_user_account    = RC_Loader::load_app_model('user_account_model', 'user');
-        $db_tag             = RC_Loader::load_app_model('tag_model', 'goods');
+//         $db_tag             = RC_Loader::load_app_model('tag_model', 'goods');
         $db_account_log     = RC_Loader::load_app_model('account_log_model', 'user');
 
         /* 如果需要同步或是ecjia插件执行这部分代码 */
