@@ -98,8 +98,7 @@ abstract class integrate_abstract
         $quiet = empty($cfg['quiet']) ? 0 : 1;
 
         /* 初始化数据库 */
-        $this->db = RC_Model::model('user/'.$this->user_table . '_model');
-        
+        $this->db = RC_Loader::load_app_model($this->user_table . '_model', 'user');
     }
 
     /**
@@ -119,7 +118,7 @@ abstract class integrate_abstract
             }
             $this->set_session($username);
             $this->set_cookie($username, $remember);
-            
+
             return true;
         } else {
             return false;
@@ -152,14 +151,16 @@ abstract class integrate_abstract
     {
     	/* 将用户添加到整合方 */
         if ($this->check_user($username) > 0) {
-            $this->error = ERR_USERNAME_EXISTS;
+//          	$this->error = ERR_USERNAME_EXISTS;
+            $this->error = new ecjia_error('ERR_USERNAME_EXISTS', RC_Lang::get('user::users.username_exists'));
             return false;
         }
         
         /* 检查email是否重复 */
         $query = $this->db->field($this->field_id)->find(array($this->field_email => $email));
         if ($query[$this->field_id] > 0) {
-            $this->error = ERR_EMAIL_EXISTS;
+//             $this->error = ERR_EMAIL_EXISTS;
+            $this->error = new ecjia_error('ERR_EMAIL_EXISTS', RC_Lang::get('user::users.email_exists'));
             return false;
         }
 
@@ -209,7 +210,7 @@ abstract class integrate_abstract
      */
     public function edit_user($cfg)
     {
-//     	$db = RC_Model::model('users_model','user');
+//     	$db = RC_Loader::load_app_model('users_model','user');
         if (empty($cfg['username'])) {
             return false;
         } else {
@@ -227,16 +228,16 @@ abstract class integrate_abstract
 
         if ((!empty($cfg['email'])) && $this->field_email != 'NULL') {
             /* 检查email是否重复 */
-        	$query = $this->db->field($this->field_id)->find(array($this->field_email => $cfg[email], $this->field_name => array('neq' => $cfg[post_username])));
+        	$query = $this->db->field($this->field_id)->find(array($this->field_email => $cfg['email'], $this->field_name => array('neq' => $cfg['post_username'])));
             if ($query[$this->field_id] > 0) {
                 $this->error = ERR_EMAIL_EXISTS;
                 return false;
             }
             // 检查是否为新E-mail
-            $count = $this->db->where(array($this->field_email => $cfg[email]))->count();
+            $count = $this->db->where(array($this->field_email => $cfg['email']))->count();
             if ($count == 0) {
                 // 新的E-mail
-            	$this->db->where(array('user_name' => $cfg[post_username]))->update(array('is_validated' => 0));
+            	$this->db->where(array('user_name' => $cfg['post_username']))->update(array('is_validated' => 0));
             }
             $values[$this->field_email] = $cfg['email'];
         }
@@ -250,7 +251,7 @@ abstract class integrate_abstract
         }
 
         if ($values) {
-        	$this->db->where(array($this->field_name => $cfg[post_username]))->update($values);
+        	$this->db->where(array($this->field_name => $cfg['post_username']))->update($values);
 
             if ($this->need_sync) {
                 if (empty($cfg['md5password'])) {
@@ -276,15 +277,16 @@ abstract class integrate_abstract
     {
         $post_id = $id;
         
-        $db_order_info      = RC_Model::model('orders/order_info_model');
-        $db_order_goods     = RC_Model::model('orders/order_goods_model');
-        $db_collect_goods   = RC_Model::model('goods/collect_goods_model');
-        $db_feedback        = RC_Model::model('feedback/feedback_model');
-        $db_user_address    = RC_Model::model('user/user_address_model');
-        $db_user_bonus      = RC_Model::model('bonus/user_bonus_model');
-        $db_user_account    = RC_Model::model('user/user_account_model');
-//         $db_tag             = RC_Model::model('goods/tag_model');
-        $db_account_log     = RC_Model::model('user/account_log_model');
+        $db_order_info      = RC_Loader::load_app_model('user_order_info_model', 'user');
+        $db_order_goods     = RC_Loader::load_app_model('user_order_goods_model', 'user');
+        $db_booking_goods   = RC_Loader::load_app_model('user_booking_goods_model', 'user');
+        $db_collect_goods   = RC_Loader::load_app_model('user_collect_goods_model', 'user');
+        $db_feedback        = RC_Loader::load_app_model('feedback_model', 'feedback');
+        $db_user_address    = RC_Loader::load_app_model('user_address_model', 'user');
+        $db_user_bonus      = RC_Loader::load_app_model('user_bonus_model', 'bonus');
+        $db_user_account    = RC_Loader::load_app_model('user_account_model', 'user');
+        $db_tag             = RC_Loader::load_app_model('tag_model', 'goods');
+        $db_account_log     = RC_Loader::load_app_model('account_log_model', 'user');
 
         /* 如果需要同步或是ecjia插件执行这部分代码 */
         if ($this->need_sync || (isset($this->is_ecjia) && $this->is_ecjia)) {
@@ -307,6 +309,8 @@ abstract class integrate_abstract
                 	$db_order_goods->in(array('order_id' => $col_order_id))->delete();
                 }
 
+                //删除用户
+                $db_booking_goods->in(array('user_id' => $col))->delete();
                 //删除会员收藏商品
                 $db_collect_goods->in(array('user_id' => $col))->delete();
                 //删除用户留言
@@ -318,9 +322,11 @@ abstract class integrate_abstract
                 //删除用户帐号金额
                 $db_user_account->in(array('user_id' => $col))->delete();
                 //删除用户标记
-//                 $db_tag->in(array('user_id' => $col))->delete();
+                $db_tag->in(array('user_id' => $col))->delete();
                 //删除用户日志
                 $db_account_log->in(array('user_id' => $col))->delete();
+                
+                RC_Api::api('connect', 'connect_user_remove', array('user_id' => $col, 'is_admin' => 0));
             }
         }
         
@@ -478,7 +484,7 @@ abstract class integrate_abstract
      *
      * @return void
      */
-    public function set_session($username = '')
+    public function set_session ($username='')
     {
         if (empty($username)) {
             RC_Session::destroy();
@@ -514,7 +520,7 @@ abstract class integrate_abstract
      *
      * @return void
      */
-    public function compile_password($cfg)
+    public function compile_password ($cfg)
     {
         if (isset($cfg['password'])) {
             $cfg['md5password'] = md5($cfg['password']);
@@ -563,9 +569,9 @@ abstract class integrate_abstract
      *
      * @return void
      */
-    public function sync($username, $password='', $md5password='')
+    public function sync ($username, $password='', $md5password='')
     {
-//     	$db = RC_Model::model('user/users_model');
+//     	$db = RC_Loader::load_app_model('users_model','user');
     	
         if ((!empty($password)) && empty($md5password)) {
             $md5password = md5($password);
@@ -643,7 +649,7 @@ abstract class integrate_abstract
      *
      * @return void
      */
-    public function get_points_name()
+    public function get_points_name ()
     {
         return array();
     }
@@ -676,7 +682,7 @@ abstract class integrate_abstract
      *
      * @return void
      */
-    public function set_points($username, $credits)
+    public function set_points ($username, $credits)
     {
         $user_set = array_keys($credits);
         $points_set = array_keys($this->get_points_name());
@@ -708,7 +714,7 @@ abstract class integrate_abstract
      *
      * @return void
      */
-    public function test_conflict($user_list)
+    public function test_conflict ($user_list)
     {
         if (empty($user_list)) {
             return array();
