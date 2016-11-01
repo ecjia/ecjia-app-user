@@ -322,7 +322,7 @@ abstract class integrate_abstract
                 //删除用户帐号金额
                 $db_user_account->in(array('user_id' => $col))->delete();
                 //删除用户标记
-                $db_tag->in(array('user_id' => $col))->delete();
+//                 $db_tag->in(array('user_id' => $col))->delete();
                 //删除用户日志
                 $db_account_log->in(array('user_id' => $col))->delete();
                 
