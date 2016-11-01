@@ -81,7 +81,6 @@ class admin extends ecjia_admin {
 
 //		$ranks = $this->db_user_rank->field('rank_id,rank_name,min_points')->order(array('min_points' => 'asc'))->select();
 		$ranks = RC_DB::table('user_rank')->select('rank_id', 'rank_name', 'min_points')->orderBy('min_points', 'asc')->get();
-
 		$user_list = get_user_list($_REQUEST);
 
 		$this->assign('user_ranks',		$ranks);
@@ -164,6 +163,7 @@ class admin extends ecjia_admin {
 		$birthday			= empty($_POST['birthday'])			? ''	: $_POST['birthday'];
 		$rank				= empty($_POST['user_rank'])		? 0		: intval($_POST['user_rank']);
 		$credit_line		= empty($_POST['credit_line'])		? 0		: trim($_POST['credit_line']);
+		$reg_time           = RC_Time::gmtime();
 
 		/* 验证参数的合法性*/
 		/* 邮箱*/
@@ -200,54 +200,56 @@ class admin extends ecjia_admin {
 		}
 
 		/* 更新会员的其它信息 */
-		$other					= array();
-		$other['user_name']		= $username;
-		$other['password']		= $password;
-		$other['email']			= $email;
 		$other['credit_line']	= $credit_line;
 		$other['user_rank']		= $rank;
 		$other['sex']			= $sex;
 		$other['birthday']		= $birthday;
-		$other['reg_time']		= RC_Time::local_strtotime(RC_Time::local_date('Y-m-d H:i:s'));
 		$other['msn']			= isset($_POST['extend_field1']) ? htmlspecialchars(trim($_POST['extend_field1'])) : '';
 		$other['qq']			= isset($_POST['extend_field2']) ? htmlspecialchars(trim($_POST['extend_field2'])) : '';
 		$other['office_phone']	= isset($_POST['extend_field3']) ? htmlspecialchars(trim($_POST['extend_field3'])) : '';
 		$other['home_phone']	= isset($_POST['extend_field4']) ? htmlspecialchars(trim($_POST['extend_field4'])) : '';
 		$other['mobile_phone']	= isset($_POST['extend_field5']) ? htmlspecialchars(trim($_POST['extend_field5'])) : '';
+		$other['reg_time']      = $reg_time;
 
-//		$max_id = $this->db_user->insert($other);
-		$max_id = RC_DB::table('users')->insertGetId($other);
+		if ($user->add_user($username, $password, $email)) {
+			$user_info = $user->get_user_info($username);
+			$max_id = $user_info['user_id'];
+			RC_DB::table('users')->where('user_id', $user_info['user_id'])->update($other);
 
-		/*把新注册用户的扩展信息插入数据库*/
-//		$fields_arr = $this->db_reg_fields->field('id')->where(array('type' => 0 , 'display' => 1))->order(array('dis_order' => 'asc', 'id' => 'asc'))->select();
-		$fields_arr = RC_DB::table('reg_fields')->where('type', 0)->where('display', 1)
-				->orderBy('dis_order', 'asc')->orderBy('id', 'asc')->select('id')->get();
-
-		$extend_field_str = '';	//生成扩展字段的内容字符串
-		
-		if (!empty($fields_arr)) {
-			foreach ($fields_arr AS $val) {
-				$extend_field_index = 'extend_field' . $val['id'];
-				if(!empty($_POST[$extend_field_index])) {
-					$temp_field_content = strlen($_POST[$extend_field_index]) > 100 ? mb_substr($_POST[$extend_field_index], 0, 99) : $_POST[$extend_field_index];
-					$data = array (
-						'user_id'		=> $max_id,
-						'reg_field_id'	=> $val['id'],
-						'content'		=> $temp_field_content
-					);
-//					$this->db_reg_extend_info->insert($data);
-					RC_DB::table('reg_extend_info')->insert($data);
+			/*把新注册用户的扩展信息插入数据库*/
+// 			$fields_arr = $this->db_reg_fields->field('id')->where(array('type' => 0 , 'display' => 1))->order(array('dis_order' => 'asc', 'id' => 'asc'))->select();
+			$fields_arr = RC_DB::table('reg_fields')->where('type', 0)->where('display', 1)
+			->orderBy('dis_order', 'asc')->orderBy('id', 'asc')->select('id')->get();
+			
+			$extend_field_str = '';	//生成扩展字段的内容字符串
+			
+			if (!empty($fields_arr)) {
+				foreach ($fields_arr AS $val) {
+					$extend_field_index = 'extend_field' . $val['id'];
+					if(!empty($_POST[$extend_field_index])) {
+						$temp_field_content = strlen($_POST[$extend_field_index]) > 100 ? mb_substr($_POST[$extend_field_index], 0, 99) : $_POST[$extend_field_index];
+						$data = array (
+								'user_id'		=> $max_id,
+								'reg_field_id'	=> $val['id'],
+								'content'		=> $temp_field_content
+						);
+						//					$this->db_reg_extend_info->insert($data);
+						RC_DB::table('reg_extend_info')->insert($data);
+					}
 				}
 			}
+			
+			/* 记录管理员操作 */
+			ecjia_admin::admin_log($username , 'add', 'users');
+			
+			/* 提示信息 */
+			$links[] = array('text' =>RC_Lang::get('user::users.back_user_list'), 'href' => RC_Uri::url('user/admin/init'));
+			$links[] = array('text' =>RC_Lang::get('user::users.keep_add'), 'href' => RC_Uri::url('user/admin/add'));
+			$this->showmessage(RC_Lang::get('user::users.add_user_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('links' => $links, 'pjaxurl' => RC_Uri::url('user/admin/edit', array('id' => $max_id))));
+				
+		}else{
+			$this->showmessage($user->error->get_error_message(), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
-		
-		/* 记录管理员操作 */
-		ecjia_admin::admin_log($username , 'add', 'users');
-		
-		/* 提示信息 */
-		$links[] = array('text' =>RC_Lang::get('user::users.back_user_list'), 'href' => RC_Uri::url('user/admin/init'));
-		$links[] = array('text' =>RC_Lang::get('user::users.keep_add'), 'href' => RC_Uri::url('user/admin/add'));
-		$this->showmessage(RC_Lang::get('user::users.add_user_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('links' => $links, 'pjaxurl' => RC_Uri::url('user/admin/edit', array('id' => $max_id))));
 	}
 	
 	/**
@@ -453,11 +455,15 @@ class admin extends ecjia_admin {
 		}
 
 		/* 更新会员的其它信息 */
-		$other =array();
+		$other = array();
+		$user_other = array();
 		if ($password) {
-			$other['password']	= md5($password);
+			$user_other['password']	= $password;
 		}
 
+		$user_other['username']		= $username;
+		$user_other['email']		= $email;
+		
 		$other['user_name']		= $username;
 		$other['email']			= $email;
 		$other['credit_line']	= $credit_line;
@@ -469,6 +475,7 @@ class admin extends ecjia_admin {
 		$other['office_phone']	= isset($_POST['extend_field3']) ? htmlspecialchars(trim($_POST['extend_field3'])) : '';
 		$other['home_phone']	= isset($_POST['extend_field4']) ? htmlspecialchars(trim($_POST['extend_field4'])) : '';
 		$other['mobile_phone']	= isset($_POST['extend_field5']) ? htmlspecialchars(trim($_POST['extend_field5'])) : '';
+		$user->edit_user($user_other);
 		
 		RC_DB::table('users')->where('user_id', $user_id)->update($other);
 		
