@@ -8,14 +8,13 @@ defined('IN_ECJIA') or exit('No permission resources.');
 class list_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	
-    	$this->authSession();	
+    	if ($_SESSION['user_id'] <= 0) {
+    		return new ecjia_error(100, 'Invalid session');
+    	}
 		
 		$size = $this->requestData('pagination.count', 15);
 		$page = $this->requestData('pagination.page', 1);
         $user_id = $_SESSION['user_id'];
-		if (!$user_id) {
-		    return new ecjia_error(100, 'Invalid session' );
-		}
 		$rec_id = $this->requestData('rec_id', 0);
 		
 		RC_Loader::load_app_func('collection', 'user');

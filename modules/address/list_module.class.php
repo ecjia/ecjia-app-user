@@ -8,7 +8,9 @@ defined('IN_ECJIA') or exit('No permission resources.');
 class list_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	
-    	$this->authSession();	
+    	if ($_SESSION['user_id'] <= 0) {
+    		return new ecjia_error(100, 'Invalid session');
+    	}
 		$user_id = $_SESSION['user_id'];
 		if (!$user_id) {
 		    return new ecjia_error( 'invalid_parameter', RC_Lang::get ('system::system.invalid_parameter' ));
