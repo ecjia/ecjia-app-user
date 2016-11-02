@@ -20,16 +20,18 @@ function get_user_list($args = array()) {
 	$filter['rank']			= empty($args['rank'])			? 0			: intval($args['rank']);
 	$filter['sort_by']		= empty($args['sort_by'])		? 'user_id' : trim($args['sort_by']);
 	$filter['sort_order']	= empty($args['sort_order'])	? 'DESC'	: trim($args['sort_order']);
-	$where = ' 1 ';
+// 	$where = ' 1 ';
 	if ($filter['keywords']) {
-		$where .= " AND user_name LIKE '%" . mysql_like_quote($filter['keywords']) ."%' or email like '%".$filter['keywords'] ."%'";
+// 		$where .= " AND user_name LIKE '%" . mysql_like_quote($filter['keywords']) ."%' or email like '%".$filter['keywords'] ."%'";
+		
+		$db_user->whereRaw("(user_name LIKE '%" . mysql_like_quote($filter['keywords']) ."%' or email like '%".$filter['keywords'] ."%'or mobile_phone like '%".$filter['keywords'] ."%')");
 	}
 	if ($filter['rank']) {
-		$where .= " AND user_rank = '$filter[rank]' ";
+		$db_user->where('user_rank', $filter['rank']); 
 	}
 
 //	$count = $db_user->where($where)->count();
-	$count = $db_user->whereRaw($where)->count();
+	$count = $db_user->count();
 
 	if ($count != 0) {
 		/* 实例化分页 */
