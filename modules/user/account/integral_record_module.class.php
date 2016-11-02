@@ -15,10 +15,10 @@ class integral_record_module extends api_front implements api_interface {
         $page = $this->requestData('pagination.page', 1);
  		$user_id = $_SESSION['user_id'];
  		$type = $this->requestData('type', 'income');
- 		$user_id = 33;
+ 		
 		$where = array();
 		$where['user_id'] = $_SESSION['user_id'];
-		$where['user_id'] = 33;
+		
 		if ($type == 'income') {
 			$where['pay_points'] = array('gt' => 0);
 		} elseif ($type == 'expenses') {
