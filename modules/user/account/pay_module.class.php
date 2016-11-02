@@ -38,10 +38,6 @@ class pay_module extends api_front implements api_interface {
 	    if (!empty($payment_info)) {
 	        //取得支付信息，生成支付代码
 	        $payment_config = $payment_method->unserialize_config($payment_info['pay_config']);
-	        
-	        RC_Loader::load_app_func('order', 'orders');
-	        //生成伪订单号
-	        $order['order_sn'] = get_order_sn();
 	
 	        //获取需要支付的log_id
 	        $order['log_id'] = $payment_method->get_paylog_id($account_id, $pay_type = PAY_SURPLUS);
@@ -56,11 +52,17 @@ class pay_module extends api_front implements api_interface {
 	        //计算此次预付款需要支付的总金额
 	        $order['order_amount']   = strval($order['surplus_amount'] + $payment_info['pay_fee']);
 	
-	        //如果支付费用改变了，也要相应的更改pay_log表的order_amount
-	        $pay_db = RC_Model::model('orders/pay_log_model');
-	        $order_amount = $pay_db-> where(array('log_id' => $order['log_id']))->get_field('order_amount');
-	        if ($order_amount <> $order['order_amount']) {
-	        	$pay_db->where(array('log_id' => $order['log_id']))->update(array('order_amount' => $order['order_amount']));
+
+	        
+	        if (!empty($order['log_id'])) {
+	        	//如果支付费用改变了，也要相应的更改pay_log表的order_amount
+	        	$pay_db = RC_Model::model('orders/pay_log_model');
+	        	$order_amount = $pay_db-> where(array('log_id' => $order['log_id']))->get_field('order_amount');
+	        	if ($order_amount <> $order['order_amount']) {
+	        		$pay_db->where(array('log_id' => $order['log_id']))->update(array('order_amount' => $order['order_amount']));
+	        	}
+	        } else {
+	        	$order['log_id'] = strval($payment_method->insert_pay_log($order['id'], $order['order_amount'], PAY_SURPLUS, 0));
 	        }
 
 	        $handler = $payment_method->get_payment_instance($payment_info['pay_code'], $payment_config);
@@ -73,7 +75,26 @@ class pay_module extends api_front implements api_interface {
 	        } else {
 	        	$order['payment'] = $result;
 	        }
-	        	
+
+	        /* 插入支付流水记录*/
+	        $db = RC_DB::table('payment_record');
+	        $payment_record = $db->where('order_sn', $order['order_sn'])->first();
+	        $payment_data = array(
+	        		'order_sn'		=> $order['order_sn'],
+	        		'trade_type'	=> 'deposit',
+	        		'pay_code'		=> $payment_info['pay_code'],
+	        		'pay_name'		=> $payment_info['pay_name'],
+	        		'total_fee'		=> $order['order_amount'],
+	        		'pay_status'	=> 0,
+	        );
+	        if (empty($payment_record)) {
+	        	$payment_data['create_time']	= RC_Time::gmtime();
+	        	$db->insertGetId($payment_data);
+	        } elseif($payment_record['pay_status'] == 0 && $payment_record['pay_code'] != $payment_info['pay_code'] && $order['order_amount'] != $payment_record['total_fee']) {
+	        	$payment_data['update_time']	= RC_Time::gmtime();
+	        	$db->where('order_sn', $order['order_sn'])->update($payment_data);
+	        }
+	        
 	        return array('payment' => $order['payment']);
 	    } else {
 	    	/* 重新选择支付方式 */

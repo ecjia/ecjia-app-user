@@ -177,9 +177,9 @@ function get_account_list($args = array()) {
  * @return  int
  */
 function insert_user_account($surplus, $amount) {
-//	$db = RC_Model::model('user/user_account_model');
 	$data = array(
 		'user_id'		=> $surplus['user_id'] ,
+		'order_sn'		=> $surplus['order_sn'],
 		'admin_user'	=> '' ,
 		'amount'		=> $amount ,
 		'add_time'		=> RC_Time::gmtime() ,
@@ -190,7 +190,6 @@ function insert_user_account($surplus, $amount) {
 		'payment'		=> $surplus['payment'] ,
 		'is_paid'		=> 0
 	);
-//	return $db->insert($data);
 	return RC_DB::table('user_account')->insertGetId($data);
 }
 

@@ -22,9 +22,12 @@ class raply_module extends api_front implements api_interface {
  		if (!$user_id) {
  		    return new ecjia_error(100, 'Invalid session' );
  		}
+ 		
+ 		RC_Loader::load_app_func('order', 'orders');
  		/* 变量初始化 */
  		$surplus = array(
  				'user_id'      => $user_id,
+ 				'order_sn'	   => get_order_sn(),
  				'account_id'   => 0,
  				'process_type' => 1,
  				'payment_id'   => 0,
