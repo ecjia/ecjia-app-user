@@ -27,7 +27,6 @@ class user_user_bonus_list_api extends Component_Event_Api {
     	
     	$bonus_list = array();
     	
-    	
     	if (!empty($rows)) {
     		foreach ($rows as $key => $row) {
     			$bonus_list[$key] = array(
