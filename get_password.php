@@ -120,12 +120,12 @@ class get_password extends ecjia_front {
 				$tpl   = RC_Api::api('sms', 'sms_template', $tpl_name);
 				$code = rand(111111, 999999);
 				
-				ecjia::$view_object->assign('mobile', $username);
-				ecjia::$view_object->assign('service_phone', ecjia::config('service_phone'));
-				ecjia::$view_object->assign('code', $code);
-				ecjia::$view_object->assign('action', '短信找回密码');
+				ecjia_front::$controller->assign('mobile', $username);
+				ecjia_front::$controller->assign('service_phone', ecjia::config('service_phone'));
+				ecjia_front::$controller->assign('code', $code);
+				ecjia_front::$controller->assign('action', '短信找回密码');
 				
-				$content = ecjia::$controller->fetch_string($tpl['template_content']);
+				$content = ecjia_front::$controller->fetch_string($tpl['template_content']);
 				
 				$options = array(
 					'mobile' 		=> $username,
@@ -238,12 +238,12 @@ class get_password extends ecjia_front {
 				$tpl   = RC_Api::api('sms', 'sms_template', $tpl_name);
 				$code = rand(111111, 999999);
 			
-				ecjia::$view_object->assign('mobile', $user_name);
-				ecjia::$view_object->assign('service_phone', ecjia::config('service_phone'));
-				ecjia::$view_object->assign('code', $code);
-				ecjia::$view_object->assign('action', '短信找回密码');
+				ecjia_front::$controller->assign('mobile', $user_name);
+				ecjia_front::$controller->assign('service_phone', ecjia::config('service_phone'));
+				ecjia_front::$controller->assign('code', $code);
+				ecjia_front::$controller->assign('action', '短信找回密码');
 			
-				$content = ecjia::$controller->fetch_string($tpl['template_content']);
+				$content = ecjia_front::$controller->fetch_string($tpl['template_content']);
 					
 				$options = array(
 					'mobile' 		=> $user_name,
