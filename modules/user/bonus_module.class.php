@@ -16,7 +16,7 @@ class bonus_module extends api_front implements api_interface
             return new ecjia_error(100, 'Invalid session');
         }
 		
-		$bonus_type		= $this->requestData('bonus_type');
+		$bonus_type	= $this->requestData('bonus_type');
 		$bonus_list = RC_Api::api('user', 'user_bonus_list', array('bonus_type' => $bonus_type));
 		
 		return $bonus_list;
