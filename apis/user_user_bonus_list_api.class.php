@@ -23,8 +23,16 @@ class user_user_bonus_list_api extends Component_Event_Api {
     	} elseif ($options['bonus_type'] == 'is_used') {
     		$where['ub.order_id'] = array('gt' => 0);
     	}
-    	$rows = $db->join('bonus_type')->field('ub.bonus_id, ub.order_id, bt.type_name, bt.type_money, bt.min_goods_amount, bt.use_start_date, bt.use_end_date')->where($where)->select();
     	
+    	$count = $db->where($where)->count();
+    	$page_row = new ecjia_page($count, $options['size'], 6, '', $options['page']);
+    	
+    	$rows = $db->join('bonus_type')
+    	->field('ub.bonus_id, ub.order_id, bt.type_name, bt.type_money, bt.min_goods_amount, bt.use_start_date, bt.use_end_date')
+    	->where($where)
+    	->limit($page_row->limit())
+    	->select();
+    
     	$bonus_list = array();
     	
     	if (!empty($rows)) {
@@ -63,8 +71,7 @@ class user_user_bonus_list_api extends Component_Event_Api {
     		}
     	}
     	
-    	
-    	return $bonus_list;
+    	return array('bonus_list'=> $bonus_list, 'filter' => $options, 'page' => $page_row);
     }
 }
 
