@@ -51,7 +51,7 @@ function get_user_list($args = array()) {
 			$rows['reg_time']	= RC_Time::local_date(ecjia::config('time_format'), $rows['reg_time']);
 			$user_list[]		= $rows;
 		}
-		return array('user_list' => $user_list, 'filter' => $filter, 'page' => $page->show(5), 'desc' => $page->page_desc());
+		return array('user_list' => $user_list, 'filter' => $filter, 'page' => $page->show(2), 'desc' => $page->page_desc());
 	}
 }
 
