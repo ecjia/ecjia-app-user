@@ -691,7 +691,6 @@ function update_address($address) {
 
 function EM_user_info($user_id) {
 	$db_collect_goods = RC_Model::model('goods/collect_goods_model');
-// 	$db_order_info = RC_Model::model('order_info_model', 'orders');
 	$db_user_rank = RC_Model::model('user/user_rank_model');
 	$db_orderinfo_view = RC_Model::model('orders/order_info_viewmodel');
 	
@@ -724,7 +723,7 @@ function EM_user_info($user_id) {
 		$level = 1;
 	}
 
-	$bonus_list = em_get_user_bouns_list($user_id);
+	
 	$uid = sprintf("%09d", $user_id);//格式化uid字串， d 表示把uid格式为9位数的整数，位数不够的填0
 	
 	$dir1 = substr($uid, 0, 3);//把uid分段
@@ -741,6 +740,9 @@ function EM_user_info($user_id) {
 	}
 	$user_info['user_name'] = preg_replace('/<span(.*)span>/i', '', $user_info['user_name']);
 	
+	/* 获取可使用的红包数量*/
+	$bonus_count = RC_Model::model('bonus/user_bonus_type_viewmodel')->join('bonus_type')->where(array('ub.user_id' => $_SESSION['user_id'], 'use_end_date' => array('gt' => RC_Time::gmtime()), 'ub.order_id' => 0))->count("*");
+	
 	return array(
 		'id'				=> $user_info['user_id'],
 		'name'				=> $user_info['user_name'],
@@ -750,7 +752,6 @@ function EM_user_info($user_id) {
 		'email'				=> $user_info['email'],
 		'mobile_phone'		=> $user_info['mobile_phone'],
 		'avatar_img'		=> $avatar_img,
-			
 		'order_num' => array(
 			'await_pay' 	=> $await_pay,
 			'await_ship' 	=> $await_ship,
@@ -759,73 +760,9 @@ function EM_user_info($user_id) {
 		),
 		'formated_user_money' 	=> price_format($user_info['user_money'], false),
 		'user_points' 			=> $user_info['pay_points'],
-		'user_bonus_count' 		=> count($bonus_list),
-		'bonus_list' 			=> $bonus_list
+		'user_bonus_count' 		=> $bonus_count,
 	);
 }
 
-/**
- *用户钱包，暂时只返回可用的红包
- */
-function em_get_user_bouns_list($user_id) {
-	$db = RC_Model::model('bonus/user_bonus_type_viewmodel');
-	$db->view = array(
-		'bonus_type' 	=> array(
-			'type' 	=> Component_Model_View::TYPE_LEFT_JOIN,
-			'alias'	=> 'bt',
-			'field' => 'ub.bonus_id, ub.order_id, bt.type_name, bt.type_money, bt.min_goods_amount, bt.use_start_date, bt.use_end_date',
-			'on'   	=> 'ub.bonus_type_id = bt.type_id'
-		)
-	);
-
-	$rows = $db->where(array('ub.user_id' => $user_id))->select();
-
-	$arr = array();
-
-	$cur_date = RC_Time::gmtime();
-	if (!empty($rows)) {
-		foreach ($rows as $row) {
-			/* 先判断是否被使用，然后判断是否开始或过期 */
-			if (empty($row['order_id'])) {
-				/* 没有被使用 */
-				if ($row['use_start_date'] > $cur_date) {
-					unset($row);
-					continue;
-					$row['status'] = __('未开始');
-				} else if ($row['use_end_date'] < $cur_date) {
-					$row['status'] = __('已过期');
-					$row['bonus_status'] = 2;
-					$row['formatted_bonus_status'] = __('已过期');
-				} else {
-					$row['status'] = __('未使用');
-					$row['bonus_status'] = 0;
-					$row['formatted_bonus_status'] = __('未使用');
-				}
-			} else {
-				/*已使用的*/
-				$row['status'] = __('已使用');
-				$row['bonus_status'] = 1;
-				$row['formatted_bonus_status'] = __('已使用');
-			}
-			unset($row['order_id']);
-			$row['formated_min_goods_amount'] = price_format($row['min_goods_amount'],false);
-			$row['formated_use_start_date']   = RC_Time::local_date(ecjia::config('date_format'), $row['use_start_date']);
-			$row['formated_use_end_date']     = RC_Time::local_date(ecjia::config('date_format'), $row['use_end_date']);
-			
-			$row['bonus_id']		= $row['bonus_id'];
-			$row['bonus_name']		= $row['type_name'];
-			$row['bonus_amount'] 	= $row['type_money'];
-			$row['formatted_bonus_amount'] 		= price_format($row['type_money']);
-			$row['request_amount'] 				= $row['min_goods_amount'];
-			$row['formatted_request_amount'] 	= price_format($row['min_goods_amount']);
-			$row['start_date']	= RC_Time::local_time($row['use_start_date']);
-			$row['end_date']	= RC_Time::local_time($row['use_end_date']);
-			$row['formatted_start_date']   = RC_Time::local_date(ecjia::config('date_format'), $row['use_start_date']);
-			$row['formatted_end_date']     = RC_Time::local_date(ecjia::config('date_format'), $row['use_end_date']);
-			$arr[] = $row;
-		}
-	}
-	return $arr;
-}
 
 // end
