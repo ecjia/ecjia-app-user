@@ -169,6 +169,11 @@ function signin_merchant($username, $password, $device) {
 
 function signin_admin($username, $password, $device) {
     $db_user = RC_Model::model('user/admin_user_model');
+    //到家后台不允许平台管理员登录
+    if (!empty($device) && is_array($device) && ($device['code'] == '6001' || $device['code'] == '6002')) {
+        return new ecjia_error('login_error', __('平台管理员请登录掌柜管理。'));
+    }
+    
     /* 收银台请求判断处理*/
     if (!empty($device) && is_array($device) && $device['code'] == '8001') {
         $adviser_info = RC_Model::model('achievement/adviser_model')->find(array('username' => $username));
