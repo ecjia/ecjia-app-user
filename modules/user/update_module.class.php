@@ -17,7 +17,7 @@ class update_module extends api_front implements api_interface {
 		
 		$db = RC_Model::model('user/users_model');
 		
-		if (!empty($img)) {
+		if (isset($_FILES['avatar_img'])) {
 			
 			$save_path = 'data/avatar_img';
 			$upload = RC_Upload::uploader('image', array('save_path' => $save_path, 'auto_sub_dirs' => true));
