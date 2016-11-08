@@ -723,11 +723,11 @@ function EM_user_info($user_id) {
 		$level = 1;
 	}
 
-	$avatar_path = RC_Upload::upload_path($user_info);
+	$avatar_path = RC_Upload::upload_path($user_info['avatar_img']);
 	if(!file_exists($avatar_path)) {
 		$avatar_img = '';
 	} else {
-		$avatar_img = RC_Upload::upload_url($avatar_path);
+		$avatar_img = RC_Upload::upload_url($user_info['avatar_img']);
 	}
 	
 	$user_info['user_name'] = preg_replace('/<span(.*)span>/i', '', $user_info['user_name']);

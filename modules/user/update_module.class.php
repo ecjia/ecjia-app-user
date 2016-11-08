@@ -12,20 +12,22 @@ class update_module extends api_front implements api_interface {
     	if ($user_id <= 0) {
     		return new ecjia_error(100, 'Invalid session');
     	}
-		$img = $this->requestData('avatar_img');
+		
 		$user_name = $this->requestData('user_name');
-		
 		$db = RC_Model::model('user/users_model');
-		
 		if (isset($_FILES['avatar_img'])) {
 			
 			$save_path = 'data/avatar_img';
 			$upload = RC_Upload::uploader('image', array('save_path' => $save_path, 'auto_sub_dirs' => true));
-				
+			
 			$image_info	= $upload->upload($_FILES['avatar_img']);
 			/* 判断是否上传成功 */
 			if (!empty($image_info)) {
 				$avatar_img = $upload->get_position($image_info);
+				$old_avatar_img = $db->where(array('user_id' => $_SESSION['user_id']))->get_field('avatar_img');
+				if (!empty($old_avatar_img)) {
+					$upload->remove($old_avatar_img);
+				}
 				$db->where(array('user_id' => $_SESSION['user_id']))->update(array('avatar_img' => $avatar_img));
 			} else {
 				return new ecjia_error('avatar_img_error', '头像上传失败！');
