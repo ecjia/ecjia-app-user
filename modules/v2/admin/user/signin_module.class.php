@@ -13,6 +13,7 @@ class signin_module extends api_admin implements api_interface {
 		$username	= $this->requestData('username');
 		$password	= $this->requestData('password');
 		$device		= $this->requestData('device', array());
+		RC_Logger::getlogger('device')->error($device);
 		if (empty($username) || empty($password)) {
 			$result = new ecjia_error('login_error', __('您输入的帐号信息不正确。'));
 			return $result;
