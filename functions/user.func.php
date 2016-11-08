@@ -723,21 +723,13 @@ function EM_user_info($user_id) {
 		$level = 1;
 	}
 
-	
-	$uid = sprintf("%09d", $user_id);//格式化uid字串， d 表示把uid格式为9位数的整数，位数不够的填0
-	
-	$dir1 = substr($uid, 0, 3);//把uid分段
-	$dir2 = substr($uid, 3, 2);
-	$dir3 = substr($uid, 5, 2);
-	
-	$filename = md5($user_info['user_name']);
-	$avatar_path = RC_Upload::upload_path().'/data/avatar/'.$dir1.'/'.$dir2.'/'.$dir3.'/'.substr($uid, -2)."_".$filename.'.jpg';
-	
+	$avatar_path = RC_Upload::upload_path($user_info);
 	if(!file_exists($avatar_path)) {
 		$avatar_img = '';
 	} else {
-		$avatar_img = RC_Upload::upload_url().'/data/avatar/'.$dir1.'/'.$dir2.'/'.$dir3.'/'.substr($uid, -2)."_".$filename.'.jpg';
+		$avatar_img = RC_Upload::upload_url($avatar_path);
 	}
+	
 	$user_info['user_name'] = preg_replace('/<span(.*)span>/i', '', $user_info['user_name']);
 	
 	/* 获取可使用的红包数量*/
