@@ -39,7 +39,7 @@ class forget_password_module extends api_front implements api_interface {
         	/* 判断是否有短信app*/
         	if (!is_ecjia_error($result)) {
         		//发送短信
-        		$tpl_name = 'sms_verifying_authentication';
+        		$tpl_name = 'sms_get_validate';
         		$tpl   = RC_Api::api('sms', 'sms_template', $tpl_name);
         		/* 判断短信模板是否存在*/
         		if (!empty($tpl)) {

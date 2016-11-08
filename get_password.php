@@ -116,7 +116,7 @@ class get_password extends ecjia_front {
 			$result = ecjia_app::validate_application('sms');
 			if (!is_ecjia_error($result)) {
 				//发送短信
-				$tpl_name = 'sms_verifying_authentication';
+				$tpl_name = 'sms_get_validate';
 				$tpl   = RC_Api::api('sms', 'sms_template', $tpl_name);
 				$code = rand(111111, 999999);
 				
@@ -234,7 +234,7 @@ class get_password extends ecjia_front {
 			$result = ecjia_app::validate_application('sms');
 			if (!is_ecjia_error($result)) {
 				//发送短信
-				$tpl_name = 'sms_verifying_authentication';
+				$tpl_name = 'sms_get_validate';
 				$tpl   = RC_Api::api('sms', 'sms_template', $tpl_name);
 				$code = rand(111111, 999999);
 			

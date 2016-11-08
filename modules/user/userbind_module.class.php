@@ -33,7 +33,7 @@ class userbind_module extends api_front implements api_interface {
 		
 		if ($type == 'mobile') {
 			//发送短信
-			$tpl_name = 'sms_register_validate';
+			$tpl_name = 'sms_get_validate';
 			$tpl   = RC_Api::api('sms', 'sms_template', $tpl_name);
 			/* 判断短信模板是否存在*/
 			if (empty($tpl)) {
