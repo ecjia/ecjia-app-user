@@ -51,15 +51,13 @@
 					<tr>
 						<th class="table_checkbox"><input type="checkbox" data-toggle="selectall" data-children=".checkbox"/></th>
 						<th class="w100">{lang key='user::users.label_user_name'}</th>
-						<th>{lang key='user::users.email'}</th>
-						
-						<th class="w80">{lang key='user::users.mobile_phone'}</th>
+						<th class="w150">{lang key='user::users.email'}</th>
+						<th class="w100">{lang key='user::users.mobile_phone'}</th>
 						<th class="w100">{lang key='user::users.user_money'}</th>
 						<th class="w100">{lang key='user::users.frozen_money'}</th>
-						<th class="w100">{lang key='user::users.rank_points'}</th>
-						<th class="w100">{lang key='user::users.pay_points'}</th>
+						<th class="w50">{lang key='user::users.rank_points'}</th>
+						<th class="w50">{lang key='user::users.pay_points'}</th>
 						<th class="w130">{lang key='user::users.reg_date'}</th>
-						
 					</tr>
 				</thead>
 				<tbody>
