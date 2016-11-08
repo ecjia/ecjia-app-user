@@ -52,10 +52,12 @@
 						<th class="table_checkbox"><input type="checkbox" data-toggle="selectall" data-children=".checkbox"/></th>
 						<th class="w100">{lang key='user::users.label_user_name'}</th>
 						<th>{lang key='user::users.email'}</th>
-						<th class="w110">{lang key='user::users.user_money'}</th>
-						<th class="w110">{lang key='user::users.frozen_money'}</th>
-						<th class="w110">{lang key='user::users.rank_points'}</th>
-						<th class="w110">{lang key='user::users.pay_points'}</th>
+						
+						<th class="w80">{lang key='user::users.mobile_phone'}</th>
+						<th class="w100">{lang key='user::users.user_money'}</th>
+						<th class="w100">{lang key='user::users.frozen_money'}</th>
+						<th class="w100">{lang key='user::users.rank_points'}</th>
+						<th class="w100">{lang key='user::users.pay_points'}</th>
 						<th class="w130">{lang key='user::users.reg_date'}</th>
 						
 					</tr>
@@ -85,6 +87,7 @@
 								<a class="ajaxremove ecjiafc-red" data-toggle="ajaxremove" data-msg="{lang key='user::users.delete_confirm'}" href='{url path="user/admin/remove" args="id={$user.user_id}"}' title="{lang key='user::users.delete'}">{lang key='user::users.delete'}</a>
 							</div>
 						</td>
+						<td>{$user.mobile_phone}</td>
 						<td>{$user.user_money}</td>
 						<td>{$user.frozen_money}</td>
 						<td>{$user.rank_points}</td>
@@ -92,7 +95,7 @@
 						<td>{if $user.reg_time}{$user.reg_time}{else}{t}1970-01-01 00:00:00{/t}{/if}</td>
 					</tr>
 					<!--{foreachelse}-->
-					<tr><td class="no-records" colspan="8">{lang key='system::system.no_records'}</td></tr>
+					<tr><td class="no-records" colspan="9">{lang key='system::system.no_records'}</td></tr>
 					<!--{/foreach} -->
 				</tbody>
 			</table>

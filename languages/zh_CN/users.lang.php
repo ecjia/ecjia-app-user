@@ -71,7 +71,7 @@ return array(
 	'qq'  					=> 'QQ',
 	'home_phone'    		=> '家庭电话',
 	'office_phone' 		 	=> '办公电话',
-	'mobile_phone'  		=> '手机',
+	'mobile_phone'  		=> '手机号',
 	'msn_lable' 			=> 'MSN：',
 	'qq_lable'  			=> 'QQ：',
 	'home_phone_lable' 		=> '家庭电话：',

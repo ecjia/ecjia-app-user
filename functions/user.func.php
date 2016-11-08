@@ -41,7 +41,7 @@ function get_user_list($args = array()) {
 		$data = $db_user
 // 				->whereRaw($where)
 				->orderBy($filter['sort_by'],  $filter['sort_order'])
-				->select('user_id', 'user_name', 'email', 'is_validated', 'user_money', 'frozen_money', 'rank_points', 'pay_points', 'reg_time')
+				->select('user_id', 'user_name', 'email', 'is_validated', 'user_money', 'frozen_money', 'rank_points', 'pay_points', 'reg_time', 'mobile_phone')
 				->take(15)
 				->skip($page->start_id-1)
 				->get();
