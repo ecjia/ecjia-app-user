@@ -32,7 +32,7 @@ class signin_module extends api_front implements api_interface {
 		/* 如果不是手机号码*/
 		if (!$is_mobile) {
 			if (!$user->login($name, $password)) {
-				return new ecjia_error(6, '密码错误');
+				return new ecjia_error('userinfo_error', '您输入的账号信息不正确 ！');
 			}
 		}
 		
