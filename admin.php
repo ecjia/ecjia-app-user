@@ -492,7 +492,7 @@ class admin extends ecjia_admin {
 	 * 用户详情页面
 	 */
 	public function info() {
-		$this->admin_priv('users_manage', ecjia::MSGTYPE_JSON);
+		$this->admin_priv('user_manage', ecjia::MSGTYPE_JSON);
 	
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('user::users.user_info')));
 		ecjia_screen::get_current_screen()->add_help_tab(array(
@@ -678,7 +678,7 @@ class admin extends ecjia_admin {
 	 * 收货地址查看
 	 */
 	public function address_list() {
-		$this->admin_priv('users_manage');
+		$this->admin_priv('user_manage');
 	
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('user::users.address_list')));
 		ecjia_screen::get_current_screen()->add_help_tab( array(
