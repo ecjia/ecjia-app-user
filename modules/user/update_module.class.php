@@ -72,6 +72,7 @@ class update_module extends api_front implements api_interface {
 				return new ecjia_error('user_name_exists', '用户名已存在！');	
 			} else {
 				$db->where(array('user_id' => $_SESSION['user_id']))->update(array('user_name' => $user_name));
+				$_SESSION['user_name'] = $user_name;
 			}
 		}
 
