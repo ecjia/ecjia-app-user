@@ -51,8 +51,8 @@ class signin_module extends api_front implements api_interface {
 		
 		//修正咨询信息
 		if($_SESSION['user_id'] > 0) {
-			$device = $this->requestData('device', array());
-			$device_id = $device['udid'];
+			$device		= $this->device;
+			$device_id	= $device['udid'];
 			$device_client = $device['client'];
 			$db_term_relation = RC_Model::model('goods/term_relationship_model');
 				
