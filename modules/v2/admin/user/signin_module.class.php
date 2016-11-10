@@ -12,7 +12,7 @@ class signin_module extends api_admin implements api_interface {
 		
 		$username	= $this->requestData('username');
 		$password	= $this->requestData('password');
-		$device		= $this->requestData('device', array());
+		$device		= $this->device;
 
 		if (empty($username) || empty($password)) {
 			$result = new ecjia_error('login_error', __('您输入的帐号信息不正确。'));
@@ -149,17 +149,24 @@ function signin_merchant($username, $password, $device) {
          
         //修正关联设备号
         $result = ecjia_app::validate_application('mobile');
-        /* if (!is_ecjia_error($result)) {
+        if (!is_ecjia_error($result)) {
             if (!empty($device['udid']) && !empty($device['client']) && !empty($device['code'])) {
-                $db_mobile_device = RC_Model::model('mobile/mobile_device_model');
-                $device_data = array(
-                    'device_udid'	=> $device['udid'],
-                    'device_client'	=> $device['client'],
-                    'device_code'	=> $device['code']
-                );
-                $db_mobile_device->where($device_data)->update(array('user_id' => $_SESSION['admin_id'], 'is_admin' => 1));
+            	$db_mobile_device = RC_Model::model('mobile/mobile_device_model');
+            	$device_data = array(
+            			'device_udid'	=> $device['udid'],
+            			'device_client'	=> $device['client'],
+            			'device_code'	=> $device['code'],
+            			'user_type'		=> 'merchant',
+            	);
+            	$device_info = $db_mobile_device->find($device_data);
+            	if (empty($device_info)) {
+            		$device_data['add_time'] = RC_Time::gmtime();
+            		$db_mobile_device->insert($device_data);
+            	} else {
+            		$db_mobile_device->where($device_data)->update(array('user_id' => $_SESSION['staff_id']));
+            	}
             }
-        } */
+        }
          
         return $out;
     } else {
@@ -273,17 +280,24 @@ function signin_admin($username, $password, $device) {
         	
         //修正关联设备号
         $result = ecjia_app::validate_application('mobile');
-        /* if (!is_ecjia_error($result)) {
+        if (!is_ecjia_error($result)) {
             if (!empty($device['udid']) && !empty($device['client']) && !empty($device['code'])) {
                 $db_mobile_device = RC_Model::model('mobile/mobile_device_model');
                 $device_data = array(
                     'device_udid'	=> $device['udid'],
                     'device_client'	=> $device['client'],
-                    'device_code'	=> $device['code']
+                    'device_code'	=> $device['code'],
+                    'user_type'		=> 'admin',
                 );
-                $db_mobile_device->where($device_data)->update(array('user_id' => $_SESSION['admin_id'], 'is_admin' => 1));
+                $device_info = $db_mobile_device->find($device_data);
+                if (empty($device_info)) {
+                	$device_data['add_time'] = RC_Time::gmtime();
+                	$db_mobile_device->insert($device_data);
+                } else {
+                	$db_mobile_device->where($device_data)->update(array('user_id' => $_SESSION['admin_id']));
+                }
             }
-        } */
+        }
         	
         return $out;
     } else {

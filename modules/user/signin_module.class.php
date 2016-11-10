@@ -79,7 +79,8 @@ class signin_module extends api_front implements api_interface {
 					$device_data = array(
 							'device_udid'	=> $device['udid'],
 							'device_client'	=> $device['client'],
-							'device_code'	=> $device['code']
+							'device_code'	=> $device['code'],
+							'user_type'		=> 'user',
 					);
 					$db_mobile_device->where($device_data)->update(array('user_id' => $_SESSION['user_id']));
 				}
