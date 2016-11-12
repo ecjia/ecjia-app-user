@@ -121,7 +121,7 @@ function signin_merchant($username, $password, $device) {
             'last_login' 	=> RC_Time::gmtime(),
             'last_ip'		=> RC_Ip::client_ip(),
         );
-        RC_DB::table('staff_user')->where('user_id', $_SESSION['admin_id'])->update($data);
+        RC_DB::table('staff_user')->where('user_id', $_SESSION['staff_id'])->update($data);
     
         $out = array(
             'session' => array(
