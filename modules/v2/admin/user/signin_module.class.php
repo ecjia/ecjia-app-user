@@ -163,7 +163,7 @@ function signin_merchant($username, $password, $device) {
             		$device_data['add_time'] = RC_Time::gmtime();
             		$db_mobile_device->insert($device_data);
             	} else {
-            		$db_mobile_device->where($device_data)->update(array('user_id' => $_SESSION['staff_id']));
+            		$db_mobile_device->where($device_data)->update(array('user_id' => $_SESSION['staff_id'], 'update_time' => RC_Time::gmtime()));
             	}
             }
         }
@@ -294,7 +294,7 @@ function signin_admin($username, $password, $device) {
                 	$device_data['add_time'] = RC_Time::gmtime();
                 	$db_mobile_device->insert($device_data);
                 } else {
-                	$db_mobile_device->where($device_data)->update(array('user_id' => $_SESSION['admin_id']));
+                	$db_mobile_device->where($device_data)->update(array('user_id' => $_SESSION['admin_id'], 'update_time' => RC_Time::gmtime()));
                 }
             }
         }

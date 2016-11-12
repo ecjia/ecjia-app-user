@@ -82,7 +82,7 @@ class signin_module extends api_front implements api_interface {
 							'device_code'	=> $device['code'],
 							'user_type'		=> 'user',
 					);
-					$db_mobile_device->where($device_data)->update(array('user_id' => $_SESSION['user_id']));
+					$db_mobile_device->where($device_data)->update(array('user_id' => $_SESSION['user_id'], 'update_time' => RC_Time::gmtime()));
 				}
 			}
 		}
