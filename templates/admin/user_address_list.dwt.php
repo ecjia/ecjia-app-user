@@ -40,7 +40,7 @@
 				<td>
 					{$val.country_name} {$val.province_name} {$val.city_name} {$val.district_name}
 				</td>
-				<td>{$val.address|escape}</td>
+				<td>{$val.address|escape}{$val.address_info|escape}</td>
 				<td>{$val.zipcode|escape}</td>
 				<td>
 					{lang key='user::users.tel'}：{$val.tel}<br/>
