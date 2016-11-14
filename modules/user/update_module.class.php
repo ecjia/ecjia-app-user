@@ -16,7 +16,6 @@ class update_module extends api_front implements api_interface {
 		$user_name = $this->requestData('user_name');
 		$db = RC_Model::model('user/users_model');
 		if (isset($_FILES['avatar_img'])) {
-			
 			$save_path = 'data/avatar_img';
 			$upload = RC_Upload::uploader('image', array('save_path' => $save_path, 'auto_sub_dirs' => true));
 			
@@ -72,10 +71,11 @@ class update_module extends api_front implements api_interface {
 				return new ecjia_error('user_name_exists', '用户名已存在！');	
 			} else {
 				$db->where(array('user_id' => $_SESSION['user_id']))->update(array('user_name' => $user_name));
-				$_SESSION['user_name'] = $user_name;
+				$_SESSION['user_name']		= $user_name;
+				$_SESSION['update_time']	= RC_Time::gmtime();
 			}
 		}
-
+		
  		RC_Loader::load_app_func('user', 'user');
  		$user_info = EM_user_info($_SESSION['user_id']);
  		return $user_info;
