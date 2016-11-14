@@ -9,7 +9,7 @@ class user_user_bonus_list_api extends Component_Event_Api {
     
     public function call(&$options) {
     	
-    	$db = RC_Model::model('bonus/user_bonus_type_viewmodel');
+    	$db = RC_Model::model('user/user_bonus_type_viewmodel');
     	
     	$cur_date = RC_Time::gmtime();
     	
@@ -24,11 +24,13 @@ class user_user_bonus_list_api extends Component_Event_Api {
     		$where['ub.order_id'] = array('gt' => 0);
     	}
     	
-    	$count = $db->where($where)->count();
+    	$where['shop_close'] = 0;
+    	
+    	$count = $db->join(array('bonus_type', 'store_franchisee'))->where($where)->count();
     	$page_row = new ecjia_page($count, $options['size'], 6, '', $options['page']);
     	
-    	$rows = $db->join('bonus_type')
-    	->field('ub.bonus_id, ub.order_id, bt.type_name, bt.type_money, bt.min_goods_amount, bt.use_start_date, bt.use_end_date')
+    	$rows = $db->join(array('bonus_type', 'store_franchisee'))
+    	->field('ub.bonus_id, ub.order_id, bt.type_name, bt.type_money, bt.min_goods_amount, bt.use_start_date, bt.use_end_date, s.store_id, s.manage_mode, s.merchants_name')
     	->where($where)
     	->limit($page_row->limit())
     	->select();
@@ -38,6 +40,9 @@ class user_user_bonus_list_api extends Component_Event_Api {
     	if (!empty($rows)) {
     		foreach ($rows as $key => $row) {
     			$bonus_list[$key] = array(
+    					'seller_id'		=> $row['store_id'],
+    					'seller_name'	=> $row['merchants_name'],
+    					'manage_mode'	=> $row['manage_mode'],
     					'bonus_id'		=> $row['bonus_id'],
     					'bonus_name'	=> $row['type_name'],
     					'bonus_amount'	=> $row['type_money'],
