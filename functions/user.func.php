@@ -723,8 +723,7 @@ function EM_user_info($user_id) {
 		$level = 1;
 	}
 
-	$avatar_path = RC_Upload::upload_path($user_info['avatar_img']);
-	if(!file_exists($avatar_path)) {
+	if(empty($user_info['avatar_img'])) {
 		$avatar_img = '';
 	} else {
 		$avatar_img = RC_Upload::upload_url($user_info['avatar_img']);
