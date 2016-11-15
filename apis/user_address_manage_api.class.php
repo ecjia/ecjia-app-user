@@ -97,8 +97,17 @@ class user_address_manage_api extends Component_Event_Api {
     		$address_id = intval($address['address_id']);
     		unset($address['address_id']);
     	}
+    	
+    	//验证是否重复
+    	$where = $address;
+    	unset($where['address_id']);unset($where['longitude']);unset($where['latitude']);
+    	if ($db_user_address->where($where)->count()) {
+    	    return new ecjia_error('address_repeat', '收货地址信息重复，请修改！');
+    	}
+    	
     	if ($address_id > 0) {
     		$address['district'] = empty($address['district']) ? '' : $address['district'];
+    		
     		/* 更新指定记录 */
     		$db_user_address->where(array('address_id' => $address_id, 'user_id' => $address['user_id']))->update($address);
     		
