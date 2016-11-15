@@ -732,7 +732,7 @@ function EM_user_info($user_id) {
 	$user_info['user_name'] = preg_replace('/<span(.*)span>/i', '', $user_info['user_name']);
 	
 	/* 获取可使用的红包数量*/
-	$bonus_count = RC_Model::model('bonus/user_bonus_type_viewmodel')->join('bonus_type')->where(array('ub.user_id' => $_SESSION['user_id'], 'use_end_date' => array('gt' => RC_Time::gmtime()), 'ub.order_id' => 0))->count("*");
+	$bonus_count = RC_Model::model('bonus/user_bonus_type_viewmodel')->join('bonus_type')->where(array('ub.user_id' => $_SESSION['user_id'], 'use_end_date' => array('gt' => RC_Time::gmtime()), 'ub.order_id' => 0))->count();
 	
 	return array(
 		'id'				=> $user_info['user_id'],

@@ -13,9 +13,10 @@ class user_user_bonus_list_api extends Component_Event_Api {
     	
     	$cur_date = RC_Time::gmtime();
     	
-    	$where = array('ub.user_id' => $_SESSION['user_id']);
+    	$where = array();
+    	$where['ub.user_id'] = $_SESSION['user_id'];
     	if ($options['bonus_type'] == 'allow_use') {
-    		$where['bt.use_start_date']	= array('lt' => $cur_date);
+//     		$where['bt.use_start_date']	= array('lt' => $cur_date);
     		$where['bt.use_end_date']	= array('gt' => $cur_date);
     		$where['ub.order_id'] = 0;
     	} elseif ($options['bonus_type'] == 'expired') {
@@ -24,7 +25,7 @@ class user_user_bonus_list_api extends Component_Event_Api {
     		$where['ub.order_id'] = array('gt' => 0);
     	}
     	
-    	$where['shop_close'] = 0;
+//     	$where['shop_close'] = 0;
     	
     	$count = $db->join(array('bonus_type', 'store_franchisee'))->where($where)->count();
     	$page_row = new ecjia_page($count, $options['size'], 6, '', $options['page']);
