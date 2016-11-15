@@ -99,8 +99,21 @@ class user_address_manage_api extends Component_Event_Api {
     	}
     	
     	//验证是否重复
-    	$where = $address;
-    	unset($where['address_id']);unset($where['longitude']);unset($where['latitude']);
+    	$where = array(
+    	    'user_id' =>  $address['user_id'],
+    	    'consignee' =>  $address['consignee'],
+    	    'email' =>  $address['email'],
+    	    'country' =>  $address['country'],
+    	    'province' =>  $address['province'],
+    	    'city' =>  $address['city'],
+    	    'district' =>  $address['district'],
+    	    'address' =>  $address['address'],
+    	    'address_info' =>  $address['address_info'],
+    	    'zipcode' =>  $address['zipcode'],
+    	    'tel' =>  $address['tel'],
+    	    'mobile' =>  $address['mobile'],
+    	    
+    	);
     	if ($db_user_address->where($where)->count()) {
     	    return new ecjia_error('address_repeat', '收货地址信息重复，请修改！');
     	}
