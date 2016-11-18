@@ -170,8 +170,7 @@ function signin_merchant($username, $password, $device) {
          
         return $out;
     } else {
-        $result = new ecjia_error('login_error', __('您输入的帐号信息不正确。'));
-        return $result;
+        return new ecjia_error('login_error', __('您输入的帐号信息不正确。'));
     }
 }
 
@@ -179,7 +178,12 @@ function signin_admin($username, $password, $device) {
     $db_user = RC_Model::model('user/admin_user_model');
     //到家后台不允许平台管理员登录
     if (!empty($device) && is_array($device) && ($device['code'] == '6001' || $device['code'] == '6002')) {
-        return new ecjia_error('login_error', __('平台管理员请登录掌柜管理。'));
+        if ($db_user->where(array('user_name' => $username))->count()) {
+            return new ecjia_error('login_error', __('平台管理员请登录掌柜管理。'));
+        } else {
+            return new ecjia_error('login_error', __('您输入的帐号信息不正确。'));
+        }
+        
     }
     
     /* 收银台请求判断处理*/
