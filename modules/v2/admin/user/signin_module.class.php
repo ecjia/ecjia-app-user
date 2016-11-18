@@ -15,7 +15,7 @@ class signin_module extends api_admin implements api_interface {
 		$device		= $this->device;
 
 		if (empty($username) || empty($password)) {
-			$result = new ecjia_error('login_error', __('您输入的帐号信息不正确。'));
+			$result = new ecjia_error('login_error', __('您输入的帐号信息不正确'));
 			return $result;
 		}
 		
@@ -39,7 +39,7 @@ function signin_merchant($username, $password, $device) {
     if (!empty($device) && is_array($device) && $device['code'] == '8001') {
         $adviser_info = RC_Model::model('achievement/adviser_model')->find(array('username' => $username));
         if (empty($adviser_info)) {
-            $result = new ecjia_error('login_error', __('您输入的帐号信息不正确。'));
+            $result = new ecjia_error('login_error', __('您输入的帐号信息不正确'));
             return $result;
         }
         $admin_info = RC_DB::table('staff_user')->where('user_id', $adviser_info['admin_id'])->first();
@@ -170,7 +170,7 @@ function signin_merchant($username, $password, $device) {
          
         return $out;
     } else {
-        return new ecjia_error('login_error', __('您输入的帐号信息不正确。'));
+        return new ecjia_error('login_error', __('您输入的帐号信息不正确'));
     }
 }
 
@@ -179,9 +179,9 @@ function signin_admin($username, $password, $device) {
     //到家后台不允许平台管理员登录
     if (!empty($device) && is_array($device) && ($device['code'] == '6001' || $device['code'] == '6002')) {
         if ($db_user->where(array('user_name' => $username))->count()) {
-            return new ecjia_error('login_error', __('平台管理员请登录掌柜管理。'));
+            return new ecjia_error('login_error', __('平台管理员请登录掌柜管理'));
         } else {
-            return new ecjia_error('login_error', __('您输入的帐号信息不正确。'));
+            return new ecjia_error('login_error', __('您输入的帐号信息不正确'));
         }
         
     }
@@ -190,7 +190,7 @@ function signin_admin($username, $password, $device) {
     if (!empty($device) && is_array($device) && $device['code'] == '8001') {
         $adviser_info = RC_Model::model('achievement/adviser_model')->find(array('username' => $username));
         if (empty($adviser_info)) {
-            $result = new ecjia_error('login_error', __('您输入的帐号信息不正确。'));
+            $result = new ecjia_error('login_error', __('您输入的帐号信息不正确'));
             return $result;
         }
         $admin_info = $db_user->field(array('user_name', 'ec_salt'))->find(array('user_id' => $adviser_info['admin_id']));
@@ -305,7 +305,7 @@ function signin_admin($username, $password, $device) {
         	
         return $out;
     } else {
-        $result = new ecjia_error('login_error', __('您输入的帐号信息不正确。'));
+        $result = new ecjia_error('login_error', __('您输入的帐号信息不正确'));
         return $result;
     }
 }
