@@ -33,6 +33,7 @@ class record_module extends api_front implements api_interface {
 			
  			$where['process_type'] = $process_type == 'deposit' ? 0 : 1;
  		}
+ 		$where['payment'] = array('neq' => '');
  		/* 获取记录条数 */
  		$record_count = $db->where($where)->count();
  		
