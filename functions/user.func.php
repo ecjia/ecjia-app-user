@@ -264,12 +264,14 @@ function get_account_log($user_id, $num, $start, $process_type = '') {
 	$account_log = array();
 	
 	$where = array(
-		'user_id' => $user_id,
-		'process_type' => array(SURPLUS_SAVE, SURPLUS_RETURN)
+		'user_id'	=> $user_id,
+		'process_type' => array(SURPLUS_SAVE, SURPLUS_RETURN),
+		'payment'	=> array('neq' => ''),
 	);
 	if (!empty($process_type)) {
 		$where['process_type'] = $process_type == 'deposit' ? 0 : 1;
 	}
+	
 	$res = $db->where($where)->order(array('add_time' => 'desc'))->limit($start->limit())->select();
 	//$res = RC_DB::table('user_account')->orderBy('add_time', 'desc')->select();
 	
