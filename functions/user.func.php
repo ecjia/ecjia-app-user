@@ -598,10 +598,10 @@ function update_user_info() {
 			'on' 	=> "b.type_id = ub.bonus_type_id AND b.use_start_date <= '$time' AND b.use_end_date >= '$time'"
 		)
 	);
-	$row = $dbview->find('u.user_id = ' . $_SESSION[user_id] . '');
+	$row = $dbview->find('u.user_id = ' . $_SESSION['user_id'] . '');
 	if ($row) {
 		/* 更新SESSION */
-		$_SESSION['last_time'] = $row['last_login'];
+		$_SESSION['last_time'] = RC_Time::local_date('Y-m-d H:i:s',$row['last_login']);
 		$_SESSION['last_ip'] = $row['last_ip'];
 		$_SESSION['login_fail'] = 0;
 		$_SESSION['email'] = $row['email'];

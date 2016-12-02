@@ -66,6 +66,7 @@ class signup_module extends api_front implements api_interface
 			$other['mobile_phone'] = '';
 		}
 		
+		$other['last_login'] = RC_Time::gmtime();
 		$result = register($username, $password, $email, $other);
 		if (is_ecjia_error($result)) {
 			return $result;
