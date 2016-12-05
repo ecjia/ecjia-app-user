@@ -278,8 +278,8 @@ function get_account_log($user_id, $num, $start, $process_type = '') {
 	if (!empty($res)) {
 		RC_Loader::load_sys_func('global');
 // 		$payment_db = RC_Model::model('payment/payment_model');
-		$db_payment = RC_DB::table('payment');
 		foreach ($res as $key=>$rows) {
+			$db_payment = RC_DB::table('payment');
 			$rows['add_time']         = RC_Time::local_date(ecjia::config('time_format'), $rows['add_time']);
 			$rows['admin_note']       = nl2br(htmlspecialchars($rows['admin_note']));
 			$rows['short_admin_note'] = ($rows['admin_note'] > '') ? RC_String::sub_str($rows['admin_note'], 30) : 'N/A';
@@ -313,7 +313,7 @@ function get_account_log($user_id, $num, $start, $process_type = '') {
 			$payment = $db_payment->first();
 			
 			
-			$rows['payment'] = $payment['pay_name'];
+			$rows['payment']	= $payment['pay_name'];
 			$rows['pid'] = $pid = $payment['pay_id'];
 			/* 如果是预付款而且还没有付款, 允许付款 */
 			if (($rows['is_paid'] == 0) && ($rows['process_type'] == 0)) {
