@@ -264,9 +264,8 @@ function get_account_log($user_id, $num, $start, $process_type = '') {
 	$account_log = array();
 	
 	$where = array(
-		'user_id'	=> $user_id,
-		'process_type' => array(SURPLUS_SAVE, SURPLUS_RETURN),
-		'payment'	=> array('neq' => ''),
+		'user_id'		=> $user_id,
+		'process_type'	=> array(SURPLUS_SAVE, SURPLUS_RETURN),
 	);
 	if (!empty($process_type)) {
 		$where['process_type'] = $process_type == 'deposit' ? 0 : 1;

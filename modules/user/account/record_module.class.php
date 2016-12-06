@@ -30,10 +30,9 @@ class record_module extends api_front implements api_interface {
  		);
  		
 		if (!empty($process_type)) {
-			
  			$where['process_type'] = $process_type == 'deposit' ? 0 : 1;
  		}
- 		$where['payment'] = array('neq' => '');
+ 		
  		/* 获取记录条数 */
  		$record_count = $db->where($where)->count();
  		
@@ -46,31 +45,37 @@ class record_module extends api_front implements api_interface {
 
  		//获取余额记录
  		$account_log = get_account_log($user_id, $size, $page_row, $process_type);
- 		$pager = array(
- 				"total" => $page_row->total_records,
- 				"count" => $page_row->total_records,
- 				"more" => $page_row->total_pages <= $page ? 0 : 1,
- 		);
  		
  		if (!empty($account_log) && is_array($account_log)) {
  			$account_list = array();
  			foreach ($account_log as $key => $value) {
-				$account_list[$key]['account_id'] = $value['id'];
-				$account_list[$key]['user_id'] = $value['user_id'];
-				$account_list[$key]['admin_user'] = $value['admin_user'];
-				$account_list[$key]['amount'] = $value['amount'];
+				$account_list[$key]['account_id']	= $value['id'];
+				$account_list[$key]['user_id']		= $value['user_id'];
+				$account_list[$key]['admin_user']	= $value['admin_user'];
+				$account_list[$key]['amount']		= $value['amount'];
 				$account_list[$key]['format_amount'] = $value['format_amount'];
-				$account_list[$key]['user_note'] = $value['user_note'];
-				$account_list[$key]['type'] = $value['process_type'] == '0' ? 'deposit' : 'raply';
-				$account_list[$key]['type_lable'] = $value['type'];
-				$account_list[$key]['payment_name'] = strip_tags($value['payment']);
-				$account_list[$key]['payment_id'] = $value['pid'];
-				$account_list[$key]['is_paid'] = $value['is_paid'];
-				$account_list[$key]['pay_status'] = $value['pay_status'];
-				$account_list[$key]['add_time'] = $value['add_time'];
+				$account_list[$key]['user_note']	= $value['user_note'];
+				$account_list[$key]['type']			= $value['process_type'] == '0' ? 'deposit' : 'raply';
+				$account_list[$key]['type_lable']	= $value['type'];
+				$account_list[$key]['payment_name']	= (empty($value['payment']) && $value['process_type'] == '0') ? '管理员操作' : strip_tags($value['payment']);
+				$account_list[$key]['payment_id']	= $value['pid'];
+				$account_list[$key]['is_paid']		= $value['is_paid'];
+				$account_list[$key]['pay_status']	= $value['pay_status'];
+				$account_list[$key]['add_time']		= $value['add_time'];
  			}
+ 			
+ 			$pager = array(
+ 					"total" => $page_row->total_records,
+ 					"count" => $page_row->total_records,
+ 					"more"	=> $page_row->total_pages <= $page ? 0 : 1,
+ 			);
  			return array('data' => $account_list, 'pager' => $pager);
  		} else {
+ 			$pager = array(
+ 					"total" => $page_row->total_records,
+ 					"count" => $page_row->total_records,
+ 					"more"	=> $page_row->total_pages <= $page ? 0 : 1,
+ 			);
  			return array('data' => array(), 'pager' => $pager);
  		}
 	}
