@@ -39,8 +39,8 @@ function signin_merchant($username, $password, $device) {
     if (!empty($device) && is_array($device) && $device['code'] == '8001') {
         $adviser_info = RC_Model::model('achievement/adviser_model')->find(array('username' => $username));
         if (empty($adviser_info)) {
-            $result = new ecjia_error('login_error', __('您输入的帐号信息不正确'));
-            return $result;
+			$result = new ecjia_error('login_error', __('您输入的帐号信息不正确'));
+			return $result;
         }
         $admin_info = RC_DB::table('staff_user')->where('user_id', $adviser_info['admin_id'])->first();
         $username	= $admin_info['mobile'];
@@ -50,7 +50,7 @@ function signin_merchant($username, $password, $device) {
     }
     
     /* 检查密码是否正确 */
-    $db_staff_user = RC_DB::table('staff_user')->selectRaw('user_id, mobile, name, store_id, nick_name, email, last_login, last_ip, action_list, avatar');
+    $db_staff_user = RC_DB::table('staff_user')->selectRaw('user_id, mobile, name, store_id, nick_name, email, last_login, last_ip, action_list, avatar, group_id');
     if (!empty($salt)) {
         $db_staff_user->where('mobile', $username)->where('password', md5(md5($password).$salt) );
     } else {
@@ -129,24 +129,36 @@ function signin_merchant($username, $password, $device) {
                 'uid' => $_SESSION['admin_id']
             ),
         );
-        $db_role = RC_Loader::load_model('role_model');
-        $role_name = $db_role->where(array('role_id' => $row['role_id']))->get_field('role_name');
-         
+        $role_name = $group = '';
+        
+        switch ($row['group_id']) {
+        	case -1 : 
+        		$role_name	= "配送员";
+        		$group		= 'express';
+        		break;
+        	default:
+        		if ($row['group_id'] > 0) {
+        			$role_name = RC_DB::table('staff_group')->where('group_id', $row['group_id'])->pluck('group_name');
+        		}
+        		break;
+        }
+        
         $out['userinfo'] = array(
             'id' 			=> $row['user_id'],
             'username'		=> $row['mobile'],
             'email'			=> $row['email'],
             'last_login' 	=> RC_Time::local_date(ecjia::config('time_format'), $row['last_login']),
             'last_ip'		=> RC_Ip::area($row['last_ip']),
-            'role_name'		=> !empty($role_name) ? $role_name : '',
-            'avator_img'	=> $row['avatar'] ? RC_Upload::upload_url($row['avatar']) : null,
+            'role_name'		=> $role_name,
+        	'group'			=> $group,
+            'avator_img'	=> !empty($row['avatar']) ? RC_Upload::upload_url($row['avatar']) : null,
         );
-         
+        
         if ($device['code'] == '8001') {
             $out['userinfo']['username'] = $adviser_info['username'];
             $out['userinfo']['email']	 = $adviser_info['email'];
         }
-         
+        
         //修正关联设备号
         $result = ecjia_app::validate_application('mobile');
         if (!is_ecjia_error($result)) {
