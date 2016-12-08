@@ -34,7 +34,7 @@ class user_address_manage_api extends Component_Event_Api {
         	$district_name	= $region_name[2]['region_name'];
         	$consignee_address = $province_name.'省'.$city_name.'市'.$address['address'];
 
-        	$shop_point = file_get_contents("http://api.map.baidu.com/geocoder/v2/?address='".$consignee_address."'&output=json&ak=E70324b6f5f4222eb1798c8db58a017b");
+        	$shop_point = file_get_contents("https://api.map.baidu.com/geocoder/v2/?address='".$consignee_address."'&output=json&ak=E70324b6f5f4222eb1798c8db58a017b");
 
         	$shop_point = json_decode($shop_point);
         	if (!empty($shop_point->result)) {
