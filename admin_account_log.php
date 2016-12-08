@@ -111,7 +111,7 @@ class admin_account_log extends ecjia_admin {
 		$user = get_user_info($user_id);
 		
 		if (empty($user)) {			
-			$this->showmessage(RC_Lang::get('user::account_log.user_not_exist'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			return $this->showmessage(RC_Lang::get('user::account_log.user_not_exist'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 		
 		$user_money		= !empty($_POST['user_money']) ? intval($_POST['user_money']): 0;
@@ -121,20 +121,20 @@ class admin_account_log extends ecjia_admin {
 
 		/* 参数验证 */
 		if ($user_money < 0 || !is_numeric($user_money) || !isset($user_money)) {
-			$this->showmessage(RC_Lang::get('user::account_log.user_money_error'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			return $this->showmessage(RC_Lang::get('user::account_log.user_money_error'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 		if ($frozen_money < 0 || !is_numeric($frozen_money) || !isset($frozen_money)) {
-			$this->showmessage(RC_Lang::get('user::account_log.frozen_money_error'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			return $this->showmessage(RC_Lang::get('user::account_log.frozen_money_error'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 		if ($rank_points < 0 || !is_numeric($rank_points) || !isset($rank_points)) {
-			$this->showmessage(RC_Lang::get('user::account_log.rank_points_error'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			return $this->showmessage(RC_Lang::get('user::account_log.rank_points_error'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 		if ($pay_points < 0 || !is_numeric($pay_points) || !isset($pay_points)) {
-			$this->showmessage(RC_Lang::get('user::account_log.pay_points_error'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			return $this->showmessage(RC_Lang::get('user::account_log.pay_points_error'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 		
 		if ($user_money == 0 && $frozen_money == 0 && $rank_points == 0 && $pay_points == 0) {
-			$this->showmessage(RC_Lang::get('user::account_log.null_msg'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			return $this->showmessage(RC_Lang::get('user::account_log.null_msg'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 		
 		$change_desc	= RC_String::sub_str($_POST['change_desc'], 255, false);
@@ -177,7 +177,7 @@ class admin_account_log extends ecjia_admin {
 			RC_Lang::get('user::account_log.change_desc').$change_desc, 'edit', 'usermoney');
 		
 		$links[] = array('href' => RC_Uri::url('user/admin_account_log/init', array('user_id' => $user_id)), 'text' => RC_Lang::get('user::account_log.account_list'));
-		$this->showmessage(RC_Lang::get('user::account_log.log_account_change_ok'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('user/admin_account_log/edit', array('user_id' => $user_id)), 'links' => $links));
+		return $this->showmessage(RC_Lang::get('user::account_log.log_account_change_ok'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('user/admin_account_log/edit', array('user_id' => $user_id)), 'links' => $links));
 	}
 }
 

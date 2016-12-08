@@ -168,30 +168,30 @@ class admin extends ecjia_admin {
 		/* 验证参数的合法性*/
 		/* 邮箱*/
 		if (!@ereg("^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+" , $email)) {
-			$this->showmessage(RC_Lang::get('user::users.js_languages.invalid_email'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			return $this->showmessage(RC_Lang::get('user::users.js_languages.invalid_email'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 	
 		if (!empty($password)) {
 			if (!preg_match("/^[A-Za-z0-9]+$/",$password)){
-				$this->showmessage(RC_Lang::get('user::users.js_languages.chinese_password'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+				return $this->showmessage(RC_Lang::get('user::users.js_languages.chinese_password'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 			}
 			if (empty($confirm_password)) {
-				$this->showmessage(RC_Lang::get('user::users.js_languages.no_confirm_password'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+				return $this->showmessage(RC_Lang::get('user::users.js_languages.no_confirm_password'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 			}
 			if ($password != $confirm_password ) {
-				$this->showmessage(RC_Lang::get('user::users.js_languages.password_not_same'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+				return $this->showmessage(RC_Lang::get('user::users.js_languages.password_not_same'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 			}
 			if (strlen($password) < 6 || strlen($confirm_password) < 6) {
-				$this->showmessage(RC_Lang::get('user::users.js_languages.password_len_err'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+				return $this->showmessage(RC_Lang::get('user::users.js_languages.password_len_err'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 			}
 			if (preg_match("/ /" , $password)) {
-				$this->showmessage(RC_Lang::get('user::users.js_languages.passwd_balnk'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+				return $this->showmessage(RC_Lang::get('user::users.js_languages.passwd_balnk'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 			}
 		}
 	
 		/* 信用额度*/
 		if (!is_numeric($credit_line) || $credit_line < 0 ) {
-			$this->showmessage(RC_Lang::get('user::users.js_languages.credit_line'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			return $this->showmessage(RC_Lang::get('user::users.js_languages.credit_line'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 
 		/* 注册送积分 */
@@ -245,10 +245,10 @@ class admin extends ecjia_admin {
 			/* 提示信息 */
 			$links[] = array('text' =>RC_Lang::get('user::users.back_user_list'), 'href' => RC_Uri::url('user/admin/init'));
 			$links[] = array('text' =>RC_Lang::get('user::users.keep_add'), 'href' => RC_Uri::url('user/admin/add'));
-			$this->showmessage(RC_Lang::get('user::users.add_user_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('links' => $links, 'pjaxurl' => RC_Uri::url('user/admin/edit', array('id' => $max_id))));
+			return $this->showmessage(RC_Lang::get('user::users.add_user_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('links' => $links, 'pjaxurl' => RC_Uri::url('user/admin/edit', array('id' => $max_id))));
 				
 		}else{
-			$this->showmessage($user->error->get_error_message(), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			return $this->showmessage($user->error->get_error_message(), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 	}
 	
@@ -399,31 +399,31 @@ class admin extends ecjia_admin {
 		/* 验证参数的合法性*/
 		/* 邮箱*/
 		if (!@ereg("^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+",$email)) {
-			$this->showmessage(RC_Lang::get('user::users.js_languages.invalid_email'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			return $this->showmessage(RC_Lang::get('user::users.js_languages.invalid_email'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 		/* 密码 */
 		if (!empty($password)) {
 			if (!preg_match("/^[A-Za-z0-9]+$/",$password)){
-				$this->showmessage(RC_Lang::get('user::users.js_languages.chinese_password'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+				return $this->showmessage(RC_Lang::get('user::users.js_languages.chinese_password'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 			}
 			if (empty($confirm_password)) {
-				$this->showmessage(RC_Lang::get('user::users.js_languages.no_confirm_password'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+				return $this->showmessage(RC_Lang::get('user::users.js_languages.no_confirm_password'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 			}
 			if ($password != $confirm_password ) {
-				$this->showmessage(RC_Lang::get('user::users.js_languages.password_not_same'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+				return $this->showmessage(RC_Lang::get('user::users.js_languages.password_not_same'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 			}
 			if (strlen($password) < 6 || strlen($confirm_password) < 6) {
-				$this->showmessage(RC_Lang::get('user::users.js_languages.password_len_err'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+				return $this->showmessage(RC_Lang::get('user::users.js_languages.password_len_err'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 			}
 			if (preg_match("/ /", $password)) {
-				$this->showmessage(RC_Lang::get('user::users.js_languages.passwd_balnk'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+				return $this->showmessage(RC_Lang::get('user::users.js_languages.passwd_balnk'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 			}
 			RC_DB::table('users')->where('user_id', $user_id)->update(array('ec_salt' => '0'));
 		}
 	
 		/* 信用额度*/
 		if (!is_numeric($credit_line) || $credit_line < 0 ) {
-			$this->showmessage(RC_Lang::get('user::users.js_languages.credit_line'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			return $this->showmessage(RC_Lang::get('user::users.js_languages.credit_line'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 		
 		/* 更新用户扩展字段的数据 */
@@ -485,7 +485,7 @@ class admin extends ecjia_admin {
 		/* 提示信息 */
 		$links[0]['text']	= RC_Lang::get('user::users.back_user_list');
 		$links[0]['href']	= RC_Uri::url('user/admin/init');
-		$this->showmessage(RC_Lang::get('user::users.edit_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('links' => $links, 'pjaxurl' => RC_Uri::url('user/admin/edit', array('id' => $user_id))));
+		return $this->showmessage(RC_Lang::get('user::users.edit_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('links' => $links, 'pjaxurl' => RC_Uri::url('user/admin/edit', array('id' => $user_id))));
 	}
 	
 	/**
@@ -525,7 +525,7 @@ class admin extends ecjia_admin {
 		}
 
 		if (empty($row)) {
-			$this->showmessage(RC_Lang::get('user::users.user_info_confirm'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR );
+			return $this->showmessage(RC_Lang::get('user::users.user_info_confirm'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR );
 		}
 		
 		/* 获得用户等级名 */
@@ -599,7 +599,7 @@ class admin extends ecjia_admin {
 		$this->admin_priv('user_delete', ecjia::MSGTYPE_JSON);
 		
 		if (!empty($_SESSION['ru_id'])) {
-			$this->showmessage(RC_Lang::get('user::user_account.merchants_notice'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			return $this->showmessage(RC_Lang::get('user::user_account.merchants_notice'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 		if (isset($_POST['checkboxes'])) {
 			$idArr = explode(',', $_POST['checkboxes']);
@@ -615,9 +615,9 @@ class admin extends ecjia_admin {
 				ecjia_admin::admin_log($row['user_name'] , 'batch_remove', 'users');
 			}		
 			
-			$this->showmessage(sprintf(RC_Lang::get('user::users.batch_remove_success'), $count), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('user/admin/init')));
+			return $this->showmessage(sprintf(RC_Lang::get('user::users.batch_remove_success'), $count), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('user/admin/init')));
 		} else {
-			$this->showmessage(RC_Lang::get('user::users.no_select_user'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			return $this->showmessage(RC_Lang::get('user::users.no_select_user'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 	}
 	
@@ -628,14 +628,14 @@ class admin extends ecjia_admin {
 		$this->admin_priv('user_update', ecjia::MSGTYPE_JSON);
 		
 		if (!empty($_SESSION['ru_id'])) {
-			$this->showmessage(RC_Lang::get('user::user_account.merchants_notice'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			return $this->showmessage(RC_Lang::get('user::user_account.merchants_notice'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 		$id	= intval($_REQUEST['pk']);
 		$email	= trim($_REQUEST['value']);
 
 		/* 验证邮箱*/
 		if (!@ereg("^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+", $email)) {
-			$this->showmessage(RC_Lang::get('user::users.js_languages.invalid_email'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			return $this->showmessage(RC_Lang::get('user::users.js_languages.invalid_email'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 
 		if (!empty($email)) {
@@ -645,13 +645,13 @@ class admin extends ecjia_admin {
 					
 					ecjia_admin::admin_log($user_name.RC_Lang::get('user::users.mailbox_information'), 'edit', 'users');
 
-					$this->showmessage(RC_Lang::get('user::users.edit_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
+					return $this->showmessage(RC_Lang::get('user::users.edit_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
 				}
 			} else {
-				$this->showmessage(RC_Lang::get('user::users.email_exists'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+				return $this->showmessage(RC_Lang::get('user::users.email_exists'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 			}
 		} else {
-			$this->showmessage(RC_Lang::get('user::users.email_required'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			return $this->showmessage(RC_Lang::get('user::users.email_required'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 	}
 
@@ -671,7 +671,7 @@ class admin extends ecjia_admin {
 		/* 记录管理员操作 */
 		ecjia_admin::admin_log(addslashes($user_info['user_name']), 'remove', 'users');
 		
-		$this->showmessage(RC_Lang::get('user::users.delete_user_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
+		return $this->showmessage(RC_Lang::get('user::users.delete_user_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
 	}
 	
 	/**

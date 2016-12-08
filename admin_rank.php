@@ -113,29 +113,29 @@ class admin_rank extends ecjia_admin {
 		
 		/* 检查是否存在重名的会员等级 */
 		if (RC_DB::table('user_rank')->where('rank_name', $rank_name)->count() != 0) {
-			$this->showmessage(sprintf(RC_Lang::get('user::user_rank.rank_name_exists'), $rank_name), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			return $this->showmessage(sprintf(RC_Lang::get('user::user_rank.rank_name_exists'), $rank_name), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 		
 		/* 非特殊会员组检查积分的上下限是否合理 */
 		if ($min_points >= $max_points && $special_rank == 0) {
-			$this->showmessage(RC_Lang::get('user::user_rank.js_languages.integral_max_small'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			return $this->showmessage(RC_Lang::get('user::user_rank.js_languages.integral_max_small'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 		
 		/* 特殊等级会员组不判断积分限制 */
 		if ($special_rank == 0) {
 			/* 检查下限制有无重复 */
 			if (RC_DB::table('user_rank')->where('min_points', $min_points)->count() != 0) {
-				$this->showmessage(sprintf(RC_Lang::get('user::user_rank.integral_min_exists'), $min_points), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+				return $this->showmessage(sprintf(RC_Lang::get('user::user_rank.integral_min_exists'), $min_points), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 			}
 			/* 检查上限有无重复 */
 			if (RC_DB::table('user_rank')->where('max_points', $max_points)->count() != 0) {
-				$this->showmessage(sprintf(RC_Lang::get('user::user_rank.integral_max_exists'), $max_points), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+				return $this->showmessage(sprintf(RC_Lang::get('user::user_rank.integral_max_exists'), $max_points), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 			}
 		}
 
 		/* 折扣验证 (0-100) */
 		if ($discount > 100 || $discount < 0 || !is_numeric($discount) || empty($discount)) {
-			$this->showmessage(RC_Lang::get('user::user_rank.notice_discount'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			return $this->showmessage(RC_Lang::get('user::user_rank.notice_discount'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 		
 		$data = array(
@@ -151,7 +151,7 @@ class admin_rank extends ecjia_admin {
 		ecjia_admin::admin_log($rank_name, 'add', 'user_rank');
 		$links[] = array('text' => RC_Lang::get('user::user_rank.back_list'), 'href' => RC_Uri::url('user/admin_rank/init'));
 		$links[] = array('text' => RC_Lang::get('user::user_rank.add_continue'), 'href' => RC_Uri::url('user/admin_rank/add'));
-		$this->showmessage(RC_Lang::get('user::user_rank.rank')."[ ". $rank_name ."]".RC_Lang::get('user::user_rank.add_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('links' => $links, 'pjaxurl' => RC_Uri::url('user/admin_rank/edit', array('id' => $new_id))));
+		return $this->showmessage(RC_Lang::get('user::user_rank.rank')."[ ". $rank_name ."]".RC_Lang::get('user::user_rank.add_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('links' => $links, 'pjaxurl' => RC_Uri::url('user/admin_rank/edit', array('id' => $new_id))));
 
 	}
 	
@@ -206,13 +206,13 @@ class admin_rank extends ecjia_admin {
 		
 		if ($rank_name != $old_name) {
 			if (RC_DB::table('user_rank')->where('rank_name', $rank_name)->count() != 0) {
-				$this->showmessage(sprintf(RC_Lang::get('user::user_rank.rank_name_exists'), htmlspecialchars($rank_name)), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+				return $this->showmessage(sprintf(RC_Lang::get('user::user_rank.rank_name_exists'), htmlspecialchars($rank_name)), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 			}
 		}
 		
 		/* 非特殊会员组检查积分的上下限是否合理 */
 		if ($min_points >= $max_points && $special_rank == 0) {
-			$this->showmessage(RC_Lang::get('user::user_rank.js_languages.integral_max_small'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			return $this->showmessage(RC_Lang::get('user::user_rank.js_languages.integral_max_small'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 		
 		/* 特殊等级会员组不判断积分限制 */
@@ -223,7 +223,7 @@ class admin_rank extends ecjia_admin {
 					->where('min_points', $min_points)
 					->where('rank_id', $id)
 					->count() != 0) {
-					$this->showmessage(sprintf(RC_Lang::get('user::user_rank.integral_min_exists'), $min_points), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+					return $this->showmessage(sprintf(RC_Lang::get('user::user_rank.integral_min_exists'), $min_points), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 				}
 			}
 			if ($max_points != $old_max) {
@@ -232,14 +232,14 @@ class admin_rank extends ecjia_admin {
 					->where('max_points', $max_points)
 					->where('rank_id', $id)
 					->count() != 0) {
-					$this->showmessage(sprintf(RC_Lang::get('user::user_rank.integral_max_exists'), $max_points), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+					return $this->showmessage(sprintf(RC_Lang::get('user::user_rank.integral_max_exists'), $max_points), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 				}
 			}
 		}
 
 		/* 折扣验证 (0-100) */
 		if ($discount > 100 || $discount < 0 || !is_numeric($discount) || empty($discount)) {
-			$this->showmessage(RC_Lang::get('user::user_rank.notice_discount'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			return $this->showmessage(RC_Lang::get('user::user_rank.notice_discount'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 		
 		$data = array(
@@ -256,7 +256,7 @@ class admin_rank extends ecjia_admin {
 		
 		ecjia_admin::admin_log($rank_name, 'edit', 'user_rank');
 		$links[] = array('text' => RC_Lang::get('user::user_rank.back_list'), 'href' => RC_Uri::url('user/admin_rank/init'));
-		$this->showmessage(RC_Lang::get('user::user_rank.rank')."[ ". $rank_name ."]".RC_Lang::get('user::user_rank.edit_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('links' => $links, 'pjaxurl' => RC_Uri::url('user/admin_rank/edit', "id=$id")));
+		return $this->showmessage(RC_Lang::get('user::user_rank.rank')."[ ". $rank_name ."]".RC_Lang::get('user::user_rank.edit_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('links' => $links, 'pjaxurl' => RC_Uri::url('user/admin_rank/edit', "id=$id")));
 	}
 		
 	/**
@@ -276,7 +276,7 @@ class admin_rank extends ecjia_admin {
 			RC_DB::table('users')->where('user_rank', $rank_id)->update(array('user_rank' => 0));
 			
 			ecjia_admin::admin_log($rank_name, 'remove', 'user_rank');	
-			$this->showmessage(RC_Lang::get('user::user_rank.rank')."[ ".$rank_name." ]".RC_Lang::get('user::user_rank.delete_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
+			return $this->showmessage(RC_Lang::get('user::user_rank.rank')."[ ".$rank_name." ]".RC_Lang::get('user::user_rank.delete_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
 		}
 	}
 	
@@ -287,7 +287,7 @@ class admin_rank extends ecjia_admin {
 		$this->admin_priv('user_rank', ecjia::MSGTYPE_JSON);
 		
 		if (!empty($_SESSION['ru_id'])) {
-			$this->showmessage(RC_Lang::get('user::user_account.merchants_notice'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			return $this->showmessage(RC_Lang::get('user::user_account.merchants_notice'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 		$rank_id = intval($_POST['pk']);
 		$val	 = trim($_POST['value']);
@@ -296,21 +296,21 @@ class admin_rank extends ecjia_admin {
 		$old_name = RC_DB::table('user_rank')->where('rank_id', $rank_id)->pluck('rank_name');
 
 		if (empty($val)) {
-			$this->showmessage(RC_Lang::get('user::user_rank.rank_name_confirm'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			return $this->showmessage(RC_Lang::get('user::user_rank.rank_name_confirm'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 		
 		if ($val != $old_name) {
 			if (RC_DB::table('user_rank')->where('rank_name', $val)->count() != 0) {
-				$this->showmessage(sprintf(RC_Lang::get('user::user_rank.rank_name_exists'), htmlspecialchars($val)), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+				return $this->showmessage(sprintf(RC_Lang::get('user::user_rank.rank_name_exists'), htmlspecialchars($val)), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 			}
 		}
 
 		if (RC_DB::table('user_rank')->where('rank_id', $rank_id)->update(array('rank_name' => $val))) {
 			ecjia_admin::admin_log('等级名是 '.$val, 'edit', 'user_rank');
 			
-			$this->showmessage(RC_Lang::get('user::user_rank.edit_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
+			return $this->showmessage(RC_Lang::get('user::user_rank.edit_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
 		} else {
-			$this->showmessage(RC_Lang::get('user::user_rank.edit_fail'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			return $this->showmessage(RC_Lang::get('user::user_rank.edit_fail'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 	}
 	
@@ -325,17 +325,17 @@ class admin_rank extends ecjia_admin {
 		
 		/* 验证参数有效性  */
 		if (!is_numeric($val) || empty($val) || $val <= 0 || strpos($val, '.') > 0) {
-			$this->showmessage(RC_Lang::get('user::user_rank.js_languages.integral_min_invalid'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			return $this->showmessage(RC_Lang::get('user::user_rank.js_languages.integral_min_invalid'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 		/* 查找该ID 对应的积分上限值,验证是否大于上限  */
 		$max_points = RC_DB::table('user_rank')->where('rank_id', $rank_id)->pluck('max_points');
 
 		if ($val >= $max_points ) {
-			$this->showmessage(RC_Lang::get('user::user_rank.js_languages.integral_max_small'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			return $this->showmessage(RC_Lang::get('user::user_rank.js_languages.integral_max_small'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 		/* 验证是否存在 */
 		if (RC_DB::table('user_rank')->where('min_points', $val)->where('rank_id', '!=', $rank_id)->count() != 0) {
-			$this->showmessage(sprintf(RC_Lang::get('user::user_rank.integral_min_exists'), $val), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			return $this->showmessage(sprintf(RC_Lang::get('user::user_rank.integral_min_exists'), $val), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 		
 		if (RC_DB::table('user_rank')->where('rank_id', $rank_id)->update(array('min_points' => $val))) {
@@ -343,9 +343,9 @@ class admin_rank extends ecjia_admin {
 			$rank_name =RC_DB::table('user_rank')->where('rank_id', $rank_id)->pluck('rank_name');
 			ecjia_admin::admin_log($rank_name, 'edit', 'user_rank');
 			
-			$this->showmessage(RC_Lang::get('user::user_rank.edit_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
+			return $this->showmessage(RC_Lang::get('user::user_rank.edit_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
 		} else {
-			$this->showmessage(RC_Lang::get('user::user_rank.edit_fail'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			return $this->showmessage(RC_Lang::get('user::user_rank.edit_fail'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 	}
 	
@@ -360,25 +360,25 @@ class admin_rank extends ecjia_admin {
 		
 		/* 验证参数有效性  */
 		if (!is_numeric($val) || empty($val) || $val <= 0 ) {
-			$this->showmessage(RC_Lang::get('user::user_rank.js_languages.integral_min_invalid'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			return $this->showmessage(RC_Lang::get('user::user_rank.js_languages.integral_min_invalid'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 		/* 查找该ID 对应的积分下限值,验证是否大于上限  */
 		$min_points =RC_DB::table('user_rank')->where('rank_id', $rank_id)->pluck('min_points');
 		if ($val <= $min_points ) {
-			$this->showmessage(RC_Lang::get('user::user_rank.js_languages.integral_max_small'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			return $this->showmessage(RC_Lang::get('user::user_rank.js_languages.integral_max_small'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 		/* 验证是否存在 */
 		if (RC_DB::table('user_rank')->where('max_points', $val)->where('rank_id', '!=', $rank_id)->count() != 0) {
-			$this->showmessage(sprintf(RC_Lang::get('user::user_rank.integral_max_exists'), $val), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			return $this->showmessage(sprintf(RC_Lang::get('user::user_rank.integral_max_exists'), $val), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 		
 		if (RC_DB::table('user_rank')->where('rank_id', $rank_id)->update(array('max_points' => $val))) {
 			$rank_name = RC_DB::table('user_rank')->where('rank_id', $rank_id)->pluck('rank_name');
 			
 			ecjia_admin::admin_log($rank_name, 'edit', 'user_rank');
-			$this->showmessage(RC_Lang::get('user::user_rank.edit_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
+			return $this->showmessage(RC_Lang::get('user::user_rank.edit_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
 		} else {
-			$this->showmessage(RC_Lang::get('user::user_rank.edit_fail'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			return $this->showmessage(RC_Lang::get('user::user_rank.edit_fail'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 	}
 	
@@ -389,23 +389,23 @@ class admin_rank extends ecjia_admin {
 		$this->admin_priv('user_rank', ecjia::MSGTYPE_JSON);
 		
 		if (!empty($_SESSION['ru_id'])) {
-			$this->showmessage(RC_Lang::get('user::user_account.merchants_notice'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			return $this->showmessage(RC_Lang::get('user::user_account.merchants_notice'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 		$rank_id	= intval($_REQUEST['pk']);
 		$val		= intval($_REQUEST['value']);
 		
 		/* 验证参数有效性  */
 		if ($val < 1 || $val > 100 || !is_numeric($val) || empty($val)) {
-			$this->showmessage(RC_Lang::get('user::user_rank.notice_discount'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			return $this->showmessage(RC_Lang::get('user::user_rank.notice_discount'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 		
 		if (RC_DB::table('user_rank')->where('rank_id', $rank_id)->update(array('discount' => $val))) {
 			$rank_name = RC_DB::table('user_rank')->where('rank_id', $rank_id)->pluck('rank_name');
 			
 			ecjia_admin::admin_log(addslashes($rank_name), 'edit', 'user_rank');
-			$this->showmessage(RC_Lang::get('user::user_rank.edit_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
+			return $this->showmessage(RC_Lang::get('user::user_rank.edit_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
 		} else {
-			$this->showmessage(RC_Lang::get('user::user_rank.edit_fail'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			return $this->showmessage(RC_Lang::get('user::user_rank.edit_fail'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 	}
 	
@@ -416,7 +416,7 @@ class admin_rank extends ecjia_admin {
 		$this->admin_priv('user_rank', ecjia::MSGTYPE_JSON);
 		
 		if (!empty($_SESSION['ru_id'])) {
-			$this->showmessage(RC_Lang::get('user::user_account.merchants_notice'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			return $this->showmessage(RC_Lang::get('user::user_account.merchants_notice'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 		$rank_id	= intval($_POST['id']);
 		$is_special	= intval($_POST['val']);
@@ -432,9 +432,9 @@ class admin_rank extends ecjia_admin {
 				ecjia_admin::admin_log($rank_name.'，'.RC_Lang::get('user::user_rank.hide_price_short'),  'edit', 'user_rank');
 			}
 			
-			$this->showmessage(RC_Lang::get('user::user_rank.change_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('content' => $is_show, 'pjaxurl' => RC_Uri::url('user/admin_rank/init')));
+			return $this->showmessage(RC_Lang::get('user::user_rank.change_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('content' => $is_show, 'pjaxurl' => RC_Uri::url('user/admin_rank/init')));
 		} else {
-			$this->showmessage(RC_Lang::get('user::user_rank.edit_fail'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			return $this->showmessage(RC_Lang::get('user::user_rank.edit_fail'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 	}
 	
@@ -445,7 +445,7 @@ class admin_rank extends ecjia_admin {
 		$this->admin_priv('user_rank', ecjia::MSGTYPE_JSON);
 		
 		if (!empty($_SESSION['ru_id'])) {
-			$this->showmessage(RC_Lang::get('user::user_account.merchants_notice'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			return $this->showmessage(RC_Lang::get('user::user_account.merchants_notice'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 		$rank_id	= intval($_POST['id']);
 		$is_show	= intval($_POST['val']);
@@ -457,9 +457,9 @@ class admin_rank extends ecjia_admin {
 			} else {
 				ecjia_admin::admin_log($rank_name.'，'.RC_Lang::get('user::user_rank.remove_group'),  'edit', 'user_rank');
 			}
-			$this->showmessage(RC_Lang::get('user::user_rank.change_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('content' => $is_special, 'pjaxurl' => RC_Uri::url('user/admin_rank/init')));
+			return $this->showmessage(RC_Lang::get('user::user_rank.change_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('content' => $is_special, 'pjaxurl' => RC_Uri::url('user/admin_rank/init')));
 		} else {
-			$this->showmessage(RC_Lang::get('user::user_rank.edit_fail'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			return $this->showmessage(RC_Lang::get('user::user_rank.edit_fail'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 	}
 }

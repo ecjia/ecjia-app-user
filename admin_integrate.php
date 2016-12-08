@@ -94,7 +94,7 @@ class admin_integrate extends ecjia_admin {
 	    $code = strval($_GET['code']);
 	    
 	    if ($code == 'ecshop' || $code == 'ecjia') {
-	        $this->showmessage(RC_Lang::get('user::integrate.need_not_setup'), ecjia::MSGTYPE_HTML | ecjia::MSGSTAT_INFO);
+	        return $this->showmessage(RC_Lang::get('user::integrate.need_not_setup'), ecjia::MSGTYPE_HTML | ecjia::MSGSTAT_INFO);
 	    }
 	
 	    $cfg = unserialize(ecjia::config('integrate_config'));
@@ -138,7 +138,7 @@ class admin_integrate extends ecjia_admin {
 		}
 		ecjia_config::instance()->write_config('points_rule', '');
 		
-		$this->showmessage(RC_Lang::get('user::integrate.integration_ok'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('user/admin_integrate/init')));
+		return $this->showmessage(RC_Lang::get('user::integrate.integration_ok'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('user/admin_integrate/init')));
 	}
 	
 	/**
@@ -148,7 +148,7 @@ class admin_integrate extends ecjia_admin {
 		$code = strval($_POST['code'], ecjia::MSGTYPE_JSON);
 
 		if ($code != 'ecjia' && $code != 'ucenter' && $code != 'ecshop') {
-		    $this->showmessage(RC_Lang::get('user::integrate.support_UCenter'), ecjia::MSGSTAT_ERROR | ecjia::MSGTYPE_JSON);
+		    return $this->showmessage(RC_Lang::get('user::integrate.support_UCenter'), ecjia::MSGSTAT_ERROR | ecjia::MSGTYPE_JSON);
 		}
 		
 		$cfg = unserialize(ecjia::config('integrate_config'));
@@ -159,9 +159,9 @@ class admin_integrate extends ecjia_admin {
 		
 		/* 直接保存修改 */
 		if (integrate::save_integrate_config($code, $cfg)) {	
-			$this->showmessage(RC_Lang::get('user::integrate.save_ok'), ecjia::MSGSTAT_SUCCESS | ecjia::MSGTYPE_JSON);
+			return $this->showmessage(RC_Lang::get('user::integrate.save_ok'), ecjia::MSGSTAT_SUCCESS | ecjia::MSGTYPE_JSON);
 		} else {			
-			$this->showmessage(RC_Lang::get('user::integrate.save_error'), ecjia::MSGSTAT_ERROR | ecjia::MSGTYPE_JSON);
+			return $this->showmessage(RC_Lang::get('user::integrate.save_error'), ecjia::MSGSTAT_ERROR | ecjia::MSGTYPE_JSON);
 		}
 	}
 }

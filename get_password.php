@@ -226,9 +226,9 @@ class get_password extends ecjia_front {
 			if (RC_Mail::send_mail($user_name, $email, '账户变更校验码', $content, 1)) {
 				$_SESSION['temp_code'] = $code;
 				$_SESSION['temp_code_time'] = RC_Time::gmtime();
-				$this->showmessage('' , ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
+				return $this->showmessage('' , ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
 			} else {
-				$this->showmessage('' , ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+				return $this->showmessage('' , ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 			}
 		} else {
 			$result = ecjia_app::validate_application('sms');
