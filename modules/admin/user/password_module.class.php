@@ -8,8 +8,7 @@ defined('IN_ECJIA') or exit('No permission resources.');
  */
 class password_module extends api_admin implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {
-    		
-		$this->authadminSession();
+    	
 		$new_password = $this->requestData('password');
 		$adminid = $this->requestData('uid', 0);
 		$admin_name = $this->requestData('user_name');
@@ -26,7 +25,6 @@ class password_module extends api_admin implements api_interface {
 		$db = RC_Model::model('user/admin_user_model');
 		/* 以用户的原密码，与code的值匹配 */
 		$name = $db->field('user_name')->where(array('user_id' => $adminid))->find();
-		
 		
 		if ($admin_name == $name) {
 			$result = new ecjia_error('info_error', __('信息错误！'));
