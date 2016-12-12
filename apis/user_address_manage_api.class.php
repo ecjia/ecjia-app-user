@@ -27,7 +27,7 @@ class user_address_manage_api extends Component_Event_Api {
         
         if (!empty($address['province']) && !empty($address['city']) && !empty($address['address']) && empty($address['location'])) {
         	$db_region = RC_Model::model('user/region_model');
-        	$region_name = $db_region->where(array('region_id' => array('in' => $address['province'], $address['city'], $address['district'])))->order('region_type')->select();
+        	$region_name = $db_region->where(array('region_id' => array('in' => array($address['province'], $address['city'], $address['district']))))->order('region_type')->select();
         	 
         	$province_name	= $region_name[0]['region_name'];
         	$city_name		= $region_name[1]['region_name'];
