@@ -735,6 +735,10 @@ function EM_user_info($user_id) {
 	/* 获取可使用的红包数量*/
 	$bonus_count = RC_Model::model('bonus/user_bonus_type_viewmodel')->join('bonus_type')->where(array('ub.user_id' => $_SESSION['user_id'], 'use_end_date' => array('gt' => RC_Time::gmtime()), 'ub.order_id' => 0))->count();
 	
+	$data = array('object_type' => 'ecjia.user', 'object_group' => 'update_user_name', 'object_id' => $_SESSION['user_id'], 'meta_key' => 'update_time');
+	
+	/* 判断会员名更改时间*/
+	$username_update_time = RC_Model::model('term_meta_model')->find($data);
 	return array(
 		'id'				=> $user_info['user_id'],
 		'name'				=> $user_info['user_name'],
@@ -753,6 +757,7 @@ function EM_user_info($user_id) {
 		'formated_user_money' 	=> price_format($user_info['user_money'], false),
 		'user_points' 			=> $user_info['pay_points'],
 		'user_bonus_count' 		=> $bonus_count,
+		'update_username_time'	=> empty($username_update_time) ? '' : RC_Time::local_date(ecjia::config('time_format'), $username_update_time['meta_value'])
 	);
 }
 

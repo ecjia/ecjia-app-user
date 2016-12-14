@@ -87,8 +87,7 @@ class update_module extends api_front implements api_interface {
 						RC_Model::model('term_meta_model')->where($data)->update(array('meta_value' => $time));	
 					}
 				} else {
-					$formatted_time = RC_Time::local_date(ecjia::config('time_format'), $last_time['meta_value']);
-					return new ecjia_error('not_repeat_update_username', '用户名上次修改时间为：'.$formatted_time);
+					return new ecjia_error('not_repeat_update_username', '30天内只允许修改一次会员名称！');
 				}
 				
 			}
