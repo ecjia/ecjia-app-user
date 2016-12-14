@@ -70,9 +70,26 @@ class update_module extends api_front implements api_interface {
 			if ($user_exists) {
 				return new ecjia_error('user_name_exists', '用户名已存在！');	
 			} else {
-				$db->where(array('user_id' => $_SESSION['user_id']))->update(array('user_name' => $user_name));
-				$_SESSION['user_name']		= $user_name;
-				$_SESSION['update_time']	= RC_Time::gmtime();
+				$data = array('object_type' => 'ecjia.user', 'object_group' => 'update_user_name', 'object_id' => $_SESSION['user_id'], 'meta_key' => 'update_time');
+				
+				/* 判断会员名更改时间*/
+				$last_time = RC_Model::model('term_meta_model')->find($data);
+				$time = RC_Time::gmtime();
+				if (empty($last_time) || $time > $last_time['meta_value']) {
+					$db->where(array('user_id' => $_SESSION['user_id']))->update(array('user_name' => $user_name));
+					$_SESSION['user_name']		= $user_name;
+					$_SESSION['update_time']	= RC_Time::gmtime();
+					$time = $time + 2592000;
+					if (empty($last_time)) {
+						$data['meta_value'] = $time;
+						RC_Model::model('term_meta_model')->insert($data);
+					} else {
+						RC_Model::model('term_meta_model')->where()->update(array('meta_value' => $time));	
+					}
+				} else {
+					return new ecjia_error('not_repeat_update_username', '30天内只允许修改一次会员名称！');
+				}
+				
 			}
 		}
 		
