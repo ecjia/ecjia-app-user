@@ -75,19 +75,20 @@ class update_module extends api_front implements api_interface {
 				/* 判断会员名更改时间*/
 				$last_time = RC_Model::model('term_meta_model')->find($data);
 				$time = RC_Time::gmtime();
-				if (empty($last_time) || $time > $last_time['meta_value']) {
+				$limit_time = $last_time['meta_value'] + 2592000;
+				if (empty($last_time) || $limit_time  < $time) {
 					$db->where(array('user_id' => $_SESSION['user_id']))->update(array('user_name' => $user_name));
 					$_SESSION['user_name']		= $user_name;
 					$_SESSION['update_time']	= RC_Time::gmtime();
-					$time = $time + 2592000;
 					if (empty($last_time)) {
 						$data['meta_value'] = $time;
 						RC_Model::model('term_meta_model')->insert($data);
 					} else {
-						RC_Model::model('term_meta_model')->where()->update(array('meta_value' => $time));	
+						RC_Model::model('term_meta_model')->where($data)->update(array('meta_value' => $time));	
 					}
 				} else {
-					return new ecjia_error('not_repeat_update_username', '30天内只允许修改一次会员名称！');
+					$formatted_time = RC_Time::local_date(ecjia::config('time_format'), $last_time['meta_value']);
+					return new ecjia_error('not_repeat_update_username', '用户名上次修改时间为：'.$formatted_time);
 				}
 				
 			}
