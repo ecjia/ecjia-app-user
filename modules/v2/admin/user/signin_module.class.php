@@ -50,7 +50,7 @@ function signin_merchant($username, $password, $device) {
     }
     
     /* 检查密码是否正确 */
-    $db_staff_user = RC_DB::table('staff_user')->selectRaw('user_id, mobile, name, store_id, nick_name, email, last_login, last_ip, action_list, avatar, group_id');
+    $db_staff_user = RC_DB::table('staff_user')->selectRaw('user_id, mobile, name, store_id, nick_name, email, last_login, last_ip, action_list, avatar, group_id, online_status');
     if (!empty($salt)) {
         $db_staff_user->where('mobile', $username)->where('password', md5(md5($password).$salt) );
     } else {
@@ -141,6 +141,20 @@ function signin_merchant($username, $password, $device) {
         			$role_name = RC_DB::table('staff_group')->where('group_id', $row['group_id'])->pluck('group_name');
         		}
         		break;
+        }
+
+        /* 登入后默认设置离开状态*/
+        if ($row['online_status'] != 4 && $group == 'express') {
+        	RC_DB::table('staff_user')->where('user_id', $_SESSION['staff_id'])->update(array('online_status' => 4));
+        	/* 获取当前时间戳*/
+        	$time = RC_Time::gmtime();
+        	$fomated_time = RC_Time::local_date('Y-m-d', $time);
+        	/* 查询签到记录*/
+        	$checkin_log = RC_DB::table('express_checkin')->where('user_id', $_SESSION['staff_id'])->orderBy('log_id', 'desc')->first();
+        	if ($fomated_time == $checkin_log['checkin_date'] && empty($checkin_log['end_time'])) {
+        		$duration = $time - $checkin_log['start_time'];
+        		RC_DB::table('express_checkin')->where('log_id', $checkin_log['log_id'])->update(array('end_time' => $time, 'duration' => $duration));
+        	}
         }
         
         $out['userinfo'] = array(
