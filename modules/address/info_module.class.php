@@ -9,6 +9,8 @@ class info_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	
         //如果用户登录获取其session
+        RC_Logger::getlogger('debug')->info('user-info');
+        RC_Logger::getlogger('debug')->info($_SESSION);
         $this->authSession();
         $user_id = $_SESSION['user_id'];
     	if ($user_id <= 0) {
