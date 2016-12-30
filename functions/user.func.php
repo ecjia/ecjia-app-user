@@ -695,7 +695,7 @@ function EM_user_info($user_id) {
 	$db_user_rank = RC_Model::model('user/user_rank_model');
 	$db_orderinfo_view = RC_Model::model('orders/order_info_viewmodel');
 	
-	RC_Loader::load_app_func('order', 'orders');
+	RC_Loader::load_app_func('admin_order', 'orders');
 	$user_info = user_info($user_id);
 	$collection_num = $db_collect_goods->where(array('user_id' => $user_id))->order(array('add_time' => 'desc'))->count();
 	$await_pay = $db_orderinfo_view->join(array('order_info'))->where(array('oi.user_id' => $user_id, EM_order_query_sql('await_pay', 'oi.')))->count('*');

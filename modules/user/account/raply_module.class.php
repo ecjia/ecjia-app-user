@@ -20,7 +20,7 @@ class raply_module extends api_front implements api_interface {
  		}
  		$user_id = $_SESSION['user_id'];
  		
- 		RC_Loader::load_app_func('order', 'orders');
+ 		RC_Loader::load_app_func('admin_order', 'orders');
  		/* 变量初始化 */
  		$surplus = array(
  				'user_id'      => $user_id,

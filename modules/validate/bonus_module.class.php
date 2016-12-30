@@ -9,8 +9,8 @@ class bonus_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {
     		
     	$this->authSession();	
- 		RC_Loader::load_app_func('order','orders');
- 		RC_Loader::load_app_func('cart','cart');
+ 		RC_Loader::load_app_func('admin_order', 'orders');
+ 		RC_Loader::load_app_func('cart', 'cart');
  		$bonus_sn = $this->requestData('bonus_sn');
  		
  		if (empty($_SESSION['user_id'])) {

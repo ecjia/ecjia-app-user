@@ -191,7 +191,7 @@ class admin_account extends ecjia_admin {
 			/* 取支付方式信息 */
 			$payment_info = array();
 			$payment_info = RC_DB::table('payment')->where('pay_name', $payment)->where('enabled', 1)->first();
-			RC_Loader::load_app_func('order', 'orders');
+			RC_Loader::load_app_func('admin_order', 'orders');
 			/* 计算支付手续费用 */
 			$pay_fee	= pay_fee($payment_info['pay_id'], $amount, 0);
 			$total_fee	= $pay_fee + $amount;

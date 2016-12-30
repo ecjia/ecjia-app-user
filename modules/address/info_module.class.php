@@ -21,7 +21,7 @@ class info_module extends api_front implements api_interface {
 			return new ecjia_error( 'invalid_parameter', RC_Lang::get ('system::system.invalid_parameter' ));
 		}
 		
-		RC_Loader::load_app_func('order', 'orders');
+		RC_Loader::load_app_func('admin_order', 'orders');
 
 		$db_user_address = RC_Model::model('user/user_address_model');
 		$db_region = RC_Model::model('shipping/region_model');

@@ -26,7 +26,7 @@ class deposit_module extends api_front implements api_interface {
  		    return new ecjia_error(100, 'Invalid session' );
  		}
  		
- 		RC_Loader::load_app_func('order', 'orders');
+ 		RC_Loader::load_app_func('admin_order', 'orders');
  		
  		/* 变量初始化 */
  		$surplus = array(
@@ -67,13 +67,13 @@ class deposit_module extends api_front implements api_interface {
 //  		$payment_config = $payment_method->unserialize_config($payment_info['pay_config']);
  		
 //  		//生成伪订单号, 不足的时候补0
-//  		RC_Loader::load_app_func('order', 'orders');
+//  		RC_Loader::load_app_func('admin_order', 'orders');
 //  		$order = array();
 //  		$order['order_sn']       = get_order_sn();
 //  		$order['user_name']      = $_SESSION['user_name'];
 //  		$order['surplus_amount'] = $amount;
  		
-//  		RC_Loader::load_app_func('order', 'orders');
+//  		RC_Loader::load_app_func('admin_order', 'orders');
 //  		//计算支付手续费用
 //  		$payment_info['pay_fee'] = pay_fee($surplus['payment_id'], $order['surplus_amount'], 0);
  		
