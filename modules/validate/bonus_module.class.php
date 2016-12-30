@@ -18,7 +18,7 @@ class bonus_module extends api_front implements api_interface {
  		}
  		
 		if (is_numeric($bonus_sn)) {
-			RC_Loader::load_app_func('bonus','bonus');
+			RC_Loader::load_app_func('admin_bonus', 'bonus');
 			$bonus = bonus_info(0, $bonus_sn);
 		} else {
 			$bonus = array();
