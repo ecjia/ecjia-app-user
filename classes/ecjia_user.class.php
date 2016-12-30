@@ -183,7 +183,7 @@ abstract class ecjia_user extends ecjia {
 // 					header("Location: index.php?m=user&a=login");die;
 // 					$action = 'login';
 
-					$this->redirect('index.php?m=user&c=passport&a=signin');
+					return $this->redirect('index.php?m=user&c=passport&a=signin');
 				} else {
 					//未登录提交数据。非正常途径提交数据！
 					die($_LANG['require_login']);
