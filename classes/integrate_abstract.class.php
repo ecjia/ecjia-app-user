@@ -152,7 +152,6 @@ abstract class integrate_abstract
     {
     	/* 将用户添加到整合方 */
         if ($this->check_user($username) > 0) {
-//          	$this->error = ERR_USERNAME_EXISTS;
             $this->error = new ecjia_error('ERR_USERNAME_EXISTS', RC_Lang::get('user::users.username_exists'));
             return false;
         }
@@ -160,7 +159,6 @@ abstract class integrate_abstract
         /* 检查email是否重复 */
         $query = $this->db->field($this->field_id)->find(array($this->field_email => $email));
         if ($query[$this->field_id] > 0) {
-//             $this->error = ERR_EMAIL_EXISTS;
             $this->error = new ecjia_error('ERR_EMAIL_EXISTS', RC_Lang::get('user::users.email_exists'));
             return false;
         }
@@ -211,7 +209,6 @@ abstract class integrate_abstract
      */
     public function edit_user($cfg)
     {
-//     	$db = RC_Loader::load_app_model('users_model','user');
         if (empty($cfg['username'])) {
             return false;
         } else {
@@ -223,7 +220,6 @@ abstract class integrate_abstract
             $cfg['md5password'] = md5($cfg['password']);
         }
         if ((!empty($cfg['md5password'])) && $this->field_pass != 'NULL') {
-//             $values[] = $this->field_pass . "='" . $this->compile_password(array('md5password' => $cfg['md5password'])) . "'";
             $values[$this->field_pass] = $this->compile_password(array('md5password' => $cfg['md5password']));
         }
 
@@ -281,12 +277,10 @@ abstract class integrate_abstract
         $db_order_info      = RC_Model::model('orders/order_info_model');
         $db_order_goods     = RC_Model::model('orders/order_goods_model');
         $db_collect_goods   = RC_Model::model('goods/collect_goods_model');
-//         $db_feedback        = RC_Model::model('feedback/feedback_model');
         $db_user_address    = RC_Model::model('user/user_address_model');
         $db_user_bonus      = RC_Model::model('bonus/user_bonus_model');
         $db_user_account    = RC_Model::model('user/user_account_model');
         
-//         $db_tag             = RC_Model::model('goods/tag_model');
         $db_account_log     = RC_Model::model('user/account_log_model');
         
 
@@ -571,7 +565,6 @@ abstract class integrate_abstract
      */
     public function sync ($username, $password='', $md5password='')
     {
-//     	$db = RC_Loader::load_app_model('users_model','user');
     	
         if ((!empty($password)) && empty($md5password)) {
             $md5password = md5($password);
@@ -582,12 +575,6 @@ abstract class integrate_abstract
         if (empty($main_profile)) {
             return false;
         }
-
-//         $sql = "SELECT user_name, email, password, sex, birthday".
-//                " FROM " . $GLOBALS['ecs']->table('users').
-//                " WHERE user_name = '$username'";
-
-//         $profile = $GLOBALS['db']->getRow($sql);
 
         $profile = $this->db->field('user_name, email, password, sex, birthday')->find(array('user_name' => $username));
         if (empty($profile)) {

@@ -44,9 +44,6 @@ class user_account_change_log_api extends Component_Event_Api {
      * @return void
      */
     private function log_account_change($user_id, $user_money = 0, $frozen_money = 0, $rank_points = 0, $pay_points = 0, $change_desc = '', $change_type = ACT_OTHER) {
-        // 链接数据库
-//         $db_account_log = RC_Model::model('user/account_log_model');
-//         $db_users 		= RC_Model::model('user/users_model');
 
         /* 插入帐户变动记录 */
         $account_log = array (
@@ -59,23 +56,15 @@ class user_account_change_log_api extends Component_Event_Api {
             'change_desc'	=> $change_desc,
             'change_type'	=> $change_type
         );
-//         $db_account_log->insert($account_log);
         RC_DB::table('account_log')->insert($account_log);
     
         /* 更新用户信息 */
         // 	TODO: 暂时先恢复之前的写法
     
-        // 	$sql = "UPDATE  ecs_users  SET user_money = user_money + ('$user_money')," .
-        // 	" frozen_money = frozen_money + ('$frozen_money')," .
-        // 	" rank_points = rank_points + ('$rank_points')," .
-        // 	" pay_points = pay_points + ('$pay_points')" .
-        // 	" WHERE user_id = '$user_id' LIMIT 1";
-        // 	$db_users->query($sql);
         $step = $user_money.", frozen_money = frozen_money + ('$frozen_money')," .
         " rank_points = rank_points + ('$rank_points')," .
         " pay_points = pay_points + ('$pay_points')";
     
-//         $db_users->inc('user_money' , 'user_id='.$user_id , $step);
         RC_DB::table('users')->where('user_id', $user_id)->increment('user_money', $step);
     }
 }

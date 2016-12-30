@@ -13,33 +13,27 @@ defined('IN_ECJIA') or exit('No permission resources.');
  * @return void
  */
 function get_user_list($args = array()) {
-//	$db_user = RC_Model::model('user/users_model');
 
 	$db_user = RC_DB::table('users');
 	$filter['keywords']		= empty($args['keywords'])		? ''		: trim($args['keywords']);
 	$filter['rank']			= empty($args['rank'])			? 0			: intval($args['rank']);
 	$filter['sort_by']		= empty($args['sort_by'])		? 'user_id' : trim($args['sort_by']);
 	$filter['sort_order']	= empty($args['sort_order'])	? 'DESC'	: trim($args['sort_order']);
-// 	$where = ' 1 ';
+	
 	if ($filter['keywords']) {
-// 		$where .= " AND user_name LIKE '%" . mysql_like_quote($filter['keywords']) ."%' or email like '%".$filter['keywords'] ."%'";
-		
 		$db_user->whereRaw("(user_name LIKE '%" . mysql_like_quote($filter['keywords']) ."%' or email like '%".$filter['keywords'] ."%'or mobile_phone like '%".$filter['keywords'] ."%')");
 	}
 	if ($filter['rank']) {
 		$db_user->where('user_rank', $filter['rank']); 
 	}
 
-//	$count = $db_user->where($where)->count();
 	$count = $db_user->count();
 
 	if ($count != 0) {
 		/* 实例化分页 */
 		$page = new ecjia_page($count, 15, 6);
 		/* 查询所有用户信息*/
-//		$data = $db_user->field('user_id, user_name, email, is_validated, user_money, frozen_money, rank_points, pay_points, reg_time')->where($where)->order(array($filter['sort_by'] => $filter['sort_order']))->limit($page->limit())->select();
 		$data = $db_user
-// 				->whereRaw($where)
 				->orderBy($filter['sort_by'],  $filter['sort_order'])
 				->select('user_id', 'user_name', 'email', 'is_validated', 'user_money', 'frozen_money', 'rank_points', 'pay_points', 'reg_time', 'mobile_phone')
 				->take(15)
@@ -69,7 +63,6 @@ function get_payment($cod_fee = 0) {
  * @param unknown $args
  */
 function get_account_list($args = array()) {
-// 	$dbview = RC_Model::model('user/user_account_user_viewmodel');
 
 	$payment_method = RC_Loader::load_app_class('payment_method', 'payment');
 	
@@ -85,18 +78,14 @@ function get_account_list($args = array()) {
 	$filter['sort_order']	= empty($_REQUEST['sort_order'])	? 'DESC' : trim($_REQUEST['sort_order']);
 	$db_user_account = RC_DB::table('user_account as ua')->leftJoin('users as u', RC_DB::raw('ua.user_id'), '=', RC_DB::raw('u.user_id'));
 	
-// 	$where = array();
 	if ($filter['user_id'] > 0) {
-// 		$where['ua.user_id'] = $filter['user_id'];
 		$db_user_account->where(RC_DB::raw('ua.user_id'), $filter['user_id']);
 	}
 	if ($filter['process_type'] != -1) {
-// 		$where['ua.process_type'] = $filter['process_type'];
 		$db_user_account->where(RC_DB::raw('process_type'), $filter['process_type']);
 	} 
 	if ($filter['payment']) {
 		$payment = $payment_method->payment_info_by_name($filter['payment']);
-// 		$where['ua.payment'] = array();
 
 		if (!empty($payment) && is_array($payment)) {
 			foreach ($payment as $key => $value) {
@@ -106,12 +95,10 @@ function get_account_list($args = array()) {
 		}
 	}
 	if ($filter['is_paid'] != -1) {
-// 		$where['ua.is_paid'] = $filter['is_paid'];
 		$db_user_account->where(RC_DB::raw('is_paid'), $filter['is_paid']);
 	}
 
 	if ($filter['keywords']) {
-// 		$where['u.user_name'] = array('like' => '%'.mysql_like_quote($filter['keywords']).'%');
 		$db_user_account->where(RC_DB::raw('u.user_name'), 'like', '%'.mysql_like_quote($filter['keywords']).'%');
 	}
 	
@@ -120,23 +107,19 @@ function get_account_list($args = array()) {
 	$end_date = RC_Time::local_strtotime($args['end_date']) + 86400;
 	
 	if (!empty($args['start_date']) && !empty($args['end_date'])) {
-// 		$where['add_time'] = array('egt' => $start_date, 'elt' => $end_date);
 		
 		$db_user_account->where('add_time', '>=', $start_date)
 			->where('add_time', '<=', $end_date);
 	} else {
 		if (!empty($args['start_date'])) {
-// 			$where['add_time'] = array('egt' => $start_date);
 			
 			$db_user_account->where('add_time', '>=', $start_date);
 		} elseif (!empty($args['end_date'])) {
-// 			$where['add_time'] = array('elt' => $end_date);
 			
 			$db_user_account->where('add_time', '<=', $end_date);
 		}
 	}
 	
-//	$count = $dbview->join('users')->where($where)->count();
 	$count = $db_user_account->count();
 
 	/* 实例化分页 */
@@ -153,7 +136,6 @@ function get_account_list($args = array()) {
 			}
 		}
 
-//		$list = $dbview->join('users')->where($where)->order(array($filter['sort_by'] => $filter['sort_order']))->limit($page->limit())->select();
 		$list = $db_user_account->orderBy($filter['sort_by'], $filter['sort_order'])->take(15)->skip($page->start_id-1)->select(RC_DB::raw('ua.*'), RC_DB::raw('u.user_name'))->get();
 
 		if (!empty($list)) {
@@ -216,7 +198,6 @@ function update_user_account($id, $amount, $admin_note, $is_paid) {
 		'admin_note'	=> $admin_note,
 		'is_paid'		=> $is_paid,
 	);
-// 	return RC_Model::model('user/user_account_model')->where(array('id' => $id))->update($data);
 	return RC_DB::table('user_account')->where('id', $id)->update($data);
 }
 
@@ -229,9 +210,7 @@ function update_user_account($id, $amount, $admin_note, $is_paid) {
  * @return  boolen
  */
 function del_user_account($rec_id, $user_id) {
-//	$db = RC_Model::model('user/user_account_model');
 
-//	return $db->where(array('is_paid' => 0, 'id' => $rec_id, 'user_id' => $user_id))->delete();
 	return RC_DB::table('user_account')->where('is_paid', 0)
 			->where('id', $rec_id)
 			->where('user_id', $user_id)
@@ -245,8 +224,6 @@ function del_user_account($rec_id, $user_id) {
  * @return  int
  */
 function get_user_surplus($user_id) {
-//	$db_account_log = RC_Model::model('user/account_log_model');
-//	return $db_account_log->where(array('user_id' => $user_id))->sum('user_money');
 	return RC_DB::table('account_log')->where('user_id', $user_id)->sum('user_money');
 }
 
@@ -295,20 +272,13 @@ function get_account_log($user_id, $num, $start, $process_type = '') {
 			}
 
 			/* 支付方式的ID */
-// 			$where = array();
-// 			$where['enabled'] = 1;
 			$db_payment->where('enabled', 1);
 			
 			if (substr($rows['payment'], 0 , 4) == 'pay_') {
-// 				$where['pay_code'] = $rows['payment'];
-				
 				$db_payment->where('pay_code', $rows['payment']);
 			} else {
-// 				$where['pay_name'] = $rows['payment'];
-				
 				$db_payment->where('pay_name', $rows['payment']);
 			}
-// 			$payment = $payment_db->find($where);
 			$payment = $db_payment->first();
 			
 			
@@ -343,7 +313,6 @@ function get_account_log_list($user_id, $account_type = '') {
 	}
 
 	/* 查询记录总数，计算分页数 */
-// 	$count = $db_account_log->where($where)->count();
 	$count = RC_DB::table('account_log')->where('user_id', $user_id)->count();
 	
 	if ($count != 0) {
@@ -351,7 +320,6 @@ function get_account_log_list($user_id, $account_type = '') {
 		$page = new ecjia_page($count, 15, 6);
 		
 		/* 查询记录 */
-// 		$res = $db_account_log->where($where)->order(array('log_id' => 'DESC'))->limit($page->limit())->select();
 		$res = RC_DB::table('account_log')->where('user_id', $user_id)->orderBy('log_id', 'DESC')->take(15)->skip($page->start_id-1)->get();
 		
 		$arr = array();
@@ -371,18 +339,7 @@ function get_account_log_list($user_id, $account_type = '') {
  * @return	array
  */
 function get_total_amount ($start_date, $end_date, $type = 0) {
-// 	$dbview = RC_Model::model('user/user_account_user_viewmodel');
-// 	$dbview->view =array(
-// 		'users' => array(
-// 			'type'		=> Component_Model_View::TYPE_LEFT_JOIN,
-// 			'alias'		=> 'u',
-// 			'field'		=> 'IFNULL(SUM(amount), 0) |total_amount',
-// 			'on'		=> 'ua.user_id = u.user_id'
-// 		)
-// 	);
 	$end_date += 86400;
-// 	$data = $dbview->find(array('process_type' => $type, 'is_paid' => 1, 'paid_time' => array('egt' => $start_date, 'lt' => $end_date)));
-
 	$data = RC_DB::table('user_account AS ua')
 		->leftJoin('users as u', RC_DB::raw('ua.user_id'), '=', RC_DB::raw('u.user_id'))
 		->select(RC_DB::raw('IFNULL(SUM(amount), 0) as total_amount'))
@@ -427,7 +384,6 @@ function get_user_order($args = array()) {
 		$where .= " AND add_time <= " . (RC_Time::local_strtotime($args['end_date']) +  86400 );
 	}
 
-// 	$count = $dbview->join('users')->where($where)->count();
 	$count = RC_DB::table('order_info as o')
 		->leftJoin('users as u', RC_DB::raw('o.user_id'), '=', RC_DB::raw('u.user_id'))
 		->selectRaw('o.order_sn, o.is_separate, (o.goods_amount - o.discount) AS goods_amount, o.user_id')
@@ -437,16 +393,6 @@ function get_user_order($args = array()) {
 	if ($count != 0) {
 		/* 实例化分页 */
 		$page = new ecjia_page($count, 15, 6);
-		
-// 		$dbview->view = array(
-// 			'users' => array(
-// 				'type'	=> Component_Model_View::TYPE_LEFT_JOIN,
-// 				'alias'	=> 'u',
-// 				'field'	=> 'o.order_id, o.order_sn, u.user_name, o.surplus, o.integral_money, o.add_time',
-// 				'on'	=> 'o.user_id = u.user_id'
-// 			)
-// 		);
-// 		$data = $dbview->where($where)->order(array($filter['sort_by'] => $filter['sort_order']))->limit($page->limit())->select();
 		
 		$data = RC_DB::table('order_info as o')
 			->leftJoin('users as u', RC_DB::raw('o.user_id'), '=', RC_DB::raw('u.user_id'))
@@ -473,7 +419,6 @@ function get_user_order($args = array()) {
  * @return  array   用户信息
  */
 function get_user_info($user_id) {
-//	$user = $db_users->find(array('user_id' => $user_id));
 	$user = RC_DB::table('users')->where('user_id', $user_id)->first();
 
 	unset($user['question']);
@@ -493,16 +438,13 @@ function get_user_info($user_id) {
  * @return  array     rank_id=>rank_name
  */
 function get_user_rank_list($is_special = false) {
-//	$db = RC_Model::model('user/user_rank_model');
 	$db_user_rank = RC_DB::table('user_rank');
 	
 	$rank_list = array();
 	if ($is_special) {
-//		$where['special_rank'] = 1;
 		$db_user_rank->where('special_rank', 1);
 	} 
 
-//	$data = $db->field('rank_id, rank_name')->where($where)->order(array('min_points' => 'asc'))->select();
 	$data = $db_user_rank->select('rank_id', 'rank_name')->orderBy('min_points', 'asc')->get();
 	
 	if (!empty($data)) {
@@ -534,8 +476,6 @@ function get_user_rank_list($is_special = false) {
  */
 function change_account_log($user_id, $user_money = 0, $frozen_money = 0, $rank_points = 0, $pay_points = 0, $change_desc = '', $change_type = ACT_OTHER) {
 	// 链接数据库
-// 	$db_account_log = RC_Model::model('user/account_log_model');
-// 	$db_users = RC_Model::model('user/users_model');
 	/* 插入帐户变动记录 */
 	$account_log = array (
 		'user_id'		=> $user_id,
@@ -548,7 +488,6 @@ function change_account_log($user_id, $user_money = 0, $frozen_money = 0, $rank_
 		'change_type'	=> $change_type
 	);
 
-//	$db_account_log->insert ( $account_log );
 	RC_DB::table('account_log')->insertGetId($account_log);
 
 	/* 更新用户信息 */
@@ -556,7 +495,6 @@ function change_account_log($user_id, $user_money = 0, $frozen_money = 0, $rank_
 	" rank_points = rank_points + ('$rank_points')," .
 	" pay_points = pay_points + ('$pay_points')";
 
-//	$db_users->inc('user_money' , 'user_id='.$user_id , $step);
 	RC_DB::table('users')
 			->where('user_id', $user_id)
 			->increment('user_money', $step);
@@ -659,9 +597,6 @@ function update_user_info() {
  * @return  bool
  */
 function update_address($address) {
-//	$db_user = RC_Model::model('users_model', 'user');
-// 	$db_user_address = RC_Model::model('user/user_address_model');
-
 	$db_user = RC_DB::table('users');
 	$db_user_address = RC_DB::table('user_address');
 
@@ -671,19 +606,16 @@ function update_address($address) {
 	if ($address_id > 0) {
 		$address['district'] = empty($address['district']) ? '' : $address['district'];
 		/* 更新指定记录 */
-//		$db_user_address->where(array('address_id' => $address_id, 'user_id' => $address['user_id']))->update($address);
 		$db_user_address
 			->where('address_id', $address_id)
 			->where('user_id', $address['user_id'])
 			->update($address);
 	} else {
 		/* 插入一条新记录 */
-//		$address_id = $db_user_address->insert($address);
 		$address_id = $db_user_address->insertGetId($address);
 	}
 
 	if (isset($address['default']) && $address['default'] > 0 && isset($address['user_id'])) {
-//		$db_user->where(array('user_id' => $address['user_id']))->update(array('address_id' => $address_id));
 		$db_user->where('user_id', $address['user_id'])->update(array('address_id', $address_id));
 	}
 

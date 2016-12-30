@@ -28,7 +28,6 @@ class setDefault_module extends api_front implements api_interface {
 		}
 		
 		/* 保存到session */
-// 		$_SESSION['flow_consignee'] = rc_addslashes($arr);
 		$db_users->where(array('user_id' => $user_id))->update(array('address_id' => $address_id));
 		return array();
 	}

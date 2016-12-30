@@ -25,7 +25,6 @@ class user_user_bonus_list_api extends Component_Event_Api {
     		$where['ub.order_id'] = array('gt' => 0);
     	}
     	
-//     	$where['shop_close'] = 0;
     	
     	$count = $db->join(array('bonus_type', 'store_franchisee'))->where($where)->count();
     	$page_row = new ecjia_page($count, $options['size'], 6, '', $options['page']);

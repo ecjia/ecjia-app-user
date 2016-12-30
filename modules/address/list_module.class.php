@@ -28,7 +28,6 @@ class list_module extends api_front implements api_interface {
 		
 		$field = 'ua.*, IFNULL(u.address_id, 0) as is_default_address';
 		$consignee_list = $dbview_user_address->field($field)->where(array('ua.user_id' => $user_id))->order(array('is_default_address' => 'desc', 'address_id' => 'desc'))->limit($page_row->limit())->select();
-// 		$consignee_list = $db_user_address->where(array('user_id' => $user_id))->order(array('address_id' => 'desc'))->limit(5)->select();
 	
 		$result = array();
 		if (!empty($consignee_list)) {
