@@ -18,7 +18,7 @@ class create_module extends api_front implements api_interface {
 			return new ecjia_error(101, '参数错误');
 		}
 		
-		RC_Loader::load_app_func('goods', 'goods');
+		RC_Loader::load_app_func('admin_goods', 'goods');
 		$goods = get_goods_info($goods_id);
 
 		if (!$goods) {

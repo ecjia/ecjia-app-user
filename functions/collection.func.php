@@ -40,7 +40,7 @@ function EM_get_collection_goods($user_id, $num = 10, $start = 1, $rec_id = 0) {
     if (!empty($res)) {
         foreach ($res as $row) {
             if ($row['promote_price'] > 0) {
-                RC_Loader::load_app_func('goods','goods');
+                RC_Loader::load_app_func('admin_goods', 'goods');
                 $promote_price = bargain_price($row['promote_price'], $row['promote_start_date'], $row['promote_end_date']);
             } else {
                 $promote_price = 0;

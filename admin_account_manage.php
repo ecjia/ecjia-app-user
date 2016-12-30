@@ -11,7 +11,7 @@ class admin_account_manage extends ecjia_admin {
 		parent::__construct();
 		
 		RC_Loader::load_app_func('user');
-		RC_Loader::load_app_func('common', 'goods');
+		RC_Loader::load_app_func('global', 'goods');
 		
 		$this->db_account_log	= RC_Model::model('user/account_log_model');
 		

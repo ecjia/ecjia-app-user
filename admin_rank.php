@@ -12,7 +12,7 @@ class admin_rank extends ecjia_admin {
 		parent::__construct();
 
 		RC_Loader::load_app_func('user');
-		RC_Loader::load_app_func('common', 'goods');
+		RC_Loader::load_app_func('global', 'goods');
 		$this->db_user		= RC_Model::model('user/users_model');
 		$this->db_user_rank	= RC_Model::model('user/user_rank_model');
 		

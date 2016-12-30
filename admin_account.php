@@ -17,7 +17,7 @@ class admin_account extends ecjia_admin {
 
 		RC_Lang::load('user_account');
 		RC_Loader::load_app_func('user');
-		RC_Loader::load_app_func('common','goods');
+		RC_Loader::load_app_func('global', 'goods');
 		RC_Loader::load_app_func('global');
 		assign_adminlog();
 		
