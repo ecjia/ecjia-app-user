@@ -19,7 +19,7 @@ class list_module extends api_front implements api_interface {
         $user_id = $_SESSION['user_id'];
 		$rec_id = $this->requestData('rec_id', 0);
 		
-		RC_Loader::load_app_func('collection', 'user');
+		RC_Loader::load_app_func('user', 'user');
 		RC_Loader::load_app_func('global', 'api');
 		$db_collect_goods = RC_Model::model('goods/collect_goods_model');
 		
