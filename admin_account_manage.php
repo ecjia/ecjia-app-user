@@ -73,7 +73,6 @@ class admin_account_manage extends ecjia_admin {
 		$account['voucher_amount'] = get_total_amount($start_date, $end_date);		//	充值总额
 		$account['to_cash_amount'] = get_total_amount($start_date, $end_date, 1);	//	提现总额
 		
-//		$money_list = $this->db_account_log->field('IFNULL(SUM(user_money), 0)|user_money, IFNULL(SUM(frozen_money), 0)|frozen_money')->find(array('change_time' => array('egt' => $start_date , 'lt' => $end_date + 86400)));
 		$db_account_log = RC_DB::table('account_log');
 		$money_list = $db_account_log->select(RC_DB::raw('IFNULL(SUM(user_money), 0) AS user_money, IFNULL(SUM(frozen_money), 0) AS frozen_money'))
 				->where('change_time', '>=', $start_date)
@@ -83,7 +82,6 @@ class admin_account_manage extends ecjia_admin {
 		$account['user_money']		= price_format($money_list['user_money']);	//	用户可用余额
 		$account['frozen_money']	= price_format($money_list['frozen_money']);	//	用户冻结金额		
 		
-//		$money = $this->db_order_info->field('IFNULL(SUM(surplus), 0)|surplus, IFNULL(SUM(integral_money), 0)|integral_money')->find(array('add_time' => array('egt' => $start_date , 'lt' => $end_date + 86400)));
 		$db_order_info = RC_DB::table('order_info');
 		$money = $db_order_info->select(RC_DB::raw('IFNULL(SUM(surplus), 0) AS surplus, IFNULL(SUM(integral_money), 0) AS integral_money'))
 				->where('add_time', '>=', $start_date)

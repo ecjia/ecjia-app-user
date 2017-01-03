@@ -65,7 +65,6 @@ class goods_viewmodel extends Component_Model_View {
 				'collect_goods' => array(
 						'type' 	=> Component_Model_View::TYPE_LEFT_JOIN,  
 						'alias'	=> 'cg',
-// 				        'field' => "g.goods_id, g.goods_name, g.market_price, g.goods_thumb, IF(g.is_promote = 1 AND ".RC_Time::gmtime()." >= g.promote_start_date AND ".RC_Time::gmtime()." <= g.promote_end_date, g.promote_price, g.shop_price) AS goods_price",
 						'on' 	=> 'g.goods_id = cg.goods_id', 
 				),
 				'cart' => array(

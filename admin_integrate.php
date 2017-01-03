@@ -131,7 +131,6 @@ class admin_integrate extends ecjia_admin {
 				'flag' => 0,
 				'alias' => ''
 			);
-// 			$this->db_user->where(array('flag' => array('gt' > 0)))->update($data);
 			RC_DB::table('users')->where('flag', '>', 0)->update($data);
 			
 			ecjia_config::instance()->write_config('integrate_code', $code);
