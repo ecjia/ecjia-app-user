@@ -232,7 +232,7 @@ class integrate  {
                 $result = RC_Api::api('user', 'account_change_log', $options);
             }
             
-            RC_Loader::load_app_func('user', 'user');
+            RC_Loader::load_app_func('admin_user', 'user');
             update_user_info(); // 更新用户信息
             RC_Loader::load_app_func('cart', 'cart');
             recalculate_price(); // 重新计算购物车中的商品价格
@@ -270,7 +270,7 @@ class integrate  {
             return new ecjia_error('login_failure', '登录失败');
         }
 	 
-        RC_Loader::load_app_func('user', 'user');
+        RC_Loader::load_app_func('admin_user', 'user');
         update_user_info(); // 更新用户信息
         RC_Loader::load_app_func('cart', 'cart');
         recalculate_price(); // 重新计算购物车中的商品价格

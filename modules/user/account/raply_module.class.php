@@ -32,7 +32,7 @@ class raply_module extends api_front implements api_interface {
  				'amount'       => $amount
  		);
  		
- 		RC_Loader::load_app_func('user', 'user');
+ 		RC_Loader::load_app_func('admin_user', 'user');
  		/* 判断是否有足够的余额的进行退款的操作 */
  		$sur_amount = get_user_surplus($user_id);
  		if ($amount > $sur_amount) {

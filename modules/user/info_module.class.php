@@ -14,7 +14,7 @@ class info_module extends api_front implements api_interface {
     		return new ecjia_error(100, 'Invalid session');
     	}
     	
-		RC_Loader::load_app_func('user', 'user');
+		RC_Loader::load_app_func('admin_user', 'user');
 		$user_info = EM_user_info($_SESSION['user_id']);
 		
 		return $user_info;

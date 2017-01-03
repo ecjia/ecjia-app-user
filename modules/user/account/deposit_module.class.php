@@ -58,7 +58,7 @@ class deposit_module extends api_front implements api_interface {
  			//更新会员账目明细
  			$surplus['account_id'] = em_update_user_account($surplus);
  		} else {
- 			RC_Loader::load_app_func('user', 'user');
+ 			RC_Loader::load_app_func('admin_user', 'user');
  			//插入会员账目明细
  			$surplus['account_id'] = insert_user_account($surplus, $amount);
  		}

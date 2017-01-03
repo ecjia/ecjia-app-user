@@ -9,7 +9,7 @@ class admin_account_log extends ecjia_admin {
 	public function __construct() {
 		parent::__construct();
 		
-		RC_Loader::load_app_func('user');
+		RC_Loader::load_app_func('admin_user');
 		RC_Loader::load_app_func('global');
 		assign_adminlog();
 		

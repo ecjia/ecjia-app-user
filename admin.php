@@ -18,7 +18,7 @@ class admin extends ecjia_admin {
 	public function __construct() {
 		parent::__construct();
 
-		RC_Loader::load_app_func('user');
+		RC_Loader::load_app_func('admin_user');
 		RC_Loader::load_app_func('global', 'goods');
 
 		$this->db_user				= RC_Model::model('user/users_model');

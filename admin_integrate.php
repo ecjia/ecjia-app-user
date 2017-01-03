@@ -9,7 +9,7 @@ class admin_integrate extends ecjia_admin {
 	
 	public function __construct() {
 		parent::__construct();
-		RC_Loader::load_app_func('user');
+		RC_Loader::load_app_func('admin_user');
 		
 		$this->integrate = RC_Loader::load_app_class('integrate', 'user');
 		$this->db_user = RC_Model::model('user/users_model');

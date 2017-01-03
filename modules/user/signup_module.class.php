@@ -108,7 +108,7 @@ class signup_module extends api_front implements api_interface
  				RC_Api::api('affiliate', 'invite_bind', array('invite_code' => $invite_code, 'mobile' => $mobile));
  			}
  			
- 			RC_Loader::load_app_func('user', 'user');
+ 			RC_Loader::load_app_func('admin_user', 'user');
 			$user_info = EM_user_info($_SESSION['user_id']);
 			
 			$out = array(
@@ -262,7 +262,7 @@ function register($username, $password, $email, $other = array())
 
         $db_user->where(array('user_id' => $_SESSION['user_id']))->update($update_data);
         
-        RC_Loader::load_app_func('user', 'user');
+        RC_Loader::load_app_func('admin_user', 'user');
         update_user_info(); // 更新用户信息
         RC_Loader::load_app_func('cart','cart');
         recalculate_price(); // 重新计算购物车中的商品价格

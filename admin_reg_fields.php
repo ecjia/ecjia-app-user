@@ -11,7 +11,7 @@ class admin_reg_fields extends ecjia_admin {
 	public function __construct() {
 		parent::__construct();
 		
-		RC_Loader::load_app_func('user');
+		RC_Loader::load_app_func('admin_user');
 		RC_Loader::load_app_func('global', 'goods');
 		$this->db_reg_fields		= RC_Model::model('user/reg_fields_model');
 		$this->db_reg_extend_info	= RC_Model::model('user/reg_extend_info_model');

@@ -17,7 +17,7 @@ class cancel_module extends api_front implements api_interface {
  			return new ecjia_error( 'invalid_parameter', RC_Lang::get ('system::system.invalid_parameter' ));
  		}
  		
- 		RC_Loader::load_app_func('user', 'user');
+ 		RC_Loader::load_app_func('admin_user', 'user');
  		$result = del_user_account($id, $user_id);
  		if ($result) {
  			return array();

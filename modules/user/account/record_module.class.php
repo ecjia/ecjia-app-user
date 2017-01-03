@@ -41,7 +41,7 @@ class record_module extends api_front implements api_interface {
 		//实例化分页
 		$page_row = new ecjia_page($record_count, $size, 6, '', $page);
  		
- 		RC_Loader::load_app_func('user' ,'user');
+ 		RC_Loader::load_app_func('admin_user' ,'user');
 
  		//获取余额记录
  		$account_log = get_account_log($user_id, $size, $page_row, $process_type);

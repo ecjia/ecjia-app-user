@@ -6,7 +6,7 @@ class signin_module extends api_front implements api_interface {
     	
 	    RC_Loader::load_app_class('integrate', 'user', false);
 	    $user = integrate::init_users();
-		RC_Loader::load_app_func('user','user');
+		RC_Loader::load_app_func('admin_user','user');
 		RC_Loader::load_app_func('cart','cart');
 		$name = $this->requestData('name');
 		$password = $this->requestData('password');
