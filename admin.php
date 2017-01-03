@@ -79,7 +79,6 @@ class admin extends ecjia_admin {
 		$this->assign('action_link',	array('text' => RC_Lang::get('system::system.04_users_add'), 'href' => RC_Uri::url('user/admin/add')));
 		
 
-//		$ranks = $this->db_user_rank->field('rank_id,rank_name,min_points')->order(array('min_points' => 'asc'))->select();
 		$ranks = RC_DB::table('user_rank')->select('rank_id', 'rank_name', 'min_points')->orderBy('min_points', 'asc')->get();
 		$user_list = get_user_list($_REQUEST);
 
@@ -121,7 +120,6 @@ class admin extends ecjia_admin {
 		$this->assign('action_link', array('text' => RC_Lang::get('user::users.user_list'), 'href' => RC_Uri::url('user/admin/init')));
 		
 		/* 取出注册扩展字段 */
-//		$extend_info_list = $this->db_reg_fields->where(array('type' => array('lt' => 2), 'display' => 1, 'id' => array('neq' => 6)))->order(array('dis_order' => 'asc', 'id' => 'asc'))->select();
 		$extend_info_list = RC_DB::table('reg_fields')->where('type', '<', 2)->where('display', 1)->where('id', '!=', 6)
 				->orderBy('dis_order', 'asc')->orderBy('id', 'asc')->get();
 
@@ -217,7 +215,6 @@ class admin extends ecjia_admin {
 			RC_DB::table('users')->where('user_id', $user_info['user_id'])->update($other);
 
 			/*把新注册用户的扩展信息插入数据库*/
-// 			$fields_arr = $this->db_reg_fields->field('id')->where(array('type' => 0 , 'display' => 1))->order(array('dis_order' => 'asc', 'id' => 'asc'))->select();
 			$fields_arr = RC_DB::table('reg_fields')->where('type', 0)->where('display', 1)
 			->orderBy('dis_order', 'asc')->orderBy('id', 'asc')->select('id')->get();
 			
@@ -233,7 +230,6 @@ class admin extends ecjia_admin {
 								'reg_field_id'	=> $val['id'],
 								'content'		=> $temp_field_content
 						);
-						//					$this->db_reg_extend_info->insert($data);
 						RC_DB::table('reg_extend_info')->insert($data);
 					}
 				}
@@ -274,7 +270,6 @@ class admin extends ecjia_admin {
 		$this->assign('ur_here', 		RC_Lang::get('user::users.users_edit'));
 		$this->assign('action_link',	array('text' => RC_Lang::get('user::users.user_list'), 'href' => RC_Uri::url('user/admin/init')));
 		
-//		$row = $this->db_user->find(array('user_id' => $_GET['id']));
 		$row = RC_DB::table('users')->where('user_id', $_GET['id'])->first();
 
 		if ($row) {
@@ -299,7 +294,6 @@ class admin extends ecjia_admin {
 		} 
 
 		/* 取出注册扩展字段 */
-//		$extend_info_list	= $this->db_reg_fields->where(array('type' => array('lt' => 2), 'display' => 1 , 'id' => array('neq' => 6)))->order(array('dis_order' => 'asc', 'id' => 'asc'))->select();
 		$extend_info_list = RC_DB::table('reg_fields')
 				->where('type', '<', 2)
 				->where('display', 1)
@@ -307,7 +301,6 @@ class admin extends ecjia_admin {
 				->orderBy('dis_order', 'asc')
 				->orderBy('id', 'asc')
 				->get();
-//		$extend_info_arr	= $this->db_reg_extend_info->field('reg_field_id, content')->where(array('user_id' => $user['user_id']))->select();
 		$extend_info_arr = RC_DB::table('reg_extend_info')->where('user_id', $user['user_id'])->select('reg_field_id', 'content')->get();
 
 		$temp_arr = array();
@@ -344,7 +337,6 @@ class admin extends ecjia_admin {
 			for ($i = 1 ; $i <=$num ;$i++) {
 				$count = 0;
 				if ($up_uid) {
-//					$data = $this->db_user->field('user_id')->in(array('parent_id' => $up_uid))->select();
 					$up_uid = explode(',', $up_uid);
 					$data = RC_DB::table('users')->whereIn('parent_id', $up_uid)->select('user_id')->get();
 
@@ -427,7 +419,6 @@ class admin extends ecjia_admin {
 		}
 		
 		/* 更新用户扩展字段的数据 */
-//		$fields_arr = $this->db_reg_fields->field('id')->where(array('type' => 0, 'display' => 1))->order(array('dis_order' => 'asc', 'id' => 'asc'))->select();
 		$fields_arr = RC_DB::table('reg_fields')->where('type', 0)->where('display', 1)
 				->orderBy('dis_order', 'asc')->orderBy('id', 'asc')->get();
 
@@ -513,14 +504,12 @@ class admin extends ecjia_admin {
 		$keywords = !empty($_GET['keywords']) ? trim($_GET['keywords']) : '';
 
 		if (!empty($keywords)) {
-//			$row = $this->db_user->find("user_id = '$keywords' or user_name = '$keywords' or email = '$keywords'");
 			$row = RC_DB::table('users')->where('user_id', $keywords)
 					->orWhere('user_name', $keywords)
 					->orWhere('email', $keywords)
 					->first();
 
 		} else {
-//			$row = $this->db_user->find(array('user_id' => $id));
 			$row =RC_DB::table('users')->where('user_id', $id)->first();
 		}
 
@@ -529,7 +518,6 @@ class admin extends ecjia_admin {
 		}
 		
 		/* 获得用户等级名 */
-//		$user['user_rank'] = $this->db_user_rank->where(array('rank_id' => $row['user_rank']))->get_field('rank_name');
 		$user['user_rank'] = RC_DB::table('user_rank')->where('rank_id', $row['user_rank'])->pluck('rank_name');
 
 		if ($row) {
@@ -560,7 +548,6 @@ class admin extends ecjia_admin {
 			/* 用户地址列表*/
 			$field = array("ua.*,IF(address_id=".$row['address_id'].",1,0) as default_address,IFNULL(c.region_name, '') as country_name, IFNULL(p.region_name, '') as province_name,IFNULL(t.region_name, '') as city_name,IFNULL(d.region_name, '') as district_name");
 
-//			$address_list = $this->db_view->field($field)->where(array('user_id' => $row['user_id'] ))->order('default_address desc')->limit(5)->select();
 			$address_list = RC_DB::table('user_address as ua')
 					->leftJoin('region as c', RC_DB::raw('c.region_id'), '=', RC_DB::raw('ua.country'))
 					->leftJoin('region as p', RC_DB::raw('p.region_id'), '=', RC_DB::raw('ua.province'))
@@ -573,7 +560,6 @@ class admin extends ecjia_admin {
 					->get();
 
 //			/* 查找用户前5条订单 */
-//			$order = $this->db_order->where(array('user_id' => $row['user_id'] ))->order(array('add_time' => 'desc'))->limit(5)->select();
 			$order = RC_DB::table('order_info')->where('user_id', $row['user_id'])->orderBy('add_time', 'desc')->take(5)->get();
 
 			if (!empty($order)) {
@@ -697,13 +683,11 @@ class admin extends ecjia_admin {
 		$this->assign('action_link', array('text' => RC_Lang::get('user::users.user_list'), 'href' => RC_Uri::url('user/admin/init')));
 		
 		$id = isset($_GET['id']) ? intval($_GET['id']) : 0;
-//		$user_name = $this->db_user->where(array('user_id' => $id))->get_field('user_name');
 		$user_name = RC_DB::table('users')->where('user_id', $id)->pluck('user_name');
 
 		$act = !empty($_GET['type']) ? intval($_GET['type']) : '';
 		
 		/* 取用户默认地址id */
-//		$address_id = $this->db_user_address->find(array('u.user_id' => $id));
 		$address_id = RC_DB::table('user_address as ua')
 				->leftJoin('users as u', RC_DB::raw('ua.address_id'), '=', RC_DB::raw('u.address_id'))
 				->where(RC_DB::raw('u.user_id'), $id)
@@ -722,14 +706,11 @@ class admin extends ecjia_admin {
 			->leftJoin('region as d', RC_DB::raw('d.region_id'), '=', RC_DB::raw('ua.district'));
 		
 		if ($address_id) {
-// 			$field = array("ua.*, IF(address_id=".$address_id['address_id'].",1,0) as default_address, IFNULL(c.region_name, '') as country_name, IFNULL(p.region_name, '') as province_name, IFNULL(t.region_name, '') as city_name, IFNULL(d.region_name, '') as district_name");
-// 			$order = array('default_address' => 'desc');
 			$db_user_address
 				->orderBy('default_address', 'desc')
 				->selectRaw("ua.*,IF(address_id=".$address_id['address_id'].",1,0) as default_address,IFNULL(c.region_name, '') as country_name, IFNULL(p.region_name, '') as province_name,IFNULL(t.region_name, '') as city_name,IFNULL(d.region_name, '') as district_name");
 		} 
 		
-//		$row = $this->db_view->field($field)->where(array('user_id' => $id ))->order($order)->select();
 		$row = $db_user_address->where('user_id', $id)->get();
 		
 		$count = count($row);

@@ -12,7 +12,6 @@ class user_bonus_type_viewmodel extends Component_Model_View {
 			'bonus_type' => array(
 		   		'type' 	=> Component_Model_View::TYPE_LEFT_JOIN,
 			 	'alias'	=> 'bt',
-// 			 	'field'	=> 'SUM(bt.type_money) AS bonus_value, COUNT(*) AS bonus_count',
 			 	'on'   	=> 'ub.bonus_type_id = bt.type_id'				
 			),
 			'store_franchisee' => array(

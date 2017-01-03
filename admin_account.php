@@ -397,7 +397,6 @@ class admin_account extends ecjia_admin {
 		$this->admin_priv('surplus_manage', ecjia::MSGTYPE_JSON);
 		
 		$id 		= intval($_REQUEST['id']);
-// 		$data 		= $db_view->join('user_account')->field('ua.amount, ua.process_type')->find(array('ua.id' => $id));
 		$user_name 	= empty($data['user_name']) ? RC_Lang::get('user::users.no_name') : $data['user_name'];
 		
 		RC_DB::table('user_account')->where('id', $id)->delete();
@@ -419,15 +418,12 @@ class admin_account extends ecjia_admin {
 		if (isset($_POST['checkboxes'])) {
 			$idArr = explode(',', $_POST['checkboxes']);
 			$count = count($idArr);
-// 			$data = $this->db_view->field('ua.amount, ua.process_type')->in(array('ua.id' => $idArr))->select();
 			$data = RC_DB::table('user_account AS ua')
 			->leftJoin('users as u', RC_DB::raw('ua.user_id'), '=', RC_DB::raw('u.user_id'))
 			->select(RC_DB::raw('ua.*, u.user_name'))
 			->whereIn(RC_DB::raw('ua.id'), $idArr)
 			->get();
-
 			
-// 			if ($this->db_user_account->where(array('id' => $idArr))->delete()) {
 			if (RC_DB::table('user_account')->whereIn('id', $idArr)->delete()) {
 				foreach ($data as $v) {
 					if ($v['process_type'] == 1) {

@@ -88,3 +88,5 @@ class search_module extends api_admin implements api_interface {
 		return $user_search;
 	}
 }
+
+// end

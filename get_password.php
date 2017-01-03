@@ -63,13 +63,11 @@ class get_password extends ecjia_front {
 			exit;
 		}
 		if ($type == 'email') {
-//			$userinfo = $this->db_users->field('user_id, user_name, email, passwd_question, passwd_answer')->find(array('user_name' => $username, 'email' => $email));
 			$userinfo = RC_DB::table('users')->where('user_name', $username)
 					->where('email', $email)
 					->select('user_id', 'user_name', 'email', 'passwd_question', 'passwd_answer')
 					->first();
 		} elseif ($type == 'mobile') {
-//			$user_count = $this->db_users->where(array('mobile_phone' => $username))->count();
 			$user_count = RC_DB::table('users')->where('mobile_phone', $username)->count();
 			//如果用户数量大于1
 			if ($user_count > 1) {
@@ -84,7 +82,6 @@ class get_password extends ecjia_front {
 				$this->display('forget_password.dwt');
 				exit;
 			}
-//			$userinfo = $this->db_users->field('user_id, user_name, email, passwd_question, passwd_answer')->find(array('mobile_phone' => $username));
 			$userinfo =  RC_DB::table('users')->where('mobile_phone', $username)->select('user_id', 'user_name', 'email', 'passwd_question', 'passwd_answer')->first();
 		}
 		
@@ -324,7 +321,6 @@ class get_password extends ecjia_front {
 					$data = array(
 						'ec_salt' => '0'		
 					);
-// 					$this->db_users->where(array('user_id' => $user_id))->update($data);
 					RC_DB::table('users')->where('user_id', $user_id)->update($data);
 					$user->logout();
 					$this->assign('action', 'success');

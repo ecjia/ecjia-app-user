@@ -250,7 +250,6 @@ class admin_rank extends ecjia_admin {
 			'special_rank'	=> $special_rank,
 			'show_price'	=> $show_price,
 		);
-// 		$this->db_user_rank->where(array('rank_id' => $id))->update($data);
 		RC_DB::table('user_rank')->where('rank_id', $id)->update($data);
 		
 		
@@ -266,13 +265,10 @@ class admin_rank extends ecjia_admin {
 
 		$this->admin_priv('user_rank', ecjia::MSGTYPE_JSON);
 		$rank_id = intval($_GET['id']);
-// 		$rank_name = $this->db_user_rank->where(array('rank_id' => $rank_id))->get_field('rank_name');
 		$rank_name = RC_DB::table('user_rank')->where('rank_id', $rank_id)->pluck('rank_name');
 
-// 		if ($this->db_user_rank->where(array('rank_id' => $rank_id))->delete()) {
 		if (RC_DB::table('user_rank')->where('rank_id', $rank_id)->delete()) {
 			/* 更新会员表的等级字段 */
-// 			$this->db_user->where(array('user_rank' => $rank_id))->update(array('user_rank' => 0));
 			RC_DB::table('users')->where('user_rank', $rank_id)->update(array('user_rank' => 0));
 			
 			ecjia_admin::admin_log($rank_name, 'remove', 'user_rank');	
@@ -421,9 +417,7 @@ class admin_rank extends ecjia_admin {
 		$rank_id	= intval($_POST['id']);
 		$is_special	= intval($_POST['val']);
 		
-// 		if ($this->db_user_rank->where(array('rank_id' => $rank_id))->update(array('special_rank' => $is_special))) {
 		if (RC_DB::table('user_rank')->where('rank_id', $rank_id)->update(array('special_rank' => $is_special))) {
-// 			$rank_name = $this->db_user_rank->where(array('rank_id' => $rank_id))->get_field('rank_name');
 			$rank_name = RC_DB::table('user_rank')->where('rank_id', $rank_id)->pluck('rank_name');
 			
 			if ($is_special == 1) {
