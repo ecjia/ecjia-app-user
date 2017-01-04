@@ -255,9 +255,9 @@ function get_account_log($user_id, $num, $start, $process_type = '') {
 			$db_payment = RC_DB::table('payment');
 			$rows['add_time']         = RC_Time::local_date(ecjia::config('time_format'), $rows['add_time']);
 			$rows['admin_note']       = nl2br(htmlspecialchars($rows['admin_note']));
-			$rows['short_admin_note'] = ($rows['admin_note'] > '') ? RC_String::sub_str($rows['admin_note'], 30) : 'N/A';
+			$rows['short_admin_note'] = ($rows['admin_note'] > '') ? RC_String::sub_str($rows['admin_note'], 30) : '暂无';
 			$rows['user_note']        = nl2br(htmlspecialchars($rows['user_note']));
-			$rows['short_user_note']  = ($rows['user_note'] > '') ? RC_String::sub_str($rows['user_note'], 30) : 'N/A';
+			$rows['short_user_note']  = ($rows['user_note'] > '') ? RC_String::sub_str($rows['user_note'], 30) : '暂无';
 			$rows['pay_status']       = ($rows['is_paid'] == 0) ? __('未确认') : __('已完成');
 			$rows['format_amount']    = price_format(abs($rows['amount']), false);
 			
