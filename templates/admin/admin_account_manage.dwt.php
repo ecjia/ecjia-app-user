@@ -41,7 +41,7 @@
 					<div class="p_bar_up p_canvas">2,4,9,7,12,8,16</div>
 					<div class="ov_text">
 						<strong>{$account.voucher_amount}</strong>
-						<a target="_blank" href='{url path="user/admin_account/init" args="process_type=0&is_paid=1&start_date={$start_date}&end_date={$end_date}"}'>
+						<a href='{url path="user/admin_account/init" args="process_type=0&is_paid=1&start_date={$start_date}&end_date={$end_date}"}'>
 							{lang key='user::user_account_manage.user_add_money'}
 						</a>
 					</div>
@@ -50,7 +50,7 @@
 					<div class="p_bar_down p_canvas">20,15,18,14,10,13,9,7</div>
 					<div class="ov_text">
 						<strong>{$account.to_cash_amount}</strong> 
-						<a target="_blank" href='{url path="user/admin_account/init" args="process_type=1&is_paid=1&start_date={$start_date}&end_date={$end_date}"}'>
+						<a href='{url path="user/admin_account/init" args="process_type=1&is_paid=1&start_date={$start_date}&end_date={$end_date}"}'>
 							{lang key='user::user_account_manage.user_repay_money'}
 						</a>
 					</div>
@@ -59,7 +59,7 @@
 					<div class="p_line_up p_canvas">3,5,9,7,12,8,16</div>
 					<div class="ov_text">
 						<strong>{$account.user_money}</strong> 
-						<a target="_blank" href='{url path="user/admin/init"}'>
+						<a href='{url path="user/admin/init"}'>
 							{lang key='user::user_account_manage.user_money'}
 						</a>
 					</div>
@@ -68,7 +68,7 @@
 					<div class="p_line_down p_canvas">20,16,14,18,15,14,14,13,12,10,10,8</div>
 					<div class="ov_text">
 						<strong class="red">{$account.frozen_money}</strong> 
-						<a target="_blank" href='{url path="user/admin/init"}'>
+						<a href='{url path="user/admin/init"}'>
 							{lang key='user::user_account_manage.frozen_money'}
 						</a>
 					</div>
@@ -88,7 +88,7 @@
 					<div class="p_bar_up p_canvas">2,4,9,7,12,8,16</div>
 					<div class="ov_text">
 						<strong>{$account.surplus}</strong> 
-						<a target="_blank" href='{url path="user/admin_account_manage/surplus" args="start_date={$start_date}&end_date={$end_date}"}'>
+						<a href='{url path="user/admin_account_manage/surplus" args="start_date={$start_date}&end_date={$end_date}"}'>
 							{lang key='user::user_account_manage.order_surplus'}
 						</a>
 					</div>
@@ -97,7 +97,7 @@
 					<div class="p_bar_down p_canvas">20,15,18,14,10,13,9,7</div>
 					<div class="ov_text">
 						<strong>{$account.integral_money}</strong> 
-						<a target="_blank" href='{url path="user/admin_account_manage/surplus" args="start_date={$start_date}&end_date={$end_date}"}'>
+						<a href='{url path="user/admin_account_manage/surplus" args="start_date={$start_date}&end_date={$end_date}"}'>
 							{lang key='user::user_account_manage.integral_money'}
 						</a>
 					</div>
