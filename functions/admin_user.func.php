@@ -451,6 +451,13 @@ function get_user_rank_list($is_special = false) {
 	}
 	return $rank_list;
 }
+/**
+ * 获取用户等级列表数组
+ */
+function get_rank_list() {
+
+	return RC_DB::table('user_rank')->orderBy('min_points', 'asc')->get();
+}
 
 /**
  * 记录帐户变动
