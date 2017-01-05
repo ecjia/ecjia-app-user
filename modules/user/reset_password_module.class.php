@@ -1,15 +1,17 @@
 <?php
 defined('IN_ECJIA') or exit('No permission resources.');
+
 /**
  * 找回密码，重新设置
  * @author will
  *
  */
+ 
 class reset_password_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	
-        $type = $this->requestData('type');
-        $value = $this->requestData('value');
+        $type     = $this->requestData('type');
+        $value    = $this->requestData('value');
 		$password = $this->requestData('password');
         if (empty($type) || empty($value) || empty($password)) {
         	return new ecjia_error( 'invalid_parameter', RC_Lang::get ('system::system.invalid_parameter' ));

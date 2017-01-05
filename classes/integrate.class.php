@@ -1,10 +1,12 @@
 <?php
 defined('IN_ECJIA') or exit('No permission resources.');
+
 /**
  * 插件使用方法
  * @author royalwang
  *
  */
+ 
 class integrate  {
     
     /**
@@ -56,7 +58,6 @@ class integrate  {
 		
 	}
 
-	
 	/**
 	 * 获取所有可用的验证码
 	 */
@@ -77,7 +78,6 @@ class integrate  {
 
 		return $list;
 	 }
-	 
 	 
 	 /**
 	  *
@@ -152,7 +152,6 @@ class integrate  {
 	     
 	     return true;
 	 }
-	 
 	 
 	 /**
 	  * 用户注册
@@ -240,7 +239,6 @@ class integrate  {
             return true;
         }
     }
-    
 	 
 	 /**
 	  * 登录函数

@@ -7,5 +7,6 @@ class goods_model extends Component_Model_Model {
 		$this->table_name = 'goods';
 		parent::__construct();
 	}
-
 }
+
+// end

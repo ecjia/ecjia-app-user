@@ -6,6 +6,7 @@ defined('IN_ECJIA') or exit('No permission resources.');
  * @author will
  *
  */
+ 
 class forget_request_module extends api_admin implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {
     		
@@ -82,6 +83,5 @@ class forget_request_module extends api_admin implements api_interface {
 		// 			}
 	}
 }
-
 
 // end

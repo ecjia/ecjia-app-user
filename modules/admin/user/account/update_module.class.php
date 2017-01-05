@@ -42,10 +42,8 @@ class update_module extends api_admin implements api_interface {
 			RC_DB::table('staff_user')->where('user_id', $_SESSION['staff_id'])->update(array('mobile' => $mobile));
 		}
 		
-		
 		return array();
 	}
 }
-
 
 // end

@@ -9,12 +9,11 @@ class booking_addres_viewmodel extends Component_Model_View {
 		$this->table_alias_name = 'ua';
 		
 		$this->view = array(
-				'users' => array(
-					'type'  => Component_Model_View::TYPE_LEFT_JOIN,
-					'alias'	=> 'u',
-					'on'   	=> 'u.address_id = ua.address_id AND u.user_id = "$_SESSION[user_id]"'
+		    'users' => array(
+    			'type'  => Component_Model_View::TYPE_LEFT_JOIN,
+    			'alias'	=> 'u',
+    			'on'   	=> 'u.address_id = ua.address_id AND u.user_id = "$_SESSION[user_id]"'
 				)
-				
 		);
 		parent::__construct();
 	}

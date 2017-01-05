@@ -15,7 +15,7 @@ class signin_module extends api_front implements api_interface {
 
 		/* 判断是否为手机号*/
 		if (is_numeric($name) && strlen($name) == 11 && preg_match( '/^1[3|4|5|7|8][0-9]\d{8}$/', $name)) {
-			$db_user = RC_Model::model('user/users_model');
+			$db_user    = RC_Model::model('user/users_model');
 			$user_count = $db_user->where(array('mobile_phone' => $name))->count();
 			if ($user_count > 1) {
 				return new ecjia_error('user_repeat', '用户重复，请与管理员联系！');
@@ -51,9 +51,9 @@ class signin_module extends api_front implements api_interface {
 		
 		//修正咨询信息
 		if($_SESSION['user_id'] > 0) {
-			$device		= $this->device;
-			$device_id	= $device['udid'];
-			$device_client = $device['client'];
+			$device		      = $this->device;
+			$device_id	      = $device['udid'];
+			$device_client    = $device['client'];
 			$db_term_relation = RC_Model::model('goods/term_relationship_model');
 				
 			$object_id = $db_term_relation->where(array(
@@ -89,6 +89,5 @@ class signin_module extends api_front implements api_interface {
 		return $out;
 	}
 }
-
 
 // end

@@ -1,9 +1,9 @@
 <?php
+defined('IN_ECJIA') or exit('No permission resources.');
+
 /**
  * ECJIA 会员管理程序
 */
-
-defined('IN_ECJIA') or exit('No permission resources.');
 
 class admin extends ecjia_admin {
 	private $db_user;
@@ -354,8 +354,6 @@ class admin extends ecjia_admin {
 				$this->assign('affdb', $affdb);
 			}
 		}
-
-		
 		
 		$this->assign('lang_sex', RC_Lang::get('user::users.sex'));
 		$this->assign('special_ranks',	get_user_rank_list(true));

@@ -1,10 +1,12 @@
 <?php
 defined('IN_ECJIA') or exit('No permission resources.');
+
 /**
  * 验证红包
  * @author royalwang
  *
  */
+ 
 class bonus_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {
     		
@@ -27,10 +29,10 @@ class bonus_module extends api_front implements api_interface {
 		$result = array('error' => '', 'content' => '');
 
 		/* 取得购物类型 */
-		$flow_type = isset($_SESSION['flow_type']) ? intval($_SESSION['flow_type']) : CART_GENERAL_GOODS;
+		$flow_type  = isset($_SESSION['flow_type']) ? intval($_SESSION['flow_type']) : CART_GENERAL_GOODS;
 
 		/* 获得收货人信息 */
-		$consignee = get_consignee($_SESSION['user_id']);
+		$consignee  = get_consignee($_SESSION['user_id']);
 
 		/* 对商品信息赋值 */
 		$cart_goods = cart_goods($flow_type); // 取得商品列表，计算合计
@@ -47,14 +49,14 @@ class bonus_module extends api_front implements api_interface {
 
 				if ($now > $bonus['use_end_date']) {
 					$order['bonus_id'] = '';
-					$result['error']= RC_Lang::lang('bonus_use_expire');
+					$result['error']   = RC_Lang::lang('bonus_use_expire');
 				} else {
 					$order['bonus_id'] = $bonus['bonus_id'];
 					$order['bonus_sn'] = $bonus_sn;
 				}
 			} else {
-				$order['bonus_id'] = '';
-				$result['error'] = RC_Lang::lang('invalid_bonus');
+				$order['bonus_id']     = '';
+				$result['error']       = RC_Lang::lang('invalid_bonus');
 			}
 
 			/* 计算订单的费用 */

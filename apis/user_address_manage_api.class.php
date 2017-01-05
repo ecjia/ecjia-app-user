@@ -1,10 +1,12 @@
 <?php
 defined('IN_ECJIA') or exit('No permission resources.');
+
 /**
  * 收货地址管理接口
  * @author 
  *
  */
+ 
 class user_address_manage_api extends Component_Event_Api {
     
     public function call(&$address) {
@@ -26,12 +28,12 @@ class user_address_manage_api extends Component_Event_Api {
         }
         
         if (!empty($address['province']) && !empty($address['city']) && !empty($address['address']) && empty($address['location'])) {
-        	$db_region = RC_Model::model('user/region_model');
+        	$db_region   = RC_Model::model('user/region_model');
         	$region_name = $db_region->where(array('region_id' => array('in' => array($address['province'], $address['city'], $address['district']))))->order('region_type')->select();
         	 
-        	$province_name	= $region_name[0]['region_name'];
-        	$city_name		= $region_name[1]['region_name'];
-        	$district_name	= $region_name[2]['region_name'];
+        	$province_name	   = $region_name[0]['region_name'];
+        	$city_name		   = $region_name[1]['region_name'];
+        	$district_name	   = $region_name[2]['region_name'];
         	$consignee_address = $province_name.'省'.$city_name.'市'.$address['address'];
 
         	$shop_point = file_get_contents("https://api.map.baidu.com/geocoder/v2/?address='".$consignee_address."'&output=json&ak=E70324b6f5f4222eb1798c8db58a017b");
@@ -80,7 +82,6 @@ class user_address_manage_api extends Component_Event_Api {
     	return false;
     }
     
-    
     /**
      *  添加或更新指定用户收货地址
      *
@@ -100,18 +101,18 @@ class user_address_manage_api extends Component_Event_Api {
     	
     	//验证是否重复
     	$where = array(
-    	    'user_id' =>  $address['user_id'],
+    	    'user_id'   =>  $address['user_id'],
     	    'consignee' =>  $address['consignee'],
-    	    'email' =>  $address['email'],
-    	    'country' =>  $address['country'],
-    	    'province' =>  $address['province'],
-    	    'city' =>  $address['city'],
-    	    'district' =>  $address['district'],
-    	    'address' =>  $address['address'],
+    	    'email'     =>  $address['email'],
+    	    'country'   =>  $address['country'],
+    	    'province'  =>  $address['province'],
+    	    'city'      =>  $address['city'],
+    	    'district'  =>  $address['district'],
+    	    'address'   =>  $address['address'],
     	    'address_info' =>  $address['address_info'],
-    	    'zipcode' =>  $address['zipcode'],
-    	    'tel' =>  $address['tel'],
-    	    'mobile' =>  $address['mobile'],
+    	    'zipcode'   =>  $address['zipcode'],
+    	    'tel'       =>  $address['tel'],
+    	    'mobile'    =>  $address['mobile'],
     	    
     	);
     	if ($db_user_address->where($where)->count()) {

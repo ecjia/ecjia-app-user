@@ -1,10 +1,12 @@
 <?php
 defined('IN_ECJIA') or exit('No permission resources.');
+
 /**
  * 用户 头像上传
  * @author royalwang
  *
  */
+ 
 class update_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {
     	
@@ -31,8 +33,6 @@ class update_module extends api_front implements api_interface {
 			} else {
 				return new ecjia_error('avatar_img_error', '头像上传失败！');
 			}
-			
-			
 			
 // 			$uid = $user_id;
 // 			$userinfo = $db->field('user_name')->find(array('user_id' => $uid));

@@ -24,7 +24,6 @@ class article_viewmodel extends Component_Model_View {
 		
 		parent::__construct();
 	}
-
 }
 
 // end

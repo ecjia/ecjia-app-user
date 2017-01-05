@@ -7,9 +7,6 @@ class user_session_model extends Component_Model_Model {
 		$this->table_name = 'sessions';
 		parent::__construct();
 	}
-
-
-
 }
 
 // end

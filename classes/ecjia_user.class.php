@@ -1,8 +1,9 @@
 <?php
+defined('IN_ECJIA') or exit('No permission resources.');
+
 /**
  * ecjia 前端页面会员中心控制器父类
  */
-defined('IN_ECJIA') or exit('No permission resources.');
 
 abstract class ecjia_user extends ecjia {
 
@@ -273,16 +274,16 @@ abstract class ecjia_user extends ecjia {
     
         if ($tpl) {
             $this->assign(array(
-                'msg' => $msg,
-                'url' => $url,
+                'msg'  => $msg,
+                'url'  => $url,
                 'time' => $time
             ));
             $tpl = SITE_THEME_PATH . Config::get('system.tpl_style') . DIRECTORY_SEPARATOR . $tpl;
             $this->display($tpl);
         } elseif (file_exists($front_tpl)) {
             $this->assign(array(
-                'msg' => $msg,
-                'url' => $url,
+                'msg'  => $msg,
+                'url'  => $url,
                 'time' => $time
             ));
             $this->display($front_tpl);
@@ -308,8 +309,6 @@ abstract class ecjia_user extends ecjia {
             }
         }
     }
-    
-    
 }
 
 // end

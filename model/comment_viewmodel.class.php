@@ -22,10 +22,8 @@ class comment_viewmodel extends Component_Model_View {
 						'on'	=> 'c.comment_type=0 AND c.id_value = g.goods_id',
 				)
 		);
-		
 		parent::__construct();
 	}
-
 }
 
 // end

@@ -1,10 +1,12 @@
 <?php
 defined('IN_ECJIA') or exit('No permission resources.');
+
 /**
  * 用户 头像上传
  * @author royalwang
  *
  */
+ 
 class update_module extends api_admin implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {
     	
@@ -13,7 +15,6 @@ class update_module extends api_admin implements api_interface {
         }
 		
 		$user_name = $this->requestData('username');
-		
 		$old_password = $this->requestData('old_password');
 		$new_password = $this->requestData('new_password');
 		

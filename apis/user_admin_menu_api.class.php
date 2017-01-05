@@ -1,9 +1,11 @@
 <?php
 defined('IN_ECJIA') or exit('No permission resources.');
+
 /**
  * ECJIA 后台会员菜单API
  * @author royalwang
  */
+ 
 class user_admin_menu_api extends Component_Event_Api {	
 	public function call(&$options) {
 		$menus = ecjia_admin::make_admin_menu('05_members', RC_Lang::get('user::users.user_manage'), '', 5);

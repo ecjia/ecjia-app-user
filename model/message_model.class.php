@@ -7,7 +7,6 @@ class message_model extends Component_Model_Model {
 		$this->table_name = 'feedback';
 		parent::__construct();
 	}
-
 }
 
 // end

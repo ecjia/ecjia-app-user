@@ -1,9 +1,9 @@
 <?php
+defined('IN_ECJIA') or exit('No permission resources.');
+
 /**
  * 会员帐户变动记录
  */
-
-defined('IN_ECJIA') or exit('No permission resources.');
 
 class admin_account_log extends ecjia_admin {
 	public function __construct() {
@@ -108,7 +108,7 @@ class admin_account_log extends ecjia_admin {
 		$this->admin_priv('account_manage', ecjia::MSGTYPE_JSON);
 
 		$user_id = empty($_REQUEST['user_id']) ? 0 : intval($_REQUEST['user_id']);
-		$user = get_user_info($user_id);
+		$user    = get_user_info($user_id);
 		
 		if (empty($user)) {			
 			return $this->showmessage(RC_Lang::get('user::account_log.user_not_exist'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);

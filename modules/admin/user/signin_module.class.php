@@ -6,6 +6,7 @@ defined('IN_ECJIA') or exit('No permission resources.');
  * @author will
  *
  */
+ 
 class signin_module extends api_admin implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {
     		
@@ -47,11 +48,11 @@ class signin_module extends api_admin implements api_interface {
 		if ($row) {
 			// 登录成功
 			/* 设置session信息 */
-			$_SESSION['admin_id']	= $row['user_id'];
-			$_SESSION['admin_name']	= $row['user_name'];
-			$_SESSION['action_list']	= $row['action_list'];
+			$_SESSION['admin_id']	        = $row['user_id'];
+			$_SESSION['admin_name']	        = $row['user_name'];
+			$_SESSION['action_list']	    = $row['action_list'];
 			$_SESSION['last_check_order']	= $row['last_login'];
-			$_SESSION['suppliers_id']	= $row['suppliers_id'];
+			$_SESSION['suppliers_id']	    = $row['suppliers_id'];
 			
 			if (!empty($row['seller_id'])) {
 				$_SESSION['seller_id']	= $row['seller_id'];
@@ -135,6 +136,5 @@ class signin_module extends api_admin implements api_interface {
 	    
 	}
 }
-
 
 // end

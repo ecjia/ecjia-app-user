@@ -12,6 +12,4 @@ class signout_module extends api_front implements api_interface {
 	}
 }
 
-
-
 // end

@@ -1,8 +1,9 @@
 <?php
+defined('IN_ECJIA') or exit('No permission resources.');
+
 /**
  * ECJIA 会员注册项管理程序
 */
-defined('IN_ECJIA') or exit('No permission resources.');
 
 class admin_reg_fields extends ecjia_admin {
 	private $db_reg_fields;
@@ -259,7 +260,7 @@ class admin_reg_fields extends ecjia_admin {
 		if (!empty($_SESSION['ru_id'])) {
 			return $this->showmessage(RC_Lang::get('user::user_account.merchants_notice'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
-		$id = intval($_REQUEST['pk']);
+		$id  = intval($_REQUEST['pk']);
 		$val = isset($_REQUEST['value']) ? trim($_REQUEST['value']) : '' ;
 
 		/* 验证参数有效性  */

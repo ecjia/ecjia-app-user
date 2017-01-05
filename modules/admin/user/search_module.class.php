@@ -1,10 +1,12 @@
 <?php
 defined('IN_ECJIA') or exit('No permission resources.');
+
 /**
  * 用户查询
  * @author will.chen
  *
  */
+ 
 class search_module extends api_admin implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {
     		
@@ -59,7 +61,7 @@ class search_module extends api_admin implements api_interface {
 				$dir2 = substr($uid, 3, 2);
 				$dir3 = substr($uid, 5, 2);
 				
-				$filename = md5($v['user_name']);
+				$filename    = md5($v['user_name']);
 				$avatar_path = RC_Upload::upload_path().'/data/avatar/'.$dir1.'/'.$dir2.'/'.$dir3.'/'.substr($uid, -2)."_".$filename.'.jpg';
 				
 				if(!file_exists($avatar_path)) {

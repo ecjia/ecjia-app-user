@@ -6,6 +6,7 @@ defined('IN_ECJIA') or exit('No permission resources.');
  * @author will
  *
  */
+ 
 class forget_request_module extends api_admin implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {
     		
@@ -53,11 +54,11 @@ class forget_request_module extends api_admin implements api_interface {
 	        $user_id = RC_DB::Table('staff_user')->where('email', $type_info)->pluck('user_id');
 	
 	        if (!empty($user_id)) {
-	            $code = rand(111111, 999999);
+	            $code    = rand(111111, 999999);
 	            $content = "[".ecjia::config('shop_name')."]您的管理员账户正在变更账户信息，效验码：".$code."，打死都不能告诉别人哦！唯一热线".ecjia::config('service_phone');
 	            /* 发送确认重置密码的确认邮件 */
 	            if (RC_Mail::send_mail($admin_username, $type_info, '账户变更效验码', $content, 1)) {
-	                $_SESSION['temp_code'] = $code;
+	                $_SESSION['temp_code']      = $code;
 	                $_SESSION['temp_code_time'] = RC_Time::gmtime();
 	                $data = array(
 	                    'uid' => $user_id,
@@ -78,9 +79,9 @@ class forget_request_module extends api_admin implements api_interface {
 	        $user_id = RC_DB::Table('staff_user')->where('mobile', $mobile)->pluck('user_id');
 	
 	        if (!empty($user_id)) {
-	            $code = rand(111111, 999999);
-	            $tpl_name = 'sms_get_password';
-	            $tpl = RC_Api::api('sms', 'sms_template', $tpl_name);
+	            $code      = rand(111111, 999999);
+	            $tpl_name  = 'sms_get_password';
+	            $tpl       = RC_Api::api('sms', 'sms_template', $tpl_name);
 	            if (!empty($tpl)) {
 	                $this->assign('code', $code);
 	                $this->assign('service_phone', 	ecjia::config('service_phone'));
@@ -93,8 +94,8 @@ class forget_request_module extends api_admin implements api_interface {
 	                $response = RC_Api::api('sms', 'sms_send', $options);
 	                 
 	                if($response === true) {
-	                    $_SESSION['user_id'] 	= $user_id;
-	                    $_SESSION['temp_code'] 	= $code;
+	                    $_SESSION['user_id'] 	    = $user_id;
+	                    $_SESSION['temp_code'] 	    = $code;
 	                    $_SESSION['temp_code_time'] = RC_Time::gmtime();
 	                    $data = array(
 	                        'uid' => $user_id,
@@ -122,11 +123,11 @@ class forget_request_module extends api_admin implements api_interface {
 	        $admin_info = $db->field('user_id, password')->find(array('user_name' => $admin_username, 'email' => $type_info));
 	
 	        if (!empty($admin_info)) {
-	            $code = rand(111111, 999999);
+	            $code    = rand(111111, 999999);
 	            $content = "[".ecjia::config('shop_name')."]您的管理员账户正在变更账户信息，效验码：".$code."，打死都不能告诉别人哦！唯一热线".ecjia::config('service_phone');
 	            /* 发送确认重置密码的确认邮件 */
 	            if (RC_Mail::send_mail($admin_username, $type_info, '账户变更效验码', $content, 1)) {
-	                $_SESSION['temp_code'] = $code;
+	                $_SESSION['temp_code']      = $code;
 	                $_SESSION['temp_code_time'] = RC_Time::gmtime();
 	                $data = array(
 	                    'uid' => $admin_info['user_id'],
@@ -144,10 +145,5 @@ class forget_request_module extends api_admin implements api_interface {
 	    }
 	}
 }
-
-
-
-
-
 
 // end

@@ -1,8 +1,10 @@
 <?php
 defined('IN_ECJIA') or exit('No permission resources.');
+
 /**
  * ECJia 整合插件类的基类
  */
+ 
 abstract class integrate_abstract
 {
 
@@ -711,3 +713,5 @@ abstract class integrate_abstract
         return $user_list;
     }
 }
+
+// end

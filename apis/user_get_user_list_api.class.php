@@ -1,10 +1,12 @@
 <?php
 defined('IN_ECJIA') or exit('No permission resources.');
+
 /**
  * 获取用户列表
  * @author wutifang
  *
  */
+ 
 class user_get_user_list_api extends Component_Event_Api {
 	
     /**

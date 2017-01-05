@@ -1,10 +1,12 @@
 <?php
 defined('IN_ECJIA') or exit('No permission resources.');
+
 /**
  * 会员信息
  * @author will.chen
  *
  */
+ 
 class user_user_info_api extends Component_Event_Api {
     
     public function call(&$options) {

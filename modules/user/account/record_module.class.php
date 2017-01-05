@@ -1,21 +1,23 @@
 <?php
 defined('IN_ECJIA') or exit('No permission resources.');
+
 /**
  * 用户充值提现记录
  * @author royalwang
  *
  */
+ 
 class record_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	
     	if ($_SESSION['user_id'] <= 0) {
     		return new ecjia_error(100, 'Invalid session');
     	}
-    	$size = $this->requestData('pagination.count', 15);
-    	$page = $this->requestData('pagination.page', 1);
- 		$user_id = $_SESSION['user_id'];
+    	$size         = $this->requestData('pagination.count', 15);
+    	$page         = $this->requestData('pagination.page', 1);
+ 		$user_id      = $_SESSION['user_id'];
  		$process_type = $this->requestData('type');
- 		$type = array('', 'deposit', 'raply');
+ 		$type         = array('', 'deposit', 'raply');
 		if (!in_array($process_type, $type)) {
 			return new ecjia_error( 'invalid_parameter', RC_Lang::get ('system::system.invalid_parameter' ));
 		}
@@ -49,19 +51,19 @@ class record_module extends api_front implements api_interface {
  		if (!empty($account_log) && is_array($account_log)) {
  			$account_list = array();
  			foreach ($account_log as $key => $value) {
-				$account_list[$key]['account_id']	= $value['id'];
-				$account_list[$key]['user_id']		= $value['user_id'];
-				$account_list[$key]['admin_user']	= $value['admin_user'];
-				$account_list[$key]['amount']		= $value['amount'];
+				$account_list[$key]['account_id']	 = $value['id'];
+				$account_list[$key]['user_id']		 = $value['user_id'];
+				$account_list[$key]['admin_user']	 = $value['admin_user'];
+				$account_list[$key]['amount']		 = $value['amount'];
 				$account_list[$key]['format_amount'] = $value['format_amount'];
-				$account_list[$key]['user_note']	= $value['user_note'];
-				$account_list[$key]['type']			= $value['process_type'] == '0' ? 'deposit' : 'raply';
-				$account_list[$key]['type_lable']	= $value['type'];
-				$account_list[$key]['payment_name']	= (empty($value['payment']) && $value['process_type'] == '0') ? '管理员操作' : strip_tags($value['payment']);
-				$account_list[$key]['payment_id']	= $value['pid'];
-				$account_list[$key]['is_paid']		= $value['is_paid'];
-				$account_list[$key]['pay_status']	= $value['pay_status'];
-				$account_list[$key]['add_time']		= $value['add_time'];
+				$account_list[$key]['user_note']	 = $value['user_note'];
+				$account_list[$key]['type']			 = $value['process_type'] == '0' ? 'deposit' : 'raply';
+				$account_list[$key]['type_lable']	 = $value['type'];
+				$account_list[$key]['payment_name']	 = (empty($value['payment']) && $value['process_type'] == '0') ? '管理员操作' : strip_tags($value['payment']);
+				$account_list[$key]['payment_id']	 = $value['pid'];
+				$account_list[$key]['is_paid']		 = $value['is_paid'];
+				$account_list[$key]['pay_status']	 = $value['pay_status'];
+				$account_list[$key]['add_time']		 = $value['add_time'];
  			}
  			
  			$pager = array(

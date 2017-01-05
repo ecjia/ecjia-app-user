@@ -1,10 +1,12 @@
 <?php
 defined('IN_ECJIA') or exit('No permission resources.');
+
 /**
  * 用户提现申请
  * @author royalwang
  *
  */
+ 
 class raply_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	
@@ -70,7 +72,6 @@ class raply_module extends api_front implements api_interface {
  			$result = new ecjia_error('process_false', __('此次操作失败，请返回重试！'));
  			return $result;
  		}
- 		
 	}
 }
 

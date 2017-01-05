@@ -1,17 +1,19 @@
 <?php
 defined('IN_ECJIA') or exit('No permission resources.');
+
 /**
  * 密码找回校验验证码
  * @author will.chen
  *
  */
+ 
 class forget_password_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	
     	$this->authSession();	
-		$type = $this->requestData('type');
+		$type  = $this->requestData('type');
 		$value = $this->requestData('value');
-		$code = $this->requestData('code');
+		$code  = $this->requestData('code');
 		
 		if (empty($type) || empty($value) || empty($code)) {
         	return new ecjia_error( 'invalid_parameter', RC_Lang::get ('system::system.invalid_parameter' ));

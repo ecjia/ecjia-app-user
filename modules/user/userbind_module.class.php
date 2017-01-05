@@ -1,10 +1,12 @@
 <?php
 defined('IN_ECJIA') or exit('No permission resources.');
+
 /**
  * 手机快速注册/用户账户关联注册（手机、邮箱等）
  * @author will.chen
  *
  */
+ 
 class userbind_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	
@@ -56,20 +58,17 @@ class userbind_module extends api_front implements api_interface {
 			$response = RC_Api::api('sms', 'sms_send', $options);
 			
 			if ($response === true) {
-				$_SESSION['bind_code'] = $code;
+				$_SESSION['bind_code']         = $code;
 				$_SESSION['bindcode_lifetime'] = RC_Time::gmtime();
-				$_SESSION['bind_value'] = $value;
-				$_SESSION['bind_type'] = $type;
+				$_SESSION['bind_value']        = $value;
+				$_SESSION['bind_type']         = $type;
 				return array('registered' => 0);
 			} else {
 				$result = new ecjia_error('sms_error', __('短信发送失败！'));
 				return $result;
 			}
 		}
-		
-		
 	}
 }
-
 
 // end

@@ -1,16 +1,17 @@
 <?php
 defined('IN_ECJIA') or exit('No permission resources.');
+
 /**
  * 插件调用工厂
  * @author royalwang
  */
+ 
 class integrate_factory  {
 	private $adapter_instance 	= null;
 	
 	public function __construct($adapter_name = '', $adapter_config = array()) {
 		$this->set_adapter($adapter_name, $adapter_config);
 	}
-	
 	
 	/**
 	 * 构造适配器

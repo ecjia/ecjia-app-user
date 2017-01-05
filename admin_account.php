@@ -1,9 +1,9 @@
 <?php
+defined('IN_ECJIA') or exit('No permission resources.');
+
 /**
  * ECJIA 会员充值提现管理
 */
-
-defined('IN_ECJIA') or exit('No permission resources.');
 
 class admin_account extends ecjia_admin {
 	private $db_payment;
@@ -131,7 +131,7 @@ class admin_account extends ecjia_admin {
 		$admin_note		= !empty($_POST['admin_note'])		? trim($_POST['admin_note'])		: '';
 		$user_note		= !empty($_POST['user_note'])		? trim($_POST['user_note'])			: '';
 		$payment		= !empty($_POST['payment'])			? trim($_POST['payment'])			: '';
-		$amount_count = $amount;
+		$amount_count   = $amount;
 
 		/* 验证参数有效性  */
 		if (!is_numeric($amount) || empty($amount) || $amount <= 0 || strpos($amount, '.') > 0) {
@@ -193,8 +193,8 @@ class admin_account extends ecjia_admin {
 			$payment_info = RC_DB::table('payment')->where('pay_name', $payment)->where('enabled', 1)->first();
 			RC_Loader::load_app_func('admin_order', 'orders');
 			/* 计算支付手续费用 */
-			$pay_fee	= pay_fee($payment_info['pay_id'], $amount, 0);
-			$total_fee	= $pay_fee + $amount;
+			$pay_fee	  = pay_fee($payment_info['pay_id'], $amount, 0);
+			$total_fee	  = $pay_fee + $amount;
 		
 			/* 插入 pay_log */
 			$data = array(
@@ -314,10 +314,10 @@ class admin_account extends ecjia_admin {
 		$account = array();
 		$account = RC_DB::table('user_account')->where('id', $id)->first();
 		
-		$account['add_time'] = RC_Time::local_date(ecjia::config('time_format'), $account['add_time']);
+		$account['add_time']    = RC_Time::local_date(ecjia::config('time_format'), $account['add_time']);
 		$account['user_note']	= htmlspecialchars($account['user_note']);
 		
-		$user_name = RC_DB::table('users')->where('user_id', $account['user_id'])->pluck('user_name');
+		$user_name    = RC_DB::table('users')->where('user_id', $account['user_id'])->pluck('user_name');
 		$payment_name = RC_DB::table('payment')->where('pay_code', $account['payment'])->pluck('pay_name');
 		
 		$account['payment']	= empty($payment_name) ? strip_tags($account['payment']) : strip_tags($payment_name);
@@ -392,7 +392,7 @@ class admin_account extends ecjia_admin {
 	 * ajax删除一条信息
 	 */
 	public function remove() {
-		$db_view = RC_Model::model('user_account_viewmodel', ecjia::MSGTYPE_JSON);
+		$db_view    = RC_Model::model('user_account_viewmodel', ecjia::MSGTYPE_JSON);
 		/* 检查权限 */
 		$this->admin_priv('surplus_manage', ecjia::MSGTYPE_JSON);
 		

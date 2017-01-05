@@ -1,10 +1,12 @@
 <?php
 defined('IN_ECJIA') or exit('No permission resources.');
+
 /**
  * 用户充值申请
  * @author royalwang
  *
  */
+ 
 class deposit_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {
     		
@@ -15,7 +17,7 @@ class deposit_module extends api_front implements api_interface {
  		$user_note	= $this->requestData('note', '');
  		$account_id = $this->requestData('account_id', 0);
  		$payment_id = $this->requestData('payment_id', 0);
- 		$user_id = $_SESSION['user_id'];
+ 		$user_id    = $_SESSION['user_id'];
  		
  		$amount = floatval($amount);
  		if ($amount <= 0) {

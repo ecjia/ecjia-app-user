@@ -6,6 +6,7 @@ defined('IN_ECJIA') or exit('No permission resources.');
  * @author will
  *
  */
+ 
 class signin_module extends api_admin implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {
 		$this->authadminSession();
@@ -30,7 +31,6 @@ class signin_module extends api_admin implements api_interface {
 		    //平台
 		    return signin_admin($username, $password, $device);
 		}
-
 	}
 }
 
@@ -80,23 +80,23 @@ function signin_merchant($username, $password, $device) {
           */
     
     
-        $_SESSION['admin_id']	= 0;
-        $_SESSION['admin_name']	= null;
-        $_SESSION['action_list']= $row['action_list'];
+        $_SESSION['admin_id']	    = 0;
+        $_SESSION['admin_name']	    = null;
+        $_SESSION['action_list']    = $row['action_list'];
          
-        $_SESSION['store_id']	= $row['store_id'];
-        $_SESSION['store_name']	= RC_DB::table('store_franchisee')->where('store_id', $row['store_id'])->pluck('merchants_name');
-        $_SESSION['staff_id']	= $row['user_id'];
+        $_SESSION['store_id']	    = $row['store_id'];
+        $_SESSION['store_name']	    = RC_DB::table('store_franchisee')->where('store_id', $row['store_id'])->pluck('merchants_name');
+        $_SESSION['staff_id']	    = $row['user_id'];
         $_SESSION['staff_mobile']	= $row['mobile'];
         $_SESSION['staff_name']	    = $row['name'];
         $_SESSION['staff_email']	= $row['email'];
         
-        $_SESSION['last_login']	= $row['last_login'];
-        $_SESSION['last_ip']	= $row['last_ip'];
+        $_SESSION['last_login']	    = $row['last_login'];
+        $_SESSION['last_ip']	    = $row['last_ip'];
         
         /* 获取device_id*/
         $device_id = RC_Model::model('mobile/mobile_device_model')->where(array('device_udid' => $device['udid'], 'device_client' => $device['client'], 'device_code' => $device['code']))->get_field('id');
-        $_SESSION['device_id']	= $row['device_id'];
+        $_SESSION['device_id']	    = $row['device_id'];
          
         if ($device['code'] == '8001') {
             $_SESSION['adviser_id']	= $row['user_id'];
@@ -223,7 +223,7 @@ function signin_admin($username, $password, $device) {
         $username	= $admin_info['user_name'];
         $ec_salt	= $admin_info['ec_salt'];
     } else {
-        $ec_salt = $db_user->where(array('user_name' => $username))->get_field('ec_salt');
+        $ec_salt    = $db_user->where(array('user_name' => $username))->get_field('ec_salt');
     }
     
     
@@ -239,24 +239,24 @@ function signin_admin($username, $password, $device) {
     if ($row) {
         // 登录成功
         /* 设置session信息 */
-        $_SESSION['admin_id']	= $row['user_id'];
-        $_SESSION['admin_name']	= $row['user_name'];
+        $_SESSION['admin_id']	    = $row['user_id'];
+        $_SESSION['admin_name']	    = $row['user_name'];
         $_SESSION['action_list']	= $row['action_list'];
         $_SESSION['last_login']	    = $row['last_login'];
         $_SESSION['suppliers_id']	= $row['suppliers_id'];
         
-        $_SESSION['store_id']	= 0;
-        $_SESSION['store_name']	= null;
-        $_SESSION['staff_id']	= 0;
+        $_SESSION['store_id']	    = 0;
+        $_SESSION['store_name']	    = null;
+        $_SESSION['staff_id']	    = 0;
         $_SESSION['staff_mobile']	= null;
         $_SESSION['staff_name']	    = null;
         $_SESSION['staff_email']	= null;
         
-        $_SESSION['last_ip']	= $row['last_ip'];
+        $_SESSION['last_ip']	    = $row['last_ip'];
         	
         /* 获取device_id*/
         $device_id = RC_Model::model('mobile/mobile_device_model')->where(array('device_udid' => $device['udid'], 'device_client' => $device['client'], 'device_code' => $device['code']))->get_field('id');
-        $_SESSION['device_id']	= $row['device_id'];
+        $_SESSION['device_id']	    = $row['device_id'];
     
         	
         if ($device['code'] == '8001') {
@@ -335,6 +335,5 @@ function signin_admin($username, $password, $device) {
         return $result;
     }
 }
-
 
 // end

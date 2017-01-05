@@ -7,9 +7,6 @@ class cart_model extends Component_Model_Model {
 		$this->table_name = 'cart';
 		parent::__construct();
 	}
-
-
-
 }
 
 // end

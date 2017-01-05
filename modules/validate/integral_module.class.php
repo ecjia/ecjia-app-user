@@ -1,10 +1,12 @@
 <?php
 defined('IN_ECJIA') or exit('No permission resources.');
+
 /**
  * 验证积分
  * @author royalwang
  *
  */
+ 
 class integral_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {
     		
@@ -21,7 +23,7 @@ class integral_module extends api_front implements api_interface {
 		
 		$integral_to_p =  value_of_integral($integral);
 		return array(
-			"bonus" => $integral_to_p,
+			"bonus"          => $integral_to_p,
 			"bonus_formated" => price_format($integral_to_p, false)
 		);
 	}

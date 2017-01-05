@@ -7,9 +7,6 @@ class shipping_model extends Component_Model_Model {
 		$this->table_name = 'shipping';
 		parent::__construct();
 	}
-
-
-
 }
 
 // end

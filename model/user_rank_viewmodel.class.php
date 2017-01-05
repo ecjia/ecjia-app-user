@@ -9,11 +9,11 @@ class user_rank_viewmodel extends Component_Model_View {
 		$this->table_alias_name = 'r';
 		
 		$this->view =array(
-				'member_price'		=> array(
-					'type'			=> Component_Model_View::TYPE_LEFT_JOIN,
-					'alias'			=> 'mp',
-					'on'			=> 'mp.user_rank = r.rank_id '
-			),
+			'member_price'		=> array(
+				'type'			=> Component_Model_View::TYPE_LEFT_JOIN,
+				'alias'			=> 'mp',
+				'on'			=> 'mp.user_rank = r.rank_id '
+		    ),
 		);
 		parent::__construct();
 	}

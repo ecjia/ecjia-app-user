@@ -35,7 +35,7 @@ class get_password extends ecjia_front {
 		$username	= isset($_POST['user_name']) ? trim($_POST['user_name']) : '';
 		$email		= isset($_POST['email']) ? trim($_POST['email']) : '';
 		$type 		= isset($_POST['type']) ? trim($_POST['type']) : 'email';
-		$captcha = RC_Loader::load_app_class('captcha_method', 'captcha');
+		$captcha    = RC_Loader::load_app_class('captcha_method', 'captcha');
 		
 		/* 检查验证码是否正确 */
 		$captcha_error = false;
@@ -187,7 +187,7 @@ class get_password extends ecjia_front {
 		$type = $_POST['type'];
 		$time = RC_Time::gmtime() - 6000*3;//三分有效期
 		if (!empty($code) && $code == $_SESSION['temp_code'] && $time < $_SESSION['temp_code_time']) {
-			$_SESSION['user_id'] = $_SESSION['temp_user_id'];
+			$_SESSION['user_id']   = $_SESSION['temp_user_id'];
 			$_SESSION['user_name'] = $_SESSION['temp_user_name'];
 			unset($_SESSION['temp_user']);
 			unset($_SESSION['temp_user_name']);
@@ -211,10 +211,10 @@ class get_password extends ecjia_front {
 	
 	/* 密码找回（方式一）-->再次发送邮箱验证码邮件 */
 	public function reset_pwd_mail_repeat() {
-		$uid = $_SESSION['temp_user_id'];
+		$uid       = $_SESSION['temp_user_id'];
 		$user_name = $_SESSION['temp_user_name'];
-		$email = $_SESSION['temp_email'];
-		$type = isset($_GET['type']) ? $_GET['type'] : 'email';
+		$email     = $_SESSION['temp_email'];
+		$type      = isset($_GET['type']) ? $_GET['type'] : 'email';
 		
 		$code = rand(111111, 999999);
 		if ($type == 'email') {
@@ -296,11 +296,11 @@ class get_password extends ecjia_front {
 		RC_Loader::load_app_class('integrate', 'user', false);
 		$user = integrate::init_users();
 		
-		$old_password = isset($_POST['old_password']) 	? trim($_POST['old_password']) 	: null;
-		$new_password = isset($_POST['new_password']) 	? trim($_POST['new_password']) 	: '';
+		$old_password     = isset($_POST['old_password']) 	? trim($_POST['old_password']) 	: null;
+		$new_password     = isset($_POST['new_password']) 	? trim($_POST['new_password']) 	: '';
 		$confirm_password = isset($_POST['confirm_password']) 	? trim($_POST['confirm_password']) 	: '';
-		$user_id      = isset($_POST['uid'])  			? intval($_POST['uid']) 		: $_SESSION['user_id'];
-		$code         = isset($_POST['code']) 			? trim($_POST['code'])  		: '';
+		$user_id          = isset($_POST['uid'])  			? intval($_POST['uid']) 		: $_SESSION['user_id'];
+		$code             = isset($_POST['code']) 			? trim($_POST['code'])  		: '';
 		if (strlen($new_password) < 6 ) {
 			$this->assign('error_msg', __("密码长度最少6位！"));
 			$this->assign('uid', $_SESSION['user_id']);

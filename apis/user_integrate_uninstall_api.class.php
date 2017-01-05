@@ -1,9 +1,11 @@
 <?php
 defined('IN_ECJIA') or exit('No permission resources.');
+
 /**
  * 会员整合插件卸载API
  * @author royalwang
  */
+ 
 class user_integrate_uninstall_api extends Component_Event_Api {
 	
 	public function call(&$options) {

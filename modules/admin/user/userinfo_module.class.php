@@ -21,7 +21,7 @@ class userinfo_module extends api_admin implements api_interface {
 		$result = $db->find(array('user_id' => $_SESSION['admin_id']));
 		
 		if (isset($_SESSION['adviser_id']) && !empty($_SESSION['adviser_id'])) {
-			$adviser_info = RC_Model::model('achievement/adviser_model')->find(array('id' => $_SESSION['adviser_id']));
+			$adviser_info        = RC_Model::model('achievement/adviser_model')->find(array('id' => $_SESSION['adviser_id']));
 			$result['user_name'] = $adviser_info['username'];
 			$result['email']	 = $adviser_info['email'];
 		}
@@ -39,6 +39,5 @@ class userinfo_module extends api_admin implements api_interface {
 		return $userinfo;
 	}
 }
-
 
 // end

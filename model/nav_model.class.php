@@ -7,9 +7,6 @@ class nav_model extends Component_Model_Model {
 		$this->table_name = 'nav';
 		parent::__construct();
 	}
-
-
-
 }
 
 // end

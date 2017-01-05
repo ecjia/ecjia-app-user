@@ -11,23 +11,23 @@ class signup_module extends api_front implements api_interface
 		
 		RC_Loader::load_app_class('integrate', 'user', false);
 		
-		$username	= $this->requestData('name');
-		$password	= $this->requestData('password');
-		$email		= $this->requestData('email');
-		$fileld		= $this->requestData('field', array());
-		$device		= $this->device;
-		$mobile		= $this->requestData('mobile');
+		$username	   = $this->requestData('name');
+		$password	   = $this->requestData('password');
+		$email		   = $this->requestData('email');
+		$fileld		   = $this->requestData('field', array());
+		$device		   = $this->device;
+		$mobile		   = $this->requestData('mobile');
 		$device_client = isset($device['client']) ? $device['client'] : '';
-		$invite_code = $this->requestData('invite_code');
+		$invite_code   = $this->requestData('invite_code');
 		
-		$other		= array();
-		$filelds	= array();
+		$other		   = array();
+		$filelds	   = array();
 		
 		foreach ($fileld as $val) {
 			$filelds[$val['id']] = $val['value'];
 		}
-		$other['msn']	= isset($filelds[1]) ? $filelds[1] : '';
-		$other['qq']	= isset($filelds[2]) ? $filelds[2] : '';
+		$other['msn']	        = isset($filelds[1]) ? $filelds[1] : '';
+		$other['qq']	        = isset($filelds[2]) ? $filelds[2] : '';
 		$other['office_phone']	= isset($filelds[3]) ? $filelds[3] : '';
 		$other['home_phone']	= isset($filelds[4]) ? $filelds[4] : '';
 		$other['mobile_phone']	= isset($filelds[5]) ? $filelds[5] : '';
@@ -35,7 +35,7 @@ class signup_module extends api_front implements api_interface
 		/* 随机生成6位随机数 + 请求客户端类型作为用户名*/
 		$code = '';
 		$charset 		= 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-		$charset_len = strlen($charset)-1;
+		$charset_len    = strlen($charset)-1;
 		for ($i = 0; $i < 6; $i++) {
 			$code .= $charset[rand(1, $charset_len)];
 		}
@@ -57,7 +57,7 @@ class signup_module extends api_front implements api_interface
 		
 		$other['mobile_phone'] = empty($mobile) ? $other['mobile_phone'] : $mobile;
 		if (is_numeric($other['mobile_phone']) && strlen($other['mobile_phone']) == 11 && preg_match( '/^1[3|4|5|7|8][0-9]\d{8}$/', $other['mobile_phone'])) {
-			$db_user = RC_Loader::load_app_model('users_model', 'user');
+			$db_user      = RC_Loader::load_app_model('users_model', 'user');
 			$mobile_count = $db_user->where(array('mobile_phone' => $other['mobile_phone']))->count();
 			if ($mobile_count > 0 ) {
 				return new ecjia_error('user_exists', '用户已存在！');
@@ -121,8 +121,8 @@ class signup_module extends api_front implements api_interface
 			
 			//修正咨询信息
 			if($_SESSION['user_id'] > 0) {
-				$device_id = isset($device['udid']) ? $device['udid'] : '';
-				$device_client = isset($device['client']) ? $device['client'] : '';
+				$device_id        = isset($device['udid']) ? $device['udid'] : '';
+				$device_client    = isset($device['client']) ? $device['client'] : '';
 				$db_term_relation = RC_Loader::load_model('term_relationship_model');
 				
 				$object_id = $db_term_relation->where(array(
@@ -284,6 +284,5 @@ function admin_registered ($adminname) {
     $res = $db->where(array('user_name' => $adminname))->count();
     return $res;
 }
-
 
 // end

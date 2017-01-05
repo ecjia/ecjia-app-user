@@ -16,5 +16,4 @@ class signout_module extends api_admin implements api_interface {
 	}
 }
 
-
 // end

@@ -1,20 +1,22 @@
 <?php
 defined('IN_ECJIA') or exit('No permission resources.');
+
 /**
  * 积分收支明细
  * @author zrl
  *
  */
+ 
 class integral_record_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	
     	if ($_SESSION['user_id'] <= 0) {
     		return new ecjia_error(100, 'Invalid session');
     	}
- 		$size = $this->requestData('pagination.count', 15);
-        $page = $this->requestData('pagination.page', 1);
+ 		$size    = $this->requestData('pagination.count', 15);
+        $page    = $this->requestData('pagination.page', 1);
  		$user_id = $_SESSION['user_id'];
- 		$type = $this->requestData('type', 'income');
+ 		$type    = $this->requestData('type', 'income');
  		
 		$where = array();
 		$where['user_id'] = $_SESSION['user_id'];
@@ -38,7 +40,7 @@ class integral_record_module extends api_front implements api_interface {
  		$pager = array(
  				"total" => $page_row->total_records,
  				"count" => $page_row->total_records,
- 				"more" => $page_row->total_pages <= $page ? 0 : 1,
+ 				"more"  => $page_row->total_pages <= $page ? 0 : 1,
  		);
  		$data = array();
  		$data['integral'] = intval($integral);

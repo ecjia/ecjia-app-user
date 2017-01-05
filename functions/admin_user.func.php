@@ -9,6 +9,7 @@ defined('IN_ECJIA') or exit('No permission resources.');
  *
  * @return void
  */
+ 
 function get_user_list($args = array()) {
 
 	$db_user = RC_DB::table('users');
@@ -514,11 +515,11 @@ function change_account_log($user_id, $user_money = 0, $frozen_money = 0, $rank_
  */
 function update_user_info() {
 	// 链接数据库
-	$dbview = RC_Model::model('user/user_viewmodel');
-	$db_users = RC_Model::model('user/users_model');
+	$dbview        = RC_Model::model('user/user_viewmodel');
+	$db_users      = RC_Model::model('user/users_model');
 	$db_user_bonus = RC_Model::model('bonus/user_bonus_model');
 	$db_bonus_type = RC_Model::model('bonus/bonus_type_model');
-	$db_user_rank = RC_Model::model('user/user_rank_model');
+	$db_user_rank  = RC_Model::model('user/user_rank_model');
 
 	if (! $_SESSION['user_id']) {
 		return false;
@@ -529,23 +530,23 @@ function update_user_info() {
 
 	$dbview->view = array(
 		'user_bonus' => array(
-			'type' 	=> Component_Model_View::TYPE_LEFT_JOIN,
-			'alias' => 'ub',
-			'on' 	=> 'ub.user_id = u.user_id AND ub.used_time = 0'
+			'type' 	 => Component_Model_View::TYPE_LEFT_JOIN,
+			'alias'  => 'ub',
+			'on' 	 => 'ub.user_id = u.user_id AND ub.used_time = 0'
 		),
 		'bonus_type' => array(
-			'type' 	=> Component_Model_View::TYPE_LEFT_JOIN,
-			'alias' => 'b',
-			'on' 	=> "b.type_id = ub.bonus_type_id AND b.use_start_date <= '$time' AND b.use_end_date >= '$time'"
+			'type' 	 => Component_Model_View::TYPE_LEFT_JOIN,
+			'alias'  => 'b',
+			'on' 	 => "b.type_id = ub.bonus_type_id AND b.use_start_date <= '$time' AND b.use_end_date >= '$time'"
 		)
 	);
 	$row = $dbview->find('u.user_id = ' . $_SESSION['user_id'] . '');
 	if ($row) {
 		/* 更新SESSION */
-		$_SESSION['last_time'] = RC_Time::local_date('Y-m-d H:i:s',$row['last_login']);
-		$_SESSION['last_ip'] = $row['last_ip'];
+		$_SESSION['last_time']  = RC_Time::local_date('Y-m-d H:i:s',$row['last_login']);
+		$_SESSION['last_ip']    = $row['last_ip'];
 		$_SESSION['login_fail'] = 0;
-		$_SESSION['email'] = $row['email'];
+		$_SESSION['email']      = $row['email'];
 
 		/* 判断是否是特殊等级，可能后台把特殊会员组更改普通会员组 */
 		if ($row['user_rank'] > 0) {
@@ -565,20 +566,20 @@ function update_user_info() {
 			$row = $db_user_rank->field('rank_id, discount')->find('special_rank = "0" AND min_points <= "' . intval($row['rank_points']) . '" AND max_points > "' . intval($row['rank_points']) . '"');
 			if ($row) {
 				$_SESSION['user_rank'] = $row['rank_id'];
-				$_SESSION['discount'] = $row['discount'] / 100.00;
+				$_SESSION['discount']  = $row['discount'] / 100.00;
 			} else {
 				$_SESSION['user_rank'] = 0;
-				$_SESSION['discount'] = 1;
+				$_SESSION['discount']  = 1;
 			}
 		} else {
 			// 特殊等级
 			$row = $db_user_rank->field('rank_id, discount')->find('rank_id = "' . $row[user_rank] . '"');
 			if ($row) {
 				$_SESSION['user_rank'] = $row['rank_id'];
-				$_SESSION['discount'] = $row['discount'] / 100.00;
+				$_SESSION['discount']  = $row['discount'] / 100.00;
 			} else {
 				$_SESSION['user_rank'] = 0;
-				$_SESSION['discount'] = 1;
+				$_SESSION['discount']  = 1;
 			}
 		}
 	}

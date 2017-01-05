@@ -6,6 +6,7 @@ defined('IN_ECJIA') or exit('No permission resources.');
  * @author will
  *
  */
+ 
 class rank_module extends api_admin implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {
 
@@ -21,8 +22,8 @@ class rank_module extends api_admin implements api_interface {
 		if (!empty($result)) {
 			foreach ($result as $val) {
 				$user_rank[] = array(
-					'rank_id'	=> $val['rank_id'],
-					'rank_name' => $val['rank_name'],
+					'rank_id'	 => $val['rank_id'],
+					'rank_name'  => $val['rank_name'],
 					'min_points' => $val['min_points'],
 					'max_points' => $val['max_points'], 
 				);
@@ -32,6 +33,5 @@ class rank_module extends api_admin implements api_interface {
 		return $user_rank;
 	}
 }
-
 
 // end

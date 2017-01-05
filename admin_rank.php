@@ -1,9 +1,9 @@
 <?php
+defined('IN_ECJIA') or exit('No permission resources.');
+
 /**
  * ECJIA 会员等级管理程序
 */
-
-defined('IN_ECJIA') or exit('No permission resources.');
 
 class admin_rank extends ecjia_admin {
 	private $db_user;

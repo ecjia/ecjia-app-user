@@ -6,6 +6,7 @@ defined('IN_ECJIA') or exit('No permission resources.');
  * @author will
  *
  */
+ 
 class userinfo_module extends api_admin implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {
     		
@@ -30,9 +31,9 @@ function get_user_info_merchant() {
     
     if ($result) {
         $userinfo = array(
-            'id' 		=> $result['user_id'],
-            'username'	=> $result['name'],
-            'email'		=> $result['email'],
+            'id' 		    => $result['user_id'],
+            'username'	    => $result['name'],
+            'email'		    => $result['email'],
             'last_login' 	=> RC_Time::local_date(ecjia::config('time_format'), $result['last_login']),
             'last_ip'		=> RC_Ip::area($result['last_ip']),
             'role_name'		=> $result['group_id'] ? RC_DB::table('staff_group')->where('group_id', $result['group_id'])->pluck('group_name') : null,
@@ -58,9 +59,9 @@ function get_user_info_admin() {
     }
     
     $userinfo = array(
-        'id' 		=> $result['user_id'],
-        'username'	=> $result['user_name'],
-        'email'		=> $result['email'],
+        'id' 		    => $result['user_id'],
+        'username'	    => $result['user_name'],
+        'email'		    => $result['email'],
         'last_login' 	=> RC_Time::local_date(ecjia::config('time_format'), $result['last_login']),
         'last_ip'		=> RC_Ip::area($result['last_ip']),
         'role_name'		=> $db_role->where(array('role_id' => $result['role_id']))->get_field('role_name'),

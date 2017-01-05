@@ -9,12 +9,12 @@ class user_account_viewmodel extends Component_Model_View {
 		$this->table_alias_name = 'u';
 
 		$this->view = array(
-				'user_account' 	=> array(
-				       'type' 	=> Component_Model_View::TYPE_LEFT_JOIN,
-					   'alias' 	=> 'ua',
-					   'field' 	=> 'u.user_name',
-					    'on'   	=> 'u.user_id = ua.user_id'				
-				)
+			'user_account' 	=> array(
+                'type' 	    => Component_Model_View::TYPE_LEFT_JOIN,
+                'alias' 	=> 'ua',
+                'field' 	=> 'u.user_name',
+                'on'   	    => 'u.user_id = ua.user_id'				
+			)
 		);
 		parent::__construct();
 	}
