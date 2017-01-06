@@ -4,7 +4,6 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * ECJIA 会员管理语言文件
  */
-
 return array(
 	/* 列表页面 */
 	'label_user_name' 		=> '名称',

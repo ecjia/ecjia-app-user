@@ -1,9 +1,9 @@
 <?php
 defined('IN_ECJIA') or exit('No permission resources.');
+
 /**
  * ECJIA 会员管理语言文件
  */
-
 /* 列表页面 */
 $LANG['label_user_name'] 						= '会员名称';
 $LANG['label_pay_points_gt'] 					= '会员积分大于';

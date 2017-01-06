@@ -4,9 +4,7 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * 用户提现申请
  * @author royalwang
- *
  */
- 
 class raply_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	
@@ -25,13 +23,13 @@ class raply_module extends api_front implements api_interface {
  		RC_Loader::load_app_func('admin_order', 'orders');
  		/* 变量初始化 */
  		$surplus = array(
- 				'user_id'      => $user_id,
- 				'order_sn'	   => get_order_sn(),
- 				'account_id'   => 0,
- 				'process_type' => 1,
- 				'payment_id'   => 0,
- 				'user_note'    => $user_note,
- 				'amount'       => $amount
+			'user_id'      => $user_id,
+			'order_sn'	   => get_order_sn(),
+			'account_id'   => 0,
+			'process_type' => 1,
+			'payment_id'   => 0,
+			'user_note'    => $user_note,
+			'amount'       => $amount
  		);
  		
  		RC_Loader::load_app_func('admin_user', 'user');
@@ -54,10 +52,10 @@ class raply_module extends api_front implements api_interface {
  			$db = RC_DB::table('payment_record');
  			$payment_record = $db->where('order_sn', $surplus['order_sn'])->first();
  			$payment_data = array(
- 					'order_sn'		=> $surplus['order_sn'],
- 					'trade_type'	=> 'withdraw',
- 					'total_fee'		=> $amount,
- 					'pay_status'	=> 0,
+				'order_sn'		=> $surplus['order_sn'],
+				'trade_type'	=> 'withdraw',
+				'total_fee'		=> $amount,
+				'pay_status'	=> 0,
  			);
  			if (empty($payment_record)) {
  				$payment_data['create_time']	= RC_Time::gmtime();

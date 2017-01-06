@@ -4,7 +4,6 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * ECJIA 会员充值提现管理
 */
-
 class admin_account extends ecjia_admin {
 	private $db_payment;
 	private $db_user_account;

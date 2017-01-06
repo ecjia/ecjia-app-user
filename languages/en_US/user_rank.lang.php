@@ -4,7 +4,6 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * ECJIA Member level language pack
  */
-
 return array(
 	'rank_name'			=> 'Rank name',
 	'integral_min'		=> 'Min points',

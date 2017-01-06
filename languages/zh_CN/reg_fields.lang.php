@@ -4,7 +4,6 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * ECJIA 会员注册项管理语言文件 
  */
-
 return array(
 	'21_reg_fields' 	=> '会员注册项设置',
 	'field_name' 		=> '会员注册项名称',

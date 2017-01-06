@@ -4,7 +4,6 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * ECJIA 会员资金管理文件
  */
-
 return array(
 	'start_date' 			=> '开始日期',
 	'end_date' 				=> '结束日期',

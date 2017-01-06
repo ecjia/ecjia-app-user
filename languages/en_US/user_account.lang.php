@@ -4,7 +4,6 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * ECJIA Member prepaid cash management language items
  */
-
 return array(
 	'edit' 			=> 'edit',//追加
 	'user_surplus'	=> 'Advanced payment',

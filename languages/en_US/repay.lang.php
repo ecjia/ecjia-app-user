@@ -4,7 +4,6 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * ECJIA Personal center capital management language pack
  */
-
 return array(
 	'back_list'		=> 'Return to list',
 	'dispose_succed'=> 'Successfully',

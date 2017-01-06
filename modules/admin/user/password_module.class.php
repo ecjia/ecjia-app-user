@@ -4,9 +4,7 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * 管理员修改密码
  * @author will
- *
  */
- 
 class password_module extends api_admin implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {
     	
@@ -35,7 +33,7 @@ class password_module extends api_admin implements api_interface {
 			$ec_salt = rand(1, 9999);
 			$data = array(
 					'password' => md5(md5($new_password) . $ec_salt),
-					'ec_salt' => $ec_salt
+					'ec_salt'  => $ec_salt
 			);
 		
 			$result = $db->where(array('user_id' => $adminid))->update($data);

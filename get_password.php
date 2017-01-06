@@ -1,5 +1,6 @@
 <?php
 defined('IN_ROYALCMS') or exit('No permission resources.');
+
 RC_Loader::load_app_class('integrate', 'user', false);
 
 class get_password extends ecjia_front {

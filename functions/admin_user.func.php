@@ -3,10 +3,8 @@ defined('IN_ECJIA') or exit('No permission resources.');
 
 /**
  *返回用户列表数据
- *
  * @accesspublic
  * @param
- *
  * @return void
  */
  
@@ -64,16 +62,16 @@ function get_account_list($args = array()) {
 
 	$payment_method = RC_Loader::load_app_class('payment_method', 'payment');
 	
-	$filter['user_id']		= empty($args['user_id'])			? 0  : intval($args['user_id']);
-	$filter['keywords']		= empty($args['keywords'])			? '' : trim($args['keywords']);
+	$filter['user_id']		= empty($args['user_id'])			? 0                             : intval($args['user_id']);
+	$filter['keywords']		= empty($args['keywords'])			? ''                            : trim($args['keywords']);
 	$filter['process_type']	= isset($args['process_type'])		? intval($args['process_type']) : -1;
-	$filter['payment']		= empty($args['payment'])			? '' : trim($args['payment']);
-	$filter['is_paid']		= isset($args['is_paid'])			? intval($args['is_paid']) : -1;
-	$filter['start_date']	= empty($args['start_date'])		? '' : $args['start_date'];
-	$filter['end_date']		= empty($args['end_date'])			? '' : $args['end_date'];
+	$filter['payment']		= empty($args['payment'])			? ''                            : trim($args['payment']);
+	$filter['is_paid']		= isset($args['is_paid'])			? intval($args['is_paid'])      : -1;
+	$filter['start_date']	= empty($args['start_date'])		? ''                            : $args['start_date'];
+	$filter['end_date']		= empty($args['end_date'])			? ''                            : $args['end_date'];
 
-	$filter['sort_by']		= empty($_REQUEST['sort_by'])		? 'add_time' : trim($_REQUEST['sort_by']);
-	$filter['sort_order']	= empty($_REQUEST['sort_order'])	? 'DESC' : trim($_REQUEST['sort_order']);
+	$filter['sort_by']		= empty($_REQUEST['sort_by'])		? 'add_time'                    : trim($_REQUEST['sort_by']);
+	$filter['sort_order']	= empty($_REQUEST['sort_order'])	? 'DESC'                        : trim($_REQUEST['sort_order']);
 	$db_user_account = RC_DB::table('user_account as ua')->leftJoin('users as u', RC_DB::raw('ua.user_id'), '=', RC_DB::raw('u.user_id'));
 	
 	if ($filter['user_id'] > 0) {
@@ -247,7 +245,6 @@ function get_account_log($user_id, $num, $start, $process_type = '') {
 	}
 	
 	$res = $db->where($where)->order(array('add_time' => 'desc'))->limit($start->limit())->select();
-	//$res = RC_DB::table('user_account')->orderBy('add_time', 'desc')->select();
 	
 	if (!empty($res)) {
 		RC_Loader::load_sys_func('global');
@@ -363,9 +360,9 @@ function get_total_amount ($start_date, $end_date, $type = 0) {
 function get_user_order($args = array()) {
 	$dbview = RC_Model::model('user/order_user_viewmodel');
 
-	$filter['keywords']		= empty($_REQUEST['keywords'])		? '' : trim($_REQUEST['keywords']);
-	$filter['start_date']	= empty($args['start_date'])		? '' : $args['start_date'];
-	$filter['end_date']		= empty($args['end_date'])			? '' : $args['end_date'];
+	$filter['keywords']		= empty($_REQUEST['keywords'])		? ''         : trim($_REQUEST['keywords']);
+	$filter['start_date']	= empty($args['start_date'])		? ''         : $args['start_date'];
+	$filter['end_date']		= empty($args['end_date'])			? ''         : $args['end_date'];
 	$filter['sort_by']		= empty($_REQUEST['sort_by'])		? 'order_id' : trim($_REQUEST['sort_by']);
 	$filter['sort_order']	= empty($_REQUEST['sort_order'])	? 'DESC'	 : trim($_REQUEST['sort_order']);
 
@@ -628,17 +625,17 @@ function update_address($address) {
 }
 
 function EM_user_info($user_id) {
-	$db_collect_goods = RC_Model::model('goods/collect_goods_model');
-	$db_user_rank = RC_Model::model('user/user_rank_model');
+	$db_collect_goods  = RC_Model::model('goods/collect_goods_model');
+	$db_user_rank      = RC_Model::model('user/user_rank_model');
 	$db_orderinfo_view = RC_Model::model('orders/order_info_viewmodel');
 	
 	RC_Loader::load_app_func('admin_order', 'orders');
-	$user_info = user_info($user_id);
+	$user_info      = user_info($user_id);
 	$collection_num = $db_collect_goods->where(array('user_id' => $user_id))->order(array('add_time' => 'desc'))->count();
-	$await_pay = $db_orderinfo_view->join(array('order_info'))->where(array('oi.user_id' => $user_id, EM_order_query_sql('await_pay', 'oi.')))->count('*');
-	$await_ship = $db_orderinfo_view->join(array('order_info'))->where(array('oi.user_id' => $user_id, EM_order_query_sql('await_ship', 'oi.')))->count('*');
-	$shipped = $db_orderinfo_view->join(array('order_info'))->where(array('oi.user_id' => $user_id, EM_order_query_sql('shipped', 'oi.')))->count('*');
-	$finished = $db_orderinfo_view->join(array('order_info'))->where(array('oi.user_id' => $user_id, EM_order_query_sql('finished', 'oi.')))->count('*');
+	$await_pay      = $db_orderinfo_view->join(array('order_info'))->where(array('oi.user_id' => $user_id, EM_order_query_sql('await_pay', 'oi.')))->count('*');
+	$await_ship     = $db_orderinfo_view->join(array('order_info'))->where(array('oi.user_id' => $user_id, EM_order_query_sql('await_ship', 'oi.')))->count('*');
+	$shipped        = $db_orderinfo_view->join(array('order_info'))->where(array('oi.user_id' => $user_id, EM_order_query_sql('shipped', 'oi.')))->count('*');
+	$finished       = $db_orderinfo_view->join(array('order_info'))->where(array('oi.user_id' => $user_id, EM_order_query_sql('finished', 'oi.')))->count('*');
 	/* 取得用户等级 */
 	if ($user_info['user_rank'] == 0) {
 		// 非特殊等级，根据等级积分计算用户等级（注意：不包括特殊等级）
@@ -721,11 +718,11 @@ function EM_get_collection_goods($user_id, $num = 10, $start = 1, $rec_id = 0) {
 		$db_collect_goods->where(RC_DB::raw('c.rec_id'), '<=', $rec_id);
 	}
 	$res = $db_collect_goods
-	->selectRaw("g.original_img, g.goods_id, g.goods_name, g.market_price, g.shop_price, g.goods_thumb, g.goods_img, g.original_img, g.goods_brief, g.goods_type AS org_price, IFNULL(mp.user_price, g.shop_price * '".$_SESSION['discount']."') AS shop_price, g.promote_price, g.promote_start_date, g.promote_end_date, c.rec_id, c.is_attention, g.click_count")
-	->orderby(RC_DB::raw('c.rec_id'), 'desc')
-	->take($num)
-	->skip(($start - 1) * $num)
-	->get();
+    	->selectRaw("g.original_img, g.goods_id, g.goods_name, g.market_price, g.shop_price, g.goods_thumb, g.goods_img, g.original_img, g.goods_brief, g.goods_type AS org_price, IFNULL(mp.user_price, g.shop_price * '".$_SESSION['discount']."') AS shop_price, g.promote_price, g.promote_start_date, g.promote_end_date, c.rec_id, c.is_attention, g.click_count")
+    	->orderby(RC_DB::raw('c.rec_id'), 'desc')
+    	->take($num)
+    	->skip(($start - 1) * $num)
+    	->get();
 
 	$goods_list = array();
 	if (!empty($res)) {
@@ -752,7 +749,7 @@ function EM_get_collection_goods($user_id, $num = 10, $start = 1, $rec_id = 0) {
 			$goods_list[$row['goods_id']]['goods_img']     = $row['goods_img'];
 			$goods_list[$row['goods_id']]['click_count']   = $row['click_count'];
 
-			$goods_list[$row['goods_id']]['unformatted_shop_price'] = $row['shop_price'];
+			$goods_list[$row['goods_id']]['unformatted_shop_price']    = $row['shop_price'];
 			$goods_list[$row['goods_id']]['unformatted_promote_price'] = $promote_price;
 		}
 	}

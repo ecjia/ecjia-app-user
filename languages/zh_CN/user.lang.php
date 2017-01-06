@@ -4,7 +4,6 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * ECJIA 前台用户中心语言项
  */
-
 return array(
 	'require_login' 	=> '非法入口。<br />必须登录才能完成操作。',
 	'no_records' 		=> '没有记录',

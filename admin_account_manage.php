@@ -4,7 +4,6 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * ECJIA 会员资金管理程序
 */
-
 class admin_account_manage extends ecjia_admin {
 	private $db_account_log;
 	

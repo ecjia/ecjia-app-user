@@ -4,7 +4,6 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * 会员帐户变动记录
  */
-
 class admin_account_log extends ecjia_admin {
 	public function __construct() {
 		parent::__construct();

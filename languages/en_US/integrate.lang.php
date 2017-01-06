@@ -4,7 +4,6 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * ECJia Management center member data integration plug-in management language file
  */
-
 return array(
 	'integrate_name'	=>'Name',
 	'integrate_version'	=>'Version',

@@ -4,7 +4,6 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * ECJia 整合插件类的基类
  */
- 
 abstract class integrate_abstract
 {
 
@@ -89,11 +88,11 @@ abstract class integrate_abstract
     {
         RC_Loader::load_app_config('constant', 'user', false);
         
-        $this->charset 			= isset($cfg['db_charset']) ? $cfg['db_charset'] : 'UTF8';
-        $this->prefix 			= isset($cfg['prefix']) ? $cfg['prefix'] : '';
-        $this->db_name 			= isset($cfg['db_name']) ? $cfg['db_name'] : '';
-        $this->cookie_domain 	= isset($cfg['cookie_domain']) ? $cfg['cookie_domain'] : '';
-        $this->cookie_path 		= isset($cfg['cookie_path']) ? $cfg['cookie_path'] : '/';
+        $this->charset 			= isset($cfg['db_charset'])    ? $cfg['db_charset']       : 'UTF8';
+        $this->prefix 			= isset($cfg['prefix'])        ? $cfg['prefix']           : '';
+        $this->db_name 			= isset($cfg['db_name'])       ? $cfg['db_name']          : '';
+        $this->cookie_domain 	= isset($cfg['cookie_domain']) ? $cfg['cookie_domain']    : '';
+        $this->cookie_path 		= isset($cfg['cookie_path'])   ? $cfg['cookie_path']      : '/';
         $this->need_sync 		= true;
         $this->user_table       = 'users';
 

@@ -4,7 +4,6 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * ECJIA 会员等级管理程序
 */
-
 class admin_rank extends ecjia_admin {
 	private $db_user;
 	private $db_user_rank;
@@ -264,6 +263,7 @@ class admin_rank extends ecjia_admin {
 	public function remove() {
 
 		$this->admin_priv('user_rank', ecjia::MSGTYPE_JSON);
+		
 		$rank_id = intval($_GET['id']);
 		$rank_name = RC_DB::table('user_rank')->where('rank_id', $rank_id)->pluck('rank_name');
 

@@ -4,7 +4,6 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * ECJIA 管理中心帐户变动记录语言文件
  */
-
 return array(
 	/* 菜单 */
 	'add_account'  		=> '调节会员帐户',

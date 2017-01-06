@@ -1,9 +1,9 @@
 <?php
 defined('IN_ECJIA') or exit('No permission resources.');
+
 /**
  * ECJIA 管理中心帐户变动记录语言文件
  */
-
 /* 菜单 */
 $LANG['add_account'] 								= '调节会员帐户';
 $LANG['account_list'] 								= '会员帐户变动明细';

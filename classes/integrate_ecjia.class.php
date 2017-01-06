@@ -4,7 +4,6 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * 会员数据处理类
  */
- 
 RC_Loader::load_app_class('integrate_abstract', 'user', false);
 
 class integrate_ecjia extends integrate_abstract {

@@ -146,10 +146,10 @@ class signup_module extends api_front implements api_interface
 					if (!empty($device['udid']) && !empty($device['client']) && !empty($device['code'])) {
 						$db_mobile_device = RC_Loader::load_app_model('mobile_device_model', 'mobile');
 						$device_data = array(
-								'device_udid'	=> $device['udid'],
-								'device_client'	=> $device['client'],
-								'device_code'	=> $device['code'],
-								'user_type'		=> 'user',
+							'device_udid'	=> $device['udid'],
+							'device_client'	=> $device['client'],
+							'device_code'	=> $device['code'],
+							'user_type'		=> 'user',
 						);
 						$db_mobile_device->where($device_data)->update(array('user_id' => $_SESSION['user_id']));
 					}
@@ -229,10 +229,10 @@ function register($username, $password, $email, $other = array())
         /* 注册送积分 */
         if (ecjia::config('register_points' , ecjia::CONFIG_EXISTS)) {
         	$options = array(
-        			'user_id'		=> $_SESSION['user_id'],
-        			'rank_points'	=> ecjia::config('register_points'),
-        			'pay_points'	=> ecjia::config('register_points'),
-        			'change_desc'	=> RC_Lang::lang('register_points')
+    			'user_id'		=> $_SESSION['user_id'],
+    			'rank_points'	=> ecjia::config('register_points'),
+    			'pay_points'	=> ecjia::config('register_points'),
+    			'change_desc'	=> RC_Lang::lang('register_points')
         	);
         	$result = RC_Api::api('user', 'account_change_log',$options);
         }

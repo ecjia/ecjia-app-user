@@ -4,9 +4,7 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * 用户充值付款
  * @author royalwang
- *
  */
- 
 class pay_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {
     		
@@ -82,12 +80,12 @@ class pay_module extends api_front implements api_interface {
 	        $db = RC_DB::table('payment_record');
 	        $payment_record = $db->where('order_sn', $order['order_sn'])->first();
 	        $payment_data = array(
-	        		'order_sn'		=> $order['order_sn'],
-	        		'trade_type'	=> 'deposit',
-	        		'pay_code'		=> $payment_info['pay_code'],
-	        		'pay_name'		=> $payment_info['pay_name'],
-	        		'total_fee'		=> $order['order_amount'],
-	        		'pay_status'	=> 0,
+        		'order_sn'		=> $order['order_sn'],
+        		'trade_type'	=> 'deposit',
+        		'pay_code'		=> $payment_info['pay_code'],
+        		'pay_name'		=> $payment_info['pay_name'],
+        		'total_fee'		=> $order['order_amount'],
+        		'pay_status'	=> 0,
 	        );
 	        if (empty($payment_record)) {
 	        	$payment_data['create_time']	= RC_Time::gmtime();

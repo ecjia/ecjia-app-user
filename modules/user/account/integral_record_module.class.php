@@ -4,9 +4,7 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * 积分收支明细
  * @author zrl
- *
  */
- 
 class integral_record_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	
@@ -38,9 +36,9 @@ class integral_record_module extends api_front implements api_interface {
  		$integral_list = $db->get_integral_list(array('where' => $where, 'limit' => $page_row->limit()));
  		
  		$pager = array(
- 				"total" => $page_row->total_records,
- 				"count" => $page_row->total_records,
- 				"more"  => $page_row->total_pages <= $page ? 0 : 1,
+			"total" => $page_row->total_records,
+			"count" => $page_row->total_records,
+			"more"  => $page_row->total_pages <= $page ? 0 : 1,
  		);
  		$data = array();
  		$data['integral'] = intval($integral);

@@ -4,9 +4,7 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * 收货地址管理接口
  * @author 
- *
  */
- 
 class user_address_manage_api extends Component_Event_Api {
     
     public function call(&$address) {

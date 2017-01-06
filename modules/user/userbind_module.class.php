@@ -4,9 +4,7 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * 手机快速注册/用户账户关联注册（手机、邮箱等）
  * @author will.chen
- *
  */
- 
 class userbind_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	
@@ -50,9 +48,9 @@ class userbind_module extends api_front implements api_interface {
 			
 			$content = ecjia_api::$controller->fetch_string($tpl['template_content']);
 			$options = array(
-					'mobile' 		=> $value,
-					'msg'			=> $content,
-					'template_id' 	=> $tpl['template_id'],
+				'mobile' 		=> $value,
+				'msg'			=> $content,
+				'template_id' 	=> $tpl['template_id'],
 			);
 			
 			$response = RC_Api::api('sms', 'sms_send', $options);

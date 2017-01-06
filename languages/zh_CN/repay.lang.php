@@ -4,7 +4,6 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * ECJIA 个人中心 资金管理语言包
  */
-
 return array(
 	'back_list' 	=> '返回列表',
 	'dispose_succed'=> '处理成功',

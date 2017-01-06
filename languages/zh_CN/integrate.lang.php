@@ -4,7 +4,6 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * ECJia 管理中心会员数据整合插件管理程序语言文件
  */
-
 return array(
 	'integrate_name' 	=> '名称',
 	'integrate_version' => '版本',

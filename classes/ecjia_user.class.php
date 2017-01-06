@@ -4,7 +4,6 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * ecjia 前端页面会员中心控制器父类
  */
-
 abstract class ecjia_user extends ecjia {
 
 	public function __construct() {
@@ -97,8 +96,6 @@ abstract class ecjia_user extends ecjia {
 				'signin',
 				'signup',
 				'forgotpass',
-				
-				
 				'login',
 				'act_login',
 				'register',

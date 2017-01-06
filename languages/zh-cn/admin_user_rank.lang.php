@@ -1,9 +1,9 @@
 <?php
 defined('IN_ECJIA') or exit('No permission resources.');
+
 /**
  * ECJIA 会员等级语言包
  */
-
 $LANG['rank_name'] 				= '会员等级名称';
 $LANG['integral_min'] 			= '积分下限';
 $LANG['integral_max'] 			= '积分上限';

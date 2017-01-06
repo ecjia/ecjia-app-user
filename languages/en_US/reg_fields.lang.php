@@ -4,7 +4,6 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * ECJIA Member Registration Manager language files
  */
-
 return array(
 	'21_reg_fields' 		=> 'Register Options Settings',
 	'field_name'			=> 'Register options',

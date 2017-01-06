@@ -4,9 +4,7 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * 会员帐号资金变动日志记录接口
  * @author royalwang
- *
  */
- 
 class user_account_change_log_api extends Component_Event_Api {
     
     public function call(&$options) {

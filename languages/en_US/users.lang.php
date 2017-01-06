@@ -4,7 +4,6 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * ECJIA Member management language file
  */
-
 return array(
 	/* List page */
 	'label_user_name'		=> 'Username',

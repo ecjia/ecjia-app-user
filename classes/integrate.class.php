@@ -4,9 +4,7 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * 插件使用方法
  * @author royalwang
- *
  */
- 
 class integrate  {
     
     /**

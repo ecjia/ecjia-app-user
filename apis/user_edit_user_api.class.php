@@ -4,9 +4,7 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * 会员帐号信息编辑包括修改密码
  * @author royalwang
- *
  */
- 
 class user_edit_user_api extends Component_Event_Api {
     
     public function call(&$options) {

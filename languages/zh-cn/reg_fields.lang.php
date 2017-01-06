@@ -1,9 +1,9 @@
 <?php
 defined('IN_ECJIA') or exit('No permission resources.');
-/**
- * ECSJIA 会员注册项管理语言文件 
- */
 
+/**
+ * ECJIA 会员注册项管理语言文件 
+ */
 $LANG['21_reg_fields'] 						= '会员注册项设置';
 $LANG['field_name'] 						= '会员注册项名称';
 $LANG['field_order'] 						= '排序权值';

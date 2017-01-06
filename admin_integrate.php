@@ -4,7 +4,6 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * ECJIA 第三方程序会员数据整合插件管理程序
  */
- 
 class admin_integrate extends ecjia_admin {
 	private $db_user;	
 	private $integrate;

@@ -4,7 +4,6 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * ECJIA 会员管理程序
 */
-
 class admin extends ecjia_admin {
 	private $db_user;
 	private $db_order;

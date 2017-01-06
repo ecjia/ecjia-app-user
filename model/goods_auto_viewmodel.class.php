@@ -10,10 +10,10 @@ class goods_auto_viewmodel extends Component_Model_View {
 		
 		$this->view = array(
 				'auto_manage' => array(
-						'type' 	=> Component_Model_View::TYPE_LEFT_JOIN,
-						'alias'	=> 'a',
-						'field'	=> 'g.*,a.starttime,a.endtime,',
-						'on'	=> "g.goods_id = a.item_id AND a.type='goods'"
+						'type' 	   => Component_Model_View::TYPE_LEFT_JOIN,
+						'alias'	   => 'a',
+						'field'	   => 'g.*,a.starttime,a.endtime,',
+						'on'	   => "g.goods_id = a.item_id AND a.type='goods'"
 				),
 				'category' => array(
 						'type'     => Component_Model_View::TYPE_LEFT_JOIN,
@@ -27,14 +27,14 @@ class goods_auto_viewmodel extends Component_Model_View {
 						'on'       => 'g.brand_id = b.brand_id '
 				),
 				'comment' => array(
-						'type' => Component_Model_View::TYPE_LEFT_JOIN,
-						'alias' => 'r',
-						'on' => 'r.id_value = g.goods_id AND comment_type = 0 AND r.parent_id = 0 AND r.status = 1'
+						'type'     => Component_Model_View::TYPE_LEFT_JOIN,
+						'alias'    => 'r',
+						'on'       => 'r.id_value = g.goods_id AND comment_type = 0 AND r.parent_id = 0 AND r.status = 1'
 				),
 				'bonus_type' => array(
-						'type' => Component_Model_View::TYPE_LEFT_JOIN,
-						'alias' => 'm',
-						'on' => 'g.bonus_type_id = m.type_id AND m.send_start_date <= "' . $time . '" AND m.send_end_date >= "' . $time . '"'
+						'type'     => Component_Model_View::TYPE_LEFT_JOIN,
+						'alias'    => 'm',
+						'on'       => 'g.bonus_type_id = m.type_id AND m.send_start_date <= "' . $time . '" AND m.send_end_date >= "' . $time . '"'
 				),
 				'member_price'   => array(
 						'type'     => Component_Model_View::TYPE_LEFT_JOIN,

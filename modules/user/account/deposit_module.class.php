@@ -4,9 +4,7 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * 用户充值申请
  * @author royalwang
- *
  */
- 
 class deposit_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {
     		
@@ -32,13 +30,13 @@ class deposit_module extends api_front implements api_interface {
  		
  		/* 变量初始化 */
  		$surplus = array(
- 				'user_id'      => $user_id,
- 				'order_sn'	   => get_order_sn(),
- 				'account_id'   => intval($account_id),
- 				'process_type' => 0,
- 				'payment_id'   => intval($payment_id),
- 				'user_note'    => $user_note,
- 				'amount'       => $amount,
+			'user_id'      => $user_id,
+			'order_sn'	   => get_order_sn(),
+			'account_id'   => intval($account_id),
+			'process_type' => 0,
+			'payment_id'   => intval($payment_id),
+			'user_note'    => $user_note,
+			'amount'       => $amount,
  		);
  		
  		if ($surplus['payment_id'] <= 0) {

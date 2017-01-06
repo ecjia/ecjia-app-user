@@ -5,7 +5,6 @@ defined('IN_ECJIA') or exit('No permission resources.');
  * 会员整合插件安装API
  * @author royalwang
  */
- 
 class user_integrate_install_api extends Component_Event_Api {
 	
 	public function call(&$options) { 

@@ -4,9 +4,7 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * 添加会员帐号接口
  * @author royalwang
- *
  */
- 
 class user_add_user_api extends Component_Event_Api {
     
     public function call(&$options) {

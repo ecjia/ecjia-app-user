@@ -4,7 +4,6 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * ECJIA Management center account change record language file
  */
-
 return array(
 	/* 菜单 */
 	'add_account'		=> 'Adjustment Member Account',

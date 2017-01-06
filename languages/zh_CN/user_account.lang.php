@@ -4,7 +4,6 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * ECJIA 会员充值提现管理语言项
  */
-
 return array(
 	'edit' 			=> '编辑',
 	'user_surplus' 	=> '预付款',

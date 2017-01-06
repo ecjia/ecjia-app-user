@@ -4,7 +4,6 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * ECJIA User center foreground language entry
  */
-
 return array(
 	'require_login'		=> 'Illegal entry.<br />You can\'t finish the operation until login.',
 	'no_records'		=> 'No record',
@@ -136,16 +135,16 @@ return array(
 		
 	//JS语言项
 	'profile_js' => array(
-		'bonus_sn_empty'=> 'Please enter a bonus NO. that you want to add!',
-		'bonus_sn_error'=> 'Please enter a valid bonus NO.!',
-		'email_empty'=> 'Please enter your email address!',
-		'email_error'=> 'Please enter a valid email address!',
-		'old_password_empty'=> 'Please enter your primary password.',
-		'new_password_empty'=> 'Please enter the new password!',
-		'confirm_password_empty'=> 'Re-enter password !',
-		'both_password_error'=> 'The two passwords you entered did not match. Please type it again!',
-		'msg_blank'=> 'is blank',
-		'no_select_question'=> '- You do not complete the operation password prompt problem',
+		'bonus_sn_empty'          => 'Please enter a bonus NO. that you want to add!',
+		'bonus_sn_error'          => 'Please enter a valid bonus NO.!',
+		'email_empty'             => 'Please enter your email address!',
+		'email_error'             => 'Please enter a valid email address!',
+		'old_password_empty'      => 'Please enter your primary password.',
+		'new_password_empty'      => 'Please enter the new password!',
+		'confirm_password_empty'  => 'Re-enter password !',
+		'both_password_error'     => 'The two passwords you entered did not match. Please type it again!',
+		'msg_blank'               => 'is blank',
+		'no_select_question'      => '- You do not complete the operation password prompt problem',
 	),
 
 	/* 支付方式 */
@@ -213,12 +212,12 @@ return array(
 	),
 	
 	/* 会员留言 */
-	'message_title'	=> 'Title',
-	'message_time'	=> 'Message time',
-	'reply_time'	=> 'Reply time',
-	'shopman_reply'	=> 'Reply of the shop owner',
-	'send_message'	=> 'Send message',
-	'message_type'	=> 'Feedback type',
+	'message_title'	    => 'Title',
+	'message_time'	    => 'Message time',
+	'reply_time'	    => 'Reply time',
+	'shopman_reply'	    => 'Reply of the shop owner',
+	'send_message'	    => 'Send message',
+	'message_type'	    => 'Feedback type',
 	'message_content'	=> 'Contents',
 	'submit_message'	=> 'Submit',
 	'upload_img'		=> 'Upload file',
@@ -239,14 +238,14 @@ return array(
 	'msg_title_empty'		=> 'The title is blank',
 	'upload_file_limit'		=> 'File larger than %dKB',
 	
-	'img_type_tips'	=> '<font color="red">TIP:</font>',
-	'img_type_list'	=> 'You can upload file type as follows:<br />gif、jpg、png、word、excel、txt、zip、ppt、pdf',
-	'view_upload_file'	=> 'View the upload file',
-	'upload_file_type'	=> 'Please upload a valid file type, please upload again!',
-	'upload_file_error'	=> 'Wrong, please upload again!',
-	'message_empty'		=> 'You hasn\'t message as yet!',
-	'msg_success'		=> 'Your message have submitted  successfully!',
-	'confirm_remove_msg'=> 'Are you sure delete those messages?',
+	'img_type_tips'	        => '<font color="red">TIP:</font>',
+	'img_type_list'	        => 'You can upload file type as follows:<br />gif、jpg、png、word、excel、txt、zip、ppt、pdf',
+	'view_upload_file'	    => 'View the upload file',
+	'upload_file_type'	    => 'Please upload a valid file type, please upload again!',
+	'upload_file_error'	    => 'Wrong, please upload again!',
+	'message_empty'		    => 'You hasn\'t message as yet!',
+	'msg_success'		    => 'Your message have submitted  successfully!',
+	'confirm_remove_msg'    => 'Are you sure delete those messages?',
 	
 	/* 会员红包 */
 	'bonus_is_used'			=> 'The bonus has used.',
@@ -639,7 +638,7 @@ return array(
 		
 	'expire_unit' => array(
 		'hour'=> 'Hour',
-		'day'=> 'Day',
+		'day' => 'Day',
 		'week'=> 'Week',
 	),
 	

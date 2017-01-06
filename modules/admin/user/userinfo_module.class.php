@@ -4,7 +4,6 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * 管理员信息
  * @author will
- *
  */
 class userinfo_module extends api_admin implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {
@@ -27,9 +26,9 @@ class userinfo_module extends api_admin implements api_interface {
 		}
 		
 		$userinfo = array(
-			'id' 		=> $result['user_id'],
-			'username'	=> $result['user_name'],
-			'email'		=> $result['email'],
+			'id' 		    => $result['user_id'],
+			'username'	    => $result['user_name'],
+			'email'		    => $result['email'],
 			'last_login' 	=> RC_Time::local_date(ecjia::config('time_format'), $result['last_login']),
 			'last_ip'		=> RC_Ip::area($result['last_ip']),
 			'role_name'		=> $db_role->where(array('role_id' => $result['role_id']))->get_field('role_name'),

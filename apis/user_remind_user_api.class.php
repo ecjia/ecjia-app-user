@@ -4,9 +4,7 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * 新会员通知
  * @author will
- *
  */
- 
 class user_remind_user_api extends Component_Event_Api {
 	
 	public function call(&$options) {
@@ -27,6 +25,5 @@ class user_remind_user_api extends Component_Event_Api {
 		}
 	}
 }
-
 
 // end

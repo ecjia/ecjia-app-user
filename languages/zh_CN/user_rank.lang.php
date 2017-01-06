@@ -4,7 +4,6 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * ECJIA 会员等级语言包
  */
-
 return array(
 	'rank_name' 		=> '会员等级名称',
 	'integral_min' 		=> '积分下限',

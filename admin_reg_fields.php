@@ -4,7 +4,6 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * ECJIA 会员注册项管理程序
 */
-
 class admin_reg_fields extends ecjia_admin {
 	private $db_reg_fields;
 	private $db_reg_extend_info;
