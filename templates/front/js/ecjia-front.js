@@ -1,3 +1,4 @@
+// JavaScript Document
 /**
  * 后台综合js文件
  */
