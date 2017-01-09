@@ -652,7 +652,7 @@ class admin extends ecjia_admin {
     	$user->remove_user($username); //已经删除用户所有数据
     	
 		/* 记录管理员操作 */
-		ecjia_admin::admin_log(addslashes($user_info['user_name']), 'remove', 'users');
+		ecjia_admin::admin_log(addslashes($username), 'remove', 'users');
 		
 		return $this->showmessage(RC_Lang::get('user::users.delete_user_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
 	}
