@@ -99,6 +99,7 @@ class user_address_manage_api extends Component_Event_Api {
     	
     	//验证是否重复
     	$where = array(
+    	    'address_id' => array('neq' => $address_id),
     	    'user_id'   =>  $address['user_id'],
     	    'consignee' =>  $address['consignee'],
     	    'email'     =>  $address['email'],
