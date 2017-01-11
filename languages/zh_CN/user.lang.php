@@ -302,7 +302,9 @@ return array(
 	'add_bonus_false' 	=> '添加新的红包操作失败！',
 	'bonus_add_expire' 	=> '该红包已经过期！',
 	'bonus_use_expire' 	=> '该红包已经过了使用期！',
-		
+    'invalid_bonus' 	=> "您选择的红包并不存在。",
+    'bonus_min_amount_error' 	=> '订单商品金额没有达到使用该红包的最低金额 %s',
+    
 	/* 会员订单 */
 	'order_list_lnk'=> '我的订单列表',
 	'order_number' 	=> '订单编号',
@@ -734,7 +736,9 @@ return array(
 	'exchange_error_1' 	=> 'UCenter提交积分兑换时发生错误',
 	'rank_points' 		=> '商城等级积分',
 	'pay_points' 		=> '商城消费积分',
-		
+
+    'no_goods_in_cart' 	=> '您的购物车中没有商品！',
+    
 	/* 密码强度 */
 	'pwd_lower' 	=> '弱',
 	'pwd_middle' 	=> '中',

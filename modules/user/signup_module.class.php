@@ -248,21 +248,6 @@ function register($username, $password, $email, $other = array())
     	if (is_ecjia_error($user->error)) {
     		return $user->error;
     	}
-//        if ($user->error == ERR_INVALID_USERNAME) {
-//            ecjia::$error->add(sprintf($GLOBALS['_LANG']['username_invalid'], $username));
-//        } elseif ($GLOBALS['user']->error == ERR_USERNAME_NOT_ALLOW) {
-//            ecjia::$error->add(sprintf(RC_Lang::lang('username_not_allow'), $username));
-//        } elseif ($GLOBALS['user']->error == ERR_USERNAME_EXISTS) {
-//            ecjia::$error->add(sprintf(RC_Lang::lang('username_exist'), $username));
-//        } elseif ($GLOBALS['user']->error == ERR_INVALID_EMAIL) {
-//            ecjia::$error->add(sprintf(RC_Lang::lang('email_invalid'), $email));
-//        } elseif ($GLOBALS['user']->error == ERR_EMAIL_NOT_ALLOW) {
-//            ecjia::$error->add(sprintf(RC_Lang::lang('email_not_allow'), $email));
-//        } elseif ($GLOBALS['user']->error == ERR_EMAIL_EXISTS) {
-//            ecjia::$error->add(sprintf(RC_Lang::lang('email_exist'), $email));
-//        } else {
-//            ecjia::$error->add('UNKNOWN ERROR!');
-//        }
         
         // 注册失败
         return new ecjia_error('signup_error', '注册失败！');
@@ -277,7 +262,7 @@ function register($username, $password, $email, $other = array())
     			'user_id'		=> $_SESSION['user_id'],
     			'rank_points'	=> ecjia::config('register_points'),
     			'pay_points'	=> ecjia::config('register_points'),
-    			'change_desc'	=> RC_Lang::lang('register_points')
+    			'change_desc'	=> RC_Lang::get('user::user.register_points')
         	);
         	$result = RC_Api::api('user', 'account_change_log',$options);
         }

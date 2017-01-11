@@ -306,7 +306,7 @@ class get_password extends ecjia_front {
 	public function reset_pwd_question(){
 		$this->assign('action', 'reset_pwd_question');
 		RC_Lang::load('user');
-		$this->assign('passwd_question', RC_Lang::lang('passwd_questions/'.$_SESSION['temp_passwd_question']));
+		$this->assign('passwd_question', RC_Lang::get('user::user.passwd_questions/'.$_SESSION['temp_passwd_question']));
 	
 		$this->display('forget_password.dwt');
 	}
@@ -325,7 +325,7 @@ class get_password extends ecjia_front {
 			$this->assign('error_msg', __("问题答案错误！"));
 			$this->assign('action', 'reset_pwd_question');
 			RC_Lang::load('user');
-			$this->assign('passwd_question', RC_Lang::lang('passwd_questions/'.$_SESSION['temp_passwd_question']));
+			$this->assign('passwd_question', RC_Lang::get('user::user.passwd_questions/'.$_SESSION['temp_passwd_question']));
 			$this->display('forget_password.dwt');
 		}
 	}

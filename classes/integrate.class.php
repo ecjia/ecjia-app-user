@@ -269,7 +269,7 @@ class integrate  {
                      'user_id'		=> $_SESSION['user_id'],
                      'rank_points'	=> ecjia::config('register_points'),
                      'pay_points'	=> ecjia::config('register_points'),
-                     'change_desc'	=> RC_Lang::lang('register_points')
+                     'change_desc'	=> RC_Lang::get('user::user.register_points')
                 );
                 $result = RC_Api::api('user', 'account_change_log', $options);
             }
