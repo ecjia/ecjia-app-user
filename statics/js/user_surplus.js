@@ -4,7 +4,8 @@
         init: function () {
             /* 加载日期控件 */
             $(".date").datepicker({
-                format: "yyyy-mm-dd"
+                format: "yyyy-mm-dd",
+                container : '.main_content',
             });
  
             $(".select-button").click(function () {
@@ -62,7 +63,8 @@
         init: function () {
             /* 加载日期控件 */
             $(".date").datepicker({
-                format: "yyyy-mm-dd"
+                format: "yyyy-mm-dd",
+                container : '.main_content',
             });
  
             app.user_surplus.screen();

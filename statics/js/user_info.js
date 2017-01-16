@@ -33,7 +33,8 @@
         init: function () {
             /* 加载日期控件 */
             $(".date").datepicker({
-                format: "yyyy-mm-dd"
+                format: "yyyy-mm-dd",
+                container : '.main_content',
             });
             
             app.user_edit.submit();
