@@ -584,7 +584,7 @@ class admin extends ecjia_admin {
 			$user['home_phone']				= $row['home_phone'];
 			$user['mobile_phone']			= $row['mobile_phone'];
 			$user['is_validated']			= $row['is_validated'] == 0 ? RC_Lang::get('user::users.not_validated') : RC_Lang::get('user::users.is_validated');
-			$user['last_time']				= $row['last_time'] == '0000-00-00 00:00:00' ? '1970-01-01 00:00:00':$row['last_time'];
+			$user['last_time']              = $row['last_login'] == '0' ? '新用户还未登录' : RC_Time::local_date(ecjia::config('time_format'), $row['last_login']);
 			$user['last_ip']				= $row['last_ip'];
 			
 			/* 用户地址列表*/
