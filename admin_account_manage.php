@@ -84,7 +84,7 @@ class admin_account_manage extends ecjia_admin {
 	 * 资金管理
 	 */
 	public function init() {
-		$this->admin_priv('account_manage', ecjia::MSGTYPE_JSON);
+		$this->admin_priv('account_manage');
 		
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('user::user_account_manage.user_account_manage')));
 		ecjia_screen::get_current_screen()->add_help_tab(array(
@@ -152,7 +152,7 @@ class admin_account_manage extends ecjia_admin {
 	 * 积分余额订单
 	 */
 	public function surplus() {
-		$this->admin_priv('account_manage', ecjia::MSGTYPE_JSON);
+		$this->admin_priv('account_manage');
 		
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('user::user_account_manage.user_account_manage'), RC_Uri::url('user/admin_account_manage/init')));
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('user::user_account_manage.integral_order')));

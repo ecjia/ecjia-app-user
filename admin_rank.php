@@ -84,7 +84,7 @@ class admin_rank extends ecjia_admin {
 	 * 会员等级列表
 	 */
 	public function init() {
-		$this->admin_priv('user_rank', ecjia::MSGTYPE_JSON);
+		$this->admin_priv('user_rank');
 		
 		ecjia_screen::get_current_screen()->remove_last_nav_here();
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('user::user_rank.rank')));
@@ -112,7 +112,7 @@ class admin_rank extends ecjia_admin {
 	 * 添加会员等级
 	 */
 	public function add() {
-		$this->admin_priv('user_rank', ecjia::MSGTYPE_JSON);
+		$this->admin_priv('user_rank');
 		
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('user::user_rank.add_user_rank')));
 		ecjia_screen::get_current_screen()->add_help_tab(array(
@@ -203,7 +203,7 @@ class admin_rank extends ecjia_admin {
 	 * 编辑会员等级
 	 */
 	public function edit() {
-		$this->admin_priv('user_rank', ecjia::MSGTYPE_JSON);
+		$this->admin_priv('user_rank');
 
 	    ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('编辑会员等级')));
 	    ecjia_screen::get_current_screen()->add_help_tab(array(

@@ -77,7 +77,7 @@ class admin_account_log extends ecjia_admin {
 	 * 账户明细列表
 	 */
 	public function init() {
-		$this->admin_priv('account_manage', ecjia::MSGTYPE_JSON);
+		$this->admin_priv('account_manage');
 		
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('user::account_log.account_change_desc')));
 		ecjia_screen::get_current_screen()->add_help_tab(array(
@@ -117,7 +117,7 @@ class admin_account_log extends ecjia_admin {
 	 * 调节帐户
 	 */
 	public function edit() {
-		$this->admin_priv('account_manage', ecjia::MSGTYPE_JSON);
+		$this->admin_priv('account_manage');
 		
 		ecjia_screen::get_current_screen()->add_help_tab(array(
 			'id'		=> 'overview',

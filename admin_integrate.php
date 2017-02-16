@@ -85,7 +85,7 @@ class admin_integrate extends ecjia_admin {
 	 * 会员数据整合插件列表
 	 */
 	public function init() {
-	    $this->admin_priv('integrate_users', ecjia::MSGTYPE_JSON);
+	    $this->admin_priv('integrate_users');
 		
 		RC_Script::enqueue_script('jquery-dataTables-bootstrap');
 		RC_Script::enqueue_script('jquery-dataTables-sorting');
@@ -132,7 +132,7 @@ class admin_integrate extends ecjia_admin {
 	 * 设置会员数据整合插件
 	 */
 	public function setup() {
-	    $this->admin_priv('integrate_users', ecjia::MSGTYPE_JSON);
+	    $this->admin_priv('integrate_users');
 	
 	    $this->assign('ur_here',      RC_Lang::get('user::integrate.integrate_setup'));
 	    $this->assign('action_link',  array('text' => RC_Lang::get('user::integrate.back_integration'), 'href' => RC_Uri::url('user/admin_integrate/init')));

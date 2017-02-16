@@ -103,7 +103,7 @@ class admin extends ecjia_admin {
 	 * 用户帐号列表
 	 */
 	public function init() {
-		$this->admin_priv('user_manage', ecjia::MSGTYPE_JSON);
+		$this->admin_priv('user_manage');
 
 		ecjia_screen::get_current_screen()->remove_last_nav_here();
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('user::users.user_list')));
@@ -138,7 +138,7 @@ class admin extends ecjia_admin {
 	 * 添加会员帐号
 	 */
 	public function add() {
-		$this->admin_priv('user_update', ecjia::MSGTYPE_JSON);
+		$this->admin_priv('user_update');
 
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('system::system.04_users_add')));
 		ecjia_screen::get_current_screen()->add_help_tab(array(
@@ -296,7 +296,7 @@ class admin extends ecjia_admin {
 	 * 编辑用户帐号
 	 */
 	public function edit() {
-		$this->admin_priv('user_update', ecjia::MSGTYPE_JSON);
+		$this->admin_priv('user_update');
 
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('user::users.users_edit')));
 		ecjia_screen::get_current_screen()->add_help_tab(array(
@@ -525,7 +525,7 @@ class admin extends ecjia_admin {
 	 * 用户详情页面
 	 */
 	public function info() {
-		$this->admin_priv('user_manage', ecjia::MSGTYPE_JSON);
+		$this->admin_priv('user_manage');
 	
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('user::users.user_info')));
 		ecjia_screen::get_current_screen()->add_help_tab(array(
@@ -552,11 +552,11 @@ class admin extends ecjia_admin {
 					->first();
 
 		} else {
-			$row =RC_DB::table('users')->where('user_id', $id)->first();
+			$row = RC_DB::table('users')->where('user_id', $id)->first();
 		}
 
 		if (empty($row)) {
-			return $this->showmessage(RC_Lang::get('user::users.user_info_confirm'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR );
+			return $this->showmessage(RC_Lang::get('user::users.user_info_confirm'), ecjia::MSGTYPE_HTML | ecjia::MSGSTAT_ERROR );
 		}
 		
 		/* 获得用户等级名 */
