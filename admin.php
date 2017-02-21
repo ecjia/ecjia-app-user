@@ -202,7 +202,7 @@ class admin extends ecjia_admin {
 		$email				= empty($_POST['email'])			? ''	: trim($_POST['email']);
 		$sex				= empty($_POST['sex'])				? 0		: intval($_POST['sex']);
 		$sex				= in_array($sex, array(0, 1, 2))	? $sex	: 0;
-		$birthday			= empty($_POST['birthday'])			? ''	: $_POST['birthday'];
+		$birthday			= empty($_POST['birthday'])			? '1000-01-01'	: $_POST['birthday'];
 		$rank				= empty($_POST['user_rank'])		? 0		: intval($_POST['user_rank']);
 		$credit_line		= empty($_POST['credit_line'])		? 0		: trim($_POST['credit_line']);
 		$reg_time           = RC_Time::gmtime();
