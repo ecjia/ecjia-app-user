@@ -195,32 +195,34 @@ class admin extends ecjia_admin {
 		
 		RC_Loader::load_app_class('integrate', 'user', false);
 		$user = integrate::init_users();
-		
+
 		$username			= empty($_POST['username'])			? ''	: trim($_POST['username']);
 		$password			= empty($_POST['password'])			? ''	: trim($_POST['password']);
 		$confirm_password	= empty($_POST['confirm_password'])	? ''	: trim($_POST['confirm_password']);
 		$email				= empty($_POST['email'])			? ''	: trim($_POST['email']);
 		$sex				= empty($_POST['sex'])				? 0		: intval($_POST['sex']);
-		$sex				= in_array($sex, array(0, 1, 2))	? $sex	: 0;
+		$sex_array 			= array(0, 1, 2);
+		
+		$sex				= in_array($sex, $sex_array)		? $sex			: 0;
 		$birthday			= empty($_POST['birthday'])			? '1000-01-01'	: $_POST['birthday'];
-		$rank				= empty($_POST['user_rank'])		? 0		: intval($_POST['user_rank']);
-		$credit_line		= empty($_POST['credit_line'])		? 0		: trim($_POST['credit_line']);
+		$rank				= empty($_POST['user_rank'])		? 0				: intval($_POST['user_rank']);
+		$credit_line		= empty($_POST['credit_line'])		? 0				: trim($_POST['credit_line']);
 		$reg_time           = RC_Time::gmtime();
 
 		/* 验证参数的合法性*/
 		/* 邮箱*/
-		if (!@ereg("^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+" , $email)) {
+		if (!preg_match('/\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/', $email)) {
 			return $this->showmessage(RC_Lang::get('user::users.js_languages.invalid_email'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
-	
+
 		if (!empty($password)) {
-			if (!preg_match("/^[A-Za-z0-9]+$/",$password)){
+			if (!preg_match("/^[A-Za-z0-9]+$/", $password)){
 				return $this->showmessage(RC_Lang::get('user::users.js_languages.chinese_password'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 			}
 			if (empty($confirm_password)) {
 				return $this->showmessage(RC_Lang::get('user::users.js_languages.no_confirm_password'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 			}
-			if ($password != $confirm_password ) {
+			if ($password != $confirm_password) {
 				return $this->showmessage(RC_Lang::get('user::users.js_languages.password_not_same'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 			}
 			if (strlen($password) < 6 || strlen($confirm_password) < 6) {

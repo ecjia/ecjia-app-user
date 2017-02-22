@@ -151,9 +151,9 @@ class admin_reg_fields extends ecjia_admin {
 		
 		/* 取得参数  */
 		$field_name		= trim($_POST['reg_field_name']);
-		$dis_order		= trim($_POST['reg_field_order']);
-		$display		= trim($_POST['reg_field_display']);
-		$is_need		= trim($_POST['reg_field_need']);
+		$dis_order		= intval($_POST['reg_field_order']);
+		$display		= intval($_POST['reg_field_display']);
+		$is_need		= intval($_POST['reg_field_need']);
 		/* 检查是否存在重名的会员注册项 */
 		if (RC_DB::table('reg_fields')->where('reg_field_name', $field_name)->count() != 0){
 
@@ -214,10 +214,10 @@ class admin_reg_fields extends ecjia_admin {
 		
 		/* 取得参数  */
 		$field_name		= trim($_POST['reg_field_name']);
-		$dis_order		= trim($_POST['reg_field_order']);
-		$display		= trim($_POST['reg_field_display']);
-		$is_need		= trim($_POST['reg_field_need']);
-		$id				= $_POST['id'];
+		$dis_order		= intval($_POST['reg_field_order']);
+		$display		= intval($_POST['reg_field_display']);
+		$is_need		= intval($_POST['reg_field_need']);
+		$id				= intval($_POST['id']);
 		
 		/* 根据id获取之前的名字  */
 		$old_name = RC_DB::table('reg_fields')->where('id', $id)->pluck('reg_field_name');
@@ -305,7 +305,7 @@ class admin_reg_fields extends ecjia_admin {
 			return $this->showmessage(RC_Lang::get('user::user_account.merchants_notice'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 		$id  = intval($_REQUEST['pk']);
-		$val = isset($_REQUEST['value']) ? trim($_REQUEST['value']) : '' ;
+		$val = isset($_REQUEST['value']) ? intval($_REQUEST['value']) : 0 ;
 
 		/* 验证参数有效性  */
 		if (!is_numeric($val) || empty($val) || $val < 0 || strpos($val, '.') > 0 ) {
