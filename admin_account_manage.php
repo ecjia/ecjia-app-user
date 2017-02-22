@@ -90,8 +90,7 @@ class admin_account_manage extends ecjia_admin {
 		ecjia_screen::get_current_screen()->add_help_tab(array(
 			'id'		=> 'overview',
 			'title'		=> RC_Lang::get('user::users.overview'),
-			'content'	=>
-			'<p>' . RC_Lang::get('user::users.user_account_manage_help')  . '</p>'
+			'content'	=> '<p>' . RC_Lang::get('user::users.user_account_manage_help')  . '</p>'
 		));
 		
 		ecjia_screen::get_current_screen()->set_help_sidebar(

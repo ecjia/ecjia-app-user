@@ -146,7 +146,7 @@ class admin_integrate extends ecjia_admin {
 	    $cfg = unserialize(ecjia::config('integrate_config'));
 	    ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('user::integrate.integrate_setup')));
 	    if ($code != 'ucenter') {
-	        $this->assign('set_list',     integrate::charset_list());
+	        $this->assign('set_list', integrate::charset_list());
 	        $cfg['integrate_url'] = "http://";
 	    }
 	    
@@ -174,7 +174,7 @@ class admin_integrate extends ecjia_admin {
 		} else {
 		    //如果有标记，清空标记
 			$data = array(
-				'flag' => 0,
+				'flag' 	=> 0,
 				'alias' => ''
 			);
 			RC_DB::table('users')->where('flag', '>', 0)->update($data);

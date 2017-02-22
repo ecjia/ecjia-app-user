@@ -466,10 +466,10 @@ class admin_account extends ecjia_admin {
 			$idArr = explode(',', $_POST['checkboxes']);
 			$count = count($idArr);
 			$data = RC_DB::table('user_account AS ua')
-			->leftJoin('users as u', RC_DB::raw('ua.user_id'), '=', RC_DB::raw('u.user_id'))
-			->select(RC_DB::raw('ua.*, u.user_name'))
-			->whereIn(RC_DB::raw('ua.id'), $idArr)
-			->get();
+				->leftJoin('users as u', RC_DB::raw('ua.user_id'), '=', RC_DB::raw('u.user_id'))
+				->select(RC_DB::raw('ua.*, u.user_name'))
+				->whereIn(RC_DB::raw('ua.id'), $idArr)
+				->get();
 			
 			if (RC_DB::table('user_account')->whereIn('id', $idArr)->delete()) {
 				foreach ($data as $v) {

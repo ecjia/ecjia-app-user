@@ -50,16 +50,11 @@ defined('IN_ECJIA') or exit('No permission resources.');
  * ECJIA 会员注册项管理程序
 */
 class admin_reg_fields extends ecjia_admin {
-	private $db_reg_fields;
-	private $db_reg_extend_info;
-	
 	public function __construct() {
 		parent::__construct();
 		
 		RC_Loader::load_app_func('admin_user');
 		RC_Loader::load_app_func('global', 'goods');
-		$this->db_reg_fields		= RC_Model::model('user/reg_fields_model');
-		$this->db_reg_extend_info	= RC_Model::model('user/reg_extend_info_model');
 		
 		/* 加载所需js */
 		RC_Script::enqueue_script('jquery-validate');
@@ -93,8 +88,7 @@ class admin_reg_fields extends ecjia_admin {
 		ecjia_screen::get_current_screen()->add_help_tab(array(
 			'id'		=> 'overview',
 			'title'		=> RC_Lang::get('user::users.overview'),
-			'content'	=>
-			'<p>' . RC_Lang::get('user::users.user_register_help') . '</p>'
+			'content'	=> '<p>' . RC_Lang::get('user::users.user_register_help') . '</p>'
 		));
 		
 		ecjia_screen::get_current_screen()->set_help_sidebar(
@@ -106,7 +100,6 @@ class admin_reg_fields extends ecjia_admin {
 		$this->assign('action_link',	array('text' => RC_Lang::get('user::reg_fields.add_reg_field'), 'href' => RC_Uri::url('user/admin_reg_fields/add')));
 		
 		$fields = RC_DB::table('reg_fields')->orderBy('dis_order', 'asc')->orderBy('id', 'asc')->get();
-
 		$this->assign('reg_fields', $fields);
 		
 		$this->display('reg_fields_list.dwt');
@@ -122,8 +115,7 @@ class admin_reg_fields extends ecjia_admin {
 		ecjia_screen::get_current_screen()->add_help_tab(array(
 			'id'		=> 'overview',
 			'title'		=> RC_Lang::get('user::users.overview'),
-			'content'	=>
-			'<p>' . RC_Lang::get('user::users.add_register_help') . '</p>'
+			'content'	=> '<p>' . RC_Lang::get('user::users.add_register_help') . '</p>'
 		));
 		
 		ecjia_screen::get_current_screen()->set_help_sidebar(
@@ -184,8 +176,7 @@ class admin_reg_fields extends ecjia_admin {
 		ecjia_screen::get_current_screen()->add_help_tab(array(
 			'id'		=> 'overview',
 			'title'		=> RC_Lang::get('user::users.overview'),
-			'content'	=>
-			'<p>' . RC_Lang::get('user::users.edit_register_help') . '</p>'
+			'content'	=> '<p>' . RC_Lang::get('user::users.edit_register_help') . '</p>'
 		));
 		
 		ecjia_screen::get_current_screen()->set_help_sidebar(
@@ -197,7 +188,8 @@ class admin_reg_fields extends ecjia_admin {
 		$this->assign('action_link', array('text' => RC_Lang::get('user::reg_fields.21_reg_fields'), 'href' => RC_Uri::url('user/admin_reg_fields/init')));
 		
 		$reg_field = RC_DB::table('reg_fields')
-				->where('id', $_REQUEST['id'])->select('id as reg_field_id', 'reg_field_name', 'dis_order as reg_field_order', 'display as reg_field_display', 'is_need as reg_field_need')
+				->where('id', $_REQUEST['id'])
+				->select('id as reg_field_id', 'reg_field_name', 'dis_order as reg_field_order', 'display as reg_field_display', 'is_need as reg_field_need')
 				->first();
 
 		$this->assign('reg_field',		$reg_field);

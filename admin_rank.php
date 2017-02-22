@@ -91,8 +91,7 @@ class admin_rank extends ecjia_admin {
 		ecjia_screen::get_current_screen()->add_help_tab(array(
 			'id'		=> 'overview',
 			'title'		=> RC_Lang::get('user::users.overview'),
-			'content'	=>
-			'<p>' . RC_Lang::get('user::users.user_rank_help') . '</p>'
+			'content'	=> '<p>' . RC_Lang::get('user::users.user_rank_help') . '</p>'
 		));
 		
 		ecjia_screen::get_current_screen()->set_help_sidebar(
@@ -118,8 +117,7 @@ class admin_rank extends ecjia_admin {
 		ecjia_screen::get_current_screen()->add_help_tab(array(
 			'id'		=> 'overview',
 			'title'		=> RC_Lang::get('user::users.overview'),
-			'content'	=>
-			'<p>' . RC_Lang::get('user::users.add_rank_help'). '</p>'
+			'content'	=> '<p>' . RC_Lang::get('user::users.add_rank_help'). '</p>'
 		));
 		
 		ecjia_screen::get_current_screen()->set_help_sidebar(
@@ -209,8 +207,7 @@ class admin_rank extends ecjia_admin {
 	    ecjia_screen::get_current_screen()->add_help_tab(array(
 		    'id'		=> 'overview',
 		    'title'		=> RC_Lang::get('user::users.overview'),
-		    'content'	=>
-		    '<p>' . RC_Lang::get('user::users.edit_rank_help') . '</p>'
+		    'content'	=> '<p>' . RC_Lang::get('user::users.edit_rank_help') . '</p>'
 	    ));
 	    
 	    ecjia_screen::get_current_screen()->set_help_sidebar(
@@ -235,9 +232,9 @@ class admin_rank extends ecjia_admin {
 	public function update() {
 		$this->admin_priv('user_rank', ecjia::MSGTYPE_JSON);
 		
-		$id				= $_POST['id']; 
-		$rank_name		= trim($_POST['rank_name']);
-		$special_rank	= isset($_POST['special_rank'])		? intval($_POST['special_rank']) : 0;
+		$id				= empty($_POST['id'])				? 0 : $_POST['id']; 
+		$rank_name		= empty($_POST['rank_name'])		? '': trim($_POST['rank_name']);
+		$special_rank	= empty($_POST['special_rank'])		? 0 : intval($_POST['special_rank']);
 		$min_points		= empty($_POST['min_points'])		? 0 : intval($_POST['min_points']);
 		$max_points		= empty($_POST['max_points'])		? 0 : intval($_POST['max_points']);
 		$discount		= empty($_POST['discount'])			? 0 : intval($_POST['discount']);
@@ -263,19 +260,13 @@ class admin_rank extends ecjia_admin {
 		if ($special_rank == 0) {
 			if ($min_points != $old_min) {
 				/* 检查下限有无重复 */
-				if (RC_DB::table('user_rank')
-					->where('min_points', $min_points)
-					->where('rank_id', $id)
-					->count() != 0) {
+				if (RC_DB::table('user_rank')->where('min_points', $min_points)->where('rank_id', $id)->count() != 0) {
 					return $this->showmessage(sprintf(RC_Lang::get('user::user_rank.integral_min_exists'), $min_points), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 				}
 			}
 			if ($max_points != $old_max) {
 				/* 检查上限有无重复 */
-				if (RC_DB::table('user_rank')
-					->where('max_points', $max_points)
-					->where('rank_id', $id)
-					->count() != 0) {
+				if (RC_DB::table('user_rank')->where('max_points', $max_points)->where('rank_id', $id)->count() != 0) {
 					return $this->showmessage(sprintf(RC_Lang::get('user::user_rank.integral_max_exists'), $max_points), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 				}
 			}

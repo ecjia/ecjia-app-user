@@ -158,10 +158,10 @@ class admin_account_log extends ecjia_admin {
 			return $this->showmessage(RC_Lang::get('user::account_log.user_not_exist'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 		
-		$user_money		= !empty($_POST['user_money']) ? intval($_POST['user_money']): 0;
-		$frozen_money	= $_POST['frozen_money'] ? intval($_POST['frozen_money']): 0;
-		$rank_points	= $_POST['rank_points'] ? intval($_POST['rank_points']): 0;
-		$pay_points		= $_POST['pay_points'] ? intval($_POST['pay_points']): 0;
+		$user_money		= !empty($_POST['user_money']) 		? $_POST['user_money']		: 0;
+		$frozen_money	= !empty($_POST['frozen_money']) 	? $_POST['frozen_money']	: 0;
+		$rank_points	= !empty($_POST['rank_points']) 	? $_POST['rank_points']		: 0;
+		$pay_points		= !empty($_POST['pay_points'] )		? $_POST['pay_points']		: 0;
 
 		/* 参数验证 */
 		if ($user_money < 0 || !is_numeric($user_money) || !isset($user_money)) {
