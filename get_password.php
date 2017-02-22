@@ -78,9 +78,9 @@ class get_password extends ecjia_front {
 	/* 验证用户信息是否正确*/
 	public function check_userinfo() {
 		
-		$username	= isset($_POST['user_name']) ? trim($_POST['user_name']) : '';
-		$email		= isset($_POST['email']) ? trim($_POST['email']) : '';
-		$type 		= isset($_POST['type']) ? trim($_POST['type']) : 'email';
+		$username	= isset($_POST['user_name']) 	? trim($_POST['user_name']) : '';
+		$email		= isset($_POST['email']) 		? trim($_POST['email']) 	: '';
+		$type 		= isset($_POST['type']) 		? trim($_POST['type']) 		: 'email';
 		$captcha    = RC_Loader::load_app_class('captcha_method', 'captcha');
 		
 		/* 检查验证码是否正确 */
@@ -278,7 +278,7 @@ class get_password extends ecjia_front {
 			if (!is_ecjia_error($result)) {
 				//发送短信
 				$tpl_name = 'sms_get_validate';
-				$tpl   = RC_Api::api('sms', 'sms_template', $tpl_name);
+				$tpl = RC_Api::api('sms', 'sms_template', $tpl_name);
 				$code = rand(111111, 999999);
 			
 				ecjia_front::$controller->assign('mobile', $user_name);
@@ -318,6 +318,7 @@ class get_password extends ecjia_front {
 			$_SESSION['user_name'] = $_SESSION['temp_user_name'];
 			unset($_SESSION['temp_user']);
 			unset($_SESSION['temp_user_name']);
+			
 			$this->assign('uid', $_SESSION['user_id']);
 			$this->assign('action', 'reset_pwd_form');
 			$this->display('forget_password.dwt');
@@ -342,11 +343,11 @@ class get_password extends ecjia_front {
 		RC_Loader::load_app_class('integrate', 'user', false);
 		$user = integrate::init_users();
 		
-		$old_password     = isset($_POST['old_password']) 	? trim($_POST['old_password']) 	: null;
-		$new_password     = isset($_POST['new_password']) 	? trim($_POST['new_password']) 	: '';
+		$old_password     = isset($_POST['old_password']) 		? trim($_POST['old_password']) 		: null;
+		$new_password     = isset($_POST['new_password']) 		? trim($_POST['new_password']) 		: '';
 		$confirm_password = isset($_POST['confirm_password']) 	? trim($_POST['confirm_password']) 	: '';
-		$user_id          = isset($_POST['uid'])  			? intval($_POST['uid']) 		: $_SESSION['user_id'];
-		$code             = isset($_POST['code']) 			? trim($_POST['code'])  		: '';
+		$user_id          = isset($_POST['uid'])  				? intval($_POST['uid']) 			: $_SESSION['user_id'];
+		$code             = isset($_POST['code']) 				? trim($_POST['code'])  			: '';
 		if (strlen($new_password) < 6 ) {
 			$this->assign('error_msg', __("密码长度最少6位！"));
 			$this->assign('uid', $_SESSION['user_id']);
@@ -363,7 +364,6 @@ class get_password extends ecjia_front {
 				($_SESSION['user_id'] > 0 && $_SESSION['user_id'] == $user_id && $user->check_user($_SESSION['user_name'], $old_password))) {
 				
 				if ($user->edit_user(array('username'=> (empty($code) ? $_SESSION['user_name'] : $user_info['user_name']), 'old_password'=>$old_password, 'password'=>$new_password), $forget_pwd = 1)) {
-					
 					$data = array(
 						'ec_salt' => '0'		
 					);
