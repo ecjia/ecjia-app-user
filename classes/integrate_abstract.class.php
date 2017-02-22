@@ -624,24 +624,24 @@ abstract class integrate_abstract
 
         $profile = $this->db->field('user_name, email, password, sex, birthday')->find(array('user_name' => $username));
         if (empty($profile)) {
-            /* 向商城表插入一条新记录 */
+            /* 向用户表插入一条新记录 */
             if (empty($md5password)) {
             	$data = array(
-            			'user_name'  => $username,
-            			'email'      => $main_profile['email'],
-            			'sex'        => $main_profile['sex'],
-            			'birthday'   => $main_profile['birthday'] ,
-            			'reg_time'   => $main_profile['reg_time'],
+            		'user_name'  => $username,
+            		'email'      => $main_profile['email'],
+            		'sex'        => $main_profile['sex'],
+            		'birthday'   => $main_profile['birthday'] ,
+            		'reg_time'   => $main_profile['reg_time'],
             	);
             	$this->db->insert($data);
             } else {
             	$data = array(
-            			'user_name'  => $username,
-            			'email'      => $main_profile['email'],
-            			'sex'        => $main_profile['sex'],
-            			'birthday'   => $main_profile['birthday'] ,
-            			'reg_time'   => $main_profile['reg_time'],
-            			'password'   => $md5password
+            		'user_name'  => $username,
+            		'email'      => $main_profile['email'],
+            		'sex'        => $main_profile['sex'],
+            		'birthday'   => $main_profile['birthday'] ,
+            		'reg_time'   => $main_profile['reg_time'],
+            		'password'   => $md5password
             	);
             	$this->db->insert($data);
 

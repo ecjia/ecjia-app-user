@@ -270,9 +270,9 @@ class admin extends ecjia_admin {
 					if(!empty($_POST[$extend_field_index])) {
 						$temp_field_content = strlen($_POST[$extend_field_index]) > 100 ? mb_substr($_POST[$extend_field_index], 0, 99) : $_POST[$extend_field_index];
 						$data = array (
-								'user_id'		=> $max_id,
-								'reg_field_id'	=> $val['id'],
-								'content'		=> $temp_field_content
+							'user_id'		=> $max_id,
+							'reg_field_id'	=> $val['id'],
+							'content'		=> $temp_field_content
 						);
 						RC_DB::table('reg_extend_info')->insert($data);
 					}
