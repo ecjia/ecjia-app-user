@@ -104,7 +104,7 @@ class mobile_reward extends ecjia_front {
 		));
 		
 // 		ecjia_front::$controller->showmessage('发放成功！', ecjia::MSGSTAT_SUCCESS | ecjia::MSGTYPE_JSON, array('url' => 'ecjiaopen://app?open_type=main'));
-		ecjia_front::$controller->showmessage('发放成功！', ecjia::MSGSTAT_SUCCESS | ecjia::MSGTYPE_JSON, array('url' => RC_Uri::url('touch/my/init', array('reward' => '1'))));
+		ecjia_front::$controller->showmessage('发放成功！', ecjia::MSGSTAT_SUCCESS | ecjia::MSGTYPE_JSON, array('url' => RC_Uri::url('touch/my/init')));
 	}
 	
 	
