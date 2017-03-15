@@ -20,7 +20,6 @@
 								location.href = data.url;
 							}
 						} else {
-							console.log(data.url);
 							$("#cover").show();
 							$(".success-image").show();
 							$('.to-use').attr('data-url', data.url);
