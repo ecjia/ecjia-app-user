@@ -30,7 +30,7 @@
 	</div>
 	<div class="success-image">
 		<img src="{RC_App::apps_url('user/statics/front/images/receive-success.png')}" />
-		<div class="close"></div>
+		<div class="close" data-url="{RC_Uri::url('touch/my/init')}"></div>
 		<div class="to-use" data-url=""></div>
 	</div>
 </body>

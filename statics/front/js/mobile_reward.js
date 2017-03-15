@@ -20,6 +20,7 @@
 								location.href = data.url;
 							}
 						} else {
+							console.log(data.url);
 							$("#cover").show();
 							$(".success-image").show();
 							$('.to-use').attr('data-url', data.url);
@@ -31,6 +32,10 @@
 			$('.close').on('click', function(e) {
 				$("#cover").hide();
 				$(".success-image").hide();
+				var url = $(".close").attr("data-url");
+				if (url != '') {
+					window.location.href = url;
+				}
 			});
 			
 			$('.to-use').on('click', function(e) {
