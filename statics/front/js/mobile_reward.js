@@ -16,6 +16,9 @@
 					success: function (data) {
 						if (data.state == 'error') {
 							alert(data.message);
+							if (data.url) {
+								location.href = data.url;
+							}
 						} else {
 							$("#cover").show();
 							$(".success-image").show();
