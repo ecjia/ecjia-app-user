@@ -47,6 +47,7 @@ h1,h2,h3,h4,h5,h6,ul,li,dl,dt,dd,form,img,p{
 	padding-left:10%;
 	font-size : 20px;
 	color : #ead957;
+    min-height: 9em;
 }
 
 
@@ -76,11 +77,11 @@ h1,h2,h3,h4,h5,h6,ul,li,dl,dt,dd,form,img,p{
 	opacity : 1;
 }
 .success-image .to-use {
-	height: 50px;
-    left: 50%;
+    height: 50px;
+    left: 48%;
     margin-left: -80px;
     position: absolute;
-    top: 95%;
+    top: 86%;
     width: 180px;
 }
 .success-image .close {
