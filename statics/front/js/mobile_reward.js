@@ -23,6 +23,7 @@
 							$("#cover").show();
 							$(".success-image").show();
 							$('.to-use').attr('data-url', data.url);
+							$('.close').attr('data-url', data.close_url);
 						}
 					}
         		});
@@ -33,14 +34,14 @@
 				$(".success-image").hide();
 				var url = $(".close").attr("data-url");
 				if (url != '') {
-					window.location.href = url;
+					location.href = url;
 				}
 			});
 			
 			$('.to-use').on('click', function(e) {
 				var url = $(this).attr('data-url');
 				if (url != '') {
-					window.location.href = url;
+					location.href = url;
 				}
 			});
 		},

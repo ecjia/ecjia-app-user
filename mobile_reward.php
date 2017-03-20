@@ -109,7 +109,7 @@ class mobile_reward extends ecjia_front {
 		    
 		    $this->send_bonus($_SESSION['user_id'], $bonus_id);
 		    
-		    ecjia_front::$controller->showmessage('发放成功！', ecjia::MSGSTAT_SUCCESS | ecjia::MSGTYPE_JSON, array('url' => RC_Uri::url('user/bonus/init')));
+		    ecjia_front::$controller->showmessage('发放成功！', ecjia::MSGSTAT_SUCCESS | ecjia::MSGTYPE_JSON, array('url' => RC_Uri::url('user/bonus/init'), 'close_url' => RC_Uri::url('touch/my/init')));
 		    
 		} else {
 		    if ($need_login) {
@@ -118,11 +118,11 @@ class mobile_reward extends ecjia_front {
 		    
 		    /* 新人有礼的红包id*/
 		    if (!$bonus_id) {
-		        ecjia_front::$controller->showmessage('活动未开始！', ecjia::MSGSTAT_ERROR | ecjia::MSGTYPE_JSON, array('url' => 'ecjiaopen://app?open_type=user_center'));
+		        ecjia_front::$controller->showmessage('活动未开始！', ecjia::MSGSTAT_ERROR | ecjia::MSGTYPE_JSON);
 		    }
 		    
 		    if (!empty($is_received)) {
-		        ecjia_front::$controller->showmessage('您已领取过！', ecjia::MSGSTAT_ERROR | ecjia::MSGTYPE_JSON, array('url' => 'ecjiaopen://app?open_type=user_center'));
+		        ecjia_front::$controller->showmessage('您已领取过！', ecjia::MSGSTAT_ERROR | ecjia::MSGTYPE_JSON);
 		    }
 		    
 		    // 		$user_info = RC_Model::model('user/users_model')->where(array('user_id' => $_SESSION['user_id']))->find();
