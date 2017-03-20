@@ -57,6 +57,7 @@ class mobile_reward extends ecjia_front {
 	
 	public function init() {
 		$token = isset($_GET['token']) ? trim($_GET['token']) : '';
+		setcookie("ecjia_token", $token);
 		
 		$mobile_signup_reward_notice = ecjia::config('mobile_signup_reward_notice');
 
@@ -72,10 +73,6 @@ class mobile_reward extends ecjia_front {
 	
 	public function recieve() {
 		$token = isset($_POST['token']) ? trim($_POST['token']) : '';
-		if ( RC_Session::session_id() != $token) {
-			RC_Session::destroy();
-			RC_Session::init(null, $token);
-		}
 		
 		$need_login = false;
 		if (!isset($_SESSION['user_id']) || !$_SESSION['user_id']) {
