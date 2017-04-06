@@ -226,7 +226,7 @@ function register($username, $password, $email, $other = array())
     $db_user = RC_Loader::load_app_model('users_model', 'user');
 
     /* 检查注册是否关闭 */
-    if (ecjia::config('shop_reg_closed', ecjia::CONFIG_EXISTS)) {
+    if (ecjia::config('shop_reg_closed')) {
     	return new ecjia_error('shop_reg_closed', '会员注册关闭');
     }
     /* 检查username */
