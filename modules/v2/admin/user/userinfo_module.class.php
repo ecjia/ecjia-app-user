@@ -81,6 +81,7 @@ function get_user_info_merchant() {
             'last_ip'		=> RC_Ip::area($result['last_ip']),
             'role_name'		=> $result['group_id'] ? RC_DB::table('staff_group')->where('group_id', $result['group_id'])->pluck('group_name') : null,
             'avator_img'	=> $result['avatar'] ? RC_Upload::upload_url($result['avatar']) : null,
+            'action_list'	=> $result['action_list'],
         );
     } else {
         return new ecjia_error('error', '用户信息不存在，你是火星来的吧');
