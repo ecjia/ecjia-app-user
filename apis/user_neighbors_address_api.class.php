@@ -47,89 +47,53 @@
 defined('IN_ECJIA') or exit('No permission resources.');
 
 /**
- * 单条收货地址信息
- * @author royalwang
+ * 配送范围 收货地址接口
+ * @author
  */
-class info_module extends api_front implements api_interface {
-    public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
-    	
-        //如果用户登录获取其session
-        $this->authSession();
-        $user_id = $_SESSION['user_id'];
-    	if ($user_id <= 0) {
-    		return new ecjia_error(100, 'Invalid session');
-    	}
-		$id = $this->requestData('address_id', 0);
-		if(intval($id) < 1 || empty($user_id)){
-			return new ecjia_error( 'invalid_parameter', RC_Lang::get ('system::system.invalid_parameter' ));
+class user_neighbors_address_api extends Component_Event_Api {
+	/**
+	 *
+	 * @param array $options
+	 * @return  array
+	 */
+	public function call (&$options) {
+		if (!is_array($options) || ((!isset($options['geohash']) || empty($options['geohash'])) && (!isset($options['city_id']) || !$options['city_id']))) {
+			return new ecjia_error('invalid_parameter', RC_Lang::get('system::system.invalid_parameter'));
 		}
-		$location = $this->requestData('location', array());
-		
-		RC_Loader::load_app_func('admin_order', 'orders');
+		return $this->neighbors_address($options['geohash'], $options['geohash_store'], $options['city_id']);
+	}
 
-		$db_user_address = RC_Model::model('user/user_address_model');
-		$db_region = RC_Model::model('shipping/region_model');
-		$arr = $db_user_address->find(array('address_id' => $id, 'user_id' => $user_id));
-
-		/* 验证地址id */
-		if (empty($arr)) {
-		    return new ecjia_error(13, '不存在的信息');
-		}
+	/**
+	 * 判断经纬度是否在该地址配送范围内
+	 *
+	 * @access  private
+	 * @param 	string 		geohash_code        地区code
+	 * @param 	string 		geohash_code        店铺code
+	 * @param 	int 		city_id        		城市id
+	 * @param   float       longitude			经度
+	 * @param   float       latitude			纬度
+	 * @return  bool		是否在该地址配送范围内
+	 */
+	private function neighbors_address($geohash_code, $geohash_store_code, $city_id)
+	{
+		/* 判断是否有定位范围，如没有设置默认值*/
+		$mobile_location_range = ecjia::config('mobile_location_range', ecjia::CONFIG_CHECK) ? ecjia::config('mobile_location_range') : 3;
 		
-		$consignee = get_consignee($user_id); // 取得默认地址
-		
-		$ids = array($arr['country'], $arr['province'], $arr['city'], $arr['district']);
-		$ids = array_filter($ids);
-
-		$data = $db_region->in(array('region_id' => implode(',', $ids)))->select();
-		
-		$out = array();
-		foreach ($data as $key => $val) {
-			$out[$val['region_id']] = $val['region_name'];
-		}
-		
-		
-		$local = true;
-		if ((is_array($location) || !empty($location['longitude']) || !empty($location['latitude']))) {
-			$geohash = RC_Loader::load_app_class('geohash', 'store');
-			$geohash_code = $geohash->encode($arr['latitude'], $arr['longitude']);
-			$geohash_store_code = $geohash->encode($location['latitude'], $location['longitude']);
+		if ($city_id && $mobile_location_range == 0) {
+			$store_info = RC_DB::table('store_franchisee')->where('city', $city_id)->where('shop_close', '0')->first();
+		} else {
+			$geohash_code = substr($geohash_code, 0, $mobile_location_range);
 			
-			$local = RC_Api::api('user', 'neighbors_address', array('geohash' => $geohash_code, 'geohash_store' => $geohash_store_code, 'city_id' => $arr['city']));
+			$geohash_store = substr($geohash_store_code, 0, $mobile_location_range);
+				
+			$store_info = RC_DB::table('store_franchisee')->where('geohash', 'like', $geohash_code.'%')->where('geohash', 'like', $geohash_store.'%')->where('shop_close', '0')->first();
 		}
-		$result = array(
-		    'id'         => $arr['address_id'],
-		    'consignee'  => $arr['consignee'],
-		    'email'      => $arr['email'],
-		    
-		    'country'    => $arr['country'],
-		    'province'   => $arr['province'],
-		    'city'       => $arr['city'],
-		    'district'   => $arr['district'],
-		    'location'	 => array(
-		        'longitude' => $arr['longitude'],
-		        'latitude'	=> $arr['latitude'],
-		    ),
-		    
-		    'country_name'   => isset($out[$arr['country']]) ? $out[$arr['country']] : '',
-		    'province_name'  => isset($out[$arr['province']]) ? $out[$arr['province']] : '',
-		    'city_name'      => isset($out[$arr['city']]) ? $out[$arr['city']] : '',
-		    'district_name'  => isset($out[$arr['district']]) ? $out[$arr['district']] : '',
-		    
-		    'address'        => $arr['address'],
-		    'address_info'   => $arr['address_info'],
-		    'zipcode'        => $arr['zipcode'],
-		    'mobile'         => $arr['mobile'],
-		    'sign_building'  => $arr['sign_building'],
-		    'best_time'      => $arr['best_time'],
-		    'default_address'=> $arr['default_address'],
-		    'tel'            => $arr['tel'],
-			'local'			 => $local ? 1 : 0,
-		    
-		    'default_address'=> $arr['address_id'] == $consignee['address_id'] ? 1 :0,
-		);
 		
-		return $result;		
+		if (!empty($store_info)) {
+			return true;
+		}
+		
+		return false;
 	}
 }
 
