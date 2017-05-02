@@ -110,7 +110,10 @@ class list_module extends api_front implements api_interface {
 					$result[$key]['default_address'] = 0;
 				}
 				
-				$local = RC_Api::api('user', 'neighbors_address_store', array('address' => $value, 'store_id' => $seller_id));
+				$local = true;
+				if ($seller_id) {
+				    $local = RC_Api::api('user', 'neighbors_address_store', array('address' => $value, 'store_id' => $seller_id));
+				}
 				
 				if ($local) {
 					$result[$key]['local'] = 1;

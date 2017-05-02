@@ -89,7 +89,10 @@ class info_module extends api_front implements api_interface {
 			$out[$val['region_id']] = $val['region_name'];
 		}
 		
-		$local = RC_Api::api('user', 'neighbors_address_store', array('address' => $info, 'store_id' => $seller_id));
+		$local = true;
+		if ($seller_id) {
+            $local = RC_Api::api('user', 'neighbors_address_store', array('address' => $info, 'store_id' => $seller_id));
+		}
 		
 		$result = array(
 		    'id'         => $info['address_id'],
