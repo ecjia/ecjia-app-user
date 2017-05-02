@@ -64,7 +64,7 @@ class list_module extends api_front implements api_interface {
 		$dbview_user_address = RC_Model::model('user/user_address_user_viewmodel');
 		$db_region = RC_Model::model('shipping/region_model');
 		
-		$location = $this->requestData('location', array());
+		$seller_id = $this->requestData('seller_id', 0);
 		$size = $this->requestData('pagination.count', 15);
 		$page = $this->requestData('pagination.page', 1);
 		$record_count = $db_user_address->where(array('user_id' => $user_id))->count();
@@ -110,13 +110,7 @@ class list_module extends api_front implements api_interface {
 					$result[$key]['default_address'] = 0;
 				}
 				
-				$local = true;
-				if ((is_array($location) || !empty($location['longitude']) || !empty($location['latitude']))) {
-					$geohash_code = $geohash->encode($value['latitude'], $value['longitude']);
-					$geohash_store_code = $geohash->encode($location['latitude'], $location['longitude']);
-					
-					$local = RC_Api::api('user', 'neighbors_address', array('geohash' => $geohash_code, 'geohash_store' => $geohash_store_code, 'city_id' => $city_id));
-				}
+				$local = RC_Api::api('user', 'neighbors_address_store', array('address' => $value, 'store_id' => $seller_id));
 				
 				if ($local) {
 					$result[$key]['local'] = 1;

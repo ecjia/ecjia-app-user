@@ -47,56 +47,46 @@
 defined('IN_ECJIA') or exit('No permission resources.');
 
 /**
- * 配送范围 收货地址接口
+ * 判断收货地址和商店地址接口
  * @author
  */
-class user_neighbors_address_api extends Component_Event_Api {
+class user_neighbors_address_store_api extends Component_Event_Api {
 	/**
 	 *
 	 * @param array $options
 	 * @return  array
 	 */
 	public function call (&$options) {
-		if (!is_array($options) || ((!isset($options['geohash']) || empty($options['geohash'])) && (!isset($options['city_id']) || !$options['city_id']))) {
+		if (!is_array($options) || !isset($options['address']) || empty($options['store_id']) ) {
 			return new ecjia_error('invalid_parameter', RC_Lang::get('system::system.invalid_parameter'));
 		}
-		return $this->neighbors_address($options['geohash'], $options['geohash_store'], $options['city_id']);
-	}
-
-	/**
-	 * 判断经纬度是否在该地址配送范围内
-	 *
-	 * @access  private
-	 * @param 	string 		geohash_code        地区code
-	 * @param 	string 		geohash_code        店铺code
-	 * @param 	int 		city_id        		城市id
-	 * @param   float       longitude			经度
-	 * @param   float       latitude			纬度
-	 * @return  bool		是否在该地址配送范围内
-	 */
-	private function neighbors_address($geohash_code, $geohash_store_code, $city_id)
-	{
+		
+		$store_info = RC_DB::table('store_franchisee')->where('store_id', $options['store_id'])->where('shop_close', '0')->first();
+		
 		/* 判断是否有定位范围，如没有设置默认值*/
 		$mobile_location_range = ecjia::config('mobile_location_range', ecjia::CONFIG_CHECK) ? ecjia::config('mobile_location_range') : 3;
 		
-		if ($city_id && $mobile_location_range == 0) {
-// 			$store_info = RC_DB::table('store_franchisee')->where('city', $city_id)->where('shop_close', '0')->first();
-
-		    return true;
+		if ($mobile_location_range == 0) {
+		    if ($store_info['city'] == $options['address']['city']) {
+		        return true;
+		    }
 		} else {
-			$geohash_code = substr($geohash_code, 0, $mobile_location_range);
-			
-			$geohash_store = substr($geohash_store_code, 0, $mobile_location_range);
-				
-// 			$store_info = RC_DB::table('store_franchisee')->where('geohash', 'like', $geohash_code.'%')->where('geohash', 'like', $geohash_store.'%')->where('shop_close', '0')->first();
-            if ($geohash_code == $geohash_store) {
-                return true;
-            } else {
-                return false;
-            }
+		    $geohash = RC_Loader::load_app_class('geohash', 'store');
+		    $geohash_code = $geohash->encode($options['address']['latitude'], $options['address']['longitude']);
+		    $geohash_store_code = $store_info['geohash'];
+		    
+		    $geohash_code = substr($geohash_code, 0, $mobile_location_range);
+		    	
+		    $geohash_store = substr($geohash_store_code, 0, $mobile_location_range);
+		    
+		    if ($geohash_code == $geohash_store) {
+		        return true;
+		    }
 		}
+		return false;
 		
 	}
+
 }
 
 // end

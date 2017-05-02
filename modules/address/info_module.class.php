@@ -64,21 +64,22 @@ class info_module extends api_front implements api_interface {
 			return new ecjia_error( 'invalid_parameter', RC_Lang::get ('system::system.invalid_parameter' ));
 		}
 		$location = $this->requestData('location', array());
+		$seller_id = $this->requestData('seller_id');
 		
 		RC_Loader::load_app_func('admin_order', 'orders');
 
 		$db_user_address = RC_Model::model('user/user_address_model');
 		$db_region = RC_Model::model('shipping/region_model');
-		$arr = $db_user_address->find(array('address_id' => $id, 'user_id' => $user_id));
+		$info = $db_user_address->find(array('address_id' => $id, 'user_id' => $user_id));
 
 		/* 验证地址id */
-		if (empty($arr)) {
+		if (empty($info)) {
 		    return new ecjia_error(13, '不存在的信息');
 		}
 		
 		$consignee = get_consignee($user_id); // 取得默认地址
 		
-		$ids = array($arr['country'], $arr['province'], $arr['city'], $arr['district']);
+		$ids = array($info['country'], $info['province'], $info['city'], $info['district']);
 		$ids = array_filter($ids);
 
 		$data = $db_region->in(array('region_id' => implode(',', $ids)))->select();
@@ -88,45 +89,38 @@ class info_module extends api_front implements api_interface {
 			$out[$val['region_id']] = $val['region_name'];
 		}
 		
+		$local = RC_Api::api('user', 'neighbors_address_store', array('address' => $info, 'store_id' => $seller_id));
 		
-		$local = true;
-		if ((is_array($location) || !empty($location['longitude']) || !empty($location['latitude']))) {
-			$geohash = RC_Loader::load_app_class('geohash', 'store');
-			$geohash_code = $geohash->encode($arr['latitude'], $arr['longitude']);
-			$geohash_store_code = $geohash->encode($location['latitude'], $location['longitude']);
-			
-			$local = RC_Api::api('user', 'neighbors_address', array('geohash' => $geohash_code, 'geohash_store' => $geohash_store_code, 'city_id' => $arr['city']));
-		}
 		$result = array(
-		    'id'         => $arr['address_id'],
-		    'consignee'  => $arr['consignee'],
-		    'email'      => $arr['email'],
+		    'id'         => $info['address_id'],
+		    'consignee'  => $info['consignee'],
+		    'email'      => $info['email'],
 		    
-		    'country'    => $arr['country'],
-		    'province'   => $arr['province'],
-		    'city'       => $arr['city'],
-		    'district'   => $arr['district'],
+		    'country'    => $info['country'],
+		    'province'   => $info['province'],
+		    'city'       => $info['city'],
+		    'district'   => $info['district'],
 		    'location'	 => array(
-		        'longitude' => $arr['longitude'],
-		        'latitude'	=> $arr['latitude'],
+		        'longitude' => $info['longitude'],
+		        'latitude'	=> $info['latitude'],
 		    ),
 		    
-		    'country_name'   => isset($out[$arr['country']]) ? $out[$arr['country']] : '',
-		    'province_name'  => isset($out[$arr['province']]) ? $out[$arr['province']] : '',
-		    'city_name'      => isset($out[$arr['city']]) ? $out[$arr['city']] : '',
-		    'district_name'  => isset($out[$arr['district']]) ? $out[$arr['district']] : '',
+		    'country_name'   => isset($out[$info['country']]) ? $out[$info['country']] : '',
+		    'province_name'  => isset($out[$info['province']]) ? $out[$info['province']] : '',
+		    'city_name'      => isset($out[$info['city']]) ? $out[$info['city']] : '',
+		    'district_name'  => isset($out[$info['district']]) ? $out[$info['district']] : '',
 		    
-		    'address'        => $arr['address'],
-		    'address_info'   => $arr['address_info'],
-		    'zipcode'        => $arr['zipcode'],
-		    'mobile'         => $arr['mobile'],
-		    'sign_building'  => $arr['sign_building'],
-		    'best_time'      => $arr['best_time'],
-		    'default_address'=> $arr['default_address'],
-		    'tel'            => $arr['tel'],
+		    'address'        => $info['address'],
+		    'address_info'   => $info['address_info'],
+		    'zipcode'        => $info['zipcode'],
+		    'mobile'         => $info['mobile'],
+		    'sign_building'  => $info['sign_building'],
+		    'best_time'      => $info['best_time'],
+		    'default_address'=> $info['default_address'],
+		    'tel'            => $info['tel'],
 			'local'			 => $local ? 1 : 0,
 		    
-		    'default_address'=> $arr['address_id'] == $consignee['address_id'] ? 1 :0,
+		    'default_address'=> $info['address_id'] == $consignee['address_id'] ? 1 :0,
 		);
 		
 		return $result;		
