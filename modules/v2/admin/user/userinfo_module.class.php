@@ -76,11 +76,14 @@ function get_user_info_merchant() {
         $userinfo = array(
             'id' 		    => $result['user_id'],
             'username'	    => $result['name'],
+            'nickname'	    => $result['nick_name'],
+            'mobile'	    => $result['mobile'],
             'email'		    => $result['email'],
             'last_login' 	=> RC_Time::local_date(ecjia::config('time_format'), $result['last_login']),
             'last_ip'		=> RC_Ip::area($result['last_ip']),
-            'role_name'		=> $result['group_id'] ? RC_DB::table('staff_group')->where('group_id', $result['group_id'])->pluck('group_name') : null,
-            'avator_img'	=> $result['avatar'] ? RC_Upload::upload_url($result['avatar']) : null,
+            'role_name'		=> $result['parent_id'] == 0 ? '店长' : ($result['group_id'] ? RC_DB::table('staff_group')->where('group_id', $result['group_id'])->pluck('group_name') : ''),
+            'avator_img'	=> $result['avatar'] ? RC_Upload::upload_url($result['avatar']) : '',
+            'avatar_img'	=> $result['avatar'] ? RC_Upload::upload_url($result['avatar']) : '',
             'action_list'	=> $result['action_list'],
         );
     } else {
@@ -110,6 +113,7 @@ function get_user_info_admin() {
         'last_ip'		=> RC_Ip::area($result['last_ip']),
         'role_name'		=> $db_role->where(array('role_id' => $result['role_id']))->get_field('role_name'),
         'avator_img'	=> RC_Uri::admin_url('statics/images/admin_avatar.png'),
+        'avatar_img'	=> RC_Uri::admin_url('statics/images/admin_avatar.png'),
     );
     
     return $userinfo;
