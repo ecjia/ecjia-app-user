@@ -272,11 +272,9 @@ function signin_admin($username, $password, $device) {
     
     /* 检查密码是否正确 */
     if (!empty($ec_salt)) {
-        $row = $db_user->field('user_id, user_name, email, password, last_login, action_list, last_login, suppliers_id, ec_salt, seller_id, role_id, ru_id')
-        ->find(array('user_name' => $username, 'password' => md5(md5($password).$ec_salt)));
+        $row = $db_user->find(array('user_name' => $username, 'password' => md5(md5($password).$ec_salt)));
     } else {
-        $row = $db_user->field('user_id, user_name, email, password, last_login, action_list, last_login, suppliers_id, ec_salt, seller_id, role_id, ru_id')
-        ->find(array('user_name' => $username, 'password' => md5($password)));
+        $row = $db_user->find(array('user_name' => $username, 'password' => md5($password)));
     }
     
     if ($row) {
