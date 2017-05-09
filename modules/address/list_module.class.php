@@ -83,8 +83,8 @@ class list_module extends api_front implements api_interface {
 			
 				$result[$key]['id'] = $value['address_id'];
 				$result[$key]['consignee'] = $value['consignee'];
-				$result[$key]['address'] = $value['address'];
-				$result[$key]['address_info'] = $value['address_info'];
+				$result[$key]['address'] = empty($value['address']) ? '' : $value['address'];
+				$result[$key]['address_info'] = empty($value['address_info']) ? '' : $value['address_info'];
 			
 				$country = $value['country'];
 				$province = $value['province'];
@@ -97,7 +97,7 @@ class list_module extends api_front implements api_interface {
 				$result[$key]['province_name']   = $region_name[1]['region_name'];
 				$result[$key]['city_name']       = $region_name[2]['region_name'];
 				$result[$key]['district_name']   = isset($region_name[3]['region_name']) ? $region_name[3]['region_name'] : '';
-				$result[$key]['tel']   			 = $value['tel'];
+				$result[$key]['tel']   			 = empty($value['tel']) ? '' : $value['tel'];
 				$result[$key]['mobile']   		 = $value['mobile'];
 				$result[$key]['location']		 = array(
 					'longitude' => $value['longitude'],
