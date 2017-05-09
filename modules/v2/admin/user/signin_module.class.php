@@ -207,6 +207,7 @@ function signin_merchant($username, $password, $device) {
             'last_login' 	=> RC_Time::local_date(ecjia::config('time_format'), $row['last_login']),
             'last_ip'		=> RC_Ip::area($row['last_ip']),
             'role_name'		=> $role_name,
+            'role_type'		=> $row['group_id'] == -1 ? 'express_user' : '',
         	'group'			=> $group,
             'avator_img'	=> !empty($row['avatar']) ? RC_Upload::upload_url($row['avatar']) : null,
         );
