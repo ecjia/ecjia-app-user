@@ -90,10 +90,13 @@ class bind_module extends api_admin implements api_interface {
 		        return new ecjia_error('mobile error', '接收和验证的手机号不同');
 		    }
 		    //替换手机号
-		    $db_user->where('user_id', $staff_id)->update(array('mobile' => $value));
+		    $rs = RC_DB::table('staff_user')->where('user_id', $staff_id)->update(array('mobile' => $value));
+		    if (!$rs) {
+		        return new ecjia_error('update error', '更新失败');
+		    }
 		    $_SESSION['validate_code']['sms'] = array();
 		} else if ($type == 'email') {
-		    $email = $db_user->where('email', $value)->where('user_id', '<>', $staff_id)->first();
+		    $email = RC_DB::table('staff_user')->where('email', $value)->where('user_id', '<>', $staff_id)->first();
 		    if (!empty($email)) {
 		        return new ecjia_error('registered', '该邮箱已被注册');
 		    }
@@ -107,7 +110,10 @@ class bind_module extends api_admin implements api_interface {
 		        return new ecjia_error('email error', '接收和验证的邮箱不同');
 		    }
 		    //替换邮箱
-		    $db_user->where('user_id', $staff_id)->update(array('email' => $value));
+		    $rs = RC_DB::table('staff_user')->where('user_id', $staff_id)->update(array('email' => $value));
+		    if (!$rs) {
+		        return new ecjia_error('update error', '更新失败');
+		    }
 		    $_SESSION['validate_code']['email'] = array();
 		}
 		
