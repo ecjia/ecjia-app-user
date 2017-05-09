@@ -72,7 +72,9 @@ class signin_module extends api_admin implements api_interface {
 		    return signin_merchant($username, $password, $device);
 		} else {
 		    //平台
-		    return signin_admin($username, $password, $device);
+		    $result = new ecjia_error('login_error', __('此账号不是商家账号'));
+		    return $result;
+// 		    return signin_admin($username, $password, $device);
 		}
 	}
 }
