@@ -79,6 +79,7 @@ class userinfo_module extends api_admin implements api_interface {
 			'role_name'		=> $db_role->where(array('role_id' => $result['role_id']))->get_field('role_name'),
 			'avator_img'	=> RC_Uri::admin_url('statics/images/admin_avatar.png'),
 		    'avatar_img'	=> RC_Uri::admin_url('statics/images/admin_avatar.png'),
+		    'action_list'   => $_SESSION['action_list']
 		);
 		
 		return $userinfo;
