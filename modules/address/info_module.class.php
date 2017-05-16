@@ -61,6 +61,7 @@ class info_module extends api_front implements api_interface {
     	}
 		$id = $this->requestData('address_id', 0);
 		if(intval($id) < 1 || empty($user_id)){
+		    RC_Logger::getLogger('info')->info(array($id,intval($id),$user_id));
 			return new ecjia_error( 'invalid_parameter', RC_Lang::get ('system::system.invalid_parameter' ));
 		}
 		$location = $this->requestData('location', array());
