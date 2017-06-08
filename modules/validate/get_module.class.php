@@ -20,30 +20,55 @@ class get_module extends api_front implements api_interface {
 		    if (RC_Time::gmtime() - $_SESSION['validate_code']['sms']['sendtime'] < 60) {
 		        return new ecjia_error('send_error', '发送频率过高，请一分钟后再试');
 		    }
+		    
 			//发送短信
-			$tpl_name = 'sms_get_validate ';
-			$tpl = RC_Api::api('sms', 'sms_template', $tpl_name);
-			ecjia_api::$view_object->assign('code', $code);
-			ecjia_api::$view_object->assign('service_phone', ecjia::config('service_phone'));
-			$content = ecjia_api::$controller->fetch_string($tpl['template_content']);
-			$options = array(
-				'mobile' 		=> $value,
-				'msg'			=> $content,
-				'template_id' 	=> $tpl['template_id'],
-			);
+// 			$tpl_name = 'sms_get_validate ';
+// 			$tpl = RC_Api::api('sms', 'sms_template', $tpl_name);
+// 			ecjia_api::$view_object->assign('code', $code);
+// 			ecjia_api::$view_object->assign('service_phone', ecjia::config('service_phone'));
+// 			$content = ecjia_api::$controller->fetch_string($tpl['template_content']);
+// 			$options = array(
+// 				'mobile' 		=> $value,
+// 				'msg'			=> $content,
+// 				'template_id' 	=> $tpl['template_id'],
+// 			);
 			
-			$response = RC_Api::api('sms', 'sms_send', $options);
-			if ($response === true) {
-			    $_SESSION['validate_code']['sms'] = array(
+// 			$response = RC_Api::api('sms', 'sms_send', $options);
+// 			if ($response === true) {
+// 			    $_SESSION['validate_code']['sms'] = array(
+// 			        'value' => $value,
+// 			        'code' => $code,
+// 			        'lifetime' => RC_Time::gmtime() + 1800,
+// 			        'sendtime' => RC_Time::gmtime(),
+// 			    );
+// 				return array();
+// 			} else {
+// 				return new ecjia_error('sms_error', '短信发送失败！');//$response['description']
+// 			}
+
+		    
+		    $options = array(
+	    		'mobile' => $value,
+	    		'event'	 => 'sms_get_validate',
+	    		'value'  =>array(
+    				'code' 			=> $code,
+    				'service_phone' => ecjia::config('service_phone'),
+	    		),
+		    );
+		    $response = RC_Api::api('sms', 'send_event_sms', $options);
+		    if (is_ecjia_error($response)) {
+		    	return new ecjia_error('sms_error', '短信发送失败！');//$response['description']
+		    }else{
+				$_SESSION['validate_code']['sms'] = array(
 			        'value' => $value,
 			        'code' => $code,
 			        'lifetime' => RC_Time::gmtime() + 1800,
 			        'sendtime' => RC_Time::gmtime(),
 			    );
 				return array();
-			} else {
-				return new ecjia_error('sms_error', '短信发送失败！');//$response['description']
-			}
+		    }
+		    
+		    
 		} else if ($type == 'email') {
 		    
 		    $chars = "/^([0-9A-Za-z\\-_\\.]+)@([0-9a-z]+\\.[a-z]{2,3}(\\.[a-z]{2})?)$/i";
