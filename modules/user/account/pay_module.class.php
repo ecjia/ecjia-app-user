@@ -123,23 +123,31 @@ class pay_module extends api_front implements api_interface {
 	        }
 
 	        /* 插入支付流水记录*/
-	        $db = RC_DB::table('payment_record');
-	        $payment_record = $db->where('order_sn', $order['order_sn'])->first();
-	        $payment_data = array(
-        		'order_sn'		=> $order['order_sn'],
-        		'trade_type'	=> 'deposit',
-        		'pay_code'		=> $payment_info['pay_code'],
-        		'pay_name'		=> $payment_info['pay_name'],
-        		'total_fee'		=> $order['order_amount'],
-        		'pay_status'	=> 0,
-	        );
-	        if (empty($payment_record)) {
-	        	$payment_data['create_time']	= RC_Time::gmtime();
-	        	$db->insertGetId($payment_data);
-	        } elseif($payment_record['pay_status'] == 0 && $payment_record['pay_code'] != $payment_info['pay_code'] && $order['order_amount'] != $payment_record['total_fee']) {
-	        	$payment_data['update_time']	= RC_Time::gmtime();
-	        	$db->where('order_sn', $order['order_sn'])->update($payment_data);
-	        }
+	        RC_Api::api('payment', 'save_payment_record', [
+    	        'order_sn' 		 => $order['order_sn'],
+    	        'total_fee'      => $order['order_amount'],
+    	        'pay_code'       => $handler->getCode(),
+    	        'pay_name'		 => $handler->getName(),
+    	        'trade_type'	 => 'deposit',
+	        ]);
+	        
+// 	        $db = RC_DB::table('payment_record');
+// 	        $payment_record = $db->where('order_sn', $order['order_sn'])->first();
+// 	        $payment_data = array(
+//         		'order_sn'		=> $order['order_sn'],
+//         		'trade_type'	=> 'deposit',
+//         		'pay_code'		=> $payment_info['pay_code'],
+//         		'pay_name'		=> $payment_info['pay_name'],
+//         		'total_fee'		=> $order['order_amount'],
+//         		'pay_status'	=> 0,
+// 	        );
+// 	        if (empty($payment_record)) {
+// 	        	$payment_data['create_time']	= RC_Time::gmtime();
+// 	        	$db->insertGetId($payment_data);
+// 	        } elseif($payment_record['pay_status'] == 0 && $payment_record['pay_code'] != $payment_info['pay_code'] && $order['order_amount'] != $payment_record['total_fee']) {
+// 	        	$payment_data['update_time']	= RC_Time::gmtime();
+// 	        	$db->where('order_sn', $order['order_sn'])->update($payment_data);
+// 	        }
 	        
 	        return array('payment' => $order['payment']);
 	    } else {
