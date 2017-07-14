@@ -110,7 +110,8 @@ class pay_module extends api_front implements api_interface {
 	        	$order['log_id'] = strval($payment_method->insert_pay_log($order['id'], $order['order_amount'], PAY_SURPLUS, 0));
 	        }
 
-	        $handler = $payment_method->get_payment_instance($payment_info['pay_code'], $payment_config);
+// 	        $handler = $payment_method->get_payment_instance($payment_info['pay_code'], $payment_config);
+	        $handler = with(new Ecjia\App\Payment\PaymentPlugin)->channel($payment_info['pay_code']);
 	        $handler->set_orderinfo($order);
 	        $handler->set_mobile(true);
 	        	
