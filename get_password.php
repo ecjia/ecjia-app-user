@@ -302,12 +302,10 @@ class get_password extends ecjia_front {
 				$response = RC_Api::api('sms', 'send_event_sms', $options);
 				if (is_ecjia_error($response)) {
 					return $this->showmessage($response->get_error_message(), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
-				}else{
+				} else {
 					$_SESSION['temp_code'] = $code;
 					$_SESSION['temp_code_time'] = RC_Time::gmtime();
 				}
-				
-				
 			}
 		}
 	}
