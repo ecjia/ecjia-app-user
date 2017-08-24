@@ -138,7 +138,7 @@ class deposit_module extends api_front implements api_interface {
  		$order['payment']['account_id'] = $surplus['account_id'];
 
  		
- 		return array('payment' => $order['payment']);
+ 		return array('payment' => $order['payment'], 'order_sn' => $surplus['order_sn']);
 	}
 }
 
