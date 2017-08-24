@@ -73,10 +73,17 @@ class deposit_module extends api_front implements api_interface {
  		
  		RC_Loader::load_app_func('admin_order', 'orders');
  		
+ 		if ($account_id > 0) {
+            $res = RC_DB::table('user_account')->where('id', $account_id)->first();
+            $order_sn = $res['order_sn'];
+ 		} else {
+ 		    $order_sn = get_order_sn();
+ 		}
+ 		
  		/* 变量初始化 */
  		$surplus = array(
 			'user_id'      => $user_id,
-			'order_sn'	   => get_order_sn(),
+			'order_sn'	   => $order_sn,
 			'account_id'   => intval($account_id),
 			'process_type' => 0,
 			'payment_id'   => intval($payment_id),
