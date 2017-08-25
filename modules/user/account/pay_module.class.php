@@ -78,6 +78,7 @@ class pay_module extends api_front implements api_interface {
 	    RC_Logger::getLogger('pay')->info($payment_info);
 	    /* 如果当前支付方式没有被禁用，进行支付的操作 */
 	    if (!empty($payment_info)) {
+	        $order['order_id']       = $order['id'];
 	        $order['user_name']      = $_SESSION['user_name'];
 	        $order['surplus_amount'] = $order['amount'];
 	        $order['open_id']	     = $wxpay_open_id;
