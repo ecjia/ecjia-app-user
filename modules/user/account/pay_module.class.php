@@ -61,6 +61,7 @@ class pay_module extends api_front implements api_interface {
  		$account_id = $this->requestData('account_id', 0);
  		$payment_id = $this->requestData('payment_id', 0);
  		$user_id = $_SESSION['user_id'];
+ 		$wxpay_open_id = $this->requestData('wxpay_open_id', 0);
 	
  		if ($account_id <= 0 || $payment_id <= 0) {
 	    	return new ecjia_error(101, '参数错误');
@@ -82,6 +83,7 @@ class pay_module extends api_front implements api_interface {
 	    if (!empty($payment_info)) {
 	        $order['user_name']      = $_SESSION['user_name'];
 	        $order['surplus_amount'] = $order['amount'];
+	        $order['open_id']	     = $wxpay_open_id;
 	        
 	        RC_Loader::load_app_func('admin_order', 'orders');
 	        //计算支付手续费用
