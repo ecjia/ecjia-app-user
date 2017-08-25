@@ -82,6 +82,7 @@ class pay_module extends api_front implements api_interface {
 	        $order['user_name']      = $_SESSION['user_name'];
 	        $order['surplus_amount'] = $order['amount'];
 	        $order['open_id']	     = $wxpay_open_id;
+	        $order['order_type']     = 'user_account';
 	        
 	        RC_Loader::load_app_func('admin_order', 'orders');
 	        //计算支付手续费用
