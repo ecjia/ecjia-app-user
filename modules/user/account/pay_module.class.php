@@ -78,7 +78,7 @@ class pay_module extends api_front implements api_interface {
 	    
 	    $plugin = new Ecjia\App\Payment\PaymentPlugin();
 	    $payment_info = $plugin->getPluginDataById($$payment_id);
-	    
+	    RC_Logger::getLogger('pay')->info($payment_info);
 	    /* 如果当前支付方式没有被禁用，进行支付的操作 */
 	    if (!empty($payment_info)) {
 	        $order['user_name']      = $_SESSION['user_name'];
