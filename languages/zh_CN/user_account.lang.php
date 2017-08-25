@@ -54,6 +54,7 @@ return array(
 	'user_surplus' 	=> '预付款',
 	'surplus_id' 	=> '编号',
 	'user_id' 		=> '会员名称',
+	'order_sn'		=> '订单编号',
 	'surplus_amount'=> '金额',
 	'add_date' 		=> '操作日期',
 	'pay_mothed' 	=> '支付方式',
