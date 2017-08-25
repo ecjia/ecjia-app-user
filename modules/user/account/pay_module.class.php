@@ -66,9 +66,6 @@ class pay_module extends api_front implements api_interface {
  		if ($account_id <= 0 || $payment_id <= 0) {
 	    	return new ecjia_error(101, '参数错误');
 	    }
-	    if (!$user_id) {
-	        return new ecjia_error(100, 'Invalid session' );
-	    }
 	    
 	    //获取单条会员帐目信息
 	    $order = get_surplus_info($account_id, $user_id);
@@ -77,7 +74,7 @@ class pay_module extends api_front implements api_interface {
 	    }
 	    
 	    $plugin = new Ecjia\App\Payment\PaymentPlugin();
-	    $payment_info = $plugin->getPluginDataById($$payment_id);
+	    $payment_info = $plugin->getPluginDataById($payment_id);
 	    RC_Logger::getLogger('pay')->info($payment_info);
 	    /* 如果当前支付方式没有被禁用，进行支付的操作 */
 	    if (!empty($payment_info)) {
@@ -108,8 +105,7 @@ class pay_module extends api_front implements api_interface {
 	        return array('payment' => $order['payment']);
         } else {
             /* 重新选择支付方式 */
-            $result = new ecjia_error('select_payment_pls_again', __('支付方式无效，请重新选择支付方式！'));
- 			return $result;
+            return new ecjia_error('select_payment_pls_again', __('支付方式无效，请重新选择支付方式！'));
         }
 	    
 // 	    $payment_method = RC_Loader::load_app_class('payment_method', 'payment');
