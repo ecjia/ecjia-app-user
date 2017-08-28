@@ -108,6 +108,8 @@ return array(
 	),
 	
 	'recharge_withdrawal_apply' 		=> '充值提现申请',
+	'recharge_apply' 					=> '充值申请',
+	'withdrawal_apply' 					=> '提现申请',
 	'log_username' 						=> '会员名称是',
 	'batch_deletes_ok' 					=> '批量删除成功',
 	'update_recharge_withdrawal_apply' 	=> '更新充值提现申请',
