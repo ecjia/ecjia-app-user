@@ -96,11 +96,8 @@ class deposit_module extends api_front implements api_interface {
  			return $result;
  		}
  		
- 		$payment_method = RC_Loader::load_app_class('payment_method', 'payment');
- 		
  		//获取支付方式名称
- 		$payment_info = array();
- 		$payment_info = $payment_method->payment_info($surplus['payment_id']);
+ 		$payment_info = with(new Ecjia\App\Payment\PaymentPlugin)->getPluginDataById($surplus['payment_id']);
         if (empty($payment_info)) {
             $result = new ecjia_error('select_payment_pls_again', __('支付方式无效，请重新选择支付方式！'));
         }
@@ -114,32 +111,6 @@ class deposit_module extends api_front implements api_interface {
  			//插入会员账目明细
  			$surplus['account_id'] = insert_user_account($surplus, $amount);
  		}
- 		
-//  		//取得支付信息，生成支付代码
-//  		$payment_config = $payment_method->unserialize_config($payment_info['pay_config']);
- 		
-//  		//生成伪订单号, 不足的时候补0
-//  		RC_Loader::load_app_func('admin_order', 'orders');
-//  		$order = array();
-//  		$order['order_sn']       = get_order_sn();
-//  		$order['user_name']      = $_SESSION['user_name'];
-//  		$order['surplus_amount'] = $amount;
- 		
-//  		RC_Loader::load_app_func('admin_order', 'orders');
-//  		//计算支付手续费用
-//  		$payment_info['pay_fee'] = pay_fee($surplus['payment_id'], $order['surplus_amount'], 0);
- 		
-//  		//计算此次预付款需要支付的总金额
-//  		$order['order_amount']   = strval($amount + $payment_info['pay_fee']);
- 		
-//  		if ($account_id > 0) {
-//  			//获取需要支付的log_id
-//  			$order['log_id'] = $payment_method->get_paylog_id($surplus['account_id'], $pay_type = PAY_SURPLUS);
-//  			$payment_method->update_pay_log($surplus['account_id'], $order['order_amount'], $type=PAY_SURPLUS, 0);
-//  		} else {
-//  			//记录支付log
-//  			$order['log_id'] = strval($payment_method->insert_pay_log($surplus['account_id'], $order['order_amount'], $type=PAY_SURPLUS, 0));
-//  		}
  		
  		$order['payment']['payment_id'] = $surplus['payment_id'];
  		$order['payment']['account_id'] = $surplus['account_id'];
