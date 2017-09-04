@@ -150,6 +150,8 @@ return array(
 	'select_operate_item'		=> '请先选择需要操作的项',
 	'withdraw_apply'			=> '提现申请',
 	'pay_apply'					=> '充值申请',
+	'recharge_order'			=> '充值订单',
+	'withdraw_apply'			=> '提现申请',
 	
 );
 
