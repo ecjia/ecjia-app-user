@@ -154,6 +154,9 @@ return array(
 	'withdraw_apply'			=> '提现申请',
 	'min_amount_error'			=> '充值或提现金额最低一元起',
 	'user_mobile'				=> '会员手机号码',
+	'back_recharge_list'		=> '返回充值订单',
+	'back_withdraw_list'		=> '返回提现申请',
+	'user_keyword'				=> '请输入会员手机号或名称等关键字'
 	
 );
 
