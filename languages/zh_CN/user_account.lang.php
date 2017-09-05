@@ -152,7 +152,7 @@ return array(
 	'pay_apply'					=> '充值申请',
 	'recharge_order'			=> '充值订单',
 	'withdraw_apply'			=> '提现申请',
-	'min_amount_error'			=> '充值金额最低一元起',
+	'min_amount_error'			=> '充值或提现金额最低一元起',
 	'user_mobile'				=> '会员手机号码',
 	
 );
