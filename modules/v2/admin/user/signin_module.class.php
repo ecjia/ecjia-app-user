@@ -57,7 +57,7 @@ class signin_module extends api_admin implements api_interface {
 		$username	= $this->requestData('username');
 		$password	= $this->requestData('password');
 		$device		= $this->device;
-
+		//$device = array('code'=> '8001', 'udid' => 'bdc0525eebad246de659a7d0ac39fe834d198c5f', 'client' => 'android');
 		if (empty($username) || empty($password)) {
 			$result = new ecjia_error('login_error', __('您输入的帐号信息不正确'));
 			return $result;
@@ -82,14 +82,13 @@ class signin_module extends api_admin implements api_interface {
 function signin_merchant($username, $password, $device) {
     /* 收银台请求判断处理*/
     if (!empty($device) && is_array($device) && $device['code'] == '8001') {
-        $adviser_info = RC_Model::model('achievement/adviser_model')->find(array('username' => $username));
-        if (empty($adviser_info)) {
+    	$staff_user_info = RC_DB::table('staff_user')->where('mobile', $username)->first();
+        if (empty($staff_user_info)) {
 			$result = new ecjia_error('login_error', __('您输入的帐号信息不正确'));
 			return $result;
         }
-        $admin_info = RC_DB::table('staff_user')->where('user_id', $adviser_info['admin_id'])->first();
-        $username	= $admin_info['mobile'];
-        $salt	    = $admin_info['salt'];
+        $username	= $staff_user_info['mobile'];
+        $salt	    = $staff_user_info['salt'];
     } else {
         $salt = RC_DB::table('staff_user')->where('mobile', $username)->pluck('salt');
     }
@@ -145,7 +144,7 @@ function signin_merchant($username, $password, $device) {
          
         if ($device['code'] == '8001') {
             $_SESSION['adviser_id']	= $row['user_id'];
-            $_SESSION['admin_name']	= $row['mobile'];
+            $_SESSION['admin_name']	= $row['name'];
         }
          
         if (empty($row['salt'])) {
@@ -215,8 +214,8 @@ function signin_merchant($username, $password, $device) {
         );
         
         if ($device['code'] == '8001') {
-            $out['userinfo']['username'] = $adviser_info['username'];
-            $out['userinfo']['email']	 = $adviser_info['email'];
+            $out['userinfo']['username'] = $row['mobile'];
+            $out['userinfo']['email']	 = $row['email'];
         }
         
         //修正关联设备号

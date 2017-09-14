@@ -746,6 +746,10 @@ function EM_user_info($user_id) {
 	
 	/* 判断会员名更改时间*/
 	$username_update_time = RC_Model::model('term_meta_model')->find($data);
+	
+	$address = $user_info['address_id'] > 0 ? RC_DB::table('user_address')->where('address_id', $user_info['address_id'])->first() : '';
+	$user_info['address'] = $user_info['address_id'] > 0 ? RC_DB::table('region')->where('region_id', $address['city'])->pluck('region_name').RC_DB::table('region')->where('region_id', $address['district'])->pluck('region_name').$address['address'] : '';
+	
 	return array(
 		'id'				=> $user_info['user_id'],
 		'name'				=> $user_info['user_name'],
@@ -755,6 +759,7 @@ function EM_user_info($user_id) {
 		'collection_num' 	=> $collection_num,
 		'email'				=> $user_info['email'],
 		'mobile_phone'		=> $user_info['mobile_phone'],
+		'address'			=> $user_info['address'],
 		'avatar_img'		=> $avatar_img,
 		'order_num' => array(
 			'await_pay' 	=> $await_pay,

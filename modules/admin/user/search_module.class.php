@@ -47,22 +47,21 @@
 defined('IN_ECJIA') or exit('No permission resources.');
 
 /**
- * 用户查询
+ * 查询会员信息(返回列表)
  * @author will.chen
  */
 class search_module extends api_admin implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {
     		
 		$this->authadminSession();
-		if ($_SESSION['admin_id'] <= 0 ) {
+		if ($_SESSION['admin_id'] <= 0 && $_SESSION['staff_id'] <= 0) {
 		    return new ecjia_error(100, 'Invalid session');
 		}
 		
-		$result = $this->admin_priv('users_manage');
-		
-		if (is_ecjia_error($result)) {
-			return $result;
-		}
+		//$result = $this->admin_priv('users_manage');
+		//if (is_ecjia_error($result)) {
+		//	return $result;
+		//}
 		
 		$keywords = $this->requestData('keywords');
 		if (empty($keywords)) {

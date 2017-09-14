@@ -83,7 +83,6 @@ function get_user_info_merchant() {
             'last_ip'		=> RC_Ip::area($result['last_ip']),
             'role_name'		=> $result['parent_id'] == 0 ? '店长' : ($result['group_id'] ? RC_DB::table('staff_group')->where('group_id', $result['group_id'])->pluck('group_name') : ''),
             'avator_img'	=> $result['avatar'] ? RC_Upload::upload_url($result['avatar']) : '',
-            'avatar_img'	=> $result['avatar'] ? RC_Upload::upload_url($result['avatar']) : '',
             'action_list'	=> $result['action_list'],
         );
     } else {
