@@ -301,7 +301,7 @@ function signin_admin($username, $password, $device) {
         $device_id = RC_Model::model('mobile/mobile_device_model')->where(array('device_udid' => $device['udid'], 'device_client' => $device['client'], 'device_code' => $device['code']))->get_field('id');
         $_SESSION['device_id']	    = $row['device_id'];
     
-        	
+        //TODO
         if ($device['code'] == '8001') {
             $_SESSION['adviser_id']	= $row['id'];
             $_SESSION['admin_name']	= $row['username'];
