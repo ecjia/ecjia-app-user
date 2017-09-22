@@ -203,7 +203,8 @@ function signin_merchant($username, $password, $device) {
         
         $out['userinfo'] = array(
             'id' 			=> $row['user_id'],
-            'username'		=> $row['mobile'],
+            'username'		=> $row['name'],
+        	'mobile'		=> $row['mobile'],
             'email'			=> $row['email'],
             'last_login' 	=> RC_Time::local_date(ecjia::config('time_format'), $row['last_login']),
             'last_ip'		=> RC_Ip::area($row['last_ip']),
@@ -212,12 +213,7 @@ function signin_merchant($username, $password, $device) {
         	'group'			=> $group,
             'avator_img'	=> !empty($row['avatar']) ? RC_Upload::upload_url($row['avatar']) : null,
         );
-        
-        if ($device['code'] == '8001') {
-            $out['userinfo']['username'] = $row['mobile'];
-            $out['userinfo']['email']	 = $row['email'];
-        }
-        
+                
         //修正关联设备号
         $result = ecjia_app::validate_application('mobile');
         if (!is_ecjia_error($result)) {
