@@ -92,7 +92,7 @@ class search_module extends api_admin implements api_interface {
 		);
 
 		$arr = $db_user->join(array('user_rank','user_address'))
-						->field('u.user_id, user_name, u.address_id, avatar_img, user_rank, u.email, mobile_phone, r.rank_name, u.user_money, pay_points, country, province, city, district, address')
+						->field('u.user_id, user_name, u.address_id, u.reg_time, avatar_img, user_rank, u.email, mobile_phone, r.rank_name, u.user_money, pay_points, country, province, city, district, address')
 						->where($where)
 						->select();
 		$user_search = array();
@@ -126,6 +126,7 @@ class search_module extends api_admin implements api_interface {
 						'user_money'	=>	$v['user_money'],
 						'address'		=>	$address,
 						'avatar_img'	=>	$v['avatar_img'] ? RC_Upload::upload_url($v['avatar_img']) : '',
+						'reg_time'		=>   RC_Time::local_date(ecjia::config('time_format'), $v['reg_time']),
 				);
 			}
 		}
