@@ -672,7 +672,7 @@ function update_address($address) {
 	return true;
 }
 
-function EM_user_info($user_id) {
+function EM_user_info($user_id, $mobile) {
 	$db_collect_goods  = RC_Model::model('goods/collect_goods_model');
 	$db_user_rank      = RC_Model::model('user/user_rank_model');
 	$db_orderinfo_view = RC_Model::model('orders/order_info_viewmodel');
@@ -700,7 +700,7 @@ function EM_user_info($user_id) {
 	);
 	
 	RC_Loader::load_app_func('admin_order', 'orders');
-	$user_info      = user_info($user_id);
+	$user_info      = user_info($user_id, $mobile);
 	$collection_num = $db_collect_goods->where(array('user_id' => $user_id))->order(array('add_time' => 'desc'))->count();
 	$await_pay      = $db_orderinfo_view->join(array('order_info'))->where(array('oi.user_id' => $user_id, EM_order_query_sql('await_pay', 'oi.')))->count('*');
 	$await_ship     = $db_orderinfo_view->join(array('order_info'))->where(array('oi.user_id' => $user_id, EM_order_query_sql('await_ship', 'oi.')))->count('*');

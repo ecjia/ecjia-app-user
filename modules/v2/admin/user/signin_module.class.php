@@ -170,7 +170,7 @@ function signin_merchant($username, $password, $device) {
         $out = array(
             'session' => array(
                 'sid' => RC_Session::session_id(),
-                'uid' => $_SESSION['admin_id']
+                'uid' => $_SESSION['staff_id']
             ),
         );
         $role_name = $group = '';
@@ -179,14 +179,22 @@ function signin_merchant($username, $password, $device) {
         	case -1 : 
         		$role_name	= "配送员";
         		$group		= 'express';
+        		$role_type = 'express_user';
+        		break;
+        	case -2 :
+        		$role_name	= "收银员";
+        		$group		= 'cashier';
+        		$role_type  = 'cashier';
         		break;
         	default:
         		if ($row['group_id'] > 0) {
         			$role_name = RC_DB::table('staff_group')->where('group_id', $row['group_id'])->pluck('group_name');
         		}
+        		$role_type = '';
         		break;
         }
-
+		
+        
         /* 登入后默认设置离开状态*/
         if ($row['online_status'] != 4 && $group == 'express') {
         	RC_DB::table('staff_user')->where('user_id', $_SESSION['staff_id'])->update(array('online_status' => 4));
@@ -211,7 +219,7 @@ function signin_merchant($username, $password, $device) {
             'role_name'		=> $role_name,
             'role_type'		=> $row['group_id'] == -1 ? 'express_user' : '',
         	'group'			=> $group,
-            'avator_img'	=> !empty($row['avatar']) ? RC_Upload::upload_url($row['avatar']) : null,
+            'avator_img'	=> !empty($row['avatar']) ? RC_Upload::upload_url($row['avatar']) : '',
         );
                 
         //修正关联设备号
