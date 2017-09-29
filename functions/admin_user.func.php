@@ -768,9 +768,11 @@ function EM_user_info($user_id, $mobile) {
 			'finished' 		=> $finished,
 		    'allow_comment'	=> $allow_comment_count,
 		),
+		'user_money'		=> $user_info['user_money'],
 		'formated_user_money' 	=> price_format($user_info['user_money'], false),
 		'user_points' 			=> $user_info['pay_points'],
 		'user_bonus_count' 		=> $bonus_count,
+		'reg_time'				=> empty($user_info['reg_time']) ? '' : RC_Time::local_date(ecjia::config('time_format'), $user_info['reg_time']),
 		'update_username_time'	=> empty($username_update_time) ? '' : RC_Time::local_date(ecjia::config('time_format'), $username_update_time['meta_value'])
 	);
 }
