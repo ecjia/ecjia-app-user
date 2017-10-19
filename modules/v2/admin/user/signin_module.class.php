@@ -194,6 +194,9 @@ function signin_merchant($username, $password, $device) {
         		break;
         }
 		
+        RC_Logger::getLogger('error')->info('test1111');
+        RC_Logger::getLogger('error')->info($_SESSION);
+        RC_Logger::getLogger('error')->info('test2222');
         
         /* 登入后默认设置离开状态*/
         if ($row['online_status'] != 4 && $group == 'express') {
