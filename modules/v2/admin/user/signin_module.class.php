@@ -213,6 +213,7 @@ function signin_merchant($username, $password, $device) {
         }
         
         $out['userinfo'] = array(
+        	'seller_id'		=> $row['store_id'],
             'id' 			=> $row['user_id'],
             'username'		=> $row['name'],
         	'mobile'		=> $row['mobile'],
