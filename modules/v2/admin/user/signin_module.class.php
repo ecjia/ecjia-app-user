@@ -194,10 +194,6 @@ function signin_merchant($username, $password, $device) {
         		break;
         }
 		
-        RC_Logger::getLogger('error')->info('test11');
-        RC_Logger::getLogger('error')->info($_SESSION);
-        RC_Logger::getLogger('error')->info('test22');
-        
         /* 登入后默认设置离开状态*/
         if ($row['online_status'] != 4 && $group == 'express') {
         	RC_DB::table('staff_user')->where('user_id', $_SESSION['staff_id'])->update(array('online_status' => 4));
