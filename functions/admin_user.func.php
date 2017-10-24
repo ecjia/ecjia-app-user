@@ -701,6 +701,11 @@ function EM_user_info($user_id, $mobile) {
 	
 	RC_Loader::load_app_func('admin_order', 'orders');
 	$user_info      = user_info($user_id, $mobile);
+	
+	if (is_ecjia_error($user_info)) {
+		return $user_info;
+	}
+	
 	$collection_num = $db_collect_goods->where(array('user_id' => $user_id))->order(array('add_time' => 'desc'))->count();
 	$await_pay      = $db_orderinfo_view->join(array('order_info'))->where(array('oi.user_id' => $user_id, EM_order_query_sql('await_pay', 'oi.')))->count('*');
 	$await_ship     = $db_orderinfo_view->join(array('order_info'))->where(array('oi.user_id' => $user_id, EM_order_query_sql('await_ship', 'oi.')))->count('*');
