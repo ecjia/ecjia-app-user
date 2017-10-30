@@ -724,6 +724,7 @@ function EM_user_info($user_id, $mobile) {
 	->leftJoin('comment as c', function ($join) {
 		$join->on(RC_DB::raw('c.id_value'), '=', RC_DB::raw('og.goods_id'))
 		->on(RC_DB::raw('og.rec_id'), '=', RC_DB::raw('c.rec_id'))
+		->on(RC_DB::raw('c.order_id'), '=', RC_DB::raw('oi.order_id'))
 		->where(RC_DB::raw('c.parent_id'), '=', 0)
 		->where(RC_DB::raw('c.comment_type'), '=',0);
 	});
