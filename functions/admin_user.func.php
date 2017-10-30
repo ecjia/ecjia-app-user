@@ -735,9 +735,8 @@ function EM_user_info($user_id, $mobile) {
 	->whereIn(RC_DB::raw('oi.order_status'), array(OS_CONFIRMED, OS_SPLITED))
 	->whereIn(RC_DB::raw('oi.pay_status'), array(PS_PAYED, PS_PAYING))
 	->whereRaw(RC_DB::raw('c.comment_id is null'))
-	->select(RC_DB::Raw('count(DISTINCT oi.order_id) as counts'))->get();
-	$allow_comment_count = $allow_comment_count['0']['counts'];
-	
+	->count(RC_DB::Raw('DISTINCT oi.order_id'));
+
 	/* 取得用户等级 */
 	if ($user_info['user_rank'] == 0) {
 		// 非特殊等级，根据等级积分计算用户等级（注意：不包括特殊等级）
