@@ -66,10 +66,12 @@ class add_module extends api_front implements api_interface {
 		
 		$address['user_id']       = $_SESSION['user_id'];
 		$address['consignee']     = isset($address['consignee']) ? trim($address['consignee']) : '';
-// 		$address['country']       = isset($address['country']) ? intval($address['country']) : '';
-// 		$address['province']      = isset($address['province']) ? intval($address['province']) : '';
-		$address['city']      	  = isset($address['city']) ? intval($address['city']) : 0;
-		$address['district']      = isset($address['district']) ? intval($address['district']) : 0;
+		
+// 		$address['country']       = isset($address['country']) ? trim($address['country']) : '';
+// 		$address['province']      = isset($address['province']) ? trim($address['province']) : '';
+		$address['city']      	  = isset($address['city']) ? trim($address['city']) : '';
+		$address['district']      = isset($address['district']) ? trim($address['district']) : '';
+
 		$address['email']         = !empty($address['email']) ? trim($address['email']) : '';
 		$address['mobile']        = isset($address['mobile']) ? trim($address['mobile']) : '';
 		$address['address']       = isset($address['address']) ? trim($address['address']) : '';
