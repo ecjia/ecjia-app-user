@@ -75,16 +75,23 @@ class user_address_manage_api extends Component_Event_Api {
         	$region_name = $db_region->where(array('region_id' => array('in' => array($address['province'], $address['city'], $address['district']))))->order('region_type')->select();
         	 
         	$province_name	   = $region_name[0]['region_name'];
-        	$city_name		   = $region_name[1]['region_name'];
+        	// $city_name		   = $region_name[1]['region_name'];
         	$district_name	   = $region_name[2]['region_name'];
+            $street_name       = $region_name[3]['region_name'];
         	
         	$consignee_address = '';
         	if (!empty($province_name)) {
-        		$consignee_address .= $province_name.'省';
+        		$consignee_address .= $province_name;
         	}
-        	if (!empty($city_name)) {
-        		$consignee_address .= $city_name.'市';
-        	}
+        	// if (!empty($city_name)) {
+        	// 	$consignee_address .= $city_name;
+        	// }
+            if (!empty($district_name)) {
+                $consignee_address .= $district_name;
+            }
+            if (!empty($street_name)) {
+                $consignee_address .= $street_name;
+            }
         	$consignee_address .= $address['address'];
 
             //腾讯地图api 地址解析（地址转坐标）
