@@ -71,13 +71,10 @@ class user_address_manage_api extends Component_Event_Api {
         }
         
         if (!empty($address['province']) && !empty($address['city']) && !empty($address['address']) && empty($address['location'])) {
-        	$db_region   = RC_Model::model('user/region_model');
-        	$region_name = $db_region->where(array('region_id' => array('in' => array($address['province'], $address['city'], $address['district']))))->order('region_type')->select();
-        	 
-        	$province_name	   = $region_name[0]['region_name'];
-        	// $city_name		   = $region_name[1]['region_name'];
-        	$district_name	   = $region_name[2]['region_name'];
-            $street_name       = $region_name[3]['region_name'];
+            $province_name = ecjia_region::getRegionName($address['province']);
+            $city_name = ecjia_region::getRegionName($address['city']);
+            $district_name = ecjia_region::getRegionName($address['district']);
+            $street_name = ecjia_region::getRegionName($address['street']);
         	
         	$consignee_address = '';
         	if (!empty($province_name)) {
@@ -165,6 +162,7 @@ class user_address_manage_api extends Component_Event_Api {
     	    'province'  =>  $address['province'],
     	    'city'      =>  $address['city'],
     	    'district'  =>  $address['district'],
+            'street'    =>  $address['street'],
     	    'address'   =>  $address['address'],
     	    'address_info' =>  $address['address_info'],
     	    'zipcode'   =>  $address['zipcode'],

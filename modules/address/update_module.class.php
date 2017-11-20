@@ -89,8 +89,13 @@ class update_module extends api_front implements api_interface {
 			$address['address'] = trim($address['wx_address']);
 		}
 		
-		$address['province']	  = RC_Model::model('user/region_model')->where(array('region_id' => $address['city']))->get_field('parent_id');
-		$address['country']		  = RC_Model::model('user/region_model')->where(array('region_id' => $address['province']))->get_field('parent_id');
+		$data = ecjia_region::getSplitRegion($address['city']);
+
+		$address['country']		= $data['country'];
+		$address['province']	= $data['province'];
+		$address['city']		= $data['city'];
+		$address['district']	= $data['district'];
+		$address['street']		= $data['street'];
 		
 		$result = RC_Api::api('user', 'address_manage', $address);
 		if(is_ecjia_error($result)){
