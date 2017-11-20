@@ -80,9 +80,9 @@ class user_address_manage_api extends Component_Event_Api {
         	if (!empty($province_name)) {
         		$consignee_address .= $province_name;
         	}
-        	// if (!empty($city_name)) {
-        	// 	$consignee_address .= $city_name;
-        	// }
+        	if (!empty($city_name)) {
+        		$consignee_address .= $city_name;
+        	}
             if (!empty($district_name)) {
                 $consignee_address .= $district_name;
             }
@@ -97,6 +97,7 @@ class user_address_manage_api extends Component_Event_Api {
             $shop_point = RC_Http::remote_get("https://apis.map.qq.com/ws/geocoder/v1/?address=".$consignee_address."&key=".$key);
             $shop_point = json_decode($shop_point['body'], true);
             $location   = (array)$shop_point['result']['location'];
+
             $address['longitude']   = $location['lng'];
             $address['latitude']    = $location['lat'];
             unset($address['location']);
