@@ -92,7 +92,7 @@ class search_module extends api_admin implements api_interface {
 		);
 
 		$arr = $db_user->join(array('user_rank','user_address'))
-						->field('u.user_id, user_name, u.address_id, u.reg_time, avatar_img, user_rank, u.email, mobile_phone, r.rank_name, u.user_money, pay_points, country, province, city, district, address')
+						->field('u.user_id, user_name, u.address_id, u.reg_time, avatar_img, user_rank, u.email, mobile_phone, r.rank_name, u.user_money, pay_points, country, province, city, district, street, address')
 						->where($where)
 						->select();
 		$user_search = array();

@@ -87,7 +87,7 @@ class add_module extends api_front implements api_interface {
 		
 // 		$address['province']	  = RC_Model::model('user/region_model')->where(array('region_id' => $address['city']))->get_field('parent_id');
 // 		$address['country']		  = RC_Model::model('user/region_model')->where(array('region_id' => $address['province']))->get_field('parent_id');
-		$data = with(new Ecjia\App\Setting\Region)->getSplitRegion($address['city']);
+		$data = ecjia_region::getSplitRegion($address['city']);
 
 		$address['country']		= $data['country'];
 		$address['province']	= $data['province'];

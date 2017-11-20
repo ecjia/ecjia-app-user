@@ -76,7 +76,7 @@ class info_module extends api_front implements api_interface {
 		$consignee = get_consignee($user_id); // 取得默认地址
 		
 		$ids = array($info['country'], $info['province'], $info['city'], $info['district'], $info['street']);
-		$data = RC_DB::table('regions')->whereIn('region_id', $ids)->get();
+		$data = ecjia_region::getRegions($ids);
 		
 		$out = array();
 		foreach ($data as $key => $val) {
