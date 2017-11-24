@@ -89,7 +89,7 @@ class update_module extends api_front implements api_interface {
 			$address['address'] = trim($address['wx_address']);
 		}
 		
-		$data = ecjia_region::getSplitRegion($address['city']);
+		$data = ecjia_region::getSplitRegionWithKey($address['city']);
 
 		$address['country']		= $data['country'];
 		$address['province']	= $data['province'];

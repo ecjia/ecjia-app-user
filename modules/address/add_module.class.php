@@ -84,7 +84,7 @@ class add_module extends api_front implements api_interface {
 		if (!empty($address['wx_address'])) {
 			$address['address'] = trim($address['wx_address']);
 		}		
-		$data = ecjia_region::getSplitRegion($address['city']);
+		$data = ecjia_region::getSplitRegionWithKey($address['city']);
 
 		$address['country']		= $data['country'];
 		$address['province']	= $data['province'];
