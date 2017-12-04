@@ -72,9 +72,10 @@ class update_module extends api_front implements api_interface {
 		$address['consignee']     = isset($address['consignee']) ? trim($address['consignee']) : '';
 		
 // 		$address['country']       = isset($address['country']) ? trim($address['country']) : '';
-// 		$address['province']      = isset($address['province']) ? trim($address['province']) : '';
+		$address['province']      = isset($address['province']) ? trim($address['province']) : '';
 		$address['city']      	  = isset($address['city']) ? trim($address['city']) : '';
 		$address['district']      = isset($address['district']) ? trim($address['district']) : '';
+		$address['street']        = isset($address['street']) ? trim($address['street']) : '';
 
 		$address['email']         = !empty($address['email']) ? trim($address['email']) : '';
 		$address['mobile']        = isset($address['mobile']) ? trim($address['mobile']) : '';
@@ -89,7 +90,7 @@ class update_module extends api_front implements api_interface {
 			$address['address'] = trim($address['wx_address']);
 		}
 		
-		$data = ecjia_region::getSplitRegionWithKey($address['city']);
+		$data = ecjia_region::getSplitRegionWithKey($address['street']);
 
 		$address['country']		= $data['country'];
 		$address['province']	= $data['province'];
