@@ -155,7 +155,7 @@ function signin_merchant($username, $password, $device) {
                 'salt'	=> $salt,
                 'password'	=> $new_possword
             );
-            RC_DB::table('staff_user')->where('user_id', $_SESSION['admin_id'])->update($data);
+            RC_DB::table('staff_user')->where('user_id', $_SESSION['staff_id'])->update($data);
         }
     
         if ($row['action_list'] == 'all' && empty($row['last_login'])) {
