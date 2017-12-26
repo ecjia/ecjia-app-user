@@ -97,6 +97,7 @@ class info_module extends api_front implements api_interface {
 		    'province'   => $info['province'],
 		    'city'       => $info['city'],
 		    'district'   => $info['district'],
+			'street'   => $info['street'],
 		    'location'	 => array(
 		        'longitude' => $info['longitude'],
 		        'latitude'	=> $info['latitude'],
@@ -106,6 +107,7 @@ class info_module extends api_front implements api_interface {
 		    'province_name'  => isset($out[$info['province']]) ? $out[$info['province']] : '',
 		    'city_name'      => isset($out[$info['city']]) ? $out[$info['city']] : '',
 		    'district_name'  => isset($out[$info['district']]) ? $out[$info['district']] : '',
+			'street_name' 	 => isset($out[$info['street']]) ? $out[$info['street']] : '',
 		    
 		    'address'        => empty($info['address']) ? '' : $info['address'],
 		    'address_info'   => empty($info['address_info']) ? '' : $info['address_info'],
