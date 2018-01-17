@@ -125,19 +125,34 @@ function signin_merchant($username, $password, $device) {
           */
     
     
-        $_SESSION['admin_id']	    = 0;
-        $_SESSION['admin_name']	    = null;
-        $_SESSION['action_list']    = $row['action_list'];
+//         $_SESSION['admin_id']	    = 0;
+//         $_SESSION['admin_name']	    = null;
+//         $_SESSION['action_list']    = $row['action_list'];
          
-        $_SESSION['store_id']	    = $row['store_id'];
-        $_SESSION['store_name']	    = RC_DB::table('store_franchisee')->where('store_id', $row['store_id'])->pluck('merchants_name');
-        $_SESSION['staff_id']	    = $row['user_id'];
-        $_SESSION['staff_mobile']	= $row['mobile'];
-        $_SESSION['staff_name']	    = $row['name'];
-        $_SESSION['staff_email']	= $row['email'];
+//         $_SESSION['store_id']	    = $row['store_id'];
+//         $_SESSION['store_name']	    = RC_DB::table('store_franchisee')->where('store_id', $row['store_id'])->pluck('merchants_name');
+//         $_SESSION['staff_id']	    = $row['user_id'];
+//         $_SESSION['staff_mobile']	= $row['mobile'];
+//         $_SESSION['staff_name']	    = $row['name'];
+//         $_SESSION['staff_email']	= $row['email'];
         
-        $_SESSION['last_login']	    = $row['last_login'];
-        $_SESSION['last_ip']	    = $row['last_ip'];
+//         $_SESSION['last_login']	    = $row['last_login'];
+//         $_SESSION['last_ip']	    = $row['last_ip'];
+        
+        $store_name = RC_DB::table('store_franchisee')->where('store_id', $row['store_id'])->pluck('merchants_name');
+        
+        RC_Session::set('store_id',     $row['store_id']);
+        RC_Session::set('store_name',   $store_name);
+        RC_Session::set('staff_id',     $row['user_id']);
+        RC_Session::set('staff_mobile', $row['mobile']);
+        RC_Session::set('staff_name',   $row['name']);
+        RC_Session::set('staff_email',  $row['email']);
+        RC_Session::set('last_login',   $row['last_login']);
+        RC_Session::set('last_ip',      $row['last_ip']);
+        RC_Session::set('action_list',  $row['action_list']);
+        
+        RC_Session::set('session_user_id',      $row['user_id']);
+        RC_Session::set('session_user_type',    'merchant');
         
         /* 获取device_id*/
         $device_id = RC_DB::table('mobile_device')
