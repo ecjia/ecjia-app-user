@@ -60,7 +60,6 @@ class pay_module extends api_front implements api_interface {
  		//变量初始化
  		$account_id = $this->requestData('account_id', 0);
  		$payment_id = $this->requestData('payment_id', 0);
- 		$pay_code   = $this->requestData('pay_code', '');
  		$user_id = $_SESSION['user_id'];
  		$wxpay_open_id = $this->requestData('wxpay_open_id', 0);
  		if ($account_id <= 0 || $payment_id <= 0) {
@@ -73,7 +72,12 @@ class pay_module extends api_front implements api_interface {
 	        return new ecjia_error('deposit_log_not_exist', '充值记录不存在');
 	    }
 	    
+	    $plugin = new Ecjia\App\Payment\PaymentPlugin();
+	    $payment_info = $plugin->getPluginDataById($payment_id);
+	    RC_Logger::getLogger('pay')->info($payment_info);
+	    
 	    //对比支付方式pay_code；如果有变化，则更新支付方式
+	    $pay_code   = $payment_info['pay_code'];
 	    if (!empty($pay_code)) {
 	    	if ($order['payment'] != $pay_code) {
 	    		$payment_list = RC_Api::api('payment', 'available_payments');
@@ -93,9 +97,6 @@ class pay_module extends api_front implements api_interface {
 	    	}
 	    }
 	    
-	    $plugin = new Ecjia\App\Payment\PaymentPlugin();
-	    $payment_info = $plugin->getPluginDataById($payment_id);
-	    RC_Logger::getLogger('pay')->info($payment_info);
 	    /* 如果当前支付方式没有被禁用，进行支付的操作 */
 	    if (!empty($payment_info)) {
 	        $order['order_id']       = $order['id'];
