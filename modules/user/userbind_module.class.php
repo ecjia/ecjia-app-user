@@ -64,7 +64,7 @@ class userbind_module extends api_front implements api_interface {
 			return new ecjia_error( 'invalid_parameter', RC_Lang::get ('system::system.invalid_parameter' ));
 		}
 		
-		if (version_compare($api_version, '1.14', '>=')) {
+		if (version_compare($api_version, '1.14.0', '>=')) {
 			$captcha_code = $this->requestData('captcha_code');
 			if (empty($captcha_code)) {
 				return new ecjia_error( 'invalid_parameter', RC_Lang::get ('system::system.invalid_parameter' ));
