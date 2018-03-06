@@ -64,6 +64,14 @@ class userbind_module extends api_front implements api_interface {
 			return new ecjia_error( 'invalid_parameter', RC_Lang::get ('system::system.invalid_parameter' ));
 		}
 		
+		//手机号码格式判断
+		if ($type == 'mobile') {
+			$str = '/^1[34578]{1}\d{9}$/';
+			if(!preg_match($str, $value)){
+				new ecjia_error('mobile_wrong', '手机号码格式不正确！');
+			}
+		}
+		
 		if (version_compare($api_version, '1.14.0', '>=')) {
 			$captcha_code = $this->requestData('captcha_code');
 			if (empty($captcha_code)) {
@@ -108,7 +116,17 @@ class userbind_module extends api_front implements api_interface {
 			if (is_ecjia_error($response)) {
 				return new ecjia_error('sms_error', '短信发送失败！');
 			} else {
-				return array('registered' => 0);
+				/* 判断在有效期内是否已被邀请*/
+				$is_invited = 0;
+				$is_invitedinfo = RC_DB::table('invitee_record')
+				->where('invitee_phone', $value)
+				->where('invite_type', 'signup')
+				->where('expire_time', '>', RC_Time::gmtime())
+				->first();
+				if (!empty($is_invitedinfo)) {
+					$is_invited = 1;
+				}
+				return array('registered' => 0, ' 	is_invited' => $is_invited);
 			}
 		}
 	}
