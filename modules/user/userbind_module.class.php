@@ -106,6 +106,7 @@ class userbind_module extends api_front implements api_interface {
 						'service_phone' => ecjia::config('service_phone'),
 				),
 			);
+			
 			$response = RC_Api::api('sms', 'send_event_sms', $options);	
 			
 			$_SESSION['bind_code']         = $code;
@@ -126,7 +127,7 @@ class userbind_module extends api_front implements api_interface {
 				if (!empty($is_invitedinfo)) {
 					$is_invited = 1;
 				}
-				return array('registered' => 0, ' 	is_invited' => $is_invited);
+				return array('registered' => 0, 'is_invited' => $is_invited);
 			}
 		}
 	}
