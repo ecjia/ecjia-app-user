@@ -57,7 +57,7 @@ class signin_module extends api_front implements api_interface {
 		RC_Loader::load_app_func('cart','cart');
 		$name = $this->requestData('name');
 		$password = $this->requestData('password');
-		$login_type = $this->requestData('login_type');
+		$login_type = $this->requestData('type');
 		$login_type_array = array('smslogin', 'password');
 		$api_version = $this->request->header('api-version');
 		
