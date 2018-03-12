@@ -61,7 +61,7 @@ class signin_module extends api_front implements api_interface {
 		$login_type_array = array('smslogin', 'password');
 		$api_version = $this->request->header('api-version');
 		
-		if (version_compare($api_version, '1.14.0', '>=')) {
+		if (version_compare($api_version, '1.14', '>=')) {
 			if (empty($login_type) || !in_array($login_type, $login_type_array) || empty($name) || empty($password)) {
 				return new ecjia_error('invalid_parameter', RC_Lang::get ('system::system.invalid_parameter' ));
 			}
