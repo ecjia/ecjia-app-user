@@ -86,8 +86,9 @@ class password_module extends api_front implements api_interface {
         		if ($user->edit_user(array('username'=> (empty($code) ? $_SESSION['user_name'] : $user_info['user_name']), 'old_password'=>$old_password, 'password'=>$new_password), empty($code) ? 0 : 1)) {
         			$db = RC_Model::model('user/users_model');
         			$db->where(array('user_id' => $user_id))->update(array('ec_salt' => 0));
-        			$session_db	= RC_Model::model('user/user_session_model');
-        			$session_db->delete(array('userid' => $user_id));
+        			//$session_db	= RC_Model::model('user/user_session_model');
+        			//$session_db->delete(array('userid' => $user_id));
+        			RC_DB::table('session')->where('user_id', $user_id)->delete();
         			$user->logout();
         			return array();
         		} else {
@@ -124,8 +125,9 @@ class password_module extends api_front implements api_interface {
         		if ($user->edit_user(array('username'=> $_SESSION['user_name'], 'password'=>$new_password))) {
         			$db = RC_Model::model('user/users_model');
         			$db->where(array('user_id' => $user_id))->update(array('ec_salt' => 0));
-        			$session_db	= RC_Model::model('user/user_session_model');
-        			$session_db->delete(array('userid' => $user_id));
+        			//$session_db	= RC_Model::model('user/user_session_model');
+        			//$session_db->delete(array('userid' => $user_id));
+        			RC_DB::table('session')->where('user_id', $user_id)->delete();
         			$user->logout();
         			return array();
         		} else {
@@ -139,8 +141,9 @@ class password_module extends api_front implements api_interface {
         			if ($user->edit_user(array('username'=> (empty($code) ? $_SESSION['user_name'] : $user_info['user_name']), 'old_password'=>$old_password, 'password'=>$new_password), empty($code) ? 0 : 1)) {
         				$db = RC_Model::model('user/users_model');
         				$db->where(array('user_id' => $user_id))->update(array('ec_salt' => 0));
-        				$session_db	= RC_Model::model('user/user_session_model');
-        				$session_db->delete(array('userid' => $user_id));
+        				//$session_db	= RC_Model::model('user/user_session_model');
+        				//$session_db->delete(array('userid' => $user_id));
+        				RC_DB::table('session')->where('user_id', $user_id)->delete();
         				$user->logout();
         				return array();
         			} else {
