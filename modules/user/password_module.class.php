@@ -90,6 +90,8 @@ class password_module extends api_front implements api_interface {
         			//$session_db->delete(array('userid' => $user_id));
         			RC_DB::table('session')->where('user_id', $user_id)->delete();
         			$user->logout();
+        			RC_Session::destroy();
+        			
         			return array();
         		} else {
         			$result = new ecjia_error('edit_password_failure', __('您输入的旧密码不正确！'));
@@ -129,6 +131,8 @@ class password_module extends api_front implements api_interface {
         			//$session_db->delete(array('userid' => $user_id));
         			RC_DB::table('session')->where('user_id', $user_id)->delete();
         			$user->logout();
+        			RC_Session::destroy();
+        			
         			return array();
         		} else {
         			return new ecjia_error('update_password_error', '修改密码失败！');
@@ -145,6 +149,8 @@ class password_module extends api_front implements api_interface {
         				//$session_db->delete(array('userid' => $user_id));
         				RC_DB::table('session')->where('user_id', $user_id)->delete();
         				$user->logout();
+        				RC_Session::destroy();
+        				
         				return array();
         			} else {
         				$result = new ecjia_error('edit_password_failure', __('您输入的旧密码不正确！'));
