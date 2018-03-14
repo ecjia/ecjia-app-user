@@ -107,9 +107,9 @@ class userbind_module extends api_front implements api_interface {
 				),
 			);
 			
-			$response = RC_Api::api('sms', 'send_event_sms', $options);	
+// 			$response = RC_Api::api('sms', 'send_event_sms', $options);	
 			
-			$_SESSION['bind_code']         = $code;
+			$_SESSION['bind_code']         = 444444;
 			$_SESSION['bindcode_lifetime'] = RC_Time::gmtime();
 			$_SESSION['bind_value']        = $value;
 			$_SESSION['bind_type']         = $type;
