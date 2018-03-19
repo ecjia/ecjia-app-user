@@ -753,7 +753,7 @@ function EM_user_info($user_id, $mobile) {
 	//$refund_order = $refund_order_count['0']['counts'];
 	
 	$refund_order = RC_DB::table('refund_order')->where('user_id', $_SESSION['user_id'])
-						->whereRaw('status != 10 and (status = 1 and refund_status != 2)')
+						->whereRaw('status != 10 and refund_status != 2')
 						//->whereRaw('status = 1 and refund_status != 2')
 						->count();
 	
