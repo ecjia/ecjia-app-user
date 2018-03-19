@@ -107,7 +107,7 @@ class signin_module extends api_front implements api_interface {
 					return  new ecjia_error('msg_error', __('信息错误，请重新获取验证码'));
 				}
 				 
-				if (!is_numeric($name) && strlen($name) != 11 && !preg_match( '/^1[3|4|5|7|8][0-9]\d{8}$/', $name)) {
+				if (!is_numeric($name) && strlen($name) != 11 && !preg_match( '/^1[3|4|5|6|7|8][0-9]\d{8}$/', $name)) {
 					return new ecjia_error('mobile_wrong', '手机号码格式不正确！');
 				}
 				$user_count = RC_DB::table('users')->where('mobile_phone', $name)->count();
