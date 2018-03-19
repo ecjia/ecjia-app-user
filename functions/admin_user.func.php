@@ -752,7 +752,10 @@ function EM_user_info($user_id, $mobile) {
 	//					->select(RC_DB::Raw('count(DISTINCT oi.order_id) as counts'))->get();
 	//$refund_order = $refund_order_count['0']['counts'];
 	
-	$refund_order = RC_DB::table('refund_order')->where('user_id', $_SESSION['user_id'])->where('status', '<>', 10)->count();
+	$refund_order = RC_DB::table('refund_order')->where('user_id', $_SESSION['user_id'])
+						->whereRaw('status != 10 and (status = 1 and refund_status != 2)')
+						//->whereRaw('status = 1 and refund_status != 2')
+						->count();
 	
 	/* 取得用户等级 */
 	if ($user_info['user_rank'] == 0) {
