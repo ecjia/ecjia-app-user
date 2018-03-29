@@ -576,16 +576,23 @@ class admin extends ecjia_admin {
 			$user['last_ip']				= $row['last_ip'];
 			
 			/* 用户地址列表*/
-			$field = array("ua.*,IF(address_id=".$row['address_id'].",1,0) as default_address,IFNULL(c.region_name, '') as country_name, IFNULL(p.region_name, '') as province_name,IFNULL(t.region_name, '') as city_name,IFNULL(d.region_name, '') as district_name");
+			$field = "ua.*,
+					IF(address_id=".$row['address_id'].",1,0) as default_address,
+					IFNULL(c.region_name, '') as country_name, 
+					IFNULL(p.region_name, '') as province_name,
+					IFNULL(t.region_name, '') as city_name,
+					IFNULL(d.region_name, '') as district_name,
+					IFNULL(s.region_name, '') as street_name";
 
 			$address_list = RC_DB::table('user_address as ua')
 					->leftJoin('regions as c', RC_DB::raw('c.region_id'), '=', RC_DB::raw('ua.country'))
 					->leftJoin('regions as p', RC_DB::raw('p.region_id'), '=', RC_DB::raw('ua.province'))
 					->leftJoin('regions as t', RC_DB::raw('t.region_id'), '=', RC_DB::raw('ua.city'))
 					->leftJoin('regions as d', RC_DB::raw('d.region_id'), '=', RC_DB::raw('ua.district'))
+					->leftJoin('regions as s', RC_DB::raw('s.region_id'), '=', RC_DB::raw('ua.street'))
 					->where('user_id', $row['user_id'])
 					->orderBy('default_address', 'desc')
-					->selectRaw("ua.*, IF(address_id=".$row['address_id'].",1,0) as default_address, IFNULL(c.region_name, '') as country_name, IFNULL(p.region_name, '') as province_name, IFNULL(t.region_name, '') as city_name, IFNULL(d.region_name, '') as district_name")
+					->selectRaw($field)
 					->take(5)
 					->get();
 
@@ -754,12 +761,13 @@ class admin extends ecjia_admin {
 			->leftJoin('regions as c', RC_DB::raw('c.region_id'), '=', RC_DB::raw('ua.country'))
 			->leftJoin('regions as p', RC_DB::raw('p.region_id'), '=', RC_DB::raw('ua.province'))
 			->leftJoin('regions as t', RC_DB::raw('t.region_id'), '=', RC_DB::raw('ua.city'))
-			->leftJoin('regions as d', RC_DB::raw('d.region_id'), '=', RC_DB::raw('ua.district'));
+			->leftJoin('regions as d', RC_DB::raw('d.region_id'), '=', RC_DB::raw('ua.district'))
+			->leftJoin('regions as s', RC_DB::raw('s.region_id'), '=', RC_DB::raw('ua.street'));
 		
 		if ($address_id) {
 			$db_user_address
 				->orderBy('default_address', 'desc')
-				->selectRaw("ua.*,IF(address_id=".$address_id['address_id'].",1,0) as default_address,IFNULL(c.region_name, '') as country_name, IFNULL(p.region_name, '') as province_name,IFNULL(t.region_name, '') as city_name,IFNULL(d.region_name, '') as district_name");
+				->selectRaw("ua.*,IF(address_id=".$address_id['address_id'].",1,0) as default_address,IFNULL(c.region_name, '') as country_name, IFNULL(p.region_name, '') as province_name,IFNULL(t.region_name, '') as city_name,IFNULL(d.region_name, '') as district_name,IFNULL(s.region_name, '') as street_name");
 		} 
 		
 		$row = $db_user_address->where('user_id', $id)->get();
