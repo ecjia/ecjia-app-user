@@ -150,12 +150,11 @@ class signin_module extends api_front implements api_interface {
 		
 		$user_info = EM_user_info($_SESSION['user_id']);
 		$out = array(
-				'session' => array(
-						'sid' => RC_Session::session_id(),
-						'uid' => $_SESSION['user_id']
-				),
-		
-				'user' => $user_info
+			'session' => array(
+				'sid' => RC_Session::session_id(),
+				'uid' => $_SESSION['user_id']
+			),
+			'user' => $user_info
 		);
 		
 		update_user_info();
