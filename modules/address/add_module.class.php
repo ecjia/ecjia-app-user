@@ -120,7 +120,7 @@ class add_module extends api_front implements api_interface {
 			$address_data['street']		= $data['street'];
 		}	
 		
-		$result = RC_Api::api('user', 'address_manage', $address_manage);
+		$result = RC_Api::api('user', 'address_manage', $address_data);
 	
 		if (is_ecjia_error($result)) {
 			return $result;
