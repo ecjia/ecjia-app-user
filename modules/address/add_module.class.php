@@ -64,7 +64,7 @@ class add_module extends api_front implements api_interface {
 		    return new ecjia_error( 'invalid_parameter', RC_Lang::get ('system::system.invalid_parameter' ));
 		}
 		$address_data = array();
-		$address_data['user_id'] 		= $address['user_id'];
+		$address_data['user_id'] 		= $user_id;
 				
 		if (!empty($address['consignee'])) {
 			$address_data['consignee'] 	= $address['consignee'];
