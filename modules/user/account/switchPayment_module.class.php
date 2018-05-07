@@ -47,47 +47,57 @@
 defined('IN_ECJIA') or exit('No permission resources.');
 
 /**
- * 
- * @author will
+ * 更新用户充值订单支付方式
+ * @author zrl
  */
-class validate_module extends api_admin implements api_interface {
-    public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {
+class switchPayment_module extends api_front implements api_interface {
+    public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	
-		$validate_type	= $this->requestData('validate_type');
-    	$validate_value = $this->requestData('validate_value');
+ 		$user_id	= $_SESSION['user_id'];
+ 		if ($user_id < 1 ) {
+ 		    return new ecjia_error(100, 'Invalid session');
+ 		}
+ 		$order_sn	= $this->requestData('order_sn', '');
+ 		$order_sn	= trim($order_sn);
+		$pay_code	= $this->requestData('pay_code','');
 		
-		if (empty($validate_type) || empty($validate_value)) {
-			return new ecjia_error( 'invalid_parameter', RC_Lang::get ('system::system.invalid_parameter'));
+		if (empty($order_sn) || empty($pay_code)) {
+			return new ecjia_error('invalid_parameter', RC_Lang::get('orders::order.invalid_parameter'));
 		}
 		
-		$code = rand(100000, 999999);
-		$response = '';
-		if ($validate_type == 'mobile') {
-		    //发送短信
-		    $options = array(
-		        'mobile' => $validate_value,
-		        'event'	 => 'sms_get_validate',
-		        'value'  =>array(
-		            'code' 			=> $code,
-		            'service_phone' => ecjia::config('service_phone'),
-		        ),
-		    );
-		    RC_Api::api('sms', 'send_event_sms', $options);
+		$payment_info = with(new Ecjia\App\Payment\PaymentPlugin)->getPluginDataByCode($pay_code);
+		
+		$user_account_info = get_account_detail($order_sn);
+		if (empty($user_account_info)) {
+			return new ecjia_error('not_exists_info', '不存在的信息！');
 		}
+
+		$data = array(
+			'payment'		=> $payment_info['pay_code']
+		);
+
+		$result = RC_DB::table('user_account')->where('order_sn', $order_sn)->update($data);
 		
-		$time = RC_Time::gmtime();
-		$_SESSION['adminuser_validate_value']	= $validate_value;
-		$_SESSION['adminuser_validate_code']	= $code;
-		$_SESSION['adminuser_validate_expiry']	= $time + 600;//设置有效期10分钟
-		
-		/* 判断是否发送成功*/
-		if (is_ecjia_error($response)) {
-			return new ecjia_error('send_code_error', __('验证码发送失败！'));
+		if ($result) {
+			return array();
 		} else {
-			return array('data' => '验证码发送成功！');
+			return new ecjia_error('fail_error', '处理失败！');
 		}
-		
 	}
+}
+
+/**
+ * 获取会员充值账目信息
+ *
+ * @return  array
+ */
+function get_account_detail($order_sn) {
+	$account_info = array();
+	$order_sn = trim($order_sn);
+	if (!empty($order_sn)) {
+		$account_info = RC_DB::table('user_account')->where('order_sn', $order_sn)->first();
+	}
+	return $account_info;
 }
 
 // end

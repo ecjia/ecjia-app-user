@@ -303,6 +303,7 @@ function get_account_log($user_id, $num, $start, $process_type = '') {
 			$rows['short_user_note']  = ($rows['user_note'] > '') ? RC_String::sub_str($rows['user_note'], 30) : '暂无';
 			$rows['pay_status']       = ($rows['is_paid'] == 0) ? __('未确认') : __('已完成');
 			$rows['format_amount']    = price_format(abs($rows['amount']), false);
+			$rows['pay_code']		  = $rows['payment'];
 			
 			/* 会员的操作类型： 冲值，提现 */
 			if ($rows['process_type'] == 0) {
@@ -672,10 +673,9 @@ function update_address($address) {
 	return true;
 }
 
-function EM_user_info($user_id, $mobile) {
-	$db_collect_goods  = RC_Model::model('goods/collect_goods_model');
-	$db_user_rank      = RC_Model::model('user/user_rank_model');
-	$db_orderinfo_view = RC_Model::model('orders/order_info_viewmodel');
+function EM_user_info($user_id, $mobile = '') {
+// 	$db_collect_goods  = RC_Model::model('goods/collect_goods_model');
+// 	$db_orderinfo_view = RC_Model::model('orders/order_info_viewmodel');
 // 	$db_orderinfo_view->view = array(
 // 	    'order_goods' => array(
 // 	        'type'      =>    Component_Model_View::TYPE_LEFT_JOIN,
@@ -713,10 +713,14 @@ function EM_user_info($user_id, $mobile) {
 	//$allow_comment_count = $db_orderinfo_view->join(array('order_goods', 'goods', 'comment'))->where(array('oi.user_id' => $user_id, 'oi.shipping_status' => SS_RECEIVED, 'oi.order_status' => array(OS_CONFIRMED, OS_SPLITED), 'oi.pay_status' => array(PS_PAYED, PS_PAYING), 'c.comment_id is null'))->count('DISTINCT oi.order_id');
 	
 	$collection_num = RC_DB::table('collect_goods')->where('user_id', $user_id)->orderBy('add_time', 'desc')->count();
-	$await_pay = RC_DB::table('order_info')->where('user_id', $user_id)->whereRaw(EM_order_query_sql('await_pay', ''))->count();
+	$await_pay =  RC_DB::table('order_info')->where('user_id', $user_id)->where('pay_status', PS_UNPAYED)->whereIn('order_status', array(OS_UNCONFIRMED, OS_CONFIRMED, OS_SPLITED))->count();
 	$await_ship = RC_DB::table('order_info')->where('user_id', $user_id)->whereRaw(EM_order_query_sql('await_ship', ''))->count();
 	$shipped =  RC_DB::table('order_info')->where('user_id', $user_id)->whereRaw(EM_order_query_sql('shipped', ''))->count();
-	$finished = RC_DB::table('order_info')->where('user_id', $user_id)->whereRaw(EM_order_query_sql('finished', 'oi.'))-count();
+	//$finished = RC_DB::table('order_info')->where('user_id', $user_id)->whereRaw(EM_order_query_sql('finished', 'oi.'))-count();
+	$finished = RC_DB::table('order_info')->where('user_id', $user_id)->whereIn('order_status', array(OS_CONFIRMED, OS_SPLITED))
+						->whereIn('shipping_status', array(SS_SHIPPED, SS_RECEIVED))
+						->whereIn('pay_status', array(PS_PAYED, PS_PAYING))
+						->count();
 	
 	$db_allow_comment = RC_DB::table('order_info as oi')
 	->leftJoin('order_goods as og', RC_DB::raw('oi.order_id'), '=', RC_DB::raw('og.order_id'))
@@ -737,8 +741,12 @@ function EM_user_info($user_id, $mobile) {
 	->whereRaw(RC_DB::raw('c.comment_id is null'))
 	->select(RC_DB::Raw('count(DISTINCT oi.order_id) as counts'))->get();
 	$allow_comment_count = $allow_comment_count['0']['counts'];
+	//申请售后数
+	$refund_order = RC_DB::table('refund_order')->where('user_id', $_SESSION['user_id'])
+						->whereRaw('status != 10 and refund_status != 2')
+						->count();
 	
-	
+	$db_user_rank = RC_Model::model('user/user_rank_model');
 	/* 取得用户等级 */
 	if ($user_info['user_rank'] == 0) {
 		// 非特殊等级，根据等级积分计算用户等级（注意：不包括特殊等级）
@@ -799,6 +807,7 @@ function EM_user_info($user_id, $mobile) {
 			'shipped' 		=> $shipped,
 			'finished' 		=> $finished,
 		    'allow_comment'	=> $allow_comment_count,
+			'refund_order'	=> $refund_order
 		),
 		'user_money'		=> $user_info['user_money'],
 		'formated_user_money' 	=> price_format($user_info['user_money'], false),

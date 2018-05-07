@@ -85,7 +85,7 @@ class signup_module extends api_front implements api_interface
 			$code .= $charset[rand(1, $charset_len)];
 		}
 		/* 判断是否为手机*/
-		if (is_numeric($username) && strlen($username) == 11 && preg_match( '/^1[3|4|5|7|8][0-9]\d{8}$/', $username)) {
+		if (is_numeric($username) && strlen($username) == 11 && preg_match('/^1(3|4|5|6|7|8|9)\d{9}$/', $username)) {
 			/* 设置用户手机号*/
 			$other['mobile_phone'] = $username;
 			
@@ -101,7 +101,7 @@ class signup_module extends api_front implements api_interface
 		}
 		
 		$other['mobile_phone'] = empty($mobile) ? $other['mobile_phone'] : $mobile;
-		if (is_numeric($other['mobile_phone']) && strlen($other['mobile_phone']) == 11 && preg_match( '/^1[3|4|5|7|8][0-9]\d{8}$/', $other['mobile_phone'])) {
+		if (is_numeric($other['mobile_phone']) && strlen($other['mobile_phone']) == 11 && preg_match('/^1(3|4|5|6|7|8|9)\d{9}$/', $other['mobile_phone'])) {
 			$db_user      = RC_Loader::load_app_model('users_model', 'user');
 			$mobile_count = $db_user->where(array('mobile_phone' => $other['mobile_phone']))->count();
 			if ($mobile_count > 0 ) {
@@ -146,7 +146,24 @@ class signup_module extends api_front implements api_interface
  			
  			/*注册送红包*/
  			//RC_Api::api('bonus', 'send_bonus', array('type' => SEND_BY_REGISTER));
- 			
+ 			/*客户端没传invite_code时，判断手机号码有没被邀请过*/
+ 			if (empty($invite_code)) {
+ 				/*获取邀请记录信息*/
+ 				$is_invitedinfo = RC_DB::table('invitee_record')
+ 				->where('invitee_phone', $mobile)
+ 				->where('invite_type', 'signup')
+ 				->where('expire_time', '>', RC_Time::gmtime())
+ 				->first();
+ 				if (!empty($is_invitedinfo)) {
+ 					/*获取邀请者的邀请码*/
+ 					$invite_code = RC_DB::table('term_meta')
+ 					->where('object_type', 'ecjia.affiliate')
+ 					->where('object_group', 'user_invite_code')
+ 					->where('meta_key', 'invite_code')
+ 					->where('object_id', $is_invitedinfo['invite_id'])
+ 					->pluck('meta_value');
+ 				}
+ 			}
  			$result = ecjia_app::validate_application('affiliate');
  			if (!is_ecjia_error($result) && !empty($invite_code)) {
  				RC_Api::api('affiliate', 'invite_bind', array('invite_code' => $invite_code, 'mobile' => $mobile));
