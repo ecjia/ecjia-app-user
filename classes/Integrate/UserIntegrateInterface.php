@@ -25,10 +25,10 @@ class UserIntegrateInterface
      * 
      * @return void
      */
-    public function set_session($username);
+    public function setSession($username);
     
     
-    public function clear_session();
+    public function clearSession();
     
     
     /**
@@ -36,10 +36,10 @@ class UserIntegrateInterface
      *
      * @return void
      */
-    public function set_cookie($username, $remember = null );
+    public function setCookie($username, $remember = null );
     
     
-    public function clear_cookie();
+    public function clearCookie();
     
     
     
