@@ -191,6 +191,15 @@ class IntegratePlugin
     
         return $handler;
     }
+    
+    
+    public function defaultChannel()
+    {
+        $config = unserialize(ecjia::config('integrate_config'));
+        
+        
+    }
+    
 
 }
 
