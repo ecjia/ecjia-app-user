@@ -95,8 +95,10 @@ class signup_module extends api_front implements api_interface
 				if (is_numeric($username) && strlen($username) == 11 && preg_match('/^1(3|4|5|6|7|8|9)\d{9}$/', $username)) {
 					/* 设置用户手机号*/
 					$other['mobile_phone'] = $username;
+					$mobile = $username;
 					$username = substr_replace($username,'****',3,4);
 					$user = integrate::init_users();
+					
 				}
 			}elseif (empty($username) && !empty($mobile)) {
 				/* 判断是否为手机*/
@@ -113,7 +115,7 @@ class signup_module extends api_front implements api_interface
 			if (is_numeric($username) && strlen($username) == 11 && preg_match('/^1(3|4|5|6|7|8|9)\d{9}$/', $username)) {
 				/* 设置用户手机号*/
 				$other['mobile_phone'] = $username;
-					
+				$mobile = $username;
 				$username = $device_client.'_'.$code;
 				$user = integrate::init_users();
 				if ($user->check_user($username)) {
