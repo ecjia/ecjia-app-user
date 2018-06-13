@@ -2,9 +2,9 @@
 
 namespace Ecjia\App\User;
 
-use Royalcms\Component\App\AppServiceProvider;
+use Royalcms\Component\App\AppParentServiceProvider;
 
-class UserServiceProvider extends  AppServiceProvider
+class UserServiceProvider extends  AppParentServiceProvider
 {
     
     public function boot()
