@@ -157,7 +157,7 @@ abstract class integrate_abstract
      *
      * @return void
      */
-    public function login($username, $password, $remember = null)
+    public function login($username, $password = null, $remember = null)
     {
         if ($this->check_user($username, $password) > 0) {
             if ($this->need_sync) {
