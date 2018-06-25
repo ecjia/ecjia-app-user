@@ -194,7 +194,7 @@ abstract class integrate_abstract
      *
      * @return int
      */
-    public function add_user($username, $password, $email, $gender = -1, $bday = 0, $reg_date = 0, $md5password = '')
+    public function add_user($username, $password = null, $email, $gender = -1, $bday = 0, $reg_date = 0, $md5password = '')
     {
     	/* 将用户添加到整合方 */
         if ($this->check_user($username) > 0) {
