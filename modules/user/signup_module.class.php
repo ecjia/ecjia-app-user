@@ -57,7 +57,7 @@ class signup_module extends api_front implements api_interface
 		RC_Loader::load_app_class('integrate', 'user', false);
 		
 		$username	   = $this->requestData('name');
-		$password	   = $this->requestData('password');
+		$password	   = $this->requestData('password', '');
 		$email		   = $this->requestData('email');
 		$fileld		   = $this->requestData('field', array());
 		$device		   = $this->device;
@@ -270,7 +270,7 @@ class signup_module extends api_front implements api_interface
  *            
  * @return bool $bool
  */
-function register($username, $password, $email, $other = array(), $api_version)
+function register($username, $password = null, $email, $other = array(), $api_version)
 {
     $db_user = RC_Loader::load_app_model('users_model', 'user');
 
