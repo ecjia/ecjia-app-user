@@ -116,7 +116,7 @@ class signin_module extends api_front implements api_interface {
 				}
 				$user_name = RC_DB::table('users')->where('mobile_phone', $name)->pluck('user_name');
 				//账号信息检查
-				if (!$user->login($user_name)) {
+				if (!$user->login($user_name, null)) {
 					return new ecjia_error('userinfo_error', '您输入的账号信息不正确 ！');
 				}
 			}
