@@ -531,16 +531,19 @@ abstract class integrate_abstract
         } else {
         	$row = $this->db->field('user_id, password, email')->find(array('user_name' => $username));
             if ($row) {
-//                 $_SESSION['user_id']   = $row['user_id'];
-//                 $_SESSION['user_name'] = $username;
-//                 $_SESSION['email']     = $row['email'];
+                $_SESSION['user_id']   			= $row['user_id'];
+                $_SESSION['user_name'] 			= $username;
+                $_SESSION['session_user_id']    = $row['user_id'];
+                $_SESSION['session_user_type']  = $row['user'];
+                $_SESSION['email']     			= $row['email'];
+                $_SESSION['ip']     			= RC_Ip::client_ip();
                 
-                RC_Session::set('user_id', $row['user_id']);
-                RC_Session::set('user_name', $username);
-                RC_Session::set('session_user_id', $row['user_id']);
-                RC_Session::set('session_user_type', 'user');
-                RC_Session::set('email', $row['email']);
-                RC_Session::set('ip', RC_Ip::client_ip());
+//                 RC_Session::set('user_id', $row['user_id']);
+//                 RC_Session::set('user_name', $username);
+//                 RC_Session::set('session_user_id', $row['user_id']);
+//                 RC_Session::set('session_user_type', 'user');
+//                 RC_Session::set('email', $row['email']);
+//                 RC_Session::set('ip', RC_Ip::client_ip());
             }
         }
     }
