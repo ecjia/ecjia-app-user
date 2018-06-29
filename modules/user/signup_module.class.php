@@ -92,7 +92,9 @@ class signup_module extends api_front implements api_interface
 			}
 			if (!empty($username) && empty($mobile)) {
 				/* 判断是否为手机*/
-				if (is_numeric($username) && strlen($username) == 11 && preg_match('/^1(3|4|5|6|7|8|9)\d{9}$/', $username)) {
+			    $check_mobile = Ecjia\App\Sms\Helper::check_mobile($username);
+			    if($check_mobile === true) {
+// 				if (is_numeric($username) && strlen($username) == 11 && preg_match('/^1(3|4|5|6|7|8|9)\d{9}$/', $username)) {
 					/* 设置用户手机号*/
 					$other['mobile_phone'] = $username;
 					$mobile = $username;
@@ -102,7 +104,9 @@ class signup_module extends api_front implements api_interface
 				}
 			}elseif (empty($username) && !empty($mobile)) {
 				/* 判断是否为手机*/
-				if (is_numeric($mobile) && strlen($mobile) == 11 && preg_match('/^1(3|4|5|6|7|8|9)\d{9}$/', $mobile)) {
+			    $check_mobile = Ecjia\App\Sms\Helper::check_mobile($mobile);
+			    if($check_mobile === true) {
+// 				if (is_numeric($mobile) && strlen($mobile) == 11 && preg_match('/^1(3|4|5|6|7|8|9)\d{9}$/', $mobile)) {
 					/* 设置用户手机号*/
 					$other['mobile_phone'] = $mobile;
 				
@@ -112,7 +116,9 @@ class signup_module extends api_front implements api_interface
 			}
 		} else {
 			/* 判断是否为手机*/
-			if (is_numeric($username) && strlen($username) == 11 && preg_match('/^1(3|4|5|6|7|8|9)\d{9}$/', $username)) {
+		    $check_mobile = Ecjia\App\Sms\Helper::check_mobile($username);
+		    if($check_mobile === true) {
+// 			if (is_numeric($username) && strlen($username) == 11 && preg_match('/^1(3|4|5|6|7|8|9)\d{9}$/', $username)) {
 				/* 设置用户手机号*/
 				$other['mobile_phone'] = $username;
 				$mobile = $username;
@@ -129,7 +135,9 @@ class signup_module extends api_front implements api_interface
 		}
 		
 		$other['mobile_phone'] = empty($mobile) ? $other['mobile_phone'] : $mobile;
-		if (is_numeric($other['mobile_phone']) && strlen($other['mobile_phone']) == 11 && preg_match('/^1(3|4|5|6|7|8|9)\d{9}$/', $other['mobile_phone'])) {
+// 		if (is_numeric($other['mobile_phone']) && strlen($other['mobile_phone']) == 11 && preg_match('/^1(3|4|5|6|7|8|9)\d{9}$/', $other['mobile_phone'])) {
+	    $check_mobile = Ecjia\App\Sms\Helper::check_mobile($other['mobile_phone']);
+	    if($check_mobile === true) {
 			$db_user      = RC_Loader::load_app_model('users_model', 'user');
 			$mobile_count = $db_user->where(array('mobile_phone' => $other['mobile_phone']))->count();
 			if ($mobile_count > 0 ) {
