@@ -761,7 +761,7 @@ function EM_user_info($user_id, $mobile = '') {
 		$row = $db_user_rank->field('rank_id, rank_name')->find(array('special_rank' => 0 , 'min_points' => array('elt' => intval($user_info['rank_points'])) , 'max_points' => array('gt' => intval($user_info['rank_points']))));
 	} else {
 		// 特殊等级
-		$row = $db_user_rank->field('rank_id, rank_name')->find(array('rank_id' => $user_info[user_rank]));
+		$row = $db_user_rank->field('rank_id, rank_name')->find(array('rank_id' => $user_info['user_rank']));
 	}
 
 	if (!empty($row)) {
