@@ -284,9 +284,10 @@ function register($username, $password = null, $email, $other = array(), $api_ve
     $db_user = RC_Loader::load_app_model('users_model', 'user');
 
     /* 检查注册是否关闭 */
-    if (ecjia::config('shop_reg_closed')) {
-    	return new ecjia_error('shop_reg_closed', '会员注册关闭');
-    }
+	$shop_reg_closed = ecjia::config('shop_reg_closed');
+	if ($shop_reg_closed == '1') {
+		return new ecjia_error('shop_reg_closed', '会员注册关闭');
+	}
     
     if (!empty($api_version)) {
     	/* 检查username */
