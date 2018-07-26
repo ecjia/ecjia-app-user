@@ -50,7 +50,8 @@ class signup_module extends api_front implements api_interface
 {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request)
     {
-		if (ecjia::config('shop_reg_closed')) {
+    	$shop_reg_closed = ecjia::config('shop_reg_closed');
+		if ($shop_reg_closed == '1') {
 			return new ecjia_error('shop_reg_closed', '会员注册关闭');
 		}
 		
