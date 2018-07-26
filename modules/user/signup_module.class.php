@@ -279,7 +279,7 @@ class signup_module extends api_front implements api_interface
  *            
  * @return bool $bool
  */
-function register($username, $password = null, $email, $other = array(), $api_version)
+function register($username, $password = null, $email, $other = array(), $api_version = '')
 {
     $db_user = RC_Loader::load_app_model('users_model', 'user');
 
@@ -289,7 +289,7 @@ function register($username, $password = null, $email, $other = array(), $api_ve
 		return new ecjia_error('shop_reg_closed', '会员注册关闭');
 	}
     
-    if (!empty($api_version)) {
+	if (version_compare($api_version, '1.17', '>=')) {
     	/* 检查username */
     	if (empty($username)) {
     		return new ecjia_error('username_not_empty', '用户名不能为空！');
