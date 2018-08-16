@@ -66,10 +66,6 @@ class mobile_reward extends ecjia_front {
 		$this->assign('mobile_signup_reward_notice', $mobile_signup_reward_notice);
 		$this->assign('token', $token);
 		
-		RC_Logger::getLogger('error')->info('test111');
-		RC_Logger::getLogger('error')->info($token);
-		RC_Logger::getLogger('error')->info('test222');
-		
 	    $this->display(
 	        RC_Package::package('app::user')->loadTemplate('front/reward.dwt', true)
 	    );
@@ -95,23 +91,12 @@ class mobile_reward extends ecjia_front {
 		$is_received = $db->where('object_type', 'ecjia.user')->where('object_group', 'user')->where('object_id', $_SESSION['user_id'])
 		  ->where('meta_key', 'signup_reward_receive_time')->count();
 		
-		RC_Logger::getLogger('error')->info('test333');
-		RC_Logger::getLogger('error')->info($token);
-		RC_Logger::getLogger('error')->info($_SESSION['user_id']);
-		RC_Logger::getLogger('error')->info($db->toSql());
-		RC_Logger::getLogger('error')->info($is_received);
-		RC_Logger::getLogger('error')->info('test444');
-		
 		/* 判断是否是ecjia设备扫描*/
 		// 		ECJiaBrowse/1.2.0
 		if(!preg_match('/ECJiaBrowse/', $_SERVER['HTTP_USER_AGENT'])) {
 		    if ($need_login) {
 		        return ecjia_front::$controller->showmessage('您还未登录，请先登录！', ecjia::MSGSTAT_ERROR | ecjia::MSGTYPE_JSON, array('url' => RC_Uri::url('user/privilege/login')));
 		    }
-		    
-		    RC_Logger::getLogger('error')->info('test555');
-		    RC_Logger::getLogger('error')->info($is_received);
-		    RC_Logger::getLogger('error')->info('test666');
 		    
 		    /* 新人有礼的红包id*/
 		    if (!$bonus_id) {
@@ -127,11 +112,6 @@ class mobile_reward extends ecjia_front {
 		    return ecjia_front::$controller->showmessage('发放成功！', ecjia::MSGSTAT_SUCCESS | ecjia::MSGTYPE_JSON, array('url' => RC_Uri::url('user/bonus/init'), 'close_url' => RC_Uri::url('touch/index/init')));
 		    
 		} else {
-			
-			RC_Logger::getLogger('error')->info('test777');
-			RC_Logger::getLogger('error')->info($is_received);
-			RC_Logger::getLogger('error')->info('test888');
-			
 		    if ($need_login) {
 		        return ecjia_front::$controller->showmessage('您还未登录，请先登录！', ecjia::MSGSTAT_ERROR | ecjia::MSGTYPE_JSON, array('url' => 'ecjiaopen://app?open_type=signin'));
 		    }
