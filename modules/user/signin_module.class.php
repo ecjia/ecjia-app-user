@@ -165,6 +165,11 @@ class signin_module extends api_front implements api_interface {
 			'user' => $user_info
 		);
 		
+		RC_Logger::getLogger('error')->info('testaaa');
+		RC_Logger::getLogger('error')->info($_SESSION['user_id']);
+		RC_Logger::getLogger('error')->info(RC_Session::session_id());
+		RC_Logger::getLogger('error')->info('testbbb');
+		
 		update_user_info();
 		recalculate_price();
 		
