@@ -56,15 +56,15 @@ class mobile_reward extends ecjia_front {
 	}
 	
 	public function init() {
-		$token = isset($_GET['token']) ? trim($_GET['token']) : '';
-		setcookie("ecjia_token", $token);
+//		$token = isset($_GET['token']) ? trim($_GET['token']) : '';
+//		setcookie("ecjia_token", $token);
 		
 		$mobile_signup_reward_notice = ecjia::config('mobile_signup_reward_notice');
 
 		$mobile_signup_reward_notice = nl2br($mobile_signup_reward_notice);
 
 		$this->assign('mobile_signup_reward_notice', $mobile_signup_reward_notice);
-		$this->assign('token', $token);
+//		$this->assign('token', $token);
 		
 	    $this->display(
 	        RC_Package::package('app::user')->loadTemplate('front/reward.dwt', true)
@@ -72,7 +72,7 @@ class mobile_reward extends ecjia_front {
 	}
 	
 	public function recieve() {
-		$token = isset($_POST['token']) ? trim($_POST['token']) : '';
+//		$token = isset($_POST['token']) ? trim($_POST['token']) : '';
 		
 		$need_login = false;
 		if (!isset($_SESSION['user_id']) || !$_SESSION['user_id']) {
@@ -155,8 +155,10 @@ class mobile_reward extends ecjia_front {
 	    RC_DB::table('term_meta')->insert($data);
 	}
 	
-	
-	
 }
+
+RC_Hook::add_filter('ecjia_front_session_id', function($session_id) {
+    return royalcms('request')->input('token', $session_id);
+});
 
 // end
