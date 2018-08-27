@@ -547,14 +547,13 @@ function change_account_log($user_id, $user_money = 0, $frozen_money = 0, $rank_
 	RC_DB::table('account_log')->insertGetId($account_log);
 
 	/* 更新用户信息 */
-	$step = $user_money.", frozen_money = frozen_money + ('$frozen_money')," .
-// 	" rank_points = rank_points + ('$rank_points')," .
-	" pay_points = pay_points + ('$pay_points')";
+    RC_DB::table('users')
+        ->where('user_id', $user_id)
+        ->increment( 'user_money', $user_money, [
+            'frozen_money'  => RC_DB::raw('`frozen_money` + '. $frozen_money ),
+            'pay_points'    => RC_DB::raw('`pay_points` + '. $pay_points ),
+        ]);
 
-	RC_DB::table('users')
-			->where('user_id', $user_id)
-			->increment('user_money', $step);
-	
 	if ($rank_points) {
 	    $data = array (
 	        'user_id'			=> $user_id,
