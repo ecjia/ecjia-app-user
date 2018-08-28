@@ -594,7 +594,7 @@ class admin extends ecjia_admin {
 					->leftJoin('regions as s', RC_DB::raw('s.region_id'), '=', RC_DB::raw('ua.street'))
 					->where('user_id', $row['user_id'])
 					->orderBy('default_address', 'desc')
-					->selectRaw($field)
+					->select(RC_DB::raw($field))
 					->take(5)
 					->get();
 
@@ -769,7 +769,7 @@ class admin extends ecjia_admin {
 		if ($address_id) {
 			$db_user_address
 				->orderBy('default_address', 'desc')
-				->selectRaw("ua.*,IF(address_id=".$address_id['address_id'].",1,0) as default_address,IFNULL(c.region_name, '') as country_name, IFNULL(p.region_name, '') as province_name,IFNULL(t.region_name, '') as city_name,IFNULL(d.region_name, '') as district_name,IFNULL(s.region_name, '') as street_name");
+				->select(RC_DB::raw("ua.*, IF(address_id=".$address_id['address_id'].", 1, 0) as default_address, IFNULL(c.region_name, '') as country_name, IFNULL(p.region_name, '') as province_name, IFNULL(t.region_name, '') as city_name, IFNULL(d.region_name, '') as district_name, IFNULL(s.region_name, '') as street_name"));
 		} 
 		
 		$row = $db_user_address->where('user_id', $id)->get();
