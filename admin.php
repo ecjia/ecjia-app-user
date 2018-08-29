@@ -196,7 +196,7 @@ class admin extends ecjia_admin {
 		}
 
 		if (!empty($password)) {
-			if (!preg_match("/^[A-Za-z0-9]+$/", $password)){
+			if (!preg_match("/^[A-Za-z0-9_\/|\~|\!|\@|\#|\\$|\%|\^|\&|\*|\(|\)|\_|\+|\{|\}|\:|\<|\>|\?|\[|\]|\,|\.|\/|\;|\'|\`|\-|\=|\\\|\|]+$/",$password)){
 				return $this->showmessage(RC_Lang::get('user::users.js_languages.chinese_password'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 			}
 			if (empty($confirm_password)) {
@@ -421,9 +421,10 @@ class admin extends ecjia_admin {
 		if (!preg_match("/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,})$/", $email)) {
 			return $this->showmessage(RC_Lang::get('user::users.js_languages.invalid_email'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
+
 		/* 密码 */
 		if (!empty($password)) {
-			if (!preg_match("/^[A-Za-z0-9]+$/",$password)){
+			if (!preg_match("/^[A-Za-z0-9_\/|\~|\!|\@|\#|\\$|\%|\^|\&|\*|\(|\)|\_|\+|\{|\}|\:|\<|\>|\?|\[|\]|\,|\.|\/|\;|\'|\`|\-|\=|\\\|\|]+$/",$password)){
 				return $this->showmessage(RC_Lang::get('user::users.js_languages.chinese_password'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 			}
 			if (empty($confirm_password)) {
