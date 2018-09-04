@@ -605,7 +605,9 @@ class admin extends ecjia_admin {
 			if (!empty($order)) {
 				foreach ($order as $k => $v) {
 					$order[$k]['add_time']	 = RC_Time::local_date(ecjia::config('time_format'), $v['add_time']);
-					$order[$k]['status']	 = RC_Lang::get('orders::order.os.'.$v['order_status']) . ',' .RC_Lang::get('orders::order.ps.'.$v['pay_status']) . ',' . RC_Lang::get('orders::order.ss.'.$v['shipping_status']);
+					$is_cod = $v['pay_code'] == 'pay_cod' ? 1 : 0;
+					$label_status = with(new Ecjia\App\Orders\OrderStatus())->getOrderStatusLabel($v['order_status'], $v['shipping_status'], $v['pay_status'], $is_cod);
+					$order[$k]['status'] = $label_status[0];
 				}
 			}
 		}
