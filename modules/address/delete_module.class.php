@@ -64,22 +64,23 @@ class delete_module extends api_front implements api_interface {
 			return new ecjia_error( 'invalid_parameter', RC_Lang::get ('system::system.invalid_parameter' ));
 		}
 		
-		if (!drop_consignee($address_id, $user_id)) {
+		if (! $this->drop_consignee($address_id, $user_id)) {
 			return new ecjia_error(8, 'fail');
 		}
 		return array();
 	}
-}
 
-/**
- * 删除一个收货地址
- *
- * @access public
- * @param integer $id
- * @return boolean
- */
-function drop_consignee($id, $user_id) {
-    return RC_Model::model('user/user_address_model')->where(array('address_id' => $id, 'user_id' => $user_id))->delete();
+    /**
+     * 删除一个收货地址
+     *
+     * @access public
+     * @param integer $id
+     * @return boolean
+     */
+    private function drop_consignee($id, $user_id) {
+        return RC_Model::model('user/user_address_model')->where(array('address_id' => $id, 'user_id' => $user_id))->delete();
+    }
+
 }
 
 // end

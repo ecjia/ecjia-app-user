@@ -150,9 +150,9 @@ class signup_module extends api_front implements api_interface
 		
 		$other['last_login'] = RC_Time::gmtime();
 		if (version_compare($api_version, '1.17', '>=')) {
-			$result = register($username, $password, $email, $other, $api_version);
+			$result = $this->register($username, $password, $email, $other, $api_version);
 		} else {
-			$result = register($username, $password, $email, $other);
+			$result = $this->register($username, $password, $email, $other);
 		}
 		
 		if (is_ecjia_error($result)) {
@@ -262,128 +262,131 @@ class signup_module extends api_front implements api_interface
 			return $out;
 		}
 	}
-}
 
-/**
- * 用户注册，登录函数
- *
- * @access public
- * @param string $username
- *            注册用户名
- * @param string $password
- *            用户密码
- * @param string $email
- *            注册email
- * @param array $other
- *            注册的其他信息
- *            
- * @return bool $bool
- */
-function register($username, $password = null, $email, $other = array(), $api_version = '')
-{
-    $db_user = RC_Loader::load_app_model('users_model', 'user');
 
-    /* 检查注册是否关闭 */
-	$shop_reg_closed = ecjia::config('shop_reg_closed');
-	if ($shop_reg_closed == '1') {
-		return new ecjia_error('shop_reg_closed', '会员注册关闭');
-	}
-    
-	if (version_compare($api_version, '1.17', '>=')) {
-    	/* 检查username */
-    	if (empty($username)) {
-    		return new ecjia_error('username_not_empty', '用户名不能为空！');
-    	} else {
-    		if (preg_match('/\'\/^\\s*$|^c:\\\\con\\\\con$|[%,\\\"\\s\\t\\<\\>\\&\'\\\\]/', $username)) {
-    			return new ecjia_error('username_error', '用户名有敏感字符');
-    		}
-    	}
-    } else {
-    	/* 检查username */
-    	if (empty($username)) {
-    		return new ecjia_error('username_not_empty', '用户名不能为空！');
-    	} else {
-    		if (preg_match('/\'\/^\\s*$|^c:\\\\con\\\\con$|[%,\\*\\"\\s\\t\\<\\>\\&\'\\\\]/', $username)) {
-    			return new ecjia_error('username_error', '用户名有敏感字符');
-    		}
-    	}
-    }
-    
-//     if (admin_registered($username)) {
+    /**
+     * 用户注册，登录函数
+     *
+     * @access public
+     * @param string $username
+     *            注册用户名
+     * @param string $password
+     *            用户密码
+     * @param string $email
+     *            注册email
+     * @param array $other
+     *            注册的其他信息
+     *
+     * @return bool $bool
+     */
+    private function register($username, $password = null, $email, $other = array(), $api_version = '')
+    {
+        $db_user = RC_Loader::load_app_model('users_model', 'user');
+
+        /* 检查注册是否关闭 */
+        $shop_reg_closed = ecjia::config('shop_reg_closed');
+        if ($shop_reg_closed == '1') {
+            return new ecjia_error('shop_reg_closed', '会员注册关闭');
+        }
+
+        if (version_compare($api_version, '1.17', '>=')) {
+            /* 检查username */
+            if (empty($username)) {
+                return new ecjia_error('username_not_empty', '用户名不能为空！');
+            } else {
+                if (preg_match('/\'\/^\\s*$|^c:\\\\con\\\\con$|[%,\\\"\\s\\t\\<\\>\\&\'\\\\]/', $username)) {
+                    return new ecjia_error('username_error', '用户名有敏感字符');
+                }
+            }
+        } else {
+            /* 检查username */
+            if (empty($username)) {
+                return new ecjia_error('username_not_empty', '用户名不能为空！');
+            } else {
+                if (preg_match('/\'\/^\\s*$|^c:\\\\con\\\\con$|[%,\\*\\"\\s\\t\\<\\>\\&\'\\\\]/', $username)) {
+                    return new ecjia_error('username_error', '用户名有敏感字符');
+                }
+            }
+        }
+
+//     if ($this->admin_registered($username)) {
 //     	return new ecjia_error('user_exists', RC_Lang::get('user::users.username_exists'));
 //     }
 
-    RC_Loader::load_app_class('integrate', 'user', false);
-    $user = integrate::init_users();
-    if (!$user->add_user($username, $password, $email)) {
-    	if (is_ecjia_error($user->error)) {
-    		return $user->error;
-    	}
-        
-        // 注册失败
-        return new ecjia_error('signup_error', '注册失败！');
-    } else {
-        // 注册成功
-        /* 设置成登录状态 */
-        $user->set_session($username);
-        $user->set_cookie($username);  
-        /* 注册送积分 */
-        if (ecjia_config::has('register_points')) {
-        	$options = array(
-    			'user_id'		=> $_SESSION['user_id'],
-    			'rank_points'	=> ecjia::config('register_points'),
-    			'pay_points'	=> ecjia::config('register_points'),
-    			'change_desc'	=> RC_Lang::get('user::user.register_points')
-        	);
-        	$result = RC_Api::api('user', 'account_change_log',$options);
-        }
-        
-        
-        
-        // 定义other合法的变量数组
-        $other_key_array = array(
-            'msn',
-            'qq',
-            'office_phone',
-            'home_phone',
-            'mobile_phone'
-        );
-        $update_data['reg_time'] = RC_Time::gmtime();
-        if ($other) {
-            foreach ($other as $key => $val) {
-                // 删除非法key值
-                if (!in_array($key, $other_key_array)) {
-                    unset($other[$key]);
-                } else {
-                    $other[$key] = htmlspecialchars(trim($val)); // 防止用户输入javascript代码
-                }
+        RC_Loader::load_app_class('integrate', 'user', false);
+        $user = integrate::init_users();
+        if (!$user->add_user($username, $password, $email)) {
+            if (is_ecjia_error($user->error)) {
+                return $user->error;
             }
-            $update_data = array_merge($update_data, $other);
-        }
 
-        $db_user->where(array('user_id' => $_SESSION['user_id']))->update($update_data);
-        
-        RC_Loader::load_app_func('admin_user', 'user');
-        update_user_info(); // 更新用户信息
-        RC_Loader::load_app_func('cart','cart');
-        recalculate_price(); // 重新计算购物车中的商品价格
-        
-        return true; 
+            // 注册失败
+            return new ecjia_error('signup_error', '注册失败！');
+        } else {
+            // 注册成功
+            /* 设置成登录状态 */
+            $user->set_session($username);
+            $user->set_cookie($username);
+            /* 注册送积分 */
+            if (ecjia_config::has('register_points')) {
+                $options = array(
+                    'user_id'		=> $_SESSION['user_id'],
+                    'rank_points'	=> ecjia::config('register_points'),
+                    'pay_points'	=> ecjia::config('register_points'),
+                    'change_desc'	=> RC_Lang::get('user::user.register_points')
+                );
+                $result = RC_Api::api('user', 'account_change_log',$options);
+            }
+
+
+
+            // 定义other合法的变量数组
+            $other_key_array = array(
+                'msn',
+                'qq',
+                'office_phone',
+                'home_phone',
+                'mobile_phone'
+            );
+            $update_data['reg_time'] = RC_Time::gmtime();
+            if ($other) {
+                foreach ($other as $key => $val) {
+                    // 删除非法key值
+                    if (!in_array($key, $other_key_array)) {
+                        unset($other[$key]);
+                    } else {
+                        $other[$key] = htmlspecialchars(trim($val)); // 防止用户输入javascript代码
+                    }
+                }
+                $update_data = array_merge($update_data, $other);
+            }
+
+            $db_user->where(array('user_id' => $_SESSION['user_id']))->update($update_data);
+
+            RC_Loader::load_app_func('admin_user', 'user');
+            update_user_info(); // 更新用户信息
+            RC_Loader::load_app_func('cart','cart');
+            recalculate_price(); // 重新计算购物车中的商品价格
+
+            return true;
+        }
+    }
+
+
+    /**
+     * 判断超级管理员用户名是否存在
+     *
+     * @param string $adminname
+     *            超级管理员用户名
+     * @return boolean
+     */
+    private function admin_registered ($adminname) {
+        $db = RC_Loader::load_model('admin_user_model');
+        $res = $db->where(array('user_name' => $adminname))->count();
+        return $res;
     }
 }
 
 
-/**
- * 判断超级管理员用户名是否存在
- * 
- * @param string $adminname
- *            超级管理员用户名
- * @return boolean
- */
-function admin_registered ($adminname) {
-    $db = RC_Loader::load_model('admin_user_model');
-    $res = $db->where(array('user_name' => $adminname))->count();
-    return $res;
-}
 
 // end
