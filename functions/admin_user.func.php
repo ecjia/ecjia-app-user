@@ -805,12 +805,23 @@ function EM_user_info($user_id, $mobile = '') {
 	$user_info['user_name'] = preg_replace('/<span(.*)span>/i', '', $user_info['user_name']);
 	
 	/* 获取可使用的红包数量*/
-	$bonus_count = RC_Model::model('bonus/user_bonus_type_viewmodel')->join('bonus_type')->where(array('ub.user_id' => $user_id, 'use_start_date' => array('lt' => RC_Time::gmtime()), 'use_end_date' => array('gt' => RC_Time::gmtime()), 'ub.order_id' => 0))->count();
+	$dbview = RC_DB::table('bonus_type as bt')->leftJoin('user_bonus as ub', RC_DB::raw('bt.type_id'), '=', RC_DB::raw('ub.bonus_type_id'));
+	$time = RC_Time::gmtime();
 	
-	$data = array('object_type' => 'ecjia.user', 'object_group' => 'update_user_name', 'object_id' => $user_id, 'meta_key' => 'update_time');
-	
+	$bonus_count = $dbview->where(RC_DB::raw('ub.user_id'), $user_id)
+	->where(RC_DB::raw('use_start_date'), '<', $time)
+	->where(RC_DB::raw('use_end_date'), '>', $time)
+	->where(RC_DB::raw('ub.order_id'), 0)
+	->count(RC_DB::raw('ub.bonus_id'));
 	/* 判断会员名更改时间*/
-	$username_update_time = RC_Model::model('term_meta_model')->find($data);
+	//$data = array('object_type' => 'ecjia.user', 'object_group' => 'update_user_name', 'object_id' => $user_id, 'meta_key' => 'update_time');
+	//$username_update_time = RC_Model::model('term_meta_model')->find($data);
+	$username_update_time = RC_DB::table('term_meta')->where('object_type', 'ecjia.user')
+							->where('object_group', 'update_user_name')
+							->where('object_id', $user_id)
+							->where('meta_key', 'update_time')
+							->first();
+	
 	
 	$address = $user_info['address_id'] > 0 ? RC_DB::table('user_address')->where('address_id', $user_info['address_id'])->first() : '';
 	$user_info['address'] = $user_info['address_id'] > 0 ? ecjia_region::getRegionName($address['city']).ecjia_region::getRegionName($address['district']).ecjia_region::getRegionName($address['street']).$address['address'] : '';
