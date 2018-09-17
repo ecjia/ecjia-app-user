@@ -578,7 +578,6 @@ function update_user_info() {
 	$dbview        = RC_Model::model('user/user_viewmodel');
 	$db_users      = RC_Model::model('user/users_model');
 	$db_user_bonus = RC_Model::model('bonus/user_bonus_model');
-	$db_bonus_type = RC_Model::model('bonus/bonus_type_model');
 	$db_user_rank  = RC_Model::model('user/user_rank_model');
 
 	if (! $_SESSION['user_id']) {
