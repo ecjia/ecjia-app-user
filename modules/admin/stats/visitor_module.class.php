@@ -50,7 +50,7 @@ defined('IN_ECJIA') or exit('No permission resources.');
  * ##访客数量
  * @author luchongchong
  */
-class visitor_module extends api_admin implements api_interface {
+class admin_visitor_module extends api_admin implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {
 
 		$this->authadminSession();

@@ -50,7 +50,7 @@ defined('IN_ECJIA') or exit('No permission resources.');
  * 用户收藏列表
  * @author royalwang
  */
-class list_module extends api_front implements api_interface {
+class user_collect_list_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	
         $this->authSession();

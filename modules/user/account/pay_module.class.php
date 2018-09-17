@@ -50,7 +50,7 @@ defined('IN_ECJIA') or exit('No permission resources.');
  * 用户充值付款
  * @author royalwang
  */
-class pay_module extends api_front implements api_interface {
+class user_account_pay_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {
     		
     	if ($_SESSION['user_id'] <= 0) {
