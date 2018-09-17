@@ -76,11 +76,10 @@ class user_user_bonus_list_api extends Component_Event_Api {
     	$page_row = new ecjia_page($count, $options['size'], 6, '', $options['page']);
     	$filed = 'ub.bonus_id, ub.order_id, bt.type_name, bt.type_money, bt.min_goods_amount, bt.use_start_date, bt.use_end_date, s.store_id, s.manage_mode, s.merchants_name';
     	
-    	$rows = $db->selectRaw($filed)
-    			   ->take($page_row->limit())
+    	$rows = $db->select(RC_DB::raw($filed))
+    			   ->take($page_row->page_size)
     			   ->skip($page_row->start_id - 1)
     			   ->get();
-    	
     	$bonus_list = array();
     	
     	if (!empty($rows)) {
