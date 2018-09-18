@@ -324,7 +324,6 @@ abstract class integrate_abstract
         $db_order_goods     = RC_Model::model('orders/order_goods_model');
         $db_collect_goods   = RC_Model::model('goods/collect_goods_model');
         $db_user_address    = RC_Model::model('user/user_address_model');
-        $db_user_bonus      = RC_Model::model('bonus/user_bonus_model');
         $db_user_account    = RC_Model::model('user/user_account_model');
         
         $db_account_log     = RC_Model::model('user/account_log_model');
@@ -358,7 +357,7 @@ abstract class integrate_abstract
                 //删除用户地址
                 $db_user_address->in(array('user_id' => $col))->delete();
                 //删除用户红包
-                $db_user_bonus->in(array('user_id' => $col))->delete();
+                RC_DB::table('user_bonus')->whereIn('user_id', $col)->delete();
                 //删除用户帐号金额
                 $db_user_account->in(array('user_id' => $col))->delete();
                 //删除用户标记
