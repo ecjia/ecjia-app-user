@@ -60,6 +60,7 @@ class user_account_pay_module extends api_front implements api_interface {
  		//变量初始化
  		$account_id = $this->requestData('account_id', 0);
  		$payment_id = $this->requestData('payment_id', 0);
+ 		$client_type = $this->requestData('client_type', '');
  		$user_id = $_SESSION['user_id'];
  		$wxpay_open_id = $this->requestData('wxpay_open_id', 0);
  		if ($account_id <= 0 || $payment_id <= 0) {
@@ -114,7 +115,9 @@ class user_account_pay_module extends api_front implements api_interface {
 	        
 	        $handler = $plugin->channel($payment_info['pay_code']);
 	        $handler->set_orderinfo($order);
-	        $handler->set_mobile(true);
+	        if($client_type != 'pc') {
+	            $handler->set_mobile(true);
+	        }
 	        $handler->setOrderType(Ecjia\App\Payment\PayConstant::PAY_SURPLUS);
 	        $handler->setPaymentRecord(new Ecjia\App\Payment\Repositories\PaymentRecordRepository());
 	         
