@@ -247,14 +247,14 @@ class user_signup_module extends api_front implements api_interface
 				$result = ecjia_app::validate_application('mobile');
 				if (!is_ecjia_error($result)) {
 					if (!empty($device['udid']) && !empty($device['client']) && !empty($device['code'])) {
-						$db_mobile_device = RC_Loader::load_app_model('mobile_device_model', 'mobile');
-						$device_data = array(
-							'device_udid'	=> $device['udid'],
-							'device_client'	=> $device['client'],
-							'device_code'	=> $device['code'],
-							'user_type'		=> 'user',
-						);
-						$db_mobile_device->where($device_data)->update(array('user_id' => $_SESSION['user_id']));
+						//$db_mobile_device = RC_Loader::load_app_model('mobile_device_model', 'mobile');
+// 						$device_data = array(
+// 							'device_udid'	=> $device['udid'],
+// 							'device_client'	=> $device['client'],
+// 							'device_code'	=> $device['code'],
+// 							'user_type'		=> 'user',
+// 						);
+						RC_DB::table('mobile_device')->where('device_udid', $device['udid'])->where('device_client', $device['client'])->where('device_code', $device['code'])->where('user_type', 'user')->update(array('user_id' => $_SESSION['user_id']));
 					}
 				}
 			}

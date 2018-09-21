@@ -103,8 +103,13 @@ class admin_user_signin_module extends api_admin implements api_interface {
 			}
 			
 			/* 获取device_id*/
-			$device_id = RC_Model::model('mobile/mobile_device_model')->where(array('device_udid' => $device['udid'], 'device_client' => $device['client'], 'device_code' => $device['code']))->get_field('id');
-			$_SESSION['device_id']	= $row['device_id'];
+			//$device_id = RC_Model::model('mobile/mobile_device_model')->where(array('device_udid' => $device['udid'], 'device_client' => $device['client'], 'device_code' => $device['code']))->get_field('id');
+			$device_id = RC_DB::table('mobile_device')
+								->where('device_udid', $device['udid'])
+								->where('device_client', $device['client'])
+								->where('device_code', $device['code'])
+								->pluck('id');
+			$_SESSION['device_id']	= $device_id;
 
 			$codes = array('8001', '8011');
 			if (in_array($device['code'], $codes)) {
@@ -162,13 +167,13 @@ class admin_user_signin_module extends api_admin implements api_interface {
 			if (!is_ecjia_error($result)) {
 				$device = $this->requestData('device', array());
 				if (!empty($device['udid']) && !empty($device['client']) && !empty($device['code'])) {
-					$db_mobile_device = RC_Model::model('mobile/mobile_device_model');
+					//$db_mobile_device = RC_Model::model('mobile/mobile_device_model');
 					$device_data = array(
 							'device_udid'	=> $device['udid'],
 							'device_client'	=> $device['client'],
 							'device_code'	=> $device['code']
 					);
-					$db_mobile_device->where($device_data)->update(array('user_id' => $_SESSION['admin_id'], 'is_admin' => 1));
+					RC_DB::table('mobile_device')->where('device_udid', $device['udid'])->where('device_client', $device['client'])->where('device_code', $device['code'])->update(array('user_id' => $_SESSION['admin_id'], 'is_admin' => 1));
 				}
 			}
 			
