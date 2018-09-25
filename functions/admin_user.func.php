@@ -293,7 +293,6 @@ function get_account_log($user_id, $num, $start, $process_type = '') {
 	
 	if (!empty($res)) {
 		RC_Loader::load_sys_func('global');
-// 		$payment_db = RC_Model::model('payment/payment_model');
 		foreach ($res as $key=>$rows) {
 			$db_payment = RC_DB::table('payment');
 			if ($rows['is_paid'] == '1') {
