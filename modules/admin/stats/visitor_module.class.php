@@ -86,7 +86,7 @@ class admin_stats_visitor_module extends api_admin implements api_interface {
         $start_date = RC_Time::local_strtotime($start_date. ' 00:00:00');
         $end_date	= RC_Time::local_strtotime($end_date. ' 23:59:59');
 
-        $db_stats = RC_Model::model('stats/stats_model');
+        //$db_stats = RC_Model::model('stats/stats_model');
 
         /* 计算出有多少天*/
         $day = round(($end_date - $start_date)/(24*60*60));
@@ -94,7 +94,7 @@ class admin_stats_visitor_module extends api_admin implements api_interface {
         $group_scale = ($end_date+1-$start_date)/6;
         $stats_scale = ($end_date+1-$start_date)/30;
 
-        $where = array();
+        //$where = array();
 
 // 	/* 判断请求时间，一天按小时返回*/
 // 	if ($type == 'day') {
@@ -124,11 +124,16 @@ class admin_stats_visitor_module extends api_admin implements api_interface {
                 $temp_end_time = $temp_end_time-1;
             }
             $temp_total_visitors = 0;
-            $result = $db_stats->field($field)
-                ->where(array_merge($where,array('access_time >="' .$temp_start_time. '" and access_time<="' .$temp_end_time. '"')))
-                ->group('ip_address')
-                ->order(array('access_time' => 'asc'))
-                ->select();
+            //$result = $db_stats->field($field)
+            //    ->where(array_merge($where,array('access_time >="' .$temp_start_time. '" and access_time<="' .$temp_end_time. '"')))
+            //    ->group('ip_address')
+            //    ->order(array('access_time' => 'asc'))
+            //    ->select();
+
+            $result = RC_DB::table('stats')->where('access_time', '>=', $temp_start_time)->where('access_time', '<=', $temp_end_time)
+            				->groupBy(RC_DB::raw('ip_address'))
+            				->orderBy('access_time', 'asc')
+            				->get();
 
             if (!empty($result)) {
                 foreach ($result as $val) {
