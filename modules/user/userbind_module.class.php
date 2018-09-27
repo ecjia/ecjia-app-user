@@ -101,6 +101,24 @@ class user_userbind_module extends api_front implements api_interface {
 		$mobile_phone = $db_user->find(array('mobile_phone' => $value));
 		
 		if ($type == 'mobile') {
+			
+			//版本兼容
+			if (version_compare($api_version, '1.14', '>=')) {
+				/* 判断在有效期内是否已被邀请*/
+				$is_invited = 0;
+				$is_invitedinfo = RC_DB::table('invitee_record')
+				->where('invitee_phone', $value)
+				->where('invite_type', 'signup')
+				->where('expire_time', '>', RC_Time::gmtime())
+				->first();
+				if (!empty($is_invitedinfo)) {
+					$is_invited = 1;
+				}
+				if (!empty($mobile_phone)) {
+					return array('registered' => 1, 'is_invited' => $is_invited);
+				}
+			}
+			
 			//发送短信
 			$options = array(
 				'mobile' => $value,
@@ -125,21 +143,7 @@ class user_userbind_module extends api_front implements api_interface {
 				if (version_compare($api_version, '1.14', '<')) {
 					return array('registered' => 0);
 				} else {
-					/* 判断在有效期内是否已被邀请*/
-					$is_invited = 0;
-					$is_invitedinfo = RC_DB::table('invitee_record')
-					->where('invitee_phone', $value)
-					->where('invite_type', 'signup')
-					->where('expire_time', '>', RC_Time::gmtime())
-					->first();
-					if (!empty($is_invitedinfo)) {
-						$is_invited = 1;
-					}
-					if (!empty($mobile_phone)) {
-						return array('registered' => 1);
-					} else {
-						return array('registered' => 0, 'is_invited' => $is_invited);
-					}
+					return array('registered' => 0, 'is_invited' => $is_invited);
 				}
 			}
 		}
