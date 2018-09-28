@@ -46,12 +46,16 @@
 //
 defined('IN_ECJIA') or exit('No permission resources.');
 
-class feedback_model extends Component_Model_Model {
-	public $table_name = '';
-	public function __construct() {
-		$this->table_name 	= 'feedback';
-		parent::__construct();
-	}
+class user_admin_hooks
+{
+    public static function append_admin_setting_group($menus)
+    {
+        $menus[] = ecjia_admin::make_admin_menu('nav-header', '会员', '', 42)->add_purview(array('user_manage'));
+        $menus[] = ecjia_admin::make_admin_menu('user-center', '会员中心', RC_Uri::url('user/admin_config/init'), 43)->add_purview('user_manage');
+        return $menus;
+    }
 }
+
+RC_Hook::add_action('append_admin_setting_group', array('user_admin_hooks', 'append_admin_setting_group'));
 
 // end

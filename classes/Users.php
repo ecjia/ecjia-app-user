@@ -44,31 +44,33 @@
 //
 //  ---------------------------------------------------------------------------------
 //
-defined('IN_ECJIA') or exit('No permission resources.');
+namespace Ecjia\App\User;
 
-class article_viewmodel extends Component_Model_View {
-	public $table_name = '';
-	public $view = array();
-	public function __construct() {
-		$this->table_name = 'article';
-		$this->table_alias_name = 'a';
+use RC_DB;
+use RC_Time;
+use ecjia;
+use RC_Api;
+use RC_Logger;
+use ecjia_page;
+use RC_Lang;
 
-		$this->view = array(
-			'article_cat' => array(
-				'type'  =>	Component_Model_View::TYPE_LEFT_JOIN,
-				'alias' => 	'ac',
-				'field' => 	'a.article_id, a.title, ac.cat_name, a.add_time, a.file_url, a.article_type, ac.cat_id, ac.cat_name',
-				'on'    => 	'ac.cat_id  = a.cat_id',
-			),
-			'comment' => array(
-				'type'  =>	Component_Model_View::TYPE_LEFT_JOIN,
-				'alias' => 	'c',
-				'on'    => 	'c.id_value = a.article_id AND comment_type = 1',
-			)
-		);
-		
-		parent::__construct();
-	}
+/**
+ * 会员管理
+ *
+ */
+class Users
+{
+	
+    /**
+     * 获取某个用户信息
+     * @param int $user_id
+     * @return array
+     */
+    public static function UserInfo($user_id = 0) {
+    	$info = [];
+    	if ($user_id) {
+    		$info = RC_DB::table('users')->where('user_id', $user_id)->first();
+    	}
+        return $info;
+    }
 }
-
-// end
