@@ -381,8 +381,9 @@ class user_signup_module extends api_front implements api_interface
      * @return boolean
      */
     private function admin_registered ($adminname) {
-        $db = RC_Loader::load_model('admin_user_model');
-        $res = $db->where(array('user_name' => $adminname))->count();
+        //$db = RC_Loader::load_model('admin_user_model');
+        //$res = $db->where(array('user_name' => $adminname))->count();
+    	$res = RC_DB::table('admin_user')->where('user_name', $adminname)->count();
         return $res;
     }
 }
