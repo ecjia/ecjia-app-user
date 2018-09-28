@@ -44,29 +44,18 @@
 //
 //  ---------------------------------------------------------------------------------
 //
-namespace Ecjia\App\User;
+defined('IN_ECJIA') or exit('No permission resources.');
 
-use ecjia_admin_log;
-use RC_Lang;
-
-class Helper
+class user_admin_hooks
 {
-    
-    
-    /**
-     * 添加管理员记录日志操作对象
-     */
-    public static function assign_adminlog_content() {
-        ecjia_admin_log::instance()->add_object('usermoney', RC_Lang::get('user::users.usermoney'));
-		ecjia_admin_log::instance()->add_object('user_account', RC_Lang::get('user::users.user_account'));
-	
-		ecjia_admin_log::instance()->add_object('withdraw_apply', RC_Lang::get('user::user_account.withdraw_apply'));
-		ecjia_admin_log::instance()->add_object('pay_apply', RC_Lang::get('user::user_account.pay_apply'));
-        ecjia_admin_log::instance()->add_object('config', '配置');
-        
-        ecjia_admin_log::instance()->add_action('check', RC_Lang::get('user::users.check'));
+    public static function append_admin_setting_group($menus)
+    {
+        $menus[] = ecjia_admin::make_admin_menu('nav-header', '会员', '', 42)->add_purview(array('user_manage'));
+        $menus[] = ecjia_admin::make_admin_menu('user-center', '会员中心', RC_Uri::url('user/admin_config/init'), 43)->add_purview('user_manage');
+        return $menus;
     }
-    
 }
+
+RC_Hook::add_action('append_admin_setting_group', array('user_admin_hooks', 'append_admin_setting_group'));
 
 // end
