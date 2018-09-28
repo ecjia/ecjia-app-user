@@ -353,22 +353,28 @@ function get_account_log($user_id, $num, $start, $process_type = '') {
  */
 function get_account_log_list($user_id, $account_type = '') {
 
-	$db_account_log = RC_Model::model('user/account_log_model');
+	//$db_account_log = RC_Model::model('user/account_log_model');
 	/* 检查参数 */
-	$where['user_id'] = $user_id;
+	//$where['user_id'] = $user_id;
+	//if (in_array($account_type, array('user_money', 'frozen_money', 'rank_points', 'pay_points'))) {
+	//	$where[$account_type] = array('neq' => 0);
+	//}
+	$db_account_log = RC_DB::table('account_log');
 	if (in_array($account_type, array('user_money', 'frozen_money', 'rank_points', 'pay_points'))) {
-		$where[$account_type] = array('neq' => 0);
+		$db_account_log->where(function($query) use ($account_type) {
+			$query->where($account_type, '>', 0)->orWhere($account_type, '<', 0);
+		});
 	}
 
 	/* 查询记录总数，计算分页数 */
-	$count = RC_DB::table('account_log')->where('user_id', $user_id)->count();
+	$count = $db_account_log->where('user_id', $user_id)->count();
 	
 	if ($count != 0) {
 		/* 实例化分页 */
 		$page = new ecjia_page($count, 15, 6);
 		
 		/* 查询记录 */
-		$res = RC_DB::table('account_log')->where('user_id', $user_id)->orderBy('log_id', 'DESC')->take(15)->skip($page->start_id-1)->get();
+		$res = $db_account_log->where('user_id', $user_id)->orderBy('log_id', 'DESC')->take(15)->skip($page->start_id-1)->get();
 		
 		$arr = array();
 		if (!empty($res)) {

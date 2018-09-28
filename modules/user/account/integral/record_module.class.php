@@ -61,25 +61,37 @@ class user_account_integral_record_module extends api_front implements api_inter
  		$user_id = $_SESSION['user_id'];
  		$type    = $this->requestData('type', 'income');
  		
-		$where = array();
-		$where['user_id'] = $_SESSION['user_id'];
+ 		$db 	 = RC_DB::table('account_log');
+ 		 
+		//$where = array();
+		//$where['user_id'] = $_SESSION['user_id'];
+		//if ($type == 'income') {
+		//	$where['pay_points'] = array('gt' => 0);
+		//} elseif ($type == 'expenses') {
+		//	$where['pay_points'] = array('lt' => 0);
+		//}
+ 		//$integral = array();
+ 		//$field = 'pay_points';
+ 		//$integral = RC_Model::model('user/users_model')->get_one_field(array('user_id' => $user_id), $field);
+ 		/*获取积分变动条数 */
+ 		//$db = RC_Model::model('user/account_log_model');
+ 		//$record_count = $db->get_integral_count(array('where' => $where));
 		
 		if ($type == 'income') {
-			$where['pay_points'] = array('gt' => 0);
-		} elseif ($type == 'expenses') {
-			$where['pay_points'] = array('lt' => 0);
+			$db->where('pay_points', '>', 0);
+		}  elseif ($type == 'expenses') {
+			$db->where('pay_points', '<', 0);
 		}
-		$integral = array();
-		$field = 'pay_points';
-		$integral = RC_Model::model('user/users_model')->get_one_field(array('user_id' => $user_id), $field);
+		
+		$integral = RC_DB::table('users')->where('user_id', $user_id)->pluck('pay_points');
+		
  		/*获取积分变动条数 */
-		$db = RC_Model::model('user/account_log_model');
- 		$record_count = $db->get_integral_count(array('where' => $where));
+		$record_count = $db->count();
 		//实例化分页
 		$page_row = new ecjia_page($record_count, $size, 6, '', $page);
  		//获取积分变动记录
- 		$integral_list = $db->get_integral_list(array('where' => $where, 'limit' => $page_row->limit()));
- 		
+ 		//$integral_list = $db->get_integral_list(array('where' => $where, 'limit' => $page_row->limit()));
+		$integral_list = $db->take($size)->skip($page_row->start_id-1)->get();
  		$pager = array(
 			"total" => $page_row->total_records,
 			"count" => $page_row->total_records,
@@ -87,19 +99,18 @@ class user_account_integral_record_module extends api_front implements api_inter
  		);
  		$data = array();
  		$data['integral'] = intval($integral);
+ 		$data['list'] = [];
  		if (!empty($integral_list)) {
  			foreach ($integral_list as $key => $val) {
  				$data['list'][] = array(
- 					'pay_points' 			=> $val['pay_points'],
+ 					'pay_points' 			=> intval($val['pay_points']),
  					'change_time' 			=> $val['change_time'],	
  					'formated_change_time'	=> RC_Time::local_date(ecjia::config('time_format'), $val['change_time']),
- 					'change_desc'			=> $val['change_desc'],	
+ 					'change_desc'			=> empty($val['change_desc']) ? '' : $val['change_desc'],	
  				);
  			}
- 			return array('data' => $data, 'pager' => $pager);
- 		} else {
- 			return array('data' => array(), 'pager' => $pager);
  		}
+ 		return array('data' => $data, 'pager' => $pager);
 	}
 }
 
