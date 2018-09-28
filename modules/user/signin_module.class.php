@@ -173,17 +173,26 @@ class user_signin_module extends api_front implements api_interface {
 			$device		      = $this->device;
 			$device_id	      = $device['udid'];
 			$device_client    = $device['client'];
-			$db_term_relation = RC_Model::model('goods/term_relationship_model');
-				
-			$object_id = $db_term_relation->where(array(
+			//$db_term_relation = RC_Model::model('goods/term_relationship_model');
+			//$object_id = $db_term_relation->where(array(
+			//		'object_type'	=> 'ecjia.feedback',
+			//		'object_group'	=> 'feedback',
+			//		'item_key2'		=> 'device_udid',
+			//		'item_value2'	=> $device_id ))
+			//		->get_field('object_id', true);
+			$pra = array(
 					'object_type'	=> 'ecjia.feedback',
 					'object_group'	=> 'feedback',
 					'item_key2'		=> 'device_udid',
-					'item_value2'	=> $device_id ))
-					->get_field('object_id', true);
+					'item_value2'	=> $device_id
+			);
+			
+			$object_id = Ecjia\App\User\TermRelationship::GetObjectIds($pra);
+			
 			//更新未登录用户的咨询
-			$db_term_relation->where(array('item_key2' => 'device_udid', 'item_value2' => $device_id))->update(array('item_key2' => '', 'item_value2' => ''));
-				
+			//$db_term_relation->where(array('item_key2' => 'device_udid', 'item_value2' => $device_id))->update(array('item_key2' => '', 'item_value2' => ''));
+			RC_DB::table('term_relationship')->where('item_key2', 'device_udid')->where('item_value2', $device_id)->update(array('item_key2' => '', 'item_value2' => ''));
+			
 			if(!empty($object_id)) {
 				$db = RC_Model::model('feedback/feedback_model');
 				$db->where(array('msg_id' => $object_id, 'msg_area' => '4'))->update(array('user_id' => $_SESSION['user_id'], 'user_name' => $_SESSION['user_name']));

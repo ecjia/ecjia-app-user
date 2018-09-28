@@ -226,16 +226,25 @@ class user_signup_module extends api_front implements api_interface
 			if($_SESSION['user_id'] > 0) {
 				$device_id        = isset($device['udid']) ? $device['udid'] : '';
 				$device_client    = isset($device['client']) ? $device['client'] : '';
-				$db_term_relation = RC_Loader::load_model('term_relationship_model');
+				//$db_term_relation = RC_Loader::load_model('term_relationship_model');
+				//$object_id = $db_term_relation->where(array(
+				//									'object_type'	=> 'ecjia.feedback',
+				//									'object_group'	=> 'feedback',
+				//									'item_key2'		=> 'device_udid',
+				//									'item_value2'	=> $device_id ))
+				//							->get_field('object_id', true);
 				
-				$object_id = $db_term_relation->where(array(
-													'object_type'	=> 'ecjia.feedback',
-													'object_group'	=> 'feedback',
-													'item_key2'		=> 'device_udid',
-													'item_value2'	=> $device_id ))
-											->get_field('object_id', true);
+				$pra = array(
+						'object_type'	=> 'ecjia.feedback',
+						'object_group'	=> 'feedback',
+						'item_key2'		=> 'device_udid',
+						'item_value2'	=> $device_id
+				);
+				$object_id = Ecjia\App\User\TermRelationship::GetObjectIds($pra);
+				
 				//更新未登录用户的咨询
-				$db_term_relation->where(array('item_key2' => 'device_udid', 'item_value2' => $device_id))->update(array('item_key2' => '', 'item_value2' => ''));
+				//$db_term_relation->where(array('item_key2' => 'device_udid', 'item_value2' => $device_id))->update(array('item_key2' => '', 'item_value2' => ''));
+				RC_DB::table('term_relationship')->where('item_key2', 'device_udid')->where('item_value2', $device_id)->update(array('item_key2' => '', 'item_value2' => ''));
 				
 				if(!empty($object_id)) {
 					$db = RC_Loader::load_app_model('feedback_model', 'feedback');
