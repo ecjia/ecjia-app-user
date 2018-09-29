@@ -417,7 +417,7 @@ function get_total_amount ($start_date, $end_date, $type = 0) {
  * @return void
  */
 function get_user_order($args = array()) {
-	$dbview = RC_Model::model('user/order_user_viewmodel');
+	//$dbview = RC_Model::model('user/order_user_viewmodel');
 
 	$filter['keywords']		= empty($_REQUEST['keywords'])		? ''         : trim($_REQUEST['keywords']);
 	$filter['start_date']	= empty($args['start_date'])		? ''         : $args['start_date'];
