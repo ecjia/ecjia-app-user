@@ -301,10 +301,6 @@ class user_signup_module extends api_front implements api_interface
             }
         }
 
-//     if ($this->admin_registered($username)) {
-//     	return new ecjia_error('user_exists', RC_Lang::get('user::users.username_exists'));
-//     }
-
         RC_Loader::load_app_class('integrate', 'user', false);
         $user = integrate::init_users();
         if (!$user->add_user($username, $password, $email)) {
@@ -362,21 +358,6 @@ class user_signup_module extends api_front implements api_interface
 
             return true;
         }
-    }
-
-
-    /**
-     * 判断超级管理员用户名是否存在
-     *
-     * @param string $adminname
-     *            超级管理员用户名
-     * @return boolean
-     */
-    private function admin_registered ($adminname) {
-        //$db = RC_Loader::load_model('admin_user_model');
-        //$res = $db->where(array('user_name' => $adminname))->count();
-    	$res = RC_DB::table('admin_user')->where('user_name', $adminname)->count();
-        return $res;
     }
 }
 
