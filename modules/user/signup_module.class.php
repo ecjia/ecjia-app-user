@@ -158,7 +158,6 @@ class user_signup_module extends api_front implements api_interface
 		if (is_ecjia_error($result)) {
 			return $result;
 		} else {
-			$db = RC_Loader::load_app_model('reg_extend_info_model','user');
 			$db_reg_fields = RC_Loader::load_app_model('reg_fields_model','user');
 			
 			/*把新注册用户的扩展信息插入数据库*/
@@ -181,9 +180,9 @@ class user_signup_module extends api_front implements api_interface
 				$data = array(
 					    'user_id'      => $_SESSION['user_id'],
 					    'reg_field_id' => $val['id'],
-					    'content'      => $temp_field_content
+					    'content'      => empty($temp_field_content) ? '' : $temp_field_content
 				);
-				$db->insert($data);  
+				RC_DB::table('reg_extend_info')->insert($data);  
  			}
  			
  			/*注册送红包*/
