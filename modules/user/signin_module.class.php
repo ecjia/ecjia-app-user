@@ -193,7 +193,12 @@ class user_signin_module extends api_front implements api_interface {
 			//$db_term_relation->where(array('item_key2' => 'device_udid', 'item_value2' => $device_id))->update(array('item_key2' => '', 'item_value2' => ''));
 			RC_DB::table('term_relationship')->where('item_key2', 'device_udid')->where('item_value2', $device_id)->update(array('item_key2' => '', 'item_value2' => ''));
 			
+			RC_Logger::getLogger('error')->info('test111');
+			RC_Logger::getLogger('error')->info($object_id);
+			RC_Logger::getLogger('error')->info('test222');
+			
 			if(!empty($object_id)) {
+				RC_Logger::getLogger('error')->info('test333');
 				$db = RC_Model::model('feedback/feedback_model');
 				$db->where(array('msg_id' => $object_id, 'msg_area' => '4'))->update(array('user_id' => $_SESSION['user_id'], 'user_name' => $_SESSION['user_name']));
 				$db->where(array('parent_id' => $object_id, 'msg_area' => '4'))->update(array('user_id' => $_SESSION['user_id'], 'user_name' => $_SESSION['user_name']));
