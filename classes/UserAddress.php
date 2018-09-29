@@ -44,94 +44,37 @@
 //
 //  ---------------------------------------------------------------------------------
 //
-defined('IN_ECJIA') or exit('No permission resources.');
+namespace Ecjia\App\User;
+
+use RC_DB;
+use RC_Time;
+use ecjia;
+use RC_Api;
+use RC_Logger;
+use ecjia_page;
+use RC_Lang;
 
 /**
- * 所有收货地址列表
- * @author royalwang
+ * 用户收货地址管理
+ *
  */
-class address_list_module extends api_front implements api_interface {
-    public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
-    	
-        //如果用户登录获取其session
-        $this->authSession();
-        $user_id = $_SESSION['user_id'];
-    	if ($user_id <= 0) {
-    		return new ecjia_error(100, 'Invalid session');
-    	}
-		
-		$seller_id = $this->requestData('seller_id', 0);
-		$size = $this->requestData('pagination.count', 15);
-		$page = $this->requestData('pagination.page', 1);
-		$record_count = RC_DB::table('user_address')->where('user_id', $user_id)->count();
-		
-		//实例化分页
-		$page_row = new ecjia_page($record_count, $size, 6, '', $page);
-		
-		$field = 'ua.*, IFNULL(u.address_id, 0) as is_default_address';
-		
-		$dbview_user_address = RC_DB::table('user_address as ua')->leftJoin('users as u', RC_DB::raw('ua.address_id'), '=', RC_DB::raw('u.address_id'));
-		$consignee_list = $dbview_user_address
-							->select(RC_DB::raw($field))
-							->where(RC_DB::raw('ua.user_id'), $user_id)
-							->orderBy(RC_DB::raw('is_default_address'), 'desc')
-							->orderBy(RC_DB::raw('address_id'), 'desc')
-							->take($size)
-							->skip($page->start_id-1)
-							->get();
-		
-		$result = array();
-		if (!empty($consignee_list)) {
-			$geohash = RC_Loader::load_app_class('geohash', 'store');
-			
-			foreach ($consignee_list as $key => $value) {
-			
-				$result[$key]['id'] = $value['address_id'];
-				$result[$key]['consignee'] = $value['consignee'];
-				$result[$key]['address'] = empty($value['address']) ? '' : $value['address'];
-				$result[$key]['address_info'] = empty($value['address_info']) ? '' : $value['address_info'];
-			
-				$country 	= $value['country'];
-				$province 	= $value['province'];
-				$city 		= $value['city'];
-				$district 	= $value['district'];
-				$street 	= $value['street'];
+class UserAddress
+{
 	
-				$result[$key]['country_name']   = ecjia_region::getRegionName($country);
-				$result[$key]['province_name']  = ecjia_region::getRegionName($province);
-				$result[$key]['city_name']    	= ecjia_region::getRegionName($city);
-				$result[$key]['district_name']  = ecjia_region::getRegionName($district);
-				$result[$key]['street_name']    = ecjia_region::getRegionName($street);
-
-				$result[$key]['tel']   			 = empty($value['tel']) ? '' : $value['tel'];
-				$result[$key]['mobile']   		 = $value['mobile'];
-				$result[$key]['location']		 = array(
-					'longitude' => $value['longitude'],
-					'latitude'	=> $value['latitude'],
-			   	);
-				
-				if ($value['is_default_address'] > 0 ) {
-					$result[$key]['default_address'] = 1;
-				} else {
-					$result[$key]['default_address'] = 0;
-				}
-				
-				$local = true;
-				if ($seller_id) {
-				    $local = RC_Api::api('user', 'neighbors_address_store', array('address' => $value, 'store_id' => $seller_id));
-				}
-				
-				if ($local) {
-					$result[$key]['local'] = 1;
-				} else {
-					$result[$key]['local'] = 0;
-				}
-				
-			}
-		}
-		
-		return $result;
-	}
+    /**
+     * 获取用户默认收货地址信息
+     * @param int $user_id
+     * @return array
+     */
+    public static function UserDefaultAddressInfo($user_id = 0) {
+    	$info = [];
+    	if ($user_id) {
+    		$info = RC_DB::table('user_address as ua')
+    					->leftJoin('users as u', RC_DB::raw('ua.address_id'), '=', RC_DB::raw('u.address_id'))
+    					->where(RC_DB::raw('u.user_id'), $user_id)
+    					->select(RC_DB::raw('ua.*'))
+    					->first();
+    	}
+        return $info;
+    }
 }
-
-// end
