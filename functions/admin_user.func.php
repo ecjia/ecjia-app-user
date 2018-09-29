@@ -277,19 +277,21 @@ function get_user_surplus($user_id) {
  * @param   int     $start      开始显示的条数
  * @return  array
  */
-function get_account_log($user_id, $num, $start, $process_type = '') {
-	$db = RC_Model::model('user/user_account_model');
+function get_account_log($user_id, $num = 15, $start, $process_type = '') {
 	$account_log = array();
 	
-	$where = array(
-		'user_id'		=> $user_id,
-		'process_type'	=> array(SURPLUS_SAVE, SURPLUS_RETURN),
-	);
+	$db = RC_DB::table('user_account');
+	$db->where('user_id', $user_id);
 	if (!empty($process_type)) {
-		$where['process_type'] = $process_type == 'deposit' ? 0 : 1;
+		if ($process_type == 'deposit') {
+			$db->where('process_type', SURPLUS_SAVE);
+		} else {
+			$db->where('process_type', SURPLUS_RETURN);
+		}
+	} else {
+		$db->whereIn('process_type', array(SURPLUS_SAVE, SURPLUS_RETURN));
 	}
-	
-	$res = $db->where($where)->order(array('add_time' => 'desc'))->limit($start->limit())->select();
+	$res = $db->take($num)->skip($start->start_id-1)->orderBy('add_time', 'desc')->get();
 	
 	if (!empty($res)) {
 		RC_Loader::load_sys_func('global');
