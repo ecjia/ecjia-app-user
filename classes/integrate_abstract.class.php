@@ -323,7 +323,6 @@ abstract class integrate_abstract
         $db_order_info      = RC_Model::model('orders/order_info_model');
         $db_order_goods     = RC_Model::model('orders/order_goods_model');
         $db_collect_goods   = RC_Model::model('goods/collect_goods_model');
-        $db_user_address    = RC_Model::model('user/user_address_model');
 
         /* 如果需要同步或是ecjia插件执行这部分代码 */
         if ($this->need_sync || (isset($this->is_ecjia) && $this->is_ecjia)) {
@@ -351,7 +350,7 @@ abstract class integrate_abstract
                 //删除用户留言
 //                 $db_feedback->in(array('user_id' => $col))->delete();
                 //删除用户地址
-                $db_user_address->in(array('user_id' => $col))->delete();
+                RC_DB::table('user_address')->whereIn('user_id', $col)->delete();
                 //删除用户红包
                 RC_DB::table('user_bonus')->whereIn('user_id', $col)->delete();
                 //删除用户帐号金额
