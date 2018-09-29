@@ -158,11 +158,9 @@ class user_signup_module extends api_front implements api_interface
 		if (is_ecjia_error($result)) {
 			return $result;
 		} else {
-			$db_reg_fields = RC_Loader::load_app_model('reg_fields_model','user');
-			
 			/*把新注册用户的扩展信息插入数据库*/
-	        $fields_arr = $db_reg_fields->field('id')->where(array('type' => 0 , 'display' => 1))->order(array('dis_order' => 'asc' ,'id' => 'asc'))->select();
-	        
+			$fields_arr = RC_DB::table('reg_fields')->select('id')->where('type', 0)->where('display', 1)->orderBy('dis_order', 'asc')->orderBy('id', 'asc')->get();
+			
 			$extend_field_str = '';    //生成扩展字段的内容字符串
 			if (!empty($fields_arr)) {
 				foreach ($fields_arr AS $val) {
