@@ -81,7 +81,7 @@ class payConfirm_module extends api_admin implements api_interface
 		$payment_method	= new Ecjia\App\Payment\PaymentPlugin();
 		$pay_info = $payment_method->getPluginDataByCode($user_account_info['payment']);
 		
-		$payment_handler = $payment_method->channel($pay_info['pay_code']);
+		$payment_handler = $payment_method->channel($user_account_info['payment']);
 		
 		/* 判断是否有支付方式有没*/
 		if (is_ecjia_error($payment_handler)) {
