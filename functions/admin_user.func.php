@@ -746,7 +746,7 @@ function EM_user_info($user_id, $mobile = '') {
 	$shipped =  RC_DB::table('order_info')->where('user_id', $user_id)->where('extension_code', "!=", "group_buy")->whereRaw(EM_order_query_sql('shipped', ''))->count();
 	//$finished = RC_DB::table('order_info')->where('user_id', $user_id)->whereRaw(EM_order_query_sql('finished', 'oi.'))-count();
 	$finished = RC_DB::table('order_info')->where('user_id', $user_id)->whereIn('order_status', array(OS_CONFIRMED, OS_SPLITED))
-						->whereIn('shipping_status', array(SS_SHIPPED, SS_RECEIVED))
+						->whereIn('shipping_status', array(SS_RECEIVED))
 						->whereIn('pay_status', array(PS_PAYED, PS_PAYING))
 						->where('extension_code', "!=", "group_buy")
 						->count();
