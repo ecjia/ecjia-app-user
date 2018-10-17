@@ -82,7 +82,7 @@
 								<a target="_blank" href='{url path="orders/admin/init" args="user_id={$user.user_id}"}' title="{lang key='user::users.view_order'}">{lang key='user::users.view_order'}</a>&nbsp;|&nbsp;
 								<a target="_blank" href='{url path="finance/admin_account_log/init" args="user_id={$user.user_id}"}' title="{lang key='user::users.view_deposit'}">{lang key='user::users.view_deposit'}</a>&nbsp;|&nbsp;
 								<a class="data-pjax" href='{url path="user/admin/edit" args="id={$user.user_id}"}' title="{lang key='system::system.edit'}">{lang key='system::system.edit'}</a>&nbsp;|&nbsp; 
-								<a class="ajaxremove ecjiafc-red" data-toggle="ajaxremove" data-msg="{lang key='user::users.delete_confirm'}" href='{url path="user/admin/remove" args="id={$user.user_id}"}' title="{lang key='user::users.delete'}">{lang key='user::users.delete'}</a>
+<!-- 								<a class="ajaxremove ecjiafc-red" data-toggle="ajaxremove" data-msg="{lang key='user::users.delete_confirm'}" href='{url path="user/admin/remove" args="id={$user.user_id}"}' title="{lang key='user::users.delete'}">{lang key='user::users.delete'}</a> -->
 							</div>
 						</td>
 						<td>{$user.mobile_phone}</td>

@@ -722,21 +722,21 @@ class admin extends ecjia_admin {
 	/**
 	 * 删除会员帐号
 	 */
-	public function remove() {
-		$this->admin_priv('user_delete', ecjia::MSGTYPE_JSON);
+// 	public function remove() {
+// 		$this->admin_priv('user_delete', ecjia::MSGTYPE_JSON);
 		
-		$user_id = !empty($_GET['id']) ? intval($_GET['id']) : 0;
-		$username = RC_DB::table('users')->where('user_id', $user_id)->pluck('user_name');
+// 		$user_id = !empty($_GET['id']) ? intval($_GET['id']) : 0;
+// 		$username = RC_DB::table('users')->where('user_id', $user_id)->pluck('user_name');
 
-		RC_Loader::load_app_class('integrate', 'user', false);
-		$user = integrate::init_users();
-    	$user->remove_user($username); //已经删除用户所有数据
+// 		RC_Loader::load_app_class('integrate', 'user', false);
+// 		$user = integrate::init_users();
+//     	$user->remove_user($username); //已经删除用户所有数据
     	
-		/* 记录管理员操作 */
-		ecjia_admin::admin_log(addslashes($username), 'remove', 'users');
+// 		/* 记录管理员操作 */
+// 		ecjia_admin::admin_log(addslashes($username), 'remove', 'users');
 		
-		return $this->showmessage(RC_Lang::get('user::users.delete_user_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
-	}
+// 		return $this->showmessage(RC_Lang::get('user::users.delete_user_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
+// 	}
 	
 	/**
 	 * 收货地址查看
