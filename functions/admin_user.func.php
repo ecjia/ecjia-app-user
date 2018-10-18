@@ -209,7 +209,7 @@ function insert_user_account($surplus, $amount) {
 		'amount'		=> $amount ,
 		'add_time'		=> RC_Time::gmtime() ,
 		'paid_time'		=> 0 ,
-		'admin_note'	=> '' ,
+		'admin_note'	=> !empty($surplus['admin_note']) ? $surplus['admin_note'] : '',
 		'user_note'		=> $surplus['user_note'] ,
 		'process_type'	=> $surplus['process_type'] ,
 		'payment'		=> $surplus['payment'] ,
