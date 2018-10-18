@@ -3,13 +3,21 @@
 namespace Ecjia\App\User\Integrate;
 
 
+use Royalcms\Component\Database\Connection;
+
 class UserField
 {
     /**
      * 整合对象会员表名
      * @var string
      */
-    protected $user_table;
+    protected $table;
+
+    /**
+     * 整合对象数据连接
+     * @var string
+     */
+    protected $connection = null;
     
     /**
      * 会员ID的字段名
@@ -52,6 +60,43 @@ class UserField
      * @var integer
      */
     protected $field_reg_date;
+
+    /**
+     * 设置数据库连接对象
+     * @param $connect
+     */
+    public function setDatabaseConnection(Connection $connection)
+    {
+        $this->connection = $connection;
+
+        return $this;
+    }
+
+    public function getDatabaseConnection()
+    {
+        return $this->connection;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUserTable()
+    {
+        return $this->table;
+    }
+
+    /**
+     * 在给定的表名前加上数据库名以及前缀
+     *
+     * @access  private
+     * @param   string      $table    表名
+     *
+     * @return string
+     */
+    public function getFullTable($table)
+    {
+        return '`' .$this->connection->getDatabaseName(). '`.`'.$this->connection->getTablePrefix() . $table .'`';
+    }
 
     /**
      * @param $field_id
@@ -130,6 +175,25 @@ class UserField
     }
 
     /**
+     * @param $field_gender
+     * @return $this
+     */
+    public function setFieldGender($field_gender)
+    {
+        $this->field_gender = $field_gender;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFieldGender()
+    {
+        return $this->field_gender;
+    }
+
+    /**
      * @param $field_birthday
      * @return $this
      */
@@ -141,7 +205,7 @@ class UserField
     }
 
     /**
-     * @return date
+     * @return string
      */
     public function getFieldBirthDay()
     {

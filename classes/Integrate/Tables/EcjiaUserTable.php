@@ -1,9 +1,10 @@
 <?php
 
-namespace Ecjia\App\User\Integrate\Fields;
+namespace Ecjia\App\User\Integrate\Tables;
 
+use Ecjia\App\User\Integrate\UserField;
 
-class EcjiaUser extends UserField
+class EcjiaUserTable extends UserField
 {
     
     public function __construct()

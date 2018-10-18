@@ -7,15 +7,15 @@ interface UserIntegrateInterface
 {
     
     
-    public function compile_password($cfg);
+    public function compilePassword($cfg);
     
     
     
-    public function check_user($username, $password = null);
+    public function checkUser($username, $password = null);
     
     
     
-    public function check_email($email);
+    public function checkEmail($email);
     
     
     /**

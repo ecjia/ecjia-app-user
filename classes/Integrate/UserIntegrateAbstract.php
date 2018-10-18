@@ -13,40 +13,23 @@ use Ecjia\System\Plugin\AbstractPlugin;
 abstract class UserIntegrateAbstract extends AbstractPlugin implements UserIntegrateInterface
 {
     
-    protected $db_host;
-    
-    
-    protected $db_name;
-    
-    
-    protected $db_user;
-    
-    
-    protected $db_pass;
-    
-    
-    protected $prefix;
-    
-    
-    protected $charset;
-    
-    
     protected $cookie_domain;
     
     
     protected $cookie_path;
-    
-    
-    protected $user_table;
-    
-    
+
+    /* 是否需要同步数据到商城 */
+    public $need_sync = true;
+
+
+
     /**
      *  用户登录函数
      *
      * @param   string  $username
      * @param   string  $password
      *
-     * @return void
+     * @return boolean
      */
     public function login($username, $password, $remember = null)
     {
