@@ -389,14 +389,17 @@ class IntegrateEcjia extends UserIntegrateAbstract
      */
     public function getProfileByName($username)
     {
-        RC_DB::table($this->user_table->getUserTable())->selectRaw(
+        $row = RC_DB::table($this->user_table->getUserTable())->selectRaw(
             $this->user_table->getFieldId() . ' AS `user_id`, ' .
             $this->user_table->getFieldName() . ' AS `user_name`, ' .
             $this->user_table->getFieldEmail() . ' AS `email`, ' .
-            $this->user_table->getFieldEmail()
-        );
+            $this->user_table->getFieldGender() . ' AS `sex`, ' .
+            $this->user_table->getFieldBirthDay() . ' AS `birthday`' .
+            $this->user_table->getFieldRegDate() . ' AS `reg_time`, ' .
+            $this->user_table->getFieldPass() . ' AS `password`'
+            )->where($this->user_table->getFieldName(), $username)
+            ->first();
 
-        $row = $this->db->field("$this->field_id AS `user_id`, $this->field_name AS `user_name`, $this->field_email AS `email`, $this->field_gender AS `sex`, $this->field_bday AS `birthday`, $this->field_reg_date AS `reg_time`, $this->field_pass AS `password`")->find(array($this->field_name => $username));
         return $row;
     }
 
@@ -409,7 +412,17 @@ class IntegrateEcjia extends UserIntegrateAbstract
      */
     public function getProfileById($id)
     {
-        $row = $this->db->field("$this->field_id AS `user_id`, $this->field_name AS `user_name`, $this->field_email AS `email`, $this->field_gender AS `sex`, $this->field_bday AS `birthday`, $this->field_reg_date AS `reg_time`, $this->field_pass AS `password`, `passwd_question`")->find(array($this->field_id => $id));
+        $row = RC_DB::table($this->user_table->getUserTable())->selectRaw(
+            $this->user_table->getFieldId() . ' AS `user_id`, ' .
+            $this->user_table->getFieldName() . ' AS `user_name`, ' .
+            $this->user_table->getFieldEmail() . ' AS `email`, ' .
+            $this->user_table->getFieldGender() . ' AS `sex`, ' .
+            $this->user_table->getFieldBirthDay() . ' AS `birthday`' .
+            $this->user_table->getFieldRegDate() . ' AS `reg_time`, ' .
+            $this->user_table->getFieldPass() . ' AS `password`'
+            )->where($this->user_table->getFieldId(), $id)
+            ->first();
+
         return $row;
     }
 
@@ -442,7 +455,7 @@ class IntegrateEcjia extends UserIntegrateAbstract
      * @access  public
      * @param
      *
-     * @return void
+     * @return boolean
      */
     public function sync($username, $password = '', $md5password = '')
     {
@@ -451,7 +464,7 @@ class IntegrateEcjia extends UserIntegrateAbstract
             $md5password = md5($password);
         }
 
-        $main_profile = $this->get_profile_by_name($username);
+        $main_profile = $this->getProfileByName($username);
 
         if (empty($main_profile)) {
             return false;
@@ -538,7 +551,8 @@ class IntegrateEcjia extends UserIntegrateAbstract
         $fileds = array_keys($credits);
         if ($fileds) {
             $row = RC_DB::table($this->user_table->getUserTable())
-                ->select($this->user_table->getFieldId(), implode(', ',$fileds))
+                ->select($this->user_table->getFieldId())
+                ->selectRaw(implode(', ',$fileds))
                 ->where($this->user_table->getFieldName(), $username)
                 ->first();
             return $row;
