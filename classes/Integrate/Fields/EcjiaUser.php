@@ -1,6 +1,6 @@
 <?php
 
-namespace Ecjia\App\User\Integrate;
+namespace Ecjia\App\User\Integrate\Fields;
 
 
 class EcjiaUser extends UserField

@@ -2,8 +2,15 @@
 
 namespace Ecjia\App\User\Integrate;
 
+use Ecjia\System\Plugin\AbstractPlugin;
 
-class IntegrateAbstract
+/**
+ * 会员融合插件抽象类
+ *
+ * Class IntegrateAbstract
+ * @package Ecjia\App\User\Integrate
+ */
+abstract class UserIntegrateAbstract extends AbstractPlugin implements UserIntegrateInterface
 {
     
     protected $db_host;
@@ -47,8 +54,8 @@ class IntegrateAbstract
             if ($this->need_sync) {
                 $this->sync($username,$password);
             }
-            $this->set_session($username);
-            $this->set_cookie($username, $remember);
+            $this->setSession($username);
+            $this->setCookie($username, $remember);
         
             return true;
         } else {
@@ -72,13 +79,12 @@ class IntegrateAbstract
         //清除session
         $this->clearSession(); 
     }
-    
+
     
     public function clearCookie()
     {
         
     }
-    
     
     public function clearSession()
     {

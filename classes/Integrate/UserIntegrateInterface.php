@@ -3,7 +3,7 @@
 namespace Ecjia\App\User\Integrate;
 
 
-class UserIntegrateInterface
+interface UserIntegrateInterface
 {
     
     
@@ -36,7 +36,7 @@ class UserIntegrateInterface
      *
      * @return void
      */
-    public function setCookie($username, $remember = null );
+    public function setCookie($username, $remember = null);
     
     
     public function clearCookie();
