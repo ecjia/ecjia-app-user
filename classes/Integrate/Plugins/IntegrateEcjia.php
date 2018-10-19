@@ -3,22 +3,17 @@
 
 namespace Ecjia\App\User\Integrate\Plugins;
 
-use Ecjia\App\User\Integrate\Password;
-use Ecjia\App\User\Integrate\Tables\EcjiaUserTable;
 use Ecjia\App\User\Integrate\UserIntegrateAbstract;
-use ecjia_error;
 use RC_DB;
-use RC_Lang;
+use RC_Session;
 
 class IntegrateEcjia extends UserIntegrateAbstract
 {
 
-    protected $user_table;
-
 
     public function __construct()
     {
-        $this->user_table = new EcjiaUserTable();
+        parent::__construct();
 
         $this->need_sync  = false;
 
@@ -67,13 +62,12 @@ class IntegrateEcjia extends UserIntegrateAbstract
     public function getPluginMateData()
     {
         return collect([
-            'integrate_id' => 0,
-            'integrate_code' => $this->getCode(),
-            'integrate_name' => $this->loadLanguage('ecjia'),
-            'integrate_desc' => $this->loadLanguage('ecjia_desc'),
-            'configure' => null,
+            'integrate_id'      => 1,
+            'integrate_code'    => $this->getCode(),
+            'integrate_name'    => $this->loadLanguage('ecjia'),
+            'integrate_desc'    => $this->loadLanguage('ecjia_desc'),
+            'configure'         => null,
         ]);
-
     }
 
     /**
@@ -134,75 +128,66 @@ class IntegrateEcjia extends UserIntegrateAbstract
         }
     }
 
-    /**
-     *  编译密码函数
-     *
-     * @access  public
-     * @param   array   $cfg 包含参数为 $password, $md5password, $salt, $type
-     *
-      @return string
-     */
-    public function compilePassword($password, $salt = null, $type = null)
-    {
-        $password = with(new Password())->compilePassword($password, $salt, $type);
-
-        return $password;
-    }
 
     /**
-     *  检查指定用户是否存在及密码是否正确
+     * 检查指定用户是否存在及密码是否正确
      *
-     * @access  public
      * @param   string  $username   用户名
      *
-     * @return  int
+     * @return
      */
     public function checkUser($username, $password = null)
     {
-        $post_username = $username;
 
         /* 如果没有定义密码则只检查用户名 */
         if ($password === null) {
-            return $this->db->field($this->field_id)->find(array($this->field_name => $post_username));
+            $user = RC_DB::table($this->user_table->getUserTable())
+                ->where($this->user_table->getFieldName(), $username)
+                ->pluck($this->user_table->getFieldId());
+
+            return $user;
         } else {
-            return $this->db->field($this->field_id)->find(array($this->field_name => $post_username, $this->field_pass => $this->compile_password(array('password' => $password))));
+            $password = $this->compilePassword($password);
+            $user = RC_DB::table($this->user_table->getUserTable())
+                ->where($this->user_table->getFieldName(), $username)
+                ->where($this->user_table->getFieldPass(), $password)
+                ->pluck($this->user_table->getFieldId());
+
+            return $user;
         }
 
     }
+
 
     /**
      *  检查指定邮箱是否存在
      *
-     * @access  public
      * @param   string  $email   用户邮箱
      *
      * @return  boolean
      */
-    public function checkEmail($email)
+    public function checkEmail($email, $exclude_username = null)
     {
-        if (!empty($email)) {
+        if ($exclude_username) {
+            /* 检查email是否重复，并排除指定的用户名 */
+            $field_id = RC_DB::table($this->user_table->getUserTable())
+                ->where($this->user_table->getFieldEmail(), $email)
+                ->where($this->user_table->getFieldName(), $exclude_username)
+                ->pluck($this->user_table->getFieldId());
+        } else {
             /* 检查email是否重复 */
-            $result = $this->db->field($this->field_id)->find(array($this->field_email => $email));
-            if($result[$this->field_id] > 0) {
-                $this->error = ERR_EMAIL_EXISTS;
-                return true;
-            }
-            return false;
+            $field_id = RC_DB::table($this->user_table->getUserTable())
+                ->where($this->user_table->getFieldEmail(), $email)
+                ->pluck($this->user_table->getFieldId());
         }
+
+        if ($field_id > 0) {
+            $this->error = self::ERR_EMAIL_EXISTS;
+            return true;
+        }
+        return false;
     }
 
-    /**
-     *  检查cookie是正确，返回用户名
-     *
-     * @access  public
-     * @param
-     *
-     * @return boolean
-     */
-    public function checkCookie()
-    {
-        return true;
-    }
 
     /**
      * 添加一个新用户
@@ -216,49 +201,48 @@ class IntegrateEcjia extends UserIntegrateAbstract
      * @param string $md5password
      * @return bool
      */
-    public function addUser($username, $password = null, $email, $gender = -1, $bday = 0, $reg_date = 0, $md5password = '')
+    public function addUser($username, $password, $email, $gender = -1, $bday = 0, $reg_date = 0, $md5password = null)
     {
         /* 将用户添加到整合方 */
-        if ($this->check_user($username) > 0) {
-            $this->error = new ecjia_error('ERR_USERNAME_EXISTS', RC_Lang::get('user::users.username_exists'));
+        if ($this->checkUser($username) > 0) {
+            $this->error = self::ERR_USERNAME_EXISTS;
             return false;
         }
 
         /* 检查email是否重复 */
-        $query = $this->db->field($this->field_id)->find(array($this->field_email => $email));
-        if ($query[$this->field_id] > 0) {
-            $this->error = new ecjia_error('ERR_EMAIL_EXISTS', RC_Lang::get('user::users.email_exists'));
+        if ($this->checkEmail($email)) {
+            $this->error = self::ERR_EMAIL_EXISTS;
             return false;
         }
 
         $post_username = $username;
 
         if ($md5password) {
-            $post_password = $this->compile_password(array('md5password' => $md5password));
+            $post_password = $this->compilePassword(null, $md5password);
         } else {
-            $post_password = $this->compile_password(array('password' => $password));
+            $post_password = $this->compilePassword($password);
         }
 
-        $fields = array($this->field_name, $this->field_email, $this->field_pass);
+        $fields = array($this->user_table->getFieldName(), $this->user_table->getFieldEmail(), $this->user_table->getFieldPass());
         $values = array($post_username, $email, $post_password);
 
         if ($gender > -1) {
-            $fields[] = $this->field_gender;
+            $fields[] = $this->user_table->getFieldGender();
             $values[] = $gender;
         }
 
         if ($bday) {
-            $fields[] = $this->field_bday;
+            $fields[] = $this->user_table->getFieldBirthDay();
             $values[] = $bday;
         }
 
         if ($reg_date) {
-            $fields[] = $this->field_reg_date;
+            $fields[] = $this->user_table->getFieldRegDate();
             $values[] = $reg_date;
         }
 
         $data = array_combine($fields, $values);
-        $this->db->insert($data);
+        RC_DB::table($this->user_table->getUserTable())->insert($data);
 
         if ($this->need_sync) {
             $this->sync($username, $password);
@@ -269,61 +253,61 @@ class IntegrateEcjia extends UserIntegrateAbstract
 
 
     /**
-     *  编辑用户信息($password, $email, $gender, $bday)
+     * 编辑用户信息($password, $email, $gender, $bday)
      *
-     * @access  public
-     * @param
-     *
-     * @return void
+     * @param $username
+     * @param null $password
+     * @param $email
+     * @param int $gender
+     * @param int $bday
+     * @param null $md5password
+     * @return bool
      */
-    public function editUser($cfg)
+    public function editUser($username, $password, $email, $gender = -1, $bday = 0, $md5password = null)
     {
-        if (empty($cfg['username'])) {
-            return false;
-        } else {
-            $cfg['post_username'] = $cfg['username'];
-        }
+        $post_username = $username;
 
         $values = array();
-        if (!empty($cfg['password']) && empty($cfg['md5password'])) {
-            $cfg['md5password'] = md5($cfg['password']);
-        }
-        if ((!empty($cfg['md5password'])) && $this->field_pass != 'NULL') {
-            $values[$this->field_pass] = $this->compile_password(array('md5password' => $cfg['md5password']));
+        if (!empty($password) && empty($md5password)) {
+            $md5password = md5($password);
         }
 
-        if ((!empty($cfg['email'])) && $this->field_email != 'NULL') {
+        if (!empty($md5password) && ! is_null($this->user_table->getFieldPass())) {
+            $values[$this->user_table->getFieldPass()] = $this->compilePassword(null, $md5password);
+        }
+
+        if ((!empty($email)) && ! is_null($this->user_table->getFieldEmail())) {
             /* 检查email是否重复 */
-            $query = $this->db->field($this->field_id)->find(array($this->field_email => $cfg['email'], $this->field_name => array('neq' => $cfg['post_username'])));
-            if ($query[$this->field_id] > 0) {
-                $this->error = ERR_EMAIL_EXISTS;
+            if ($this->checkEmail($email, $username) > 0) {
+                $this->error = self::ERR_EMAIL_EXISTS;
                 return false;
             }
+
             // 检查是否为新E-mail
-            $count = $this->db->where(array($this->field_email => $cfg['email']))->count();
-            if ($count == 0) {
-                // 新的E-mail
-                $this->db->where(array('user_name' => $cfg['post_username']))->update(array('is_validated' => 0));
+            $count = $this->checkEmail($email);
+            if (empty($count)) {
+                // 新的E-mail，设置为未验证
+                RC_DB::table($this->user_table)->where($this->user_table->getFieldName(), $username)->update(array('is_validated' => 0));
             }
-            $values[$this->field_email] = $cfg['email'];
+            $values[$this->user_table->getFieldEmail()] = $email;
         }
 
-        if (isset($cfg['gender']) && $this->field_gender != 'NULL') {
-            $values[$this->field_gender] = $cfg['gender'];
+        if (isset($gender) && ! is_null($this->user_table->getFieldGender())) {
+            $values[$this->user_table->getFieldGender()] = $gender;
         }
 
-        if ((!empty($cfg['bday'])) && $this->field_bday != 'NULL') {
-            $values[$this->field_bday] = $cfg['bday'];
+        if ((!empty($bday)) && ! is_null($this->user_table->getFieldBirthDay())) {
+            $values[$this->user_table->getFieldBirthDay()] = $bday;
         }
 
         if ($values) {
-            $this->db->where(array($this->field_name => $cfg['post_username']))->update($values);
+            RC_DB::table($this->user_table->getUserTable())->where($this->user_table->getFieldName(), $post_username)->update($values);
 
             if ($this->need_sync) {
-                if (empty($cfg['md5password'])) {
-                    $this->sync($cfg['username']);
+                if (empty($md5password)) {
+                    $this->sync($username);
                 } else {
-                    $this->sync($cfg['username'], '', $cfg['md5password']);
+                    $this->sync($username, '', $md5password);
                 }
             }
         }
@@ -337,230 +321,34 @@ class IntegrateEcjia extends UserIntegrateAbstract
      * @param $id
      * @return void
      */
-    public function removeUser($id)
+    public function removeUser($username)
     {
-        $post_id = $id;
+        $user_id = RC_DB::table($this->user_table->getUserTable())->where($this->user_table->getFieldName(), $username)->pluck($this->user_table->getFieldId());
 
-        $db_order_info      = RC_Model::model('orders/order_info_model');
-        $db_order_goods     = RC_Model::model('orders/order_goods_model');
-        $db_collect_goods   = RC_Model::model('goods/collect_goods_model');
+        if ($user_id) {
 
-        /* 如果需要同步或是ecjia插件执行这部分代码 */
-        if ($this->need_sync || (isset($this->is_ecjia) && $this->is_ecjia)) {
-            if (is_array($post_id)) {
-                $col = $this->db->in(array('user_id' => $post_id))->get_field('user_id', true);
-            } else {
-                $col = $this->db->field('user_id')->where(array('user_name' => $post_id))->find();
-            }
-
-            if ($col) {
-
+            $result = $this->user_remove_cleardata($user_id);
+            if ($result) {
                 //将删除用户的下级的parent_id 改为0
-                $this->db->in(array('parent_id' => $col))->update(array('parent_id' => 0));
+                RC_DB::table($this->user_table->getUserTable())->where('parent_id', $user_id)->update(['parent_id' => 0]);
+
                 //删除用户
-                $this->db->in(array('user_id' => $col))->delete();
-                /* 删除用户订单 */
-                $col_order_id = $db_order_info->in(array('user_id' => $col))->get_field('order_id', true);
-                if ($col_order_id) {
-                    $db_order_info->in(array('order_id' => $col_order_id))->delete();
-                    $db_order_goods->in(array('order_id' => $col_order_id))->delete();
-                }
+                RC_DB::table($this->user_table->getUserTable())->where($this->user_table->getFieldId(), $user_id)->delete();
 
-                //删除会员收藏商品
-                $db_collect_goods->in(array('user_id' => $col))->delete();
-                //删除用户留言
-//                 $db_feedback->in(array('user_id' => $col))->delete();
-                //删除用户地址
-                RC_DB::table('user_address')->whereIn('user_id', $col)->delete();
-                //删除用户红包
-                RC_DB::table('user_bonus')->whereIn('user_id', $col)->delete();
-                //删除用户帐号金额
-                RC_DB::table('user_account')->whereIn('user_id', $col)->delete();
-                //删除用户标记
-//                 $db_tag->in(array('user_id' => $col))->delete();
-                //删除用户日志
-                RC_DB::table('account_log')->whereIn('user_id', $col)->delete();
-
-                RC_Api::api('connect', 'connect_user_remove', array('user_id' => $col));
-            }
-        }
-
-        /* 如果是ecjia插件直接退出 */
-        if (isset($this->ecjia) && $this->ecjia) {
-            return;
-        }
-
-        if (is_array($post_id)) {
-            $this->db->in(array($this->field_id => $post_id))->delete();
-        } else {
-            $this->db->where(array($this->field_name => $post_id))->delete();
-        }
-    }
-
-
-    /**
-     *  获取指定用户的信息
-     *
-     * @param $username
-     * @return array
-     */
-    public function getProfileByName($username)
-    {
-        $row = RC_DB::table($this->user_table->getUserTable())->selectRaw(
-            $this->user_table->getFieldId() . ' AS `user_id`, ' .
-            $this->user_table->getFieldName() . ' AS `user_name`, ' .
-            $this->user_table->getFieldEmail() . ' AS `email`, ' .
-            $this->user_table->getFieldGender() . ' AS `sex`, ' .
-            $this->user_table->getFieldBirthDay() . ' AS `birthday`' .
-            $this->user_table->getFieldRegDate() . ' AS `reg_time`, ' .
-            $this->user_table->getFieldPass() . ' AS `password`'
-            )->where($this->user_table->getFieldName(), $username)
-            ->first();
-
-        return $row;
-    }
-
-
-    /**
-     *  获取指定用户的信息
-     *
-     * @param $id
-     * @return array
-     */
-    public function getProfileById($id)
-    {
-        $row = RC_DB::table($this->user_table->getUserTable())->selectRaw(
-            $this->user_table->getFieldId() . ' AS `user_id`, ' .
-            $this->user_table->getFieldName() . ' AS `user_name`, ' .
-            $this->user_table->getFieldEmail() . ' AS `email`, ' .
-            $this->user_table->getFieldGender() . ' AS `sex`, ' .
-            $this->user_table->getFieldBirthDay() . ' AS `birthday`' .
-            $this->user_table->getFieldRegDate() . ' AS `reg_time`, ' .
-            $this->user_table->getFieldPass() . ' AS `password`'
-            )->where($this->user_table->getFieldId(), $id)
-            ->first();
-
-        return $row;
-    }
-
-    /**
-     *  根据登录状态设置cookie
-     *
-     * @access  public
-     * @param
-     *
-     * @return boolean
-     */
-    public function getCookie()
-    {
-        $id = $this->checkCookie();
-        if ($id) {
-            if ($this->need_sync) {
-                $this->sync($id);
-            }
-            $this->setSession($id);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-
-    /**
-     *  会员同步
-     *
-     * @access  public
-     * @param
-     *
-     * @return boolean
-     */
-    public function sync($username, $password = '', $md5password = '')
-    {
-
-        if ((!empty($password)) && empty($md5password)) {
-            $md5password = md5($password);
-        }
-
-        $main_profile = $this->getProfileByName($username);
-
-        if (empty($main_profile)) {
-            return false;
-        }
-
-        $profile = $this->db->field('user_name, email, password, sex, birthday')->find(array('user_name' => $username));
-        if (empty($profile)) {
-            /* 向用户表插入一条新记录 */
-            if (empty($md5password)) {
-                $data = array(
-                    'user_name'  => $username,
-                    'email'      => $main_profile['email'],
-                    'sex'        => $main_profile['sex'],
-                    'birthday'   => $main_profile['birthday'] ,
-                    'reg_time'   => $main_profile['reg_time'],
-                );
-                $this->db->insert($data);
-            } else {
-                $data = array(
-                    'user_name'  => $username,
-                    'email'      => $main_profile['email'],
-                    'sex'        => $main_profile['sex'],
-                    'birthday'   => $main_profile['birthday'] ,
-                    'reg_time'   => $main_profile['reg_time'],
-                    'password'   => $md5password
-                );
-                $this->db->insert($data);
-
-            }
-            return true;
-        } else {
-            $values = array();
-            if ($main_profile['email'] != $profile['email']) {
-                $values['email'] = $main_profile['email'];
-            }
-
-            if ($main_profile['sex'] != $profile['sex']) {
-                $values['sex'] = $main_profile['sex'];
-            }
-
-            if ($main_profile['birthday'] != $profile['birthday']) {
-                $values['birthday'] = $main_profile['birthday'];
-            }
-
-            if ((!empty($md5password)) && ($md5password != $profile['password'])) {
-                $values['password'] = $md5password;
-            }
-
-            if (empty($values)) {
-                return  true;
-            } else {
-                $this->db->where(array('user_name' => $username))->update($values);
                 return true;
             }
+
         }
+
+        return false;
     }
 
 
     /**
-     *  获取论坛有效积分及单位
+     * 获取用户积分
      *
-     * @access  public
-     * @param
-     *
-     * @return array
-     */
-    public function getPointsName()
-    {
-        return array();
-    }
-
-
-    /**
-     *  获取用户积分
-     *
-     * @access  public
-     * @param
-     *
-     * @return array|boolean
+     * @param $username
+     * @return bool
      */
     public function getPoints($username)
     {
@@ -580,12 +368,11 @@ class IntegrateEcjia extends UserIntegrateAbstract
 
 
     /**
-     *设置用户积分
+     * 设置用户积分
      *
-     * @access  public
-     * @param
-     *
-     * @return boolean
+     * @param $username
+     * @param $credits
+     * @return bool
      */
     public function setPoints($username, $credits)
     {
@@ -638,8 +425,4 @@ class IntegrateEcjia extends UserIntegrateAbstract
         return $user_list;
     }
 
-
-
-
-    
 }
