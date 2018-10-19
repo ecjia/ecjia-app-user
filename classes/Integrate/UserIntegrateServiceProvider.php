@@ -7,6 +7,13 @@ use Royalcms\Component\Support\ServiceProvider;
 class UserIntegrateServiceProvider extends  ServiceProvider
 {
 
+    /**
+     * Indicates if loading of the provider is deferred.
+     *
+     * @var bool
+     */
+    protected $defer = true;
+
     public function register()
     {
         $this->registerIntegrateManager();
@@ -45,6 +52,17 @@ class UserIntegrateServiceProvider extends  ServiceProvider
             $loader->alias('ecjia_integrate', 'Ecjia\App\User\Integrate\Facades\EcjiaIntegrate');
 
         });
+    }
+
+
+    /**
+     * Get the services provided by the provider.
+     *
+     * @return array
+     */
+    public function provides()
+    {
+        return ['ecjia.integrate', 'ecjia.integrate.plugin'];
     }
     
 }
