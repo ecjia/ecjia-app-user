@@ -73,6 +73,14 @@
 				</fieldset>
 			</form>
 		</div>
+        <!--{elseif $code eq 'ecjia'}-->
+        <div>
+            <div class="control-group">
+                <div class="controls">
+                    <div class="alert alert-error" >{$error_message}</div>
+                </div>
+            </div>
+        </div>
 		<!--{else}-->
 		<div id="form3">
 			<form class="form-horizontal" id="form-privilege" action="{$form_action}" method="post" name="setupForm">
