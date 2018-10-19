@@ -47,14 +47,14 @@
 						</div>
 					</div>
 					<div class="control-group">
-						<label class="control-label">{lang key='user::integrate.ucenter_lab_ip'}</label>
+						<label class="control-label">{lang key='user::integrate.ucenter_lab_url'}</label>
 						<div class="controls users">
 							<input class="w350" type="text" name="cfg[uc_url]" value="{$cfg.uc_url}" /><i class="input-must">{lang key='system::system.require_field'}</i>
 							<span class="w400 help-block" id="noticeGoodsSN">{lang key='user::integrate.ucenter_notice_url'}</span>
 						</div>
 					</div>
 					<div class="control-group">
-						<label class="control-label">{lang key='user::integrate.ucenter_lab_connect'}</label>
+						<label class="control-label">{lang key='user::integrate.ucenter_lab_ip'}</label>
 						<div class="controls users">
 							<input class="w350" type="text" name="cfg[uc_ip]" value="{$cfg.uc_ip}" /><i class="input-must">{lang key='system::system.require_field'}</i>
 							<span class="help-block" id="noticeGoodsSN">{lang key='user::integrate.ucenter_notice_ip'}</span>
