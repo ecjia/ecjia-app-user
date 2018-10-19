@@ -2,12 +2,19 @@
 
 namespace Ecjia\App\User\Integrate;
 
+use Ecjia\System\Plugin\PluginModel;
 use ecjia;
+use Ecjia\App\User\Integrate\Plugins\IntegrateEcjia;
 use ecjia_config;
 use ecjia_error;
 
-class IntegratePlugin
+class IntegratePlugin extends PluginModel
 {
+
+    public function codeFieldName()
+    {
+        return null;
+    }
     
     /**
      * 激活的支付插件列表
@@ -38,17 +45,37 @@ class IntegratePlugin
 
 		return $list;
     }
-    
+
+    public function getPluginDataById($id)
+    {
+        return null;
+    }
+
+    public function getPluginDataByCode($code)
+    {
+        if ($code == 'ecjia') {
+            return with(new IntegrateEcjia())->getPluginMateData();
+        }
+
+        return $this->channel($code)->getPluginMateData();
+    }
+
+    public function getPluginDataByName($name)
+    {
+        return null;
+    }
     
     /**
      * 获取数据中的Config配置数据，并处理
      */
     public function configData($code)
     {
+        $pluginData = $this->getPluginDataByCode($code);
+
         $config = unserialize(ecjia::config('integrate_config'));
     
-//         $config['pay_code'] = $code;
-//         $config['pay_name'] = $pluginData['pay_name'];
+        $config['integrate_code'] = $code;
+        $config['integrate_name'] = $pluginData['integrate_name'];
     
         return $config;
     }
@@ -77,15 +104,19 @@ class IntegratePlugin
         ecjia_config::write('integrate_code', $code);
         ecjia_config::write('integrate_config', serialize($config));
     }
-    
-    
+
+    /**
+     * @param $domain1
+     * @param $domain2
+     * @param $domain
+     * @return bool
+     */
     protected function judgeDomainSame($domain1, $domain2, & $domain)
     {
-        $same_domain    = true;
+        $same_domain = true;
         
         if ($domain1 != $domain2) {
-            
-            
+
             /* 域名不一样，检查是否在同一域下 */
             $cur_domain_arr = explode(".", $domain1);
             $int_domain_arr = explode(".", $domain2);
@@ -116,13 +147,12 @@ class IntegratePlugin
     
     /**
      * 从一个url地址中获取域名
-     * @param unknown $url
+     * @param string $url
      */
     protected function getDomainByUrl($url)
     {
         $domain = str_replace(array('http://', 'https://'), array('', ''), $url);
-        if (strrpos($domain, '/')) 
-        {
+        if (strrpos($domain, '/')) {
             $domain = substr($domain, 0, strrpos($domain, '/'));
         }
         
@@ -136,22 +166,14 @@ class IntegratePlugin
     {
         $currentdomain = '';
         
-        if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) 
-        {
+        if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
             $currentdomain = $_SERVER['HTTP_X_FORWARDED_HOST'];
-        } 
-        elseif (isset($_SERVER['HTTP_HOST'])) 
-        {
+        } elseif (isset($_SERVER['HTTP_HOST'])) {
             $currentdomain = $_SERVER['HTTP_HOST'];
-        } 
-        else 
-        {
-            if (isset($_SERVER['SERVER_NAME'])) 
-            {
+        } else {
+            if (isset($_SERVER['SERVER_NAME'])) {
                 $currentdomain = $_SERVER['SERVER_NAME'];
-            } 
-            elseif (isset($_SERVER['SERVER_ADDR'])) 
-            {
+            } elseif (isset($_SERVER['SERVER_ADDR'])){
                 $currentdomain = $_SERVER['SERVER_ADDR'];
             }
         }
@@ -162,42 +184,39 @@ class IntegratePlugin
     /**
      * 获取某个插件的实例对象
      * @param string|integer $code 类型为string时是pay_code，类型是integer时是pay_id
-     * @return Ambigous <\ecjia_error, \Ecjia\System\Plugin\AbstractPlugin>|\ecjia_error|\Ecjia\System\Plugin\AbstractPlugin
+     * @return \ecjia_error|\Ecjia\System\Plugin\AbstractPlugin
      */
     public function channel($code = null)
     {
         if (is_null($code)) {
             return $this->defaultChannel();
         }
-    
-        if (is_int($code)) {
-            $data = $this->getPluginDataById($code);
+
+        $config = $this->configData($code);
+
+        if ($code == 'ecjia') {
+            $handler = new IntegrateEcjia();
+            $handler->setConfig($config);
         } else {
-            $data = $this->getPluginDataByCode($code);
+            $handler = $this->pluginInstance($code, $config);
+            if (!$handler) {
+                return new ecjia_error('plugin_not_found', $code . ' plugin not found!');
+            }
         }
-    
-        if (empty($data)) {
-            return new ecjia_error('payment_not_found', $code . ' payment not found!');
-        }
-    
-        $config = $this->unserializeConfig($data->pay_config);
-         
-        $handler = $this->pluginInstance($data->pay_code, $config);
-        if (!$handler) {
-            return new ecjia_error('plugin_not_found', $data->pay_code . ' plugin not found!');
-        }
-    
-        $handler->setPayment($data);
-    
+
         return $handler;
     }
     
     
     public function defaultChannel()
     {
-        $config = unserialize(ecjia::config('integrate_config'));
-        
-        
+        $code = ecjia::config('integrate_code');
+
+        if ($code == 'ecshop') {
+            $code = 'ecjia';
+        }
+
+        return $this->channel($code);
     }
     
 

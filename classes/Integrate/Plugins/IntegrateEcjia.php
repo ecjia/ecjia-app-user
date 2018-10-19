@@ -60,6 +60,23 @@ class IntegrateEcjia extends UserIntegrateAbstract
     }
 
     /**
+     * 获取插件的元数据
+     *
+     * @return \Royalcms\Component\Support\Collection
+     */
+    public function getPluginMateData()
+    {
+        return collect([
+            'integrate_id' => 0,
+            'integrate_code' => $this->getCode(),
+            'integrate_name' => $this->loadLanguage('ecjia'),
+            'integrate_desc' => $this->loadLanguage('ecjia_desc'),
+            'configure' => null,
+        ]);
+
+    }
+
+    /**
      *  设置指定用户SESSION
      *
      * @access  public
