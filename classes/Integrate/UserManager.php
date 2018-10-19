@@ -47,11 +47,10 @@ class UserManager
      * @param string $username 注册用户名
      * @param string $password 用户密码
      * @param string $email 注册email
-     * @param array $other 注册的其他信息
      *
      * @return bool|\ecjia_error $bool
      */
-    public function register($username, $password, $email, $other = array())
+    public function register($username, $password, $email)
     {
         /* 检查注册是否关闭 */
         if (ecjia_config::has('shop_reg_closed')) {
@@ -77,7 +76,7 @@ class UserManager
         }
 
 
-        if (! self::$instance->add_user($username, $password, $email)) {
+        if (! self::$instance->addUser($username, $password, $email)) {
             if (self::$instance->getError() == (self::$instance)::ERR_INVALID_USERNAME) {
 
                 return new ecjia_error('username_invalid', sprintf("用户名 %s 含有敏感字符", $username));
