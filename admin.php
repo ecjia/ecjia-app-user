@@ -494,6 +494,16 @@ class admin extends ecjia_admin {
 		$other['office_phone']	= isset($_POST['extend_field3']) ? htmlspecialchars(trim($_POST['extend_field3'])) : '';
 		$other['home_phone']	= isset($_POST['extend_field4']) ? htmlspecialchars(trim($_POST['extend_field4'])) : '';
 		$other['mobile_phone']	= isset($_POST['extend_field5']) ? htmlspecialchars(trim($_POST['extend_field5'])) : '';
+
+		$check_mobile = Ecjia\App\Sms\Helper::check_mobile($other['mobile_phone']);
+		if (is_ecjia_error($check_mobile)) {
+		    return $this->showmessage($check_mobile->get_error_message(), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+		}
+
+		$count = RC_DB::table('users')->where('user_id', '!=', $user_id)->where('mobile_phone', $other['mobile_phone'])->count();
+		if (!empty($count)) {
+			return $this->showmessage('手机号码已存在', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+		}
 		
 		$user->edit_user($user_other);
 		RC_DB::table('users')->where('user_id', $user_id)->update($other);
