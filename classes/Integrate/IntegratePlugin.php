@@ -31,15 +31,21 @@ class IntegratePlugin extends PluginModel
     public function getEnableList()
     {
         $plugins = $this->getInstalledPlugins();
-        
+        $plugins = array_keys($plugins);
+        $plugins = array_prepend($plugins, 'ecjia');
         $list = array();
-		foreach ($plugins as $code => $plugin) {
-		    if (isset($plugins[$plugin])) {
-		        $list[$code] = $plugins[$plugin];
-		        
-		        $list[$code]['code'] = $code;
-		        $list[$code]['format_name'] = $list[$code]['Name'];
-		        $list[$code]['format_description'] = $list[$code]['Description'];
+		foreach ($plugins as $code) {
+            $plugin = $this->channel($code);
+            if (is_ecjia_error($plugin)) {
+                continue;
+            }
+
+            $metadata = $plugin->getPluginMateData();
+
+		    if ($metadata) {
+		        $list[$code] = $metadata->toArray();
+		        $list[$code]['format_name'] = $list[$code]['integrate_name'];
+		        $list[$code]['format_description'] = $list[$code]['integrate_desc'];
 		    }
 		}
 
@@ -70,12 +76,7 @@ class IntegratePlugin extends PluginModel
      */
     public function configData($code)
     {
-        $pluginData = $this->getPluginDataByCode($code);
-
         $config = unserialize(ecjia::config('integrate_config'));
-    
-        $config['integrate_code'] = $code;
-        $config['integrate_name'] = $pluginData['integrate_name'];
     
         return $config;
     }
@@ -103,6 +104,8 @@ class IntegratePlugin extends PluginModel
         
         ecjia_config::write('integrate_code', $code);
         ecjia_config::write('integrate_config', serialize($config));
+
+        return true;
     }
 
     /**
