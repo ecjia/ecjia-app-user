@@ -33,12 +33,15 @@ class Password
      * 编译密码函数
      *
      * @param $password
+     * @param $md5password
      * @param $salt
      * @param $type
      */
-    public function compilePassword($password, $salt = null, $type = self::PWD_MD5)
+    public function compilePassword($password, $md5password = null, $salt = null, $type = self::PWD_MD5)
     {
-        $md5password = md5($password);
+        if ($password) {
+            $md5password = md5($password);
+        }
 
         $newpassword = '';
 
