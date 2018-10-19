@@ -12,6 +12,11 @@ use ecjia_error;
 use ecjia_config;
 use RC_Hook;
 
+/**
+ * Class UserManager
+ * @package Ecjia\App\User\Integrate
+ *
+ */
 class UserManager
 {
     /**
@@ -38,6 +43,22 @@ class UserManager
         self::$instance = with(new IntegratePlugin())->defaultChannel();
 
         return self::$instance;
+    }
+
+    /**
+     * 获取所有可用的插件
+     */
+    public function integrate_list()
+    {
+        return $this->plugin()->getEnableList();
+    }
+
+    /**
+     * @return \Ecjia\App\User\Integrate\IntegratePlugin
+     */
+    public function plugin()
+    {
+        return royalcms('ecjia.integrate.plugin');
     }
 
 

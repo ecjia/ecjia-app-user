@@ -2,14 +2,10 @@
 
 namespace Ecjia\App\User\Integrate;
 
-use Ecjia\App\User\Integrate\IntegratePlugin;
-use Ecjia\App\User\Integrate\UserManager;
 use Royalcms\Component\Support\ServiceProvider;
 
 class UserIntegrateServiceProvider extends  ServiceProvider
 {
-    
-
 
     public function register()
     {
