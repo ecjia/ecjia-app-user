@@ -327,7 +327,7 @@ class IntegrateEcjia extends UserIntegrateAbstract
 
         if ($user_id) {
 
-            $result = $this->user_remove_cleardata($user_id);
+            $result = $this->userRemoveClearData($user_id);
             if ($result) {
                 //将删除用户的下级的parent_id 改为0
                 RC_DB::table($this->user_table->getUserTable())->where('parent_id', $user_id)->update(['parent_id' => 0]);

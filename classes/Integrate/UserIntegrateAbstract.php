@@ -5,6 +5,7 @@ namespace Ecjia\App\User\Integrate;
 use Ecjia\System\Plugin\AbstractPlugin;
 use Ecjia\App\User\Integrate\Tables\EcjiaUserTable;
 use RC_DB;
+use RC_Api;
 
 /**
  * 会员融合插件抽象类
@@ -41,7 +42,7 @@ abstract class UserIntegrateAbstract extends AbstractPlugin implements UserInteg
     const ERR_INVALID_PASSWORD      = 5;
 
     /**
-     * email错误
+     * Email错误
      */
     const ERR_INVALID_EMAIL         = 6;
 
@@ -54,6 +55,18 @@ abstract class UserIntegrateAbstract extends AbstractPlugin implements UserInteg
      * EMAIL不允许注册
      */
     const ERR_EMAIL_NOT_ALLOW       = 8;
+
+
+    protected $error_message = [
+        self::ERR_USERNAME_EXISTS         => '用户名已经存在',
+        self::ERR_EMAIL_EXISTS            => 'Email已经存在',
+        self::ERR_INVALID_USERID          => '无效的user_id',
+        self::ERR_INVALID_USERNAME        => '无效的用户名',
+        self::ERR_INVALID_PASSWORD        => '密码错误',
+        self::ERR_INVALID_EMAIL           => 'Email错误',
+        self::ERR_USERNAME_NOT_ALLOW      => '用户名不允许注册',
+        self::ERR_EMAIL_NOT_ALLOW         => 'Email不允许注册',
+    ];
 
 
     protected $cookie_domain;
@@ -78,6 +91,11 @@ abstract class UserIntegrateAbstract extends AbstractPlugin implements UserInteg
     public function getError()
     {
         return $this->error;
+    }
+
+    public function getErrorMessage()
+    {
+        return array_get($this->error_message, $this->error, '未知错误');
     }
 
     public function needSync()
@@ -126,7 +144,7 @@ abstract class UserIntegrateAbstract extends AbstractPlugin implements UserInteg
             $this->user_table->getFieldName() . ' AS `user_name`, ' .
             $this->user_table->getFieldEmail() . ' AS `email`, ' .
             $this->user_table->getFieldGender() . ' AS `sex`, ' .
-            $this->user_table->getFieldBirthDay() . ' AS `birthday`' .
+            $this->user_table->getFieldBirthDay() . ' AS `birthday`, ' .
             $this->user_table->getFieldRegDate() . ' AS `reg_time`, ' .
             $this->user_table->getFieldPass() . ' AS `password`'
         )->where($this->user_table->getFieldName(), $username)
@@ -148,7 +166,7 @@ abstract class UserIntegrateAbstract extends AbstractPlugin implements UserInteg
             $this->user_table->getFieldName() . ' AS `user_name`, ' .
             $this->user_table->getFieldEmail() . ' AS `email`, ' .
             $this->user_table->getFieldGender() . ' AS `sex`, ' .
-            $this->user_table->getFieldBirthDay() . ' AS `birthday`' .
+            $this->user_table->getFieldBirthDay() . ' AS `birthday`, ' .
             $this->user_table->getFieldRegDate() . ' AS `reg_time`, ' .
             $this->user_table->getFieldPass() . ' AS `password`'
         )->where($this->user_table->getFieldId(), $id)
@@ -195,7 +213,7 @@ abstract class UserIntegrateAbstract extends AbstractPlugin implements UserInteg
                 $this->user_table->getFieldName() . ' AS `user_name`, ' .
                 $this->user_table->getFieldEmail() . ' AS `email`, ' .
                 $this->user_table->getFieldGender() . ' AS `sex`, ' .
-                $this->user_table->getFieldBirthDay() . ' AS `birthday`' .
+                $this->user_table->getFieldBirthDay() . ' AS `birthday`, ' .
                 $this->user_table->getFieldPass() . ' AS `password`'
             )->where($this->user_table->getFieldName(), $username)
             ->first();
@@ -256,7 +274,7 @@ abstract class UserIntegrateAbstract extends AbstractPlugin implements UserInteg
      * @param $user_id
      * @return mixed
      */
-    protected function user_remove_cleardata($user_id)
+    protected function userRemoveClearData($user_id)
     {
         //删除用户订单
         //删除会员收藏商品
