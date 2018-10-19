@@ -56,7 +56,7 @@
 					<div class="control-group">
 						<label class="control-label">{lang key='user::integrate.ucenter_lab_ip'}</label>
 						<div class="controls users">
-							<input class="w350" type="text" name="cfg[uc_ip]" value="{$cfg.uc_ip}" /><i class="input-must">{lang key='system::system.require_field'}</i>
+							<input class="w350" type="text" name="cfg[uc_ip]" value="{$cfg.uc_ip}" />
 							<span class="help-block" id="noticeGoodsSN">{lang key='user::integrate.ucenter_notice_ip'}</span>
 						</div>
 					</div>

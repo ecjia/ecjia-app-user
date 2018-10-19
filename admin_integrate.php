@@ -191,8 +191,11 @@ class admin_integrate extends ecjia_admin {
 	/**
 	 * 保存整合填写的配置资料
 	 */
-	public function save_config() {
-		$code = strval($_POST['code'], ecjia::MSGTYPE_JSON);
+	public function save_config()
+    {
+        $this->admin_priv('integrate_users', ecjia::MSGTYPE_JSON);
+
+		$code = strval($_POST['code']);
 
 		if ($code != 'ecjia' && $code != 'ucenter' && $code != 'ecshop') {
 		    return $this->showmessage(RC_Lang::get('user::integrate.support_UCenter'), ecjia::MSGSTAT_ERROR | ecjia::MSGTYPE_JSON);
