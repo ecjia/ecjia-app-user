@@ -93,7 +93,7 @@ abstract class UserIntegrateAbstract extends AbstractPlugin implements UserInteg
     {
         if ($this->checkUser($username, $password) > 0) {
             if ($this->need_sync) {
-                $this->sync($username,$password);
+                $this->sync($username, $password);
             }
             $this->setSession($username);
             $this->setCookie($username, $remember);
