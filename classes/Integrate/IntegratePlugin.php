@@ -195,16 +195,21 @@ class IntegratePlugin extends PluginModel
             return $this->defaultChannel();
         }
 
-        $config = $this->configData($code);
-
         if ($code == 'ecjia') {
+
             $handler = new IntegrateEcjia();
-            $handler->setConfig($config);
+
         } else {
+
+            $config = $this->configData($code);
+            if (empty($config)) {
+                $config = [];
+            }
             $handler = $this->pluginInstance($code, $config);
             if (!$handler) {
                 return new ecjia_error('plugin_not_found', $code . ' plugin not found!');
             }
+            
         }
 
         return $handler;
