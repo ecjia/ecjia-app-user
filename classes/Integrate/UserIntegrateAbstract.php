@@ -6,6 +6,8 @@ use Ecjia\System\Plugin\AbstractPlugin;
 use Ecjia\App\User\Integrate\Tables\EcjiaUserTable;
 use RC_DB;
 use RC_Api;
+use RC_Session;
+use RC_Ip;
 
 /**
  * 会员融合插件抽象类
@@ -83,10 +85,8 @@ abstract class UserIntegrateAbstract extends AbstractPlugin implements UserInteg
 
     public function __construct()
     {
-        $this->user_table = new EcjiaUserTable();
-
+        //
     }
-
 
     public function getError()
     {
@@ -111,6 +111,24 @@ abstract class UserIntegrateAbstract extends AbstractPlugin implements UserInteg
     abstract public function getPluginMateData();
 
     /**
+     *  获取指定用户的信息
+     *
+     * @param $username
+     * @return array
+     */
+    abstract public function getProfileByName($username);
+
+
+    /**
+     *  获取指定用户的信息
+     *
+     * @param $id
+     * @return array
+     */
+    abstract public function getProfileById($id);
+
+
+    /**
      * 编译密码函数 包含参数为 $password, $md5password, $salt, $type
      *
      * @param $password
@@ -126,54 +144,15 @@ abstract class UserIntegrateAbstract extends AbstractPlugin implements UserInteg
         return $password;
     }
 
+    /**
+     * @param $username
+     * @return array
+     */
     public function getUserInfo($username)
     {
         return $this->getProfileByName($username);
     }
 
-    /**
-     *  获取指定用户的信息
-     *
-     * @param $username
-     * @return array
-     */
-    public function getProfileByName($username)
-    {
-        $row = RC_DB::table($this->user_table->getUserTable())->selectRaw(
-            $this->user_table->getFieldId() . ' AS `user_id`, ' .
-            $this->user_table->getFieldName() . ' AS `user_name`, ' .
-            $this->user_table->getFieldEmail() . ' AS `email`, ' .
-            $this->user_table->getFieldGender() . ' AS `sex`, ' .
-            $this->user_table->getFieldBirthDay() . ' AS `birthday`, ' .
-            $this->user_table->getFieldRegDate() . ' AS `reg_time`, ' .
-            $this->user_table->getFieldPass() . ' AS `password`'
-        )->where($this->user_table->getFieldName(), $username)
-            ->first();
-
-        return $row;
-    }
-
-    /**
-     *  获取指定用户的信息
-     *
-     * @param $id
-     * @return array
-     */
-    public function getProfileById($id)
-    {
-        $row = RC_DB::table($this->user_table->getUserTable())->selectRaw(
-            $this->user_table->getFieldId() . ' AS `user_id`, ' .
-            $this->user_table->getFieldName() . ' AS `user_name`, ' .
-            $this->user_table->getFieldEmail() . ' AS `email`, ' .
-            $this->user_table->getFieldGender() . ' AS `sex`, ' .
-            $this->user_table->getFieldBirthDay() . ' AS `birthday`, ' .
-            $this->user_table->getFieldRegDate() . ' AS `reg_time`, ' .
-            $this->user_table->getFieldPass() . ' AS `password`'
-        )->where($this->user_table->getFieldId(), $id)
-            ->first();
-
-        return $row;
-    }
 
     /**
      *  获取论坛有效积分及单位
@@ -189,9 +168,34 @@ abstract class UserIntegrateAbstract extends AbstractPlugin implements UserInteg
     }
 
     /**
-     * 会员同步
+     * 同步删除用户
      *
      * @param $username
+     */
+    public function syncRemoveUser($username)
+    {
+        $user_id = RC_DB::table('users')->where('user_name', $username)->pluck('user_id');
+
+        if ($user_id) {
+
+            $result = $this->userRemoveClearData($user_id);
+            if ($result) {
+                //将删除用户的下级的parent_id 改为0
+                RC_DB::table('users')->where('parent_id', $user_id)->update(['parent_id' => 0]);
+
+                //删除用户
+                RC_DB::table('users')->where('user_id', $user_id)->delete();
+
+            }
+
+        }
+    }
+
+    /**
+     * 会员同步
+     * 使用第三方用户数据表同步时，将用户信息同步一份到ecjia_users数据表中
+     *
+     * @param string $username
      * @param null $password
      * @param null $md5password
      * @return bool
@@ -208,37 +212,32 @@ abstract class UserIntegrateAbstract extends AbstractPlugin implements UserInteg
             return false;
         }
 
-        $profile = RC_DB::table($this->user_table->getUserTable())
-            ->selectRaw(
-                $this->user_table->getFieldName() . ' AS `user_name`, ' .
-                $this->user_table->getFieldEmail() . ' AS `email`, ' .
-                $this->user_table->getFieldGender() . ' AS `sex`, ' .
-                $this->user_table->getFieldBirthDay() . ' AS `birthday`, ' .
-                $this->user_table->getFieldPass() . ' AS `password`'
-            )->where($this->user_table->getFieldName(), $username)
+        $profile = RC_DB::table('users')
+            ->select('user_name', 'email', 'password', 'sex', 'birthday')
+            ->where('user_name', $username)
             ->first();
 
         if (empty($profile)) {
             /* 向用户表插入一条新记录 */
             if (empty($md5password)) {
                 $data = array(
-                    $this->user_table->getFieldName()       => $username,
-                    $this->user_table->getFieldEmail()      => $main_profile['email'],
-                    $this->user_table->getFieldGender()     => $main_profile['sex'],
-                    $this->user_table->getFieldBirthDay()   => $main_profile['birthday'] ,
-                    $this->user_table->getFieldRegDate()    => $main_profile['reg_time'],
+                    'user_name'  => $username,
+                    'email'      => $main_profile['email'],
+                    'sex'        => $main_profile['sex'],
+                    'birthday'   => $main_profile['birthday'] ,
+                    'reg_time'   => $main_profile['reg_time'],
                 );
-                RC_DB::table($this->user_table->getUserTable())->insert($data);
+                RC_DB::table('users')->insert($data);
             } else {
                 $data = array(
-                    $this->user_table->getFieldName()       => $username,
-                    $this->user_table->getFieldEmail()      => $main_profile['email'],
-                    $this->user_table->getFieldGender()     => $main_profile['sex'],
-                    $this->user_table->getFieldBirthDay()   => $main_profile['birthday'] ,
-                    $this->user_table->getFieldRegDate()    => $main_profile['reg_time'],
-                    $this->user_table->getFieldPass()       => $md5password
+                    'user_name'  => $username,
+                    'email'      => $main_profile['email'],
+                    'sex'        => $main_profile['sex'],
+                    'birthday'   => $main_profile['birthday'] ,
+                    'reg_time'   => $main_profile['reg_time'],
+                    'password'   => $md5password
                 );
-                RC_DB::table($this->user_table->getUserTable())->insert($data);
+                RC_DB::table('users')->insert($data);
             }
             return true;
         } else {
@@ -262,7 +261,7 @@ abstract class UserIntegrateAbstract extends AbstractPlugin implements UserInteg
             if (empty($values)) {
                 return true;
             } else {
-                RC_DB::table($this->user_table->getUserTable())->where($this->user_table->getFieldName(), $username)->update($values);
+                RC_DB::table('users')->where('user_name', $username)->update($values);
                 return true;
             }
         }
@@ -340,18 +339,44 @@ abstract class UserIntegrateAbstract extends AbstractPlugin implements UserInteg
     }
 
     /**
+     *  设置cookie
+     *
+     * @return void
+     */
+    public function setCookie($username, $remember = null)
+    {
+        if (empty($username)) {
+            /* 摧毁cookie */
+            $time = SYS_TIME - 3600;
+            setcookie("ECJIA[user_id]",  '', $time, $this->cookie_path);
+            setcookie("ECJIA[password]", '', $time, $this->cookie_path);
+
+        } elseif ($remember) {
+            /* 设置cookie */
+            $time = SYS_TIME + 3600 * 24 * 15;
+            setcookie("ECJIA[username]", $username, $time, $this->cookie_path, $this->cookie_domain);
+
+            $row = RC_DB::table('users')->select('user_id', 'password')->where('user_name', $username)->first();
+            if ($row) {
+                setcookie("ECJIA[user_id]", $row['user_id'], $time, $this->cookie_path, $this->cookie_domain);
+                setcookie("ECJIA[password]", $row['password'], $time, $this->cookie_path, $this->cookie_domain);
+            }
+        }
+    }
+
+    /**
      * 根据登录状态设置cookie
      *
      * @return boolean
      */
     public function getCookie()
     {
-        $id = $this->checkCookie();
-        if ($id) {
+        $username = $this->checkCookie();
+        if ($username) {
             if ($this->need_sync) {
-                $this->sync($id);
+                $this->sync($username);
             }
-            $this->setSession($id);
+            $this->setSession($username);
             return true;
         } else {
             return false;
@@ -362,6 +387,32 @@ abstract class UserIntegrateAbstract extends AbstractPlugin implements UserInteg
     public function clearCookie()
     {
         
+    }
+
+    /**
+     *  设置指定用户SESSION
+     *
+     * @access  public
+     *
+     * @return void
+     */
+    public function setSession($username = null)
+    {
+        if (empty($username)) {
+
+            RC_Session::destroy();
+
+        } else {
+            $row = RC_DB::table('users')->select('user_id', 'password', 'email')->where('user_name', $username)->first();
+            if ($row) {
+                RC_Session::set('user_id', $row['user_id']);
+                RC_Session::set('user_name', $username);
+                RC_Session::set('session_user_id', $row['user_id']);
+                RC_Session::set('session_user_type', 'user');
+                RC_Session::set('email', $row['email']);
+                RC_Session::set('ip', RC_Ip::client_ip());
+            }
+        }
     }
     
     public function clearSession()
