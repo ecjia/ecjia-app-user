@@ -3,7 +3,6 @@
 namespace Ecjia\App\User\Integrate;
 
 use Ecjia\System\Plugin\AbstractPlugin;
-use Ecjia\App\User\Integrate\Tables\EcjiaUserTable;
 use RC_DB;
 use RC_Api;
 use RC_Session;

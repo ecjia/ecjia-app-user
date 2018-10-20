@@ -209,7 +209,7 @@ class IntegratePlugin extends PluginModel
             if (!$handler) {
                 return new ecjia_error('plugin_not_found', $code . ' plugin not found!');
             }
-            
+
         }
 
         return $handler;
