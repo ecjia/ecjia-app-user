@@ -129,7 +129,7 @@ abstract class UserIntegrateAbstract extends AbstractPlugin implements UserInteg
      * @param null $type
      * @return mixed
      */
-    public function compilePassword($password, $md5password = null, $salt = null, $type = null)
+    public function compilePassword($password, $md5password = null, $salt = null, $type = Password::PWD_MD5)
     {
         $password = with(new Password())->compilePassword($password, $md5password, $salt, $type);
 
