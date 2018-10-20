@@ -10,7 +10,7 @@ class EcjiaUserTable extends UserField
     public function __construct()
     {
         
-        $this->user_table       = 'users';
+        $this->table       = 'users';
         
         $this->field_id 		= 'user_id';
         

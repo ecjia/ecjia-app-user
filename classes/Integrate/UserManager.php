@@ -36,7 +36,7 @@ class UserManager
      */
     public static function init_users()
     {
-        if (is_null(self::$instance)) {
+        if (! is_null(self::$instance)) {
             return self::$instance;
         }
 
@@ -181,5 +181,16 @@ class UserManager
     }
 
 
+    /**
+     * Handle dynamic calls into macros or pass missing methods to the store.
+     *
+     * @param  string  $method
+     * @param  array   $parameters
+     * @return mixed
+     */
+    public function __call($method, $parameters)
+    {
+        return call_user_func_array([self::$instance, $method], $parameters);
+    }
 
 }
