@@ -80,13 +80,6 @@ abstract class UserIntegrateAbstract extends AbstractPlugin implements UserInteg
 
     protected $error = 0;
 
-    protected $user_table;
-
-
-    public function __construct()
-    {
-        //
-    }
 
     public function getError()
     {

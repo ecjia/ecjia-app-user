@@ -16,16 +16,11 @@ use RC_Api;
 abstract class UserIntegrateDatabaseAbstract extends UserIntegrateAbstract
 {
 
-    /* 是否需要同步数据到商城 */
-    protected $need_sync = true;
-
     protected $user_table;
 
 
     public function __construct()
     {
-        parent::__construct();
-
         $this->user_table = new EcjiaUserTable();
 
     }
