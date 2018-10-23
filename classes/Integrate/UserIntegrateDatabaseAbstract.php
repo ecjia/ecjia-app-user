@@ -164,7 +164,7 @@ abstract class UserIntegrateDatabaseAbstract extends UserIntegrateAbstract
             $count = $this->checkEmail($email);
             if (empty($count)) {
                 // 新的E-mail，设置为未验证
-                RC_DB::table($this->user_table)->where($this->user_table->getFieldName(), $username)->update(array('is_validated' => 0));
+                $this->updateNewEmailForNotValidated($username);
             }
             $values[$this->user_table->getFieldEmail()] = $email;
         }
@@ -190,6 +190,15 @@ abstract class UserIntegrateDatabaseAbstract extends UserIntegrateAbstract
         }
 
         return true;
+    }
+
+    /**
+     * 修改email后，设email为新mail，设置为未验证
+     */
+    public function updateNewEmailForNotValidated($username)
+    {
+        // 新的E-mail，设置为未验证
+        return RC_DB::table('users')->where('user_name', $username)->update(array('is_validated' => 0));
     }
 
     /**

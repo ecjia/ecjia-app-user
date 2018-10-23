@@ -416,9 +416,6 @@ class admin extends ecjia_admin {
 	 */
 	public function update() {
 		$this->admin_priv('user_update', ecjia::MSGTYPE_JSON);
-		
-		RC_Loader::load_app_class('integrate', 'user', false);
-		$user = integrate::init_users();
 
 		$username			= empty($_POST['username'])				? '' 	: trim($_POST['username']);
 		$user_id			= trim($_POST['id']);
@@ -493,13 +490,6 @@ class admin extends ecjia_admin {
 
 		/* 更新会员的其它信息 */
 		$other = array();
-		$user_other = array();
-		if ($password) {
-			$user_other['password']	= $password;
-		}
-		$user_other['username']		= $username;
-		$user_other['email']		= $email;
-		
 		$other['user_name']		= $username;
 		$other['email']			= $email;
 		$other['credit_line']	= $credit_line;
@@ -522,8 +512,11 @@ class admin extends ecjia_admin {
 		if (!empty($count)) {
 			return $this->showmessage('手机号码已存在', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
-		
-		$user->edit_user($user_other);
+
+        if (! ecjia_integrate::editUser($username, $password, $email, $sex, $birthday)) {
+            return $this->showmessage(ecjia_integrate::getErrorMessage(), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+        }
+
 		RC_DB::table('users')->where('user_id', $user_id)->update($other);
 		
 		/* 记录管理员操作 */
