@@ -513,7 +513,7 @@ class admin extends ecjia_admin {
 			return $this->showmessage('手机号码已存在', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
 
-        if (! ecjia_integrate::editUser($username, $password, $email, $sex, $birthday)) {
+        if (! ecjia_integrate::editUser($username, $password, null, $email, $sex, $birthday)) {
             return $this->showmessage(ecjia_integrate::getErrorMessage(), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
         }
 

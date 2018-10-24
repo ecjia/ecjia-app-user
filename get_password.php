@@ -371,7 +371,7 @@ class get_password extends ecjia_front {
 				($_SESSION['user_id'] > 0 && $_SESSION['user_id'] == $user_id && ecjia_integrate::checkUser($_SESSION['user_name'], $old_password))) {
 
 			    $username = (empty($code) ? $_SESSION['user_name'] : $user_info['user_name']);
-				if (ecjia_integrate::editUser($username, $new_password)) {
+				if (ecjia_integrate::editUser($username, $new_password, $old_password)) {
 					$data = array(
 						'ec_salt' => '0'		
 					);
