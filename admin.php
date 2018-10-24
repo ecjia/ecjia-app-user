@@ -690,14 +690,12 @@ class admin extends ecjia_admin {
 		if (isset($_POST['checkboxes'])) {
 			$idArr = explode(',', $_POST['checkboxes']);
 			$count = count($idArr);
-			$data = RC_DB::table('users')->whereIn('user_id', $idArr)->select('user_name')->get();
+			$data = RC_DB::table('users')->whereIn('user_id', $idArr)->select('user_name', 'user_id')->get();
 
 			/* 通过插件来删除用户 */
-			RC_Loader::load_app_class('integrate', 'user', false);
-			$user = integrate::init_users();
-			$user->remove_user($idArr); //已经删除用户所有数据
-			
+            //已经删除用户所有数据
 			foreach ($data as $row) {
+                ecjia_integrate::removeUser($row['user_id']);
 				ecjia_admin::admin_log($row['user_name'] , 'batch_remove', 'users');
 			}		
 			
