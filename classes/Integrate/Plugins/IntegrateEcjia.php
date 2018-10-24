@@ -48,6 +48,7 @@
 namespace Ecjia\App\User\Integrate\Plugins;
 
 use Ecjia\App\User\Integrate\UserIntegrateDatabaseAbstract;
+use RC_DB;
 
 class IntegrateEcjia extends UserIntegrateDatabaseAbstract
 {
@@ -112,5 +113,88 @@ class IntegrateEcjia extends UserIntegrateDatabaseAbstract
         ]);
     }
 
+
+    /**
+     * 检查指定用户是否存在及密码是否正确(重载基类checkUser函数，支持zc加密方法)
+     *
+     * @param   string  $username   用户名
+     * @return  int
+     */
+    function checkUser($username, $password = null)
+    {
+        if ($password === null) {
+            $user = RC_DB::table($this->user_table->getUserTable())
+                ->where($this->user_table->getFieldName(), $username)
+                ->pluck($this->user_table->getFieldId());
+
+            return $user;
+        } else {
+
+            $row = RC_DB::table('users')->select('user_id', 'password', 'salt', 'ec_salt')
+                ->where('user_name', $username)->first();
+            $ec_salt = $row['ec_salt'];
+            if (empty($row)) {
+                return 0;
+            }
+
+            if (empty($row['salt'])) {
+
+                if ($row['password'] != $this->compilePassword($password, null, $ec_salt)) {
+                    return 0;
+
+                } else {
+
+                    if (empty($ec_salt)) {
+                        $ec_salt = rand(1, 9999);
+                        $new_password = md5(md5($password) . $ec_salt);
+                        $data = array(
+                            'password' => $new_password,
+                            'ec_salt' => $ec_salt
+                        );
+                        RC_DB::table('users')->where('user_name', $username)->update($data);
+                    }
+
+                    return $row['user_id'];
+                }
+
+            } else {
+
+                /* 如果salt存在，使用salt方式加密验证，验证通过洗白用户密码 */
+                $encrypt_type = substr($row['salt'], 0, 1);
+                $encrypt_salt = substr($row['salt'], 1);
+
+                /* 计算加密后密码 */
+                $encrypt_password = '';
+                switch ($encrypt_type) {
+                    case ENCRYPT_ZC :
+                        $encrypt_password = md5($encrypt_salt.$password);
+                        break;
+
+                    case ENCRYPT_UC :
+                        $encrypt_password = md5(md5($password).$encrypt_salt);
+                        break;
+
+                    default:
+                        break;
+
+                }
+
+                if ($row['password'] != $encrypt_password) {
+                    return 0;
+                }
+
+                $data = array(
+                    'password' 	=> $this->compilePassword($password),
+                    'salt'  	=> ''
+                );
+
+                RC_DB::table('users')->where('user_id', $row['user_id'])->update($data);
+
+                return $row['user_id'];
+            }
+
+        }
+
+    }
 
 }
