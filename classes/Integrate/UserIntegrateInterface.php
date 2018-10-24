@@ -84,8 +84,34 @@ interface UserIntegrateInterface
     
     
     public function clearCookie();
-    
-    
+
+    /**
+     * 添加一个新用户
+     *
+     * @param $username
+     * @param null $password
+     * @param $email
+     * @param int $gender
+     * @param int $bday
+     * @param int $reg_date
+     * @param string $md5password
+     * @return bool
+     */
+    public function addUser($username, $password, $email, $gender = -1, $bday = 0, $reg_date = 0, $md5password = null);
+
+    /**
+     * 编辑用户信息
+     *
+     * @param $username
+     * @param null $password
+     * @param null $oldpassword
+     * @param $email
+     * @param int $gender
+     * @param int $bday
+     * @param null $md5password
+     * @return bool
+     */
+    public function editUser($username, $password, $oldpassword, $email, $gender = -1, $bday = 0, $md5password = null);
     
     
 }

@@ -140,7 +140,7 @@ abstract class UserIntegrateDatabaseAbstract extends UserIntegrateAbstract
      * @param null $md5password
      * @return bool
      */
-    public function editUser($username, $password, $email, $gender = -1, $bday = 0, $md5password = null)
+    public function editUser($username, $password, $oldpassword, $email, $gender = -1, $bday = 0, $md5password = null)
     {
         $post_username = $username;
 
