@@ -44,69 +44,79 @@
 //
 //  ---------------------------------------------------------------------------------
 //
+/**
+ * Created by PhpStorm.
+ * User: royalwang
+ * Date: 2018/10/19
+ * Time: 9:51 AM
+ */
+
 namespace Ecjia\App\User\Integrate;
 
-use Royalcms\Component\Support\ServiceProvider;
+use ecjia_error;
+use ecjia_config;
+use RC_Hook;
 
-class UserIntegrateServiceProvider extends  ServiceProvider
+/**
+ * Class UserIntegrate
+ * @package Ecjia\App\User\Integrate
+ *
+ */
+class UserIntegrate
 {
+    /**
+     * @var UserIntegrateAbstract
+     */
+    protected static $instance;
+
+    public function __construct()
+    {
+        self::init_users();
+    }
 
     /**
-     * Indicates if loading of the provider is deferred.
+     * 初始化会员数据整合类
      *
-     * @var bool
+     * @return mixed
      */
-    protected $defer = true;
-
-    public function register()
+    public static function init_users()
     {
-        $this->registerIntegrateManager();
+        if (! is_null(self::$instance)) {
+            return self::$instance;
+        }
 
-        $this->registerIntegratePlugin();
+        self::$instance = with(new IntegratePlugin())->defaultChannel();
 
-
-        $this->loadAlias();
+        return self::$instance;
     }
 
-
-    protected function registerIntegrateManager()
+    /**
+     * 获取所有可用的插件
+     */
+    public function integrate_list()
     {
-        $this->royalcms->bindShared('ecjia.integrate', function($royalcms) {
-            return new UserIntegrate();
-        });
+        return $this->plugin()->getEnableList();
     }
 
-
-    protected function registerIntegratePlugin()
+    /**
+     * @return \Ecjia\App\User\Integrate\IntegratePlugin
+     */
+    public function plugin()
     {
-        $this->royalcms->bindShared('ecjia.integrate.plugin', function($royalcms) {
-            return new IntegratePlugin();
-        });
+        return royalcms('ecjia.integrate.plugin');
     }
 
 
     /**
-     * Load the alias = One less install step for the user
-     */
-    protected function loadAlias()
-    {
-        $this->royalcms->booting(function()
-        {
-            $loader = \Royalcms\Component\Foundation\AliasLoader::getInstance();
-            $loader->alias('ecjia_integrate', 'Ecjia\App\User\Integrate\Facades\EcjiaIntegrate');
-
-        });
-    }
-
-
-    /**
-     * Get the services provided by the provider.
+     * Handle dynamic calls into macros or pass missing methods to the store.
      *
-     * @return array
+     * @param  string  $method
+     * @param  array   $parameters
+     * @return mixed
      */
-    public function provides()
+    public function __call($method, $parameters)
     {
-        return ['ecjia.integrate', 'ecjia.integrate.plugin'];
+        return call_user_func_array([self::$instance, $method], $parameters);
     }
-    
+
 }
