@@ -49,11 +49,9 @@ defined('IN_ECJIA') or exit('No permission resources.');
 class user_signout_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	
-		RC_Loader::load_app_class('integrate', 'user', false);
-		$user = integrate::init_users();
 		$device		= $this->device;
-		
-		$user->logout();
+
+        ecjia_integrate::logout();
 		RC_Session::destroy();
 		
 		//修改关联设备号用户id为0

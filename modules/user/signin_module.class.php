@@ -51,8 +51,6 @@ class user_signin_module extends api_front implements api_interface {
     	
     	$this->authSession();
     	
-	    RC_Loader::load_app_class('integrate', 'user', false);
-	    $user = integrate::init_users();
 		RC_Loader::load_app_func('admin_user','user');
 		RC_Loader::load_app_func('cart','cart');
 		$name = $this->requestData('name');
@@ -81,7 +79,7 @@ class user_signin_module extends api_front implements api_interface {
 					$check_user = $db_user->where(array('mobile_phone' => $name))->get_field('user_name');
 					/* 获取用户名进行判断验证*/
 					if (!empty($check_user)) {
-						if ($user->login($check_user, $password)) {
+						if (ecjia_integrate::login($check_user, $password)) {
 							$is_mobile = true;
 						}
 					}
@@ -89,7 +87,7 @@ class user_signin_module extends api_front implements api_interface {
 					
 				/* 如果不是手机号码*/
 				if (!$is_mobile) {
-					if (!$user->login($name, $password)) {
+					if (! ecjia_integrate::login($name, $password)) {
 						return new ecjia_error('userinfo_error', '您输入的账号信息不正确 ！');
 					}
 				}
@@ -122,7 +120,7 @@ class user_signin_module extends api_front implements api_interface {
 				}
 				$user_name = RC_DB::table('users')->where('mobile_phone', $name)->pluck('user_name');
 				//账号信息检查
-				if (!$user->login($user_name, null)) {
+				if (! ecjia_integrate::login($user_name, null)) {
 					return new ecjia_error('userinfo_error', '您输入的账号信息不正确 ！');
 				}
 			}
@@ -142,7 +140,7 @@ class user_signin_module extends api_front implements api_interface {
 				
 				/* 获取用户名进行判断验证*/
 				if (!empty($check_user)) {
-					if ($user->login($check_user, $password)) {
+					if (ecjia_integrate::login($check_user, $password)) {
 						$is_mobile = true;
 					}
 				}
@@ -150,7 +148,7 @@ class user_signin_module extends api_front implements api_interface {
 			
 			/* 如果不是手机号码*/
 			if (!$is_mobile) {
-				if (!$user->login($name, $password)) {
+				if (! ecjia_integrate::login($name, $password)) {
 					return new ecjia_error('userinfo_error', '您输入的账号信息不正确 ！');
 				}
 			}
@@ -171,8 +169,8 @@ class user_signin_module extends api_front implements api_interface {
 		//修正咨询信息
 		if($_SESSION['user_id'] > 0) {
 			$device		      = $this->device;
-			$device_id	      = $device['udid'];
-			$device_client    = $device['client'];
+//			$device_id	      = $device['udid'];
+//			$device_client    = $device['client'];
 			
 			//$pra = array(
 			//		'object_type'	=> 'ecjia.feedback',
@@ -184,7 +182,7 @@ class user_signin_module extends api_front implements api_interface {
 			
 			//更新未登录用户的咨询
 			//$db_term_relation->where(array('item_key2' => 'device_udid', 'item_value2' => $device_id))->update(array('item_key2' => '', 'item_value2' => ''));
-			RC_DB::table('term_relationship')->where('item_key2', 'device_udid')->where('item_value2', $device_id)->update(array('item_key2' => '', 'item_value2' => ''));
+//			RC_DB::table('term_relationship')->where('item_key2', 'device_udid')->where('item_value2', $device_id)->update(array('item_key2' => '', 'item_value2' => ''));
 			
 			//if(!empty($object_id)) {
 			//	$db = RC_Model::model('feedback/feedback_model');
