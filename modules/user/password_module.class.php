@@ -84,10 +84,7 @@ class user_password_module extends api_front implements api_interface {
         	
         	if (($user_info && (!empty($code) && md5($user_info['user_id'] . ecjia::config('hash_code') . $user_info['reg_time']) == $code)) || ($_SESSION['user_id']>0 && $_SESSION['user_id'] == $user_id && $user->check_user($_SESSION['user_name'], $old_password))) {
         		if ($user->edit_user(array('username'=> (empty($code) ? $_SESSION['user_name'] : $user_info['user_name']), 'old_password'=>$old_password, 'password'=>$new_password), empty($code) ? 0 : 1)) {
-        			$db = RC_Model::model('user/users_model');
-        			$db->where(array('user_id' => $user_id))->update(array('ec_salt' => 0));
-        			//$session_db	= RC_Model::model('user/user_session_model');
-        			//$session_db->delete(array('userid' => $user_id));
+        			RC_DB::table('users')->where('user_id', $user_id)->update(array('ec_salt' => 0));
         			RC_DB::table('session')->where('user_id', $user_id)->delete();
         			$user->logout();
         			RC_Session::destroy();
@@ -125,10 +122,7 @@ class user_password_module extends api_front implements api_interface {
         			return new ecjia_error('mobile_error', '接收和验证的手机号不同');
         		}
         		if ($user->edit_user(array('username'=> $_SESSION['user_name'], 'password'=>$new_password))) {
-        			$db = RC_Model::model('user/users_model');
-        			$db->where(array('user_id' => $user_id))->update(array('ec_salt' => 0));
-        			//$session_db	= RC_Model::model('user/user_session_model');
-        			//$session_db->delete(array('userid' => $user_id));
+        			RC_DB::table('users')->where('user_id', $user_id)->update(array('ec_salt' => 0));
         			RC_DB::table('session')->where('user_id', $user_id)->delete();
         			$user->logout();
         			RC_Session::destroy();
@@ -143,10 +137,7 @@ class user_password_module extends api_front implements api_interface {
         		}
         		if (($user_info && (!empty($code) && md5($user_info['user_id'] . ecjia::config('hash_code') . $user_info['reg_time']) == $code)) || ($_SESSION['user_id']>0 && $_SESSION['user_id'] == $user_id && $user->check_user($_SESSION['user_name'], $old_password))) {
         			if ($user->edit_user(array('username'=> (empty($code) ? $_SESSION['user_name'] : $user_info['user_name']), 'old_password'=>$old_password, 'password'=>$new_password), empty($code) ? 0 : 1)) {
-        				$db = RC_Model::model('user/users_model');
-        				$db->where(array('user_id' => $user_id))->update(array('ec_salt' => 0));
-        				//$session_db	= RC_Model::model('user/user_session_model');
-        				//$session_db->delete(array('userid' => $user_id));
+        				RC_DB::table('users')->where('user_id', $user_id)->update(array('ec_salt' => 0));
         				RC_DB::table('session')->where('user_id', $user_id)->delete();
         				$user->logout();
         				RC_Session::destroy();
