@@ -85,10 +85,7 @@ class user_password_module extends api_front implements api_interface {
         	    $username = (empty($code) ? $_SESSION['user_name'] : $user_info['user_name']);
 
         	    if (ecjia_integrate::editUser($username, $new_password, $old_password)) {
-        			$db = RC_Model::model('user/users_model');
-        			$db->where(array('user_id' => $user_id))->update(array('ec_salt' => 0));
-        			//$session_db	= RC_Model::model('user/user_session_model');
-        			//$session_db->delete(array('userid' => $user_id));
+        			RC_DB::table('users')->where('user_id', $user_id)->update(array('ec_salt' => 0));
         			RC_DB::table('session')->where('user_id', $user_id)->delete();
                     ecjia_integrate::logout();
         			RC_Session::destroy();
@@ -126,10 +123,7 @@ class user_password_module extends api_front implements api_interface {
         			return new ecjia_error('mobile_error', '接收和验证的手机号不同');
         		}
         		if (ecjia_integrate::editUser($_SESSION['user_name'], $new_password, $old_password)) {
-        			$db = RC_Model::model('user/users_model');
-        			$db->where(array('user_id' => $user_id))->update(array('ec_salt' => 0));
-        			//$session_db	= RC_Model::model('user/user_session_model');
-        			//$session_db->delete(array('userid' => $user_id));
+        			RC_DB::table('users')->where('user_id', $user_id)->update(array('ec_salt' => 0));
         			RC_DB::table('session')->where('user_id', $user_id)->delete();
                     ecjia_integrate::logout();
         			RC_Session::destroy();
@@ -148,10 +142,7 @@ class user_password_module extends api_front implements api_interface {
         		    $username = (empty($code) ? $_SESSION['user_name'] : $user_info['user_name']);
 
         		    if (ecjia_integrate::editUser($username, $new_password, $old_password)) {
-        				$db = RC_Model::model('user/users_model');
-        				$db->where(array('user_id' => $user_id))->update(array('ec_salt' => 0));
-        				//$session_db	= RC_Model::model('user/user_session_model');
-        				//$session_db->delete(array('userid' => $user_id));
+        				RC_DB::table('users')->where('user_id', $user_id)->update(array('ec_salt' => 0));
         				RC_DB::table('session')->where('user_id', $user_id)->delete();
                         ecjia_integrate::logout();
         				RC_Session::destroy();
