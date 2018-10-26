@@ -132,8 +132,7 @@ class user_signup_module extends api_front implements api_interface
 		$other['mobile_phone'] = empty($mobile) ? $other['mobile_phone'] : $mobile;
 	    $check_mobile = Ecjia\App\Sms\Helper::check_mobile($other['mobile_phone']);
 	    if ($check_mobile === true) {
-			$db_user      = RC_Loader::load_app_model('users_model', 'user');
-			$mobile_count = $db_user->where(array('mobile_phone' => $other['mobile_phone']))->count();
+	    	$mobile_count = RC_DB::table('users')->where('mobile_phone',  $other['mobile_phone'])->count();
 			if ($mobile_count > 0 ) {
 				return new ecjia_error('user_exists', '用户已存在！');
 			}
