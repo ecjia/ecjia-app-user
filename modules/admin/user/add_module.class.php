@@ -73,7 +73,7 @@ class admin_user_add_module extends api_admin implements api_interface
 					'store_id'		=> $store_id,
 					'user_id'		=> $user_info['user_id'],
 					'store_name'	=> empty($store_name) ? '' : $store_name,
-					'jion_scene'	=> 'cashier_suggest',
+					'join_scene'	=> 'cashier_suggest',
 					'add_time'		=> RC_Time::gmtime()
 			);
 			RC_DB::table('store_users')->insertGetId($store_user_data);
