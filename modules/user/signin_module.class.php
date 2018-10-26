@@ -71,12 +71,11 @@ class user_signin_module extends api_front implements api_interface {
 				$check_mobile = Ecjia\App\Sms\Helper::check_mobile($name);
 				if($check_mobile === true) {
 // 				if (is_numeric($name) && strlen($name) == 11 && preg_match('/^1(3|4|5|6|7|8|9)\d{9}$/', $name)) {
-					$db_user    = RC_Model::model('user/users_model');
-					$user_count = $db_user->where(array('mobile_phone' => $name))->count();
+					$user_count = RC_DB::table('users')->where('mobile_phone', $name)->count();
 					if ($user_count > 1) {
 						return new ecjia_error('user_repeat', '用户重复，请与管理员联系！');
 					}
-					$check_user = $db_user->where(array('mobile_phone' => $name))->get_field('user_name');
+					$check_user = RC_DB::table('users')->where('mobile_phone', $name)->pluck('user_name');
 					/* 获取用户名进行判断验证*/
 					if (!empty($check_user)) {
 						if (ecjia_integrate::login($check_user, $password)) {
@@ -131,12 +130,11 @@ class user_signin_module extends api_front implements api_interface {
 			$check_mobile = Ecjia\App\Sms\Helper::check_mobile($name);
 			if($check_mobile === true) {
 // 			if (is_numeric($name) && strlen($name) == 11 && preg_match( '/^1[3|4|5|6|7|8][0-9]\d{8}$/', $name)) {
-				$db_user    = RC_Model::model('user/users_model');
-				$user_count = $db_user->where(array('mobile_phone' => $name))->count();
+				$user_count = RC_DB::table('users')->where('mobile_phone', $name)->count();
 				if ($user_count > 1) {
 					return new ecjia_error('user_repeat', '用户重复，请与管理员联系！');
 				}
-				$check_user = $db_user->where(array('mobile_phone' => $name))->get_field('user_name');
+				$check_user = RC_DB::table('users')->where('mobile_phone', $name)->pluck('user_name');
 				
 				/* 获取用户名进行判断验证*/
 				if (!empty($check_user)) {
