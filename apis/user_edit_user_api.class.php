@@ -58,7 +58,11 @@ class user_edit_user_api extends Component_Event_Api {
         }
 
         $user_info = ecjia_integrate::getProfileById($options['user_id']);
-        $result = ecjia_integrate::editUser($user_info['user_name'], $options['new_password'], null, null);
+        $result = ecjia_integrate::editUser([
+            'username' => $user_info['user_name'],
+            'password' => $options['new_password'],
+        ]);
+
         if ($result) {
             return true;
         } else {

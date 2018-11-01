@@ -84,7 +84,11 @@ class user_password_module extends api_front implements api_interface {
 
         	    $username = (empty($code) ? $_SESSION['user_name'] : $user_info['user_name']);
 
-        	    if (ecjia_integrate::editUser($username, $new_password, $old_password, null)) {
+        	    if (ecjia_integrate::editUser([
+        	        'username' => $username,
+        	        'password' => $new_password,
+        	        'old_password' => $old_password,
+                ])) {
         			RC_DB::table('users')->where('user_id', $user_id)->update(array('ec_salt' => 0));
         			RC_DB::table('session')->where('user_id', $user_id)->delete();
                     ecjia_integrate::logout();
@@ -122,7 +126,11 @@ class user_password_module extends api_front implements api_interface {
         		if ($mobile_phone != $_SESSION['captcha']['sms']['user_modify_password']['value']) {
         			return new ecjia_error('mobile_error', '接收和验证的手机号不同');
         		}
-        		if (ecjia_integrate::editUser($_SESSION['user_name'], $new_password, $old_password, null)) {
+        		if (ecjia_integrate::editUser([
+        		    'username' => $_SESSION['user_name'],
+        		    'password' => $new_password,
+        		    'old_password' => $old_password,
+                ])) {
         			RC_DB::table('users')->where('user_id', $user_id)->update(array('ec_salt' => 0));
         			RC_DB::table('session')->where('user_id', $user_id)->delete();
                     ecjia_integrate::logout();
@@ -141,7 +149,11 @@ class user_password_module extends api_front implements api_interface {
 
         		    $username = (empty($code) ? $_SESSION['user_name'] : $user_info['user_name']);
 
-        		    if (ecjia_integrate::editUser($username, $new_password, $old_password, null)) {
+        		    if (ecjia_integrate::editUser([
+        		        'username' => $username,
+        		        'password' => $new_password,
+        		        'old_password' => $old_password,
+                    ])) {
         				RC_DB::table('users')->where('user_id', $user_id)->update(array('ec_salt' => 0));
         				RC_DB::table('session')->where('user_id', $user_id)->delete();
                         ecjia_integrate::logout();

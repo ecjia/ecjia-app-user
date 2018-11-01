@@ -95,7 +95,10 @@ class user_reset_password_module extends api_front implements api_interface {
         $user_id = $userinfo['user_id'];
         $user_info = ecjia_integrate::getProfileById($user_id); //论坛记录
 
-        if (ecjia_integrate::editUser($user_info['user_name'], $password, null, null)) {
+        if (ecjia_integrate::editUser([
+            'username' => $user_info['user_name'],
+            'password' => $password
+        ])) {
         	$db->where(array('user_id' => $user_id))->update(array('ec_salt' => 0));
 			$session_db	= RC_Model::model('user/user_session_model');
 			$session_db->delete(array('user_id' => $user_id));
