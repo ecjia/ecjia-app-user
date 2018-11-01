@@ -73,7 +73,7 @@ class toutiao_module extends api_front implements api_interface {
 		//实例化分页
 		$page_row = new ecjia_page($record_count, $size, 6, '', $page);
 		
-		$list = $db->orderBy('send_time', 'desc')->take($size)->skip($page_row->start_id - 1)->get();
+		$list = $db->orderBy('send_time', 'desc')->take($size)->skip($page_row->start_id - 1)->groupBy('store_id')->get();
 		
 		$news_list = [];
 		$arr = [];
@@ -85,11 +85,14 @@ class toutiao_module extends api_front implements api_interface {
 							'store_id' => $row['store_id'],
 					);
 				}
-				$news_list[$row['store_id']]['toutiao_list'][] = array(
-						'id' 					=> $row['id'],
-						'title'					=> $row['title'],
-						'description'			=> $row['description'],
-						'formatted_send_time'	=> Ecjia\App\Toutiao\ToutiaoManager::FormatedTime($row['send_time'])
+				$store_news = RC_DB::table('merchant_news')->where('store_id', $row['store_id'])->where('status', 1)->orderBy('send_time', 'desc')->get();
+				$store_latest_news = $store_news['0'];
+				
+				$news_list[$row['store_id']]['toutiao_list'] = array(
+						'id' 					=> $store_latest_news['id'],
+						'title'					=> $store_latest_news['title'],
+						'description'			=> $store_latest_news['description'],
+						'formatted_send_time'	=> Ecjia\App\Toutiao\ToutiaoManager::FormatedTime($store_latest_news['send_time'])
 				);
 			}
 		}
@@ -102,7 +105,7 @@ class toutiao_module extends api_front implements api_interface {
 					'store_id'   	=> $res['store_id'],
 					'store_name'	=> $store_name,
 					'store_logo'	=> $store_logo,
-					'toutiao'		=> $res['toutiao_list']['0']
+					'toutiao'		=> $res['toutiao_list']
 				);
 			}
 		}
