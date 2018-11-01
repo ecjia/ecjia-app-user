@@ -50,7 +50,7 @@ defined('IN_ECJIA') or exit('No permission resources.');
  * 用户取消收藏店铺
  * @author zrl
  */
-class cancel_module extends api_front implements api_interface {
+class store_collect_cancel_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {
     
     	$this->authSession();

@@ -50,7 +50,7 @@ defined('IN_ECJIA') or exit('No permission resources.');
  * 用户收藏店铺
  * @author zrl
  */
-class create_module extends api_front implements api_interface {
+class store_collect_create_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {
     
     	$this->authSession();
