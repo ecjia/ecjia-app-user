@@ -104,14 +104,15 @@ interface UserIntegrateInterface
      *
      * @param $username
      * @param null $password
-     * @param null $oldpassword
+     * @param null $old_password
      * @param $email
      * @param int $gender
      * @param int $bday
-     * @param null $md5password
+     * @param null $md5_password
+     * @param null $forget_pwd
      * @return bool
      */
-    public function editUser($username, $password, $oldpassword, $email, $gender = -1, $bday = 0, $md5password = null);
+    public function editUser($params);
     
     
 }

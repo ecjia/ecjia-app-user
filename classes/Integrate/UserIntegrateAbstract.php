@@ -334,7 +334,7 @@ abstract class UserIntegrateAbstract extends AbstractPlugin implements UserInteg
      */
     public function login($username, $password, $remember = null)
     {
-        if ($this->checkUser($username, $password) > 0) {
+        if ($this->checkUser($username, $password)) {
             if ($this->need_sync) {
                 $this->sync($username, $password);
             }

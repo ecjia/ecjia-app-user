@@ -134,14 +134,25 @@ abstract class UserIntegrateDatabaseAbstract extends UserIntegrateAbstract
      *
      * @param $username
      * @param null $password
+     * @param null $old_password
      * @param $email
      * @param int $gender
      * @param int $bday
-     * @param null $md5password
+     * @param null $md5_password
+     * @param null $forget_pwd
      * @return bool
      */
-    public function editUser($username, $password, $oldpassword, $email, $gender = -1, $bday = 0, $md5password = null)
+    public function editUser($params)
     {
+        $username       = array_get($params, 'username');
+        $password       = array_get($params, 'password');
+        $oldpassword    = array_get($params, 'old_password');
+        $email          = array_get($params, 'email');
+        $gender         = array_get($params, 'gender', '-1');
+        $bday           = array_get($params, 'birthday', '0');
+        $md5password    = array_get($params, 'md5_password');
+        $forget_pwd     = array_get($params, 'forget_pwd');
+
         $post_username = $username;
 
         $values = array();
