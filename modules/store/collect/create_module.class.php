@@ -68,6 +68,10 @@ class store_collect_create_module extends api_front implements api_interface {
     		return new ecjia_error( 'has_collected', '您已收藏过此店铺了！');
     	}
     	$data = array('store_id' => $store_id, 'user_id' => $user_id, 'add_time' => RC_Time::gmtime(), 'is_attention' => 1);
+    	//更新商家会员粉丝关联信息
+    	if(RC_DB::table('store_user')->where('store_id', $store_id)->where('user_id', $user_id)->count()) {
+    	    $data['is_store_user'] = 1;
+    	}
     	
     	RC_DB::table('collect_store')->insert($data);
     	
