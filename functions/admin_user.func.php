@@ -833,6 +833,9 @@ function EM_user_info($user_id, $mobile = '') {
 	$address = $user_info['address_id'] > 0 ? RC_DB::table('user_address')->where('address_id', $user_info['address_id'])->first() : '';
 	$user_info['address'] = $user_info['address_id'] > 0 ? ecjia_region::getRegionName($address['city']).ecjia_region::getRegionName($address['district']).ecjia_region::getRegionName($address['street']).$address['address'] : '';
 	
+	/*返回connect_user表中open_id和token*/
+	$connect_user_info = RC_DB::table('connect_user')->where('user_id', $user_id)->where('connect_code', 'app')->where('user_type', 'user')->first();
+	
 	return array(
 		'id'				=> $user_info['user_id'],
 		'name'				=> $user_info['user_name'],
@@ -857,7 +860,9 @@ function EM_user_info($user_id, $mobile = '') {
 		'user_points' 			=> $user_info['pay_points'],
 		'user_bonus_count' 		=> $bonus_count,
 		'reg_time'				=> empty($user_info['reg_time']) ? '' : RC_Time::local_date(ecjia::config('time_format'), $user_info['reg_time']),
-		'update_username_time'	=> empty($username_update_time) ? '' : RC_Time::local_date(ecjia::config('time_format'), $username_update_time['meta_value'])
+		'update_username_time'	=> empty($username_update_time) ? '' : RC_Time::local_date(ecjia::config('time_format'), $username_update_time['meta_value']),
+		'open_id'               => $connect_user_info['open_id'],
+		'access_token'          => $connect_user_info['access_token'],
 	);
 }
 
