@@ -44,31 +44,62 @@
 //
 //  ---------------------------------------------------------------------------------
 //
-defined('IN_ECJIA') or exit('No permission resources.');
+namespace Ecjia\App\User\Maintains;
 
-class user_admin_hooks
-{
-    public static function append_admin_setting_group($menus)
-    {
-        $menus[] = ecjia_admin::make_admin_menu('nav-header', '会员', '', 42)->add_purview(array('user_manage'));
-        $menus[] = ecjia_admin::make_admin_menu('user_center', '会员中心', RC_Uri::url('user/admin_config/init'), 43)->add_purview('user_manage');
-        return $menus;
-    }
-}
+use Ecjia\App\Maintain\AbstractCommand;
+use RC_DB;
+use RC_Api;
 
-RC_Hook::add_action('append_admin_setting_group', array('user_admin_hooks', 'append_admin_setting_group'));
-
-class user_admin_plugin
+class RefreshUserRank extends AbstractCommand
 {
     
-    public static function add_maintain_command($factories)
-    {
-        $factories['refresh_user_rank'] = 'Ecjia\App\User\Maintains\RefreshUserRank';
-        return $factories;
+    
+    /**
+     * 代号标识
+     * @var string
+     */
+    protected $code = 'refresh_user_rank';
+    
+    /**
+     * 名称
+     * @var string
+     */
+    protected $name = '更新会员等级';
+    
+    /**
+     * 描述
+     * @var string
+     */
+    protected $description = '一键更新会员等级';
+    
+    /**
+     * 图标
+     * @var string
+     */
+    protected $icon = '/statics/images/setting_shop.png';
+    
+    
+    /**
+     * 
+     *
+     * @return bool
+     */
+    public function run() {
+        $list = RC_DB::table('users')->where('user_rank', 0)->get();
+//         $rank_list = RC_DB::table('user_rank')->where('special_rank', 0)->get();
+        
+        if($list) {
+            foreach ($list as $user_info) {
+                $row = RC_DB::table('user_rank')->where('special_rank', 0)->where( 'min_points', '<=', $user_info['rank_points'])->where( 'max_points', '>', $user_info['rank_points'])->first();
+                RC_DB::table('users')->where('user_id', $user_info['user_id'])->update(array('user_rank' => $row['rank_id']));
+                //为更新用户购物车数据加标记
+                RC_Api::api('cart', 'mark_cart_goods', array('user_id' => $user_info['user_id']));
+            }
+        }
+        
+        return true;
     }
     
 }
-
-RC_Hook::add_action('ecjia_maintain_command_filter', array('user_admin_plugin', 'add_maintain_command'));
 
 // end
