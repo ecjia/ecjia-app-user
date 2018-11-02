@@ -151,6 +151,29 @@ class user_signin_module extends api_front implements api_interface {
 				}
 			}
 		}
+		/*向connect_user表插入一条app数据*/
+		if ($_SESSION['user_id'] > 0) {
+			$connect_user_app = RC_DB::table('connect_user')->where('connect_code', 'app')->where('user_id', $_SESSION['user_id'])->where('user_type', 'user')->first();
+			$open_id = md5(RC_Time::gmtime().$_SESSION['user_id']);
+			if (empty($connect_user_app)) {
+				$connect_data = array(
+						'connect_code'    => 'app',
+						'user_id'         => $_SESSION['user_id'],
+						'is_admin'        => '0',
+						'user_type'		  => 'user',
+						'open_id'         => $open_id,
+						'access_token'    => RC_Session::session_id(),
+						'create_at'       => RC_Time::gmtime()
+				);
+				RC_DB::table('connect_user')->insert($connect_data);
+			} else {
+				$connect_data = array(
+						'open_id'         => $open_id,
+						'access_token'    => RC_Session::session_id(),
+				);
+				RC_DB::table('connect_user')->where('connect_code', 'app')->where('user_id', $_SESSION['user_id'])->where('user_type', 'user')->update($connect_data);
+			}
+		}
 		
 		$user_info = EM_user_info($_SESSION['user_id']);
 		$out = array(
