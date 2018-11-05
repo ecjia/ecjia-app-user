@@ -778,29 +778,42 @@ function EM_user_info($user_id, $mobile = '') {
 						->whereRaw('status != 10 and refund_status != 2')
 						->count();
 	
-	$db_user_rank = RC_Model::model('user/user_rank_model');
+// 	$db_user_rank = RC_Model::model('user/user_rank_model');
 	/* 取得用户等级 */
-	if ($user_info['user_rank'] == 0) {
-		// 非特殊等级，根据等级积分计算用户等级（注意：不包括特殊等级）
-		$row = $db_user_rank->field('rank_id, rank_name')->find(array('special_rank' => 0 , 'min_points' => array('elt' => intval($user_info['rank_points'])) , 'max_points' => array('gt' => intval($user_info['rank_points']))));
-	} else {
-		// 特殊等级
-		$row = $db_user_rank->field('rank_id, rank_name')->find(array('rank_id' => $user_info['user_rank']));
-	}
+// 	if ($user_info['user_rank'] == 0) {
+// 		// 非特殊等级，根据等级积分计算用户等级（注意：不包括特殊等级）
+// 		$row = $db_user_rank->field('rank_id, rank_name')->find(array('special_rank' => 0 , 'min_points' => array('elt' => intval($user_info['rank_points'])) , 'max_points' => array('gt' => intval($user_info['rank_points']))));
+// 	} else {
+// 		// 特殊等级
+// 		$row = $db_user_rank->field('rank_id, rank_name')->find(array('rank_id' => $user_info['user_rank']));
+// 	}
 
-	if (!empty($row)) {
-		$user_info['user_rank_name'] = $row['rank_name'];
-		$user_info['user_rank_id'] = $row['rank_id'];
-	} else {
-		$user_info['user_rank_name'] = '非特殊等级';
-		$user_info['user_rank_id'] = $row['rank_id'];
-	}
-	$row = $db_user_rank->find(array('special_rank' => 0 , 'min_points' => 0));
+// 	if (!empty($row)) {
+// 		$user_info['user_rank_name'] = $row['rank_name'];
+// 		$user_info['user_rank_id'] = $row['rank_id'];
+// 	} else {
+// 		$user_info['user_rank_name'] = '非特殊等级';
+// 		$user_info['user_rank_id'] = $row['rank_id'];
+// 	}
+// 	$row = $db_user_rank->find(array('special_rank' => 0 , 'min_points' => 0));
 
-	if ($user_info['user_rank_name'] == $row['rank_name']) {
-		$level = 0;
-	} else {
-		$level = 1;
+// 	if ($user_info['user_rank_name'] == $row['rank_name']) {
+// 		$level = 0;
+// 	} else {
+// 		$level = 1;
+// 	}
+
+    if($user_info['user_rank'] == 0) {
+        //重新计算会员等级
+        RC_Api::api('user', 'update_user_rank', array('user_id' => $user_id));
+    }
+	//用户等级更新，不用计算，直接读取
+	$row = RC_DB::table('user_rank')->where('rank_id', $user_info['user_rank'])->first();
+	$user_info['user_rank_name'] = $row['rank_name'];
+	$user_info['user_rank_id'] = $row['rank_id'];
+	$level = 1;
+	if($row['special_rank'] == 0 && $row['min_points'] == 0) {
+	    $level = 0;
 	}
 
 	if(empty($user_info['avatar_img'])) {
