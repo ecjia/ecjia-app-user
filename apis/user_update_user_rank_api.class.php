@@ -54,13 +54,16 @@ defined('IN_ECJIA') or exit('No permission resources.');
 class user_update_user_rank_api extends Component_Event_Api {
     
     public function call(&$options) {
-        if (!is_array($options) || !isset($options['user_id'])) {
+        if (!is_array($options) || empty($options['user_id'])) {
             return new ecjia_error('invalid_parameter', '参数无效');
         }
         
-        $user_id = $options['user_id'];
+        $user_id = intval($options['user_id']);
         
         $user_info = RC_DB::table('users')->where('user_id', $user_id)->first();
+        if(empty($user_info)) {
+            return new ecjia_error('user_not_exist', '会员信息不存在');
+        }
         if ($user_info['user_rank'] > 0) {
             $rank_info = RC_DB::table('user_rank')->where('rank_id', $user_info['user_rank'])->first();
             if ($rank_info['special_rank']) {
@@ -72,14 +75,14 @@ class user_update_user_rank_api extends Component_Event_Api {
             }
         }
         
-        $row = RC_DB::table('user_rank')->where('special_rank', 0)->where( 'min_points', '<=', $user_info['rank_points'])->where( 'max_points', '>', $user_info['rank_points'])->first();
+        $row = RC_DB::table('user_rank')->where('special_rank', 0)->where('min_points', '<=', $user_info['rank_points'])->where('max_points', '>', $user_info['rank_points'])->first();
         RC_DB::table('users')->where('user_id', $user_id)->update(array('user_rank' => $row['rank_id']));
         if($user_info['user_rank'] != $row['rank_id']) {
             //为更新用户购物车数据加标记
             RC_Api::api('cart', 'mark_cart_goods', array('user_id' => $user_id));
         }
         
-        return true;
+        return $row;
     }
 }
 
