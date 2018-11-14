@@ -612,6 +612,7 @@ class admin extends ecjia_admin {
 			$user['last_time']              = $row['last_login'] == '0' ? '新用户还未登录' : RC_Time::local_date(ecjia::config('time_format'), $row['last_login']);
 			$user['last_ip']				= $row['last_ip'];
 			
+			$row['address_id'] = !empty($row['address_id']) ? intval($row['address_id']) : 0;
 			/* 用户地址列表*/
 			$field = "ua.*,
 					IF(address_id=".$row['address_id'].",1,0) as default_address,
