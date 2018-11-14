@@ -62,7 +62,7 @@ abstract class EcjiaUser extends EcjiaController
 		parent::__construct();
 		
 		
-		// 		define('SESS_ID', RC_Session::getId());
+// 		define('SESS_ID', RC_Session::session()->get_session_id());
 		
 		/* 会员信息 */
 // 		$user =& init_users();
