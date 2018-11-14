@@ -381,13 +381,7 @@ abstract class UserIntegrateAbstract extends AbstractPlugin implements UserInteg
      */
     public function setCookie($username, $remember = null)
     {
-        if (empty($username)) {
-            /* 摧毁cookie */
-            $time = SYS_TIME - 3600;
-            setcookie("ECJIA[user_id]",  '', $time, $this->cookie_path);
-            setcookie("ECJIA[password]", '', $time, $this->cookie_path);
-
-        } elseif ($remember) {
+        if ($remember) {
             /* 设置cookie */
             $time = SYS_TIME + 3600 * 24 * 15;
             setcookie("ECJIA[username]", $username, $time, $this->cookie_path, $this->cookie_domain);
@@ -419,10 +413,15 @@ abstract class UserIntegrateAbstract extends AbstractPlugin implements UserInteg
         }
     }
 
-    
+    /**
+     * 清除记住密码的cookie
+     */
     public function clearCookie()
     {
-        
+        /* 摧毁cookie */
+        $time = time() - 3600;
+        setcookie("ECJIA[user_id]",  '', $time, $this->cookie_path);
+        setcookie("ECJIA[password]", '', $time, $this->cookie_path);
     }
 
     /**
@@ -450,10 +449,13 @@ abstract class UserIntegrateAbstract extends AbstractPlugin implements UserInteg
             }
         }
     }
-    
+
+    /**
+     * 清除Session
+     */
     public function clearSession()
     {
-        
+        RC_Session::destroy();
     }
     
     
