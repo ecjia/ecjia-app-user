@@ -60,7 +60,7 @@ use RC_Hook;
 
 /**
  * Class UserManager
- * @package Ecjia\App\User\Integrate
+ * @package Ecjia\App\User
  *
  */
 class UserManager
