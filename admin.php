@@ -683,9 +683,9 @@ class admin extends ecjia_admin {
 	public function batch_remove() {
 		$this->admin_priv('user_delete', ecjia::MSGTYPE_JSON);
 		
-		if (!empty($_SESSION['ru_id'])) {
-			return $this->showmessage(RC_Lang::get('user::user_account.merchants_notice'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
-		}
+// 		if (!empty($_SESSION['ru_id'])) {
+// 			return $this->showmessage(RC_Lang::get('user::user_account.merchants_notice'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+// 		}
 		if (isset($_POST['checkboxes'])) {
 			$idArr = explode(',', $_POST['checkboxes']);
 			$count = count($idArr);
@@ -694,7 +694,7 @@ class admin extends ecjia_admin {
 			/* 通过插件来删除用户 */
             //已经删除用户所有数据
 			foreach ($data as $row) {
-                ecjia_integrate::removeUser($row['user_id']);
+                ecjia_integrate::removeUser($row['user_name']);
 				ecjia_admin::admin_log($row['user_name'] , 'batch_remove', 'users');
 			}		
 			
