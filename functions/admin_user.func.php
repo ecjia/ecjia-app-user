@@ -516,7 +516,6 @@ function get_user_rank_list($is_special = false) {
  * 获取用户等级列表数组
  */
 function get_rank_list() {
-
 	return RC_DB::table('user_rank')->orderBy('min_points', 'asc')->get();
 }
 
