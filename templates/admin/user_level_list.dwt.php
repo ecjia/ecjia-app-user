@@ -69,7 +69,7 @@
 						<th data-toggle="sortbyDesc" data-sortby="integral">积分</th>
 						<th data-toggle="sortbyDesc" data-sortby="order_count">下单总数</th>
 						<th data-toggle="sortbyDesc" data-sortby="order_money">下单总金额</th>
-						<th data-toggle="sortbyDesc" data-sortby="level" class="w100">店铺排行</th>
+						<th data-toggle="sortbyDesc" data-sortby="level" class="w100">会员排行</th>
 					</tr>
 				</thead>
 				<tbody>

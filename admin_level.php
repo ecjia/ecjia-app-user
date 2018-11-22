@@ -790,8 +790,8 @@ as d on d.user_id = u.user_id";
 
         //图表数据 根据按钮状态切换显示 start
         $stats = !empty($_GET['stats']) ? trim($_GET['stats']) : 'order_money';
-        if ($stats == 'valid_order') {
-            $level_sql = $sql . " ORDER BY valid_order desc";
+        if ($stats == 'order_count') {
+            $level_sql = $sql . " ORDER BY order_count desc";
         } else {
             $level_sql = $sql . " ORDER BY order_money desc";
         }
