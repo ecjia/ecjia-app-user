@@ -10,15 +10,16 @@
 <!-- {/block} -->
 
 <!-- {block name="main_content"} -->
-<div>
-	<h3 class="heading">
-		<!-- {if $ur_here}{$ur_here}{/if} -->
-	</h3>
-</div>
 
 <div class="alert alert-info">
 	<a class="close" data-dismiss="alert">×</a>
 	<strong>{lang key='orders::statistic.tips'}</strong>统计会员排名前30的订单总数以及下单总金额对比。
+</div>
+
+<div>
+	<h3 class="heading">
+		<!-- {if $ur_here}{$ur_here}{/if} -->
+	</h3>
 </div>
 
 <div class="row-fluid row-fluid-stats">
