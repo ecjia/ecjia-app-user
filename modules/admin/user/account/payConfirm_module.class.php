@@ -88,7 +88,7 @@ class payConfirm_module extends api_admin implements api_interface
 			return $payment_handler;
 		}
 		
-		if (in_array($pay_info['pay_code'], array('pay_koolyun_alipay', 'pay_koolyun_unionpay', 'pay_koolyun_wxpay'))) {
+		if (in_array($pay_info['pay_code'], array('pay_koolyun_alipay', 'pay_koolyun_unionpay', 'pay_koolyun_wxpay', 'pay_shouqianba'))) {
 			$result = RC_Api::api('finance', 'surplus_order_paid', array('order_sn' => $user_account_info['order_sn'], 'money' => $user_account_info['amount']));
 			if (is_ecjia_error($result)) {
 				return $result;
@@ -142,6 +142,7 @@ class payConfirm_module extends api_admin implements api_interface
 					'order_sn' 						=> trim($user_account_info['order_sn']),
 					'trade_no'						=> empty($payment_record_info['trade_no']) ? '' : $payment_record_info['trade_no'],
 					'trade_type'					=> 'surplus',
+					'pay_time'						=> empty($user_account_info['paid_time']) ? '' : RC_Time::local_date(ecjia::config('time_format'), $user_account_info['paid_time']),
 					'goods_list'					=> [],
 					'total_goods_number' 			=> 0,
 					'total_goods_amount'			=> $user_account_info['amount'],
