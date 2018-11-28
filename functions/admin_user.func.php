@@ -205,7 +205,7 @@ function insert_user_account($surplus, $amount) {
 	$data = array(
 		'user_id'		=> $surplus['user_id'] ,
 		'order_sn'		=> $surplus['order_sn'],
-		'admin_user'	=> '' ,
+		'admin_user'	=> empty($surplus['admin_user']) ? '' : $surplus['admin_user'],
 		'amount'		=> $amount ,
 		'add_time'		=> RC_Time::gmtime() ,
 		'paid_time'		=> 0 ,
