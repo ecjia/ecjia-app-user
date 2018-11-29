@@ -141,6 +141,7 @@ class payConfirm_module extends api_admin implements api_interface
 			$surplus_print_data = array(
 					'order_sn' 						=> trim($user_account_info['order_sn']),
 					'trade_no'						=> empty($payment_record_info['trade_no']) ? '' : $payment_record_info['trade_no'],
+					'order_trade_no'				=> empty($payment_record_info['order_trade_no']) ? '' : $payment_record_info['order_trade_no'],
 					'trade_type'					=> 'surplus',
 					'pay_time'						=> empty($user_account_info['paid_time']) ? '' : RC_Time::local_date(ecjia::config('time_format'), $user_account_info['paid_time']),
 					'goods_list'					=> [],
