@@ -804,14 +804,16 @@ function EM_user_info($user_id, $mobile = '') {
 
     if($user_info['user_rank'] == 0) {
         //重新计算会员等级
-        RC_Api::api('user', 'update_user_rank', array('user_id' => $user_id));
+        $now_rank = RC_Api::api('user', 'update_user_rank', array('user_id' => $user_id));
+    } else {
+    	//用户等级更新，不用计算，直接读取
+    	$now_rank = RC_DB::table('user_rank')->where('rank_id', $user_info['user_rank'])->first();
     }
-	//用户等级更新，不用计算，直接读取
-	$row = RC_DB::table('user_rank')->where('rank_id', $user_info['user_rank'])->first();
-	$user_info['user_rank_name'] = $row['rank_name'];
-	$user_info['user_rank_id'] = $row['rank_id'];
+    
+	$user_info['user_rank_name'] = $now_rank['rank_name'];
+	$user_info['user_rank_id'] = $now_rank['rank_id'];
 	$level = 1;
-	if($row['special_rank'] == 0 && $row['min_points'] == 0) {
+	if($now_rank['special_rank'] == 0 && $now_rank['min_points'] == 0) {
 	    $level = 0;
 	}
 
