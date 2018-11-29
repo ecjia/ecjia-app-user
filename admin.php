@@ -67,6 +67,8 @@ class admin extends ecjia_admin {
 		RC_Style::enqueue_style('bootstrap-editable', RC_Uri::admin_url('statics/lib/x-editable/bootstrap-editable/css/bootstrap-editable.css'));
 		RC_Script::enqueue_script('bootstrap-editable.min', RC_Uri::admin_url('statics/lib/x-editable/bootstrap-editable/js/bootstrap-editable.min.js'));
 		RC_Script::enqueue_script('user_info', RC_App::apps_url('statics/js/user_info.js', __FILE__));
+		RC_Style::enqueue_style('user_info_css', RC_App::apps_url('statics/css/user_info.css', __FILE__));
+
 		$user_jslang = array(
 			'keywords_required'		=>	RC_Lang::get('user::users.keywords_required'),
 			'username_required'		=> 	RC_Lang::get('user::users.username_required'),
@@ -653,27 +655,37 @@ class admin extends ecjia_admin {
 		$this->assign('address_list',	$address_list);
 		
 		/* 取出注册扩展字段 */
-		$extend_info_list = RC_DB::table('reg_fields')
-			->where('type', '<', 2)
-			->where('display', 1)
-			->where('id', '!=', 5)
-			->where('id', '!=', 6)
-			->orderBy('dis_order', 'asc')
-			->orderBy('id', 'asc')
-			->get();
-		if (!empty($extend_info_list)) {
-			foreach ($extend_info_list AS $key => $val) {
-				switch ($val['id']) {
-					case 1:	 $extend_info_list[$key]['content'] = $user['msn']; break;
-					case 2:	 $extend_info_list[$key]['content'] = $user['qq']; break;
-					case 3:	 $extend_info_list[$key]['content'] = $user['office_phone']; break;
-					case 4:	 $extend_info_list[$key]['content'] = $user['home_phone']; break;
-					// case 5:	 $extend_info_list[$key]['content'] = $user['mobile_phone']; break;
-					default: $extend_info_list[$key]['content'] = empty($temp_arr[$val['id']]) ? '' : $temp_arr[$val['id']] ;
-				}
-			}
+		// $extend_info_list = RC_DB::table('reg_fields')
+		// 	->where('type', '<', 2)
+		// 	->where('display', 1)
+		// 	->where('id', '!=', 5)
+		// 	->where('id', '!=', 6)
+		// 	->orderBy('dis_order', 'asc')
+		// 	->orderBy('id', 'asc')
+		// 	->get();
+		// if (!empty($extend_info_list)) {
+		// 	foreach ($extend_info_list AS $key => $val) {
+		// 		switch ($val['id']) {
+		// 			case 1:	 $extend_info_list[$key]['content'] = $user['msn']; break;
+		// 			case 2:	 $extend_info_list[$key]['content'] = $user['qq']; break;
+		// 			case 3:	 $extend_info_list[$key]['content'] = $user['office_phone']; break;
+		// 			case 4:	 $extend_info_list[$key]['content'] = $user['home_phone']; break;
+		// 			// case 5:	 $extend_info_list[$key]['content'] = $user['mobile_phone']; break;
+		// 			default: $extend_info_list[$key]['content'] = empty($temp_arr[$val['id']]) ? '' : $temp_arr[$val['id']] ;
+		// 		}
+		// 	}
+		// }
+		// $this->assign('extend_info_list', $extend_info_list);
+
+		$qq_info = RC_DB::table('connect_user')->where('connect_code', 'sns_qq')->where('user_id', $id)->first();
+		if (!empty($qq_info)) {
+			$this->assign('qq_info', $qq_info);
 		}
-		$this->assign('extend_info_list', $extend_info_list);
+
+		$wechat_info = RC_DB::table('connect_user')->where('connect_code', 'sns_wechat')->where('user_id', $id)->first();
+		if (!empty($wechat_info)) {
+			$this->assign('wechat_info', $wechat_info);
+		}
 
 		$this->display('user_info.dwt');
 	}
