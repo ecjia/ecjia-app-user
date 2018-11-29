@@ -76,7 +76,7 @@ function get_user_list($args = array()) {
 		/* 查询所有用户信息*/
 		$data = $db_user
 				->orderBy($filter['sort_by'],  $filter['sort_order'])
-				->select('user_id', 'user_name', 'email', 'is_validated', 'user_money', 'frozen_money', 'rank_points', 'pay_points', 'reg_time', 'mobile_phone')
+				->select('user_id', 'user_name', 'email', 'is_validated', 'user_money', 'frozen_money', 'rank_points', 'pay_points', 'reg_time', 'mobile_phone', 'user_rank')
 				->take(15)
 				->skip($page->start_id-1)
 				->get();
@@ -84,6 +84,8 @@ function get_user_list($args = array()) {
 		$user_list = array();
 		foreach ($data as $rows) {
 			$rows['reg_time']	= RC_Time::local_date(ecjia::config('time_format'), $rows['reg_time']);
+			$rank_info 			= RC_DB::table('user_rank')->where('rank_id', $rows['user_rank'])->first();
+			$rows['rank_name'] 	= $rank_info['rank_name'];
 			$user_list[]		= $rows;
 		}
 		return array('user_list' => $user_list, 'filter' => $filter, 'page' => $page->show(2), 'desc' => $page->page_desc());
