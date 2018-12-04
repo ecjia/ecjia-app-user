@@ -96,7 +96,6 @@
 					<div class="accordion-heading">
 						<div class="accordion-toggle acc-in" data-toggle="collapse" data-target="#telescopic2">
 							<strong>会员资金</strong>
-							<a target="_blank" href='{url path="finance/admin_account_log/init" args="user_id={$user.user_id}"}'>{lang key='user::users.edit'}</a>
 						</div>
 					</div>
 					<div class="accordion-body in collapse" id="telescopic2">

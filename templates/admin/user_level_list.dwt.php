@@ -79,7 +79,7 @@
 						<td class="hide-edit-area">
 							{$val.user_name}
 							<div class="edit-list">
-								<a class="data-pjax" href='{url path="" args="store_id={$val.user_id}"}'>查看详情</a>
+								<a target="__blank" href='{url path="user/admin/info" args="id={$val.user_id}"}'>查看详情</a>
 							</div>
 						</td>
 						<td>{$val.formated_avaliable_money}</td>
