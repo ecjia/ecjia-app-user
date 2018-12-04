@@ -101,10 +101,10 @@
 					</div>
 					<div class="accordion-body in collapse" id="telescopic2">
 						<div class="item-content">
-							<div class="item">可用资金：<span class="ecjiafc-FF0000">{$user.formated_user_money}</span><a class="m_l5" target="__blank" href="{RC_Uri::url('finance/admin_account_log/user_money')}&user_id={$user.user_id}">查看</a></div>
+							<div class="item">可用资金：<span class="ecjiafc-FF0000">{$user.formated_user_money}</span><a class="m_l5" target="__blank" href="{RC_Uri::url('finance/admin_account_log/init')}&account_type=user_money&user_id={$user.user_id}">查看</a></div>
 							<div class="item">冻结资金：<span class="ecjiafc-FF0000">{$user.formated_frozen_money}</span></div>
-							<div class="item">积分：<span class="ecjiafc-FF0000">{$user.pay_points}</span><a class="m_l5" target="__blank" href="{RC_Uri::url('finance/admin_account_log/pay_points')}&user_id={$user.user_id}">查看</a></div>
-							<div class="item">成长值：<span class="ecjiafc-FF0000">{$user.rank_points}</span><a class="m_l5" target="__blank" href="{RC_Uri::url('finance/admin_account_log/rank_points')}&user_id={$user.user_id}">查看</a></div>
+							<div class="item">积分：<span class="ecjiafc-FF0000">{$user.pay_points}</span><a class="m_l5" target="__blank" href="{RC_Uri::url('finance/admin_account_log/init')}&account_type=pay_points&user_id={$user.user_id}">查看</a></div>
+							<div class="item">成长值：<span class="ecjiafc-FF0000">{$user.rank_points}</span><a class="m_l5" target="__blank" href="{RC_Uri::url('finance/admin_account_log/init')}&account_type=rank_points&user_id={$user.user_id}">查看</a></div>
 						</div>
 					</div>
 				</div>
