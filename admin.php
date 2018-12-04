@@ -653,37 +653,21 @@ class admin extends ecjia_admin {
 		$this->assign('user',			$user);
 		$this->assign('order_list',		$order);
 		$this->assign('address_list',	$address_list);
-		
-		/* 取出注册扩展字段 */
-		// $extend_info_list = RC_DB::table('reg_fields')
-		// 	->where('type', '<', 2)
-		// 	->where('display', 1)
-		// 	->where('id', '!=', 5)
-		// 	->where('id', '!=', 6)
-		// 	->orderBy('dis_order', 'asc')
-		// 	->orderBy('id', 'asc')
-		// 	->get();
-		// if (!empty($extend_info_list)) {
-		// 	foreach ($extend_info_list AS $key => $val) {
-		// 		switch ($val['id']) {
-		// 			case 1:	 $extend_info_list[$key]['content'] = $user['msn']; break;
-		// 			case 2:	 $extend_info_list[$key]['content'] = $user['qq']; break;
-		// 			case 3:	 $extend_info_list[$key]['content'] = $user['office_phone']; break;
-		// 			case 4:	 $extend_info_list[$key]['content'] = $user['home_phone']; break;
-		// 			// case 5:	 $extend_info_list[$key]['content'] = $user['mobile_phone']; break;
-		// 			default: $extend_info_list[$key]['content'] = empty($temp_arr[$val['id']]) ? '' : $temp_arr[$val['id']] ;
-		// 		}
-		// 	}
-		// }
-		// $this->assign('extend_info_list', $extend_info_list);
 
 		$qq_info = RC_DB::table('connect_user')->where('connect_code', 'sns_qq')->where('user_id', $id)->first();
 		if (!empty($qq_info)) {
 			$this->assign('qq_info', $qq_info);
 		}
 
-		$wechat_info = RC_DB::table('connect_user')->where('connect_code', 'sns_wechat')->where('user_id', $id)->first();
-		if (!empty($wechat_info)) {
+		$connect_info = RC_DB::table('connect_user')->where('connect_code', 'sns_wechat')->where('user_id', $id)->first();
+		if (!empty($connect_info)) {
+			$ect_uid = RC_DB::table('wechat_user')->where('unionid', $connect_info['open_id'])->pluck('ect_uid');
+			//修正绑定信息
+			if (empty($ect_uid)) {
+				RC_DB::table('wechat_user')->where('unionid', $connect_info['open_id'])->update(array('ect_uid' => $connect_info['user_id']));
+			}
+			$wechat_info = RC_DB::table('wechat_user')->where('unionid', $connect_info['open_id'])->where('ect_uid', $connect_info['user_id'])->first();
+
 			$this->assign('wechat_info', $wechat_info);
 		}
 
