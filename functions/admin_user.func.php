@@ -238,10 +238,11 @@ function update_user_account($id, $amount, $admin_note, $is_paid) {
 	$data = array(
 		'admin_user'	=> $_SESSION['admin_name'],
 		'amount'		=> $amount,
-		'add_time'		=> RC_Time::gmtime(),
+		// 'add_time'		=> RC_Time::gmtime(),
 		'paid_time'		=> RC_Time::gmtime(),
 		'admin_note'	=> $admin_note,
 		'is_paid'		=> $is_paid,
+		'review_time'	=> RC_Time::gmtime(),
 	);
 	return RC_DB::table('user_account')->where('id', $id)->update($data);
 }
