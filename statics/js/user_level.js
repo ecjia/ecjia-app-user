@@ -3,6 +3,11 @@
 (function (app, $) {
 	app.user_level = {
 		init: function () {
+			/* 加载日期控件 */
+			$(".date").datepicker({
+				format: "yyyy-mm-dd",
+				container: '.main_content',
+			});
 			app.user_level.searchForm();
 			app.user_level.chart();
 		},
@@ -34,6 +39,51 @@
 				var keywords = $("input[name='keywords']").val();
 				var url = $("form[name='searchForm']").attr('action'); //请求链接
 
+				var start_date = $("input[name='start_date']").val();
+				var end_date = $("input[name='end_date']").val();
+
+				if (start_date != '' && end_date != '') {
+					if (start_date >= end_date) {
+						var data = {
+							message: '开始时间不能大于或等于结束时间',
+							state: "error",
+						};
+						ecjia.admin.showmessage(data);
+						return false;
+					}
+					var date_diff = DateDiff(end_date, start_date);
+
+					if (date_diff > 90) {
+						var data = {
+							message: '查询时间间隔不超过90天',
+							state: "error",
+						};
+						ecjia.admin.showmessage(data);
+						return false;
+					}
+				}
+
+				if (start_date == '' && end_date != '') {
+					var data = {
+						message: '开始时间不能为空',
+						state: "error",
+					};
+					ecjia.admin.showmessage(data);
+					return false;
+				}
+
+				if (start_date != '' && end_date == '') {
+					var data = {
+						message: '结束时间不能为空',
+						state: "error",
+					};
+					ecjia.admin.showmessage(data);
+					return false;
+				}
+
+				if (start_date != '') url += '&start_date=' + start_date;
+				if (end_date != '') url += '&end_date=' + end_date;
+
 				if (keywords != '' && keywords != undefined) {
 					url += '&keywords=' + keywords;
 				}
@@ -45,7 +95,8 @@
 			var dataset = [];
 			var ticks = [];
 			if (data.length == 0) {
-				$('.row-fluid-stats').css('display', 'none');
+				var nodata = "<div style='width:100%;height:100%;line-height:400px;text-align:center;overflow: hidden;'>没有找到任何记录<\/div>";
+				$('#user_level').html(nodata);
 			} else {
 				$.each(JSON.parse(data), function (key, value) {
 					if (key < 30) {
@@ -75,7 +126,7 @@
 						extraCssText: 'box-shadow: 0 0 3px rgba(255, 255, 255, 0.4);',
 						formatter: function (params) {
 							if (params.seriesName != "") {
-								return params.name
+								return params.name + '：' + params.value;
 							}
 						},
 					},
@@ -101,6 +152,26 @@
 			}
 		},
 	};
+
+	function DateDiff(d1, d2) {
+		var day = 24 * 60 * 60 * 1000;
+		try {
+			var dateArr = d1.split("-");
+			var checkDate = new Date();
+			checkDate.setFullYear(dateArr[0], dateArr[1] - 1, dateArr[2]);
+			var checkTime = checkDate.getTime();
+
+			var dateArr2 = d2.split("-");
+			var checkDate2 = new Date();
+			checkDate2.setFullYear(dateArr2[0], dateArr2[1] - 1, dateArr2[2]);
+			var checkTime2 = checkDate2.getTime();
+
+			var cha = (checkTime - checkTime2) / day;
+			return cha;
+		} catch (e) {
+			return false;
+		}
+	}
 
 })(ecjia.admin, jQuery);
 

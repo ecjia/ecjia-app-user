@@ -788,6 +788,24 @@ as d on d.user_id = u.user_id";
         $sort_by    = isset($_GET['sort_by']) && $_GET['sort_by'] != 'level' ? trim($_GET['sort_by']) : 'order_money';
         $sort_order = isset($_GET['sort_order']) ? trim($_GET['sort_order']) : 'desc';
 
+        $m = RC_Time::local_date('m');
+        $d = RC_Time::local_date('d');
+        $y = RC_Time::local_date('y');
+
+        $start_date = RC_Time::local_mktime(0, 0, 0, $m, $d - 30, $y); //30天前 开始时间
+        $end_date   = RC_Time::gmtime(); //当前时间
+
+        $filter['start_date'] = empty($_GET['start_date']) ? '' : $_GET['start_date'];
+        $filter['end_date']   = empty($_GET['end_date']) ? '' : $_GET['end_date'];
+
+        if (!empty($filter['start_date']) && !empty($filter['end_date'])) {
+            $start_date = RC_Time::local_strtotime($filter['start_date']);
+            $end_date   = RC_Time::local_strtotime($filter['end_date']);
+        }
+        $sql .= "
+
+INNER JOIN (select user_id from " . $table_order_info . " where add_time >=" . $start_date . " and add_time <=" . $end_date . " GROUP BY user_id) as o on o.user_id = u.user_id";
+
         //图表数据 根据按钮状态切换显示 start
         $stats = !empty($_GET['stats']) ? trim($_GET['stats']) : 'order_money';
         if ($stats == 'order_count') {
