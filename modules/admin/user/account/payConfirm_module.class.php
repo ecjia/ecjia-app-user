@@ -130,7 +130,7 @@ class payConfirm_module extends api_admin implements api_interface
 							'mobile'				=> empty($userinfo['mobile_phone']) ? '' : trim($userinfo['mobile_phone']),
 							'user_points'			=> $userinfo['pay_points'],
 							'user_money'			=> $userinfo['user_money'],
-							'formatted_user_money'	=> $userinfo['user_money'] > 0 ? price_format($userinfo['user_money'], false) : '',
+							'formatted_user_money'	=> price_format($userinfo['user_money'], false),
 					);
 				}
 			}
@@ -147,11 +147,11 @@ class payConfirm_module extends api_admin implements api_interface
 					'goods_list'					=> [],
 					'total_goods_number' 			=> 0,
 					'total_goods_amount'			=> $user_account_info['amount'],
-					'formatted_total_goods_amount'	=> $user_account_info['amount'] > 0 ? price_format($user_account_info['amount'], false) : '',
+					'formatted_total_goods_amount'	=> price_format($user_account_info['amount'], false),
 					'total_discount'				=> 0,
 					'formatted_total_discount'		=> '',
 					'money_paid'					=> $user_account_info['amount'],
-					'formatted_money_paid'			=> $user_account_info['amount'] > 0 ? price_format($user_account_info['amount'], false) : '',
+					'formatted_money_paid'			=> price_format($user_account_info['amount'], false),
 					'integral'						=> 0,
 					'integral_money'				=> '',
 					'formatted_integral_money'		=> '',
