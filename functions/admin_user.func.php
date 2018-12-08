@@ -217,7 +217,9 @@ function insert_user_account($surplus, $amount) {
 		'payment'		=> $surplus['payment'] ,
 		'is_paid'		=> 0,
 		'from_type'		=> empty($surplus['from_type']) ? '' : $surplus['from_type'],
-		'from_value'	=> empty($surplus['from_value']) ? '' : $surplus['from_value']
+		'from_value'	=> empty($surplus['from_value']) ? '' : $surplus['from_value'],
+		'pay_fee'		=> empty($surplus['pay_fee']) ? '0.00' : $surplus['pay_fee'],
+		'real_amount'	=> empty($surplus['real_amount']) ? '0.00' : $surplus['real_amount'],
 	);
 	return RC_DB::table('user_account')->insertGetId($data);
 }
