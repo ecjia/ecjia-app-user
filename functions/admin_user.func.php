@@ -320,6 +320,8 @@ function get_account_log($user_id, $num = 15, $start, $process_type = '') {
 			$rows['pay_status']		  = $pay_status;
 			$rows['format_amount']    = price_format(abs($rows['amount']), false);
 			$rows['pay_code']		  = $rows['payment'];
+			$rows['real_amount']	  = $rows['real_amount'];
+			$rows['formatted_real_amount']	  = price_format(abs($rows['real_amount']), false);
 			
 			/* 会员的操作类型： 冲值，提现 */
 			if ($rows['process_type'] == 0) {
