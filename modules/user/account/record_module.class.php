@@ -111,6 +111,8 @@ class user_account_record_module extends api_front implements api_interface {
 				$account_list[$key]['add_time']		 = $value['add_time'];
 				$account_list[$key]['real_amount']	 = $value['real_amount'];
 				$account_list[$key]['formatted_real_amount'] = $value['formatted_real_amount'];
+				$account_list[$key]['pay_fee']	 = $value['pay_fee'];
+				$account_list[$key]['formatted_pay_fee'] = $value['formatted_pay_fee'];
  			}
  			
  			$pager = array(

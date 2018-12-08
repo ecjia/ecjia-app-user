@@ -322,6 +322,8 @@ function get_account_log($user_id, $num = 15, $start, $process_type = '') {
 			$rows['pay_code']		  = $rows['payment'];
 			$rows['real_amount']	  = $rows['real_amount'];
 			$rows['formatted_real_amount']	  = price_format(abs($rows['real_amount']), false);
+			$rows['pay_fee']	  	  = $rows['pay_fee'];
+			$rows['formatted_pay_fee']	  	  = price_format($rows['pay_fee'], false);
 			
 			/* 会员的操作类型： 冲值，提现 */
 			if ($rows['process_type'] == 0) {
