@@ -706,43 +706,12 @@ function update_address($address) {
 }
 
 function EM_user_info($user_id, $mobile = '') {
-// 	$db_collect_goods  = RC_Model::model('goods/collect_goods_model');
-// 	$db_orderinfo_view = RC_Model::model('orders/order_info_viewmodel');
-// 	$db_orderinfo_view->view = array(
-// 	    'order_goods' => array(
-// 	        'type'      =>    Component_Model_View::TYPE_LEFT_JOIN,
-// 	        'alias'     =>    'og',
-// 	        'on'        =>    'oi.order_id = og.order_id ',
-// 	    ),
-// 	    'goods' => array(
-// 	        'type'      => Component_Model_View::TYPE_LEFT_JOIN,
-// 	        'alias'     => 'g',
-// 	        'on'        => 'og.goods_id = g.goods_id'
-// 	    ),
-// 	    'store_franchisee' => array(
-// 	        'type'      => Component_Model_View::TYPE_LEFT_JOIN,
-// 	        'alias'     => 'ssi',
-// 	        'on'        => 'oi.store_id = ssi.store_id'
-// 	    ),
-// 	    'comment' => array(
-// 	        'type'      => Component_Model_View::TYPE_LEFT_JOIN,
-// 	        'alias'     => 'c',
-// 	        'on'        => 'c.id_value = og.goods_id and c.rec_id = og.rec_id and c.order_id = oi.order_id and c.comment_type = 0 and c.parent_id = 0'
-// 	    ),
-// 	);
-	
 	RC_Loader::load_app_func('admin_order', 'orders');
 	$user_info      = user_info($user_id, $mobile);
 	
 	if (is_ecjia_error($user_info)) {
 		return $user_info;
 	}
-	//$collection_num = $db_collect_goods->where(array('user_id' => $user_id))->order(array('add_time' => 'desc'))->count();
-	//$await_pay      = $db_orderinfo_view->join(array('order_info'))->where(array('oi.user_id' => $user_id, EM_order_query_sql('await_pay', 'oi.')))->count('*');
-	//$await_ship     = $db_orderinfo_view->join(array('order_info'))->where(array('oi.user_id' => $user_id, EM_order_query_sql('await_ship', 'oi.')))->count('*');
-	//$shipped        = $db_orderinfo_view->join(array('order_info'))->where(array('oi.user_id' => $user_id, EM_order_query_sql('shipped', 'oi.')))->count('*');
-	//$finished       = $db_orderinfo_view->join(array('order_info'))->where(array('oi.user_id' => $user_id, EM_order_query_sql('finished', 'oi.')))->count('*');
-	//$allow_comment_count = $db_orderinfo_view->join(array('order_goods', 'goods', 'comment'))->where(array('oi.user_id' => $user_id, 'oi.shipping_status' => SS_RECEIVED, 'oi.order_status' => array(OS_CONFIRMED, OS_SPLITED), 'oi.pay_status' => array(PS_PAYED, PS_PAYING), 'c.comment_id is null'))->count('DISTINCT oi.order_id');
 	
 	$collection_num = RC_DB::table('collect_goods')->where('user_id', $user_id)->orderBy('add_time', 'desc')->count();
 	$db1 = RC_DB::table('order_info');
@@ -754,7 +723,6 @@ function EM_user_info($user_id, $mobile = '') {
 	$await_pay =  $db1->where('user_id', $user_id)->where('extension_code', '!=', "group_buy")->where('pay_status', PS_UNPAYED)->whereIn('order_status', array(OS_UNCONFIRMED, OS_CONFIRMED, OS_SPLITED))->count();
 	$await_ship = RC_DB::table('order_info')->where('user_id', $user_id)->where('extension_code', '!=', "group_buy")->whereRaw(EM_order_query_sql('await_ship', ''))->count();
 	$shipped =  RC_DB::table('order_info')->where('user_id', $user_id)->where('extension_code', "!=", "group_buy")->whereRaw(EM_order_query_sql('shipped', ''))->count();
-	//$finished = RC_DB::table('order_info')->where('user_id', $user_id)->whereRaw(EM_order_query_sql('finished', 'oi.'))-count();
 	$finished = RC_DB::table('order_info')->where('user_id', $user_id)->whereIn('order_status', array(OS_CONFIRMED, OS_SPLITED))
 						->whereIn('shipping_status', array(SS_RECEIVED))
 						->whereIn('pay_status', array(PS_PAYED, PS_PAYING))
@@ -786,31 +754,6 @@ function EM_user_info($user_id, $mobile = '') {
 						->whereRaw('status != 10 and refund_status != 2')
 						->count();
 	
-// 	$db_user_rank = RC_Model::model('user/user_rank_model');
-	/* 取得用户等级 */
-// 	if ($user_info['user_rank'] == 0) {
-// 		// 非特殊等级，根据成长值计算用户等级（注意：不包括特殊等级）
-// 		$row = $db_user_rank->field('rank_id, rank_name')->find(array('special_rank' => 0 , 'min_points' => array('elt' => intval($user_info['rank_points'])) , 'max_points' => array('gt' => intval($user_info['rank_points']))));
-// 	} else {
-// 		// 特殊等级
-// 		$row = $db_user_rank->field('rank_id, rank_name')->find(array('rank_id' => $user_info['user_rank']));
-// 	}
-
-// 	if (!empty($row)) {
-// 		$user_info['user_rank_name'] = $row['rank_name'];
-// 		$user_info['user_rank_id'] = $row['rank_id'];
-// 	} else {
-// 		$user_info['user_rank_name'] = '非特殊等级';
-// 		$user_info['user_rank_id'] = $row['rank_id'];
-// 	}
-// 	$row = $db_user_rank->find(array('special_rank' => 0 , 'min_points' => 0));
-
-// 	if ($user_info['user_rank_name'] == $row['rank_name']) {
-// 		$level = 0;
-// 	} else {
-// 		$level = 1;
-// 	}
-
     if($user_info['user_rank'] == 0) {
         //重新计算会员等级
         $now_rank = RC_Api::api('user', 'update_user_rank', array('user_id' => $user_id));
@@ -844,8 +787,6 @@ function EM_user_info($user_id, $mobile = '') {
 	->where(RC_DB::raw('ub.order_id'), 0)
 	->count(RC_DB::raw('ub.bonus_id'));
 	/* 判断会员名更改时间*/
-	//$data = array('object_type' => 'ecjia.user', 'object_group' => 'update_user_name', 'object_id' => $user_id, 'meta_key' => 'update_time');
-	//$username_update_time = RC_Model::model('term_meta_model')->find($data);
 	$username_update_time = RC_DB::table('term_meta')->where('object_type', 'ecjia.user')
 							->where('object_group', 'update_user_name')
 							->where('object_id', $user_id)
