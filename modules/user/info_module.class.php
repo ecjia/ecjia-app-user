@@ -63,6 +63,18 @@ class user_info_module extends api_front implements api_interface {
 		
 		$user_info = EM_user_info($user_id);
 		$user_info['signup_reward_url'] =  RC_Uri::url('market/mobile_reward/init', array('token' => RC_Session::session_id()));
+		//是否绑定微信；微信昵称
+		$user_info['wechat_is_bind'] = 0;
+		$user_info['wechat_nickname'] = '';
+		
+		$connect_wechat_info = RC_DB::table('connect_user')->where('user_id', $user_id)->where('connect_code', 'sns_wechat')->where('user_type', 'user')->first();
+		if (!empty($connect_wechat_info)) {
+			$user_info['wechat_is_bind']  = 1;
+			if (!empty($connect_wechat_info['profile'])) {
+				$profile = unserialize($connect_wechat_info['profile']);
+				$user_info['wechat_nickname'] = empty($profile['nickname']) ? '' : $profile['nickname'];
+			}
+		} 
 		return $user_info;
 	}
 }

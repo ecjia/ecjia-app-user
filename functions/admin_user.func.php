@@ -827,7 +827,8 @@ function EM_user_info($user_id, $mobile = '') {
 		'update_username_time'	=> empty($username_update_time) ? '' : RC_Time::local_date(ecjia::config('time_format'), $username_update_time['meta_value']),
 		'open_id'               => $connect_user_info['open_id'],
 		'access_token'          => $connect_user_info['access_token'],
-		'user_type'				=> 'user'
+		'user_type'				=> 'user',
+		'has_paypassword'		=> empty($user_info['pay_password']) ? '' : $user_info['pay_password']
 	);
 }
 
