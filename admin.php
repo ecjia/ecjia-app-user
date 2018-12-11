@@ -225,27 +225,22 @@ class admin extends ecjia_admin {
 		/* 更新会员的其它信息 */
 		$other['credit_line']	= $credit_line;
 		$other['user_rank']		= $rank;
-		$other['sex']			= $sex;
-		$other['birthday']		= $birthday;
 		$other['msn']			= isset($_POST['extend_field1']) ? htmlspecialchars(trim($_POST['extend_field1'])) : '';
 		$other['qq']			= isset($_POST['extend_field2']) ? htmlspecialchars(trim($_POST['extend_field2'])) : '';
 		$other['office_phone']	= isset($_POST['extend_field3']) ? htmlspecialchars(trim($_POST['extend_field3'])) : '';
 		$other['home_phone']	= isset($_POST['extend_field4']) ? htmlspecialchars(trim($_POST['extend_field4'])) : '';
-		// $other['mobile_phone']	= isset($_POST['extend_field5']) ? htmlspecialchars(trim($_POST['extend_field5'])) : '';
-		$other['mobile_phone']  = $mobile_phone;
-		$other['reg_time']      = $reg_time;
 
-        $check_mobile = Ecjia\App\Sms\Helper::check_mobile($other['mobile_phone']);
+        $check_mobile = Ecjia\App\Sms\Helper::check_mobile($mobile_phone);
         if (is_ecjia_error($check_mobile)) {
             return $this->showmessage($check_mobile->get_error_message(), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
         }
 
-        $count = RC_DB::table('users')->where('mobile_phone', $other['mobile_phone'])->count();
-        if (!empty($count)) {
+        $count = RC_DB::table('users')->where('mobile_phone', $mobile_phone)->count();
+        if (! empty($count)) {
             return $this->showmessage('手机号码已存在', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
         }
 
-		if (ecjia_integrate::addUser($username, $password, $email)) {
+		if (ecjia_integrate::addUser($username, $password, $email, $mobile_phone, $sex, $birthday, $reg_time)) {
 			$user_info = ecjia_integrate::getUserInfo($username);
 
 			$max_id = $user_info['user_id'];

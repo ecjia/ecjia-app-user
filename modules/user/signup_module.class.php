@@ -55,8 +55,6 @@ class user_signup_module extends api_front implements api_interface
 			return new ecjia_error('shop_reg_closed', '会员注册关闭');
 		}
 		
-		RC_Loader::load_app_class('integrate', 'user', false);
-		
 		$username	   = $this->requestData('name');
 		$password	   = $this->requestData('password', '');
 		$email		   = $this->requestData('email');
@@ -142,9 +140,9 @@ class user_signup_module extends api_front implements api_interface
 		
 		$other['last_login'] = RC_Time::gmtime();
 		if (version_compare($api_version, '1.17', '>=')) {
-			$result = $this->register($username, $password, $email, $other, $api_version);
+			$result = $this->register($username, $password, $email, $other['mobile_phone'], $other, $api_version);
 		} else {
-			$result = $this->register($username, $password, $email, $other);
+			$result = $this->register($username, $password, $email, $other['mobile_phone'], $other);
 		}
 		
 		if (is_ecjia_error($result)) {
@@ -285,7 +283,7 @@ class user_signup_module extends api_front implements api_interface
      *
      * @return bool $bool
      */
-    private function register($username, $password = null, $email, $other = array(), $api_version = '')
+    private function register($username, $password = null, $email, $mobile, $other = array(), $api_version = '')
     {
         $db_user = RC_Loader::load_app_model('users_model', 'user');
 
@@ -315,7 +313,7 @@ class user_signup_module extends api_front implements api_interface
             }
         }
 
-        if (! ecjia_integrate::addUser($username, $password, $email)) {
+        if (! ecjia_integrate::addUser($username, $password, $email, $mobile)) {
             // 注册失败
             return new ecjia_error('signup_error', ecjia_integrate::getErrorMessage());
         } else {
