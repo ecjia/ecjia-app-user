@@ -43,7 +43,7 @@ class LocalUser
             'reg_time'      => $reg_date,
             'last_ip'       => $ip,
         ];
-        $model = $this->model->insert($data);
+        $model = $this->model->create($data);
 
         return $model;
     }
