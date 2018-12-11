@@ -60,7 +60,15 @@ class LocalUser
 
     public function getProfileByModel(UserModel $model)
     {
-        return $model->pluck('user_id', 'user_name', 'email', 'sex', 'birthday', 'reg_time', 'password');
+        return [
+            'user_id'       => $model->user_id,
+            'user_name'     => $model->user_name,
+            'email'         => $model->email,
+            'sex'           => $model->sex,
+            'birthday'      => $model->birthday,
+            'reg_time'      => $model->reg_time,
+            'password'      => $model->password,
+        ];
     }
 
 
@@ -75,6 +83,22 @@ class LocalUser
         $row = $this->model
             ->select('user_id', 'user_name', 'email', 'sex', 'birthday', 'reg_time', 'password')
             ->where('user_name', $username)
+            ->first();
+
+        return $row;
+    }
+
+    /**
+     *  获取指定用户的信息
+     *
+     * @param $username
+     * @return array
+     */
+    public function getProfileByMobile($mobile)
+    {
+        $row = $this->model
+            ->select('user_id', 'user_name', 'email', 'sex', 'birthday', 'reg_time', 'password')
+            ->where('mobile_phone', $mobile)
             ->first();
 
         return $row;
