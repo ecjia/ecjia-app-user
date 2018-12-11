@@ -47,10 +47,11 @@
 defined('IN_ECJIA') or exit('No permission resources.');
 
 /**
- * 添加会员帐号接口
+ * 添加本地会员帐号接口
  * @author royalwang
  */
-class user_add_user_api extends Component_Event_Api {
+class user_add_local_user_api extends Component_Event_Api
+{
 
     /**
      * 创建用户
@@ -64,9 +65,9 @@ class user_add_user_api extends Component_Event_Api {
      * reg_date 注册日期
      *
      * @param array $options
-     * @return ecjia_error
+     * @return array | ecjia_error
      */
-    public function call(&$options) {
+    public function call(& $options) {
 
         $username = array_get($options, 'username');
         $mobile = array_get($options, 'mobile');
@@ -76,17 +77,23 @@ class user_add_user_api extends Component_Event_Api {
         $birthday = array_get($options, 'birthday');
         $reg_date = array_get($options, 'reg_date');
 
-        if (empty($username) || empty($mobile)) {
-            return new ecjia_error('invalid_parameter', '调用接口user_add_user_api参数无效');
+        if (empty($username)) {
+            return new ecjia_error('invalid_parameter', '调用接口user_add_local_user_api参数无效');
         }
 
-        $result = ecjia_integrate::addUser($username, $password, $email, $gender, $birthday, $reg_date);
-        if ($result) {
-            $profile = ecjia_integrate::getProfileByName($username);
+        if (!empty($mobile)) {
+            return RC_Api::api('user', 'add_user', $options);
+        }
+
+        $localUser = new \Ecjia\App\User\LocalUser();
+        $model = $localUser->create($username);
+        if ($model) {
+            $profile = $localUser->getProfileByModel($model);
             return $profile;
         } else {
             return new ecjia_error('create_user_failed', '创建用户失败');
         }
+
     }
 }
 
