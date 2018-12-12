@@ -81,9 +81,13 @@ class user_paypassword_modify_module extends api_front implements api_interface 
 		}
 		
 		//设置支付密码
-		$salt = rand(1, 9999);
+		$salt = $user_info['ec_salt'];
 		$md5_password = md5($paypassword);
-		$password_final = md5($md5_password.$salt);
+		if (!empty($salt)) {
+			$password_final = md5($md5_password.$salt);
+		} else {
+			$password_final = md5($md5_password);
+		}
 		
 		//更新支付密码
 		RC_DB::table('users')->where('user_id', $user_id)->update(array('pay_password' => $password_final));
