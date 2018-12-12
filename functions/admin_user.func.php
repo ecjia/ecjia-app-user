@@ -828,7 +828,7 @@ function EM_user_info($user_id, $mobile = '') {
 		'open_id'               => $connect_user_info['open_id'],
 		'access_token'          => $connect_user_info['access_token'],
 		'user_type'				=> 'user',
-		'has_paypassword'		=> empty($user_info['pay_password']) ? '' : $user_info['pay_password']
+		'has_paypassword'		=> empty($user_info['pay_password']) ? 0 : 1
 	);
 }
 
