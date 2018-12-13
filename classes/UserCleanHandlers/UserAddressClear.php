@@ -31,6 +31,11 @@ class UserAddressClear extends  UserCleanAbstract
      */
     public function handlePrintData()
     {
+        $count = $this->handleCount();
+
+        return <<<HTML
+
+HTML;
 
     }
 
