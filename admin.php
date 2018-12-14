@@ -66,8 +66,7 @@ class admin extends ecjia_admin
         RC_Script::enqueue_script('jquery-chosen');
         RC_Style::enqueue_style('uniform-aristo');
         RC_Script::enqueue_script('jquery-uniform');
-        RC_Style::enqueue_style('bootstrap-editable', RC_Uri::admin_url('statics/lib/x-editable/bootstrap-editable/css/bootstrap-editable.css'));
-        RC_Script::enqueue_script('bootstrap-editable.min', RC_Uri::admin_url('statics/lib/x-editable/bootstrap-editable/js/bootstrap-editable.min.js'));
+
         RC_Script::enqueue_script('user_info', RC_App::apps_url('statics/js/user_info.js', __FILE__));
         RC_Style::enqueue_style('user_info_css', RC_App::apps_url('statics/css/user_info.css', __FILE__));
 
@@ -92,6 +91,10 @@ class admin extends ecjia_admin
     public function init()
     {
         $this->admin_priv('user_manage');
+
+        //解决点击左侧菜单 添加会员和会员等级 切换 左侧菜单会收起问题
+        RC_Style::enqueue_style('bootstrap-editable', RC_Uri::admin_url('statics/lib/x-editable/bootstrap-editable/css/bootstrap-editable.css'));
+        RC_Script::enqueue_script('bootstrap-editable.min', RC_Uri::admin_url('statics/lib/x-editable/bootstrap-editable/js/bootstrap-editable.min.js'));
 
         ecjia_screen::get_current_screen()->remove_last_nav_here();
         ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('user::users.user_list')));
