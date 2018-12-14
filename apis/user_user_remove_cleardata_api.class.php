@@ -54,14 +54,18 @@ defined('IN_ECJIA') or exit('No permission resources.');
 class user_user_remove_cleardata_api extends Component_Event_Api
 {
     
-    public function call(&$options) {
-        if (!is_array($options) || !isset($options['user_id'])) {
-            return new ecjia_error('invalid_parameter', RC_Lang::get('users.users.invalid_parameter'));
+    public function call(& $options)
+    {
+
+        $user_id = array_get($options, 'user_id');
+
+        if (empty($user_id)) {
+            return new ecjia_error('invalid_parameter', '请求接口user_user_remove_cleardata_api参数无效');
         }
 
         return [
-            new \Ecjia\App\User\UserCleanHandlers\UserAddressClear(),
-            new \Ecjia\App\User\UserCleanHandlers\UserBonusClear(),
+            new \Ecjia\App\User\UserCleanHandlers\UserAddressClear($user_id),
+            new \Ecjia\App\User\UserCleanHandlers\UserBonusClear($user_id),
         ];
     }
     
