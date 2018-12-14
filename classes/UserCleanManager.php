@@ -56,57 +56,40 @@ class UserCleanManager
 
     protected $api_name = 'user_remove_cleardata';
     
-    protected static $factories;
+    protected $factories;
+
+    protected $user_id;
     
-    public function __construct()
+    public function __construct($user_id)
     {
-        self::$factories = $this->getFactories();
+        $this->user_id = $user_id;
+//        dd($this);
+//        $this->factories = $this->getFactories();
     }
     
     public function getFactories()
     {
-        $cache_key = 'user_clean_component_factories';
-    
-        $factories = ecjia_cache('user')->get($cache_key);
-        if (! empty($factories)) {
-    
-            $apps = ecjia_app::installed_app_floders();
-            $handlers = RC_Api::apis( $apps, $this->api_name );
 
-            $factories = [];
-            foreach ($handlers as $value) {
-                $factories[$value->getCode()] = $value;
+        $apps = ecjia_app::installed_app_floders();
+        $handlers = RC_Api::apis( $apps, $this->api_name, ['user_id' => $this->user_id]);
+
+        $factories = [];
+        foreach ($handlers as $values) {
+            foreach ($values as $item) {
+                $factories[$item->getCode()] = $item;
             }
-    
-            ecjia_cache('user')->put($cache_key, $factories, 10080);
         }
-    
-        return RC_Hook::apply_filters('ecjia_user_clean_component_filter', $factories);
+
+        return RC_Hook::apply_filters('ecjia_user_clean_component_filter', $factories, $this->user_id);
     }
     
-    
-    public function getComponents()
+    public function handler($code)
     {
-        $events = [];
-    
-        foreach (self::$factories as $key => $value) {
-            $inst = new $value;
-            $events[$key] = $inst;
-        }
-    
-        return $events;
-    }
-    
-    
-    public function component($code)
-    {
-        if (!array_key_exists($code, self::$factories)) {
+        if (!array_key_exists($code, $this->factories)) {
             throw new InvalidArgumentException("Component '$code' is not supported.");
         }
     
-        $className = self::$factories[$code];
-
-        return new $className();
+        return $this->factories[$code];
     }
     
     
