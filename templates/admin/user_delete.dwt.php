@@ -55,22 +55,20 @@
 				<p>当前账户没有关联数据，您可以直接删除此会员账户。</p>
 			</div>
 			{else}
-			<div class="control-group formSep">
-				<label class="control-label">账户地址</label>
-				<div class="controls p_t4">
-					<span class="controls-info w200">总共有<span class="ecjiafc-red ecjiaf-fs3">{$data.user_address_count}</span>个收货地址</span>
-					{if $data.user_address_count gt 0}
-					<span class="controls-info"><a href="{RC_Uri::url('user/admin/address_list')}&id={$user.user_id}" target="__blank">查看全部>>></a></span>
-					{/if}
-					<span class="controls-info-right f_r">
-						{if $data.user_address_count gt 0}
-						<a class="btn btn-gebo" data-toggle="ajaxremove" data-msg="您确定要这么做吗？" href="{RC_Uri::url('user/admin/remove')}&id={$user.user_id}&type=user_address">删除数据</a>
-						{else}
-						<a class="btn btn-gebo disabled">删除数据</a>
+				<!-- {foreach from=$handles item=val} -->
+				<div class="control-group formSep">
+					<label class="control-label">{$val->getName()}</label>
+					<div class="controls p_t4">
+						{$val->handlePrintData()}
+						{if $val->handleCanRemove()}
+						<span class="controls-info-right f_r">
+							<a class="btn btn-gebo" data-toggle="ajaxremove" data-msg="您确定要这么做吗？" href="{RC_Uri::url('user/admin/remove')}&id={$user.user_id}&handle={$val->getCode()}">删除数据</a>
+						</span>
 						{/if}
-					</span>
+					</div>
 				</div>
-			</div>
+				<!-- {/foreach} -->
+
 			<div class="control-group formSep">
 				<label class="control-label">账户余额</label>
 				<div class="controls p_t4">

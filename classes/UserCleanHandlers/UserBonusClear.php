@@ -9,6 +9,7 @@
 namespace Ecjia\App\User\UserCleanHandlers;
 
 use Ecjia\App\User\UserCleanAbstract;
+use RC_DB;
 
 class UserBonusClear extends  UserCleanAbstract
 {
@@ -31,7 +32,13 @@ class UserBonusClear extends  UserCleanAbstract
      */
     public function handlePrintData()
     {
+        $count = $this->handleCount();
 
+        return <<<HTML
+
+<span class="controls-info">账户内可用红包<span class="ecjiafc-red ecjiaf-fs3">{$count}</span>个</span>
+
+HTML;
     }
 
     /**
@@ -41,6 +48,9 @@ class UserBonusClear extends  UserCleanAbstract
      */
     public function handleCount()
     {
+        $user_bonus_count = RC_DB::table('user_bonus')->where('user_id', $this->user_id)->where('used_time', 0)->count();
+
+        return $user_bonus_count;
 
     }
 
@@ -63,6 +73,16 @@ class UserBonusClear extends  UserCleanAbstract
     public function handleAdminLog()
     {
 
+    }
+
+    /**
+     * 是否允许删除
+     *
+     * @return mixed
+     */
+    public function handleCanRemove()
+    {
+        return !empty($this->handleCount()) ? true : false;
     }
 
 

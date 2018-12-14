@@ -741,6 +741,9 @@ class admin extends ecjia_admin
         $user = $data['user'];
         $this->assign('user', $user);
 
+        $handles = (new \Ecjia\App\User\UserCleanManager($id))->getFactories();
+        $this->assign('handles', $handles);
+
         $this->display('user_delete.dwt');
     }
 
@@ -752,16 +755,19 @@ class admin extends ecjia_admin
         $this->admin_priv('user_delete', ecjia::MSGTYPE_JSON);
 
         $user_id = !empty($_GET['id']) ? intval($_GET['id']) : 0;
-        $username = RC_DB::table('users')->where('user_id', $user_id)->pluck('user_name');
+        $code = trim($_GET['handle']);
 
-        // RC_Loader::load_app_class('integrate', 'user', false);
-        // $user = integrate::init_users();
-        // $user->remove_user($username); //已经删除用户所有数据
+        $handles = (new \Ecjia\App\User\UserCleanManager($user_id))->getFactories();
+        $handle = array_get($handles, $code);
 
-        /* 记录管理员操作 */
-        // ecjia_admin::admin_log(addslashes($username), 'remove', 'users');
-
-        return $this->showmessage(RC_Lang::get('user::users.delete_user_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
+        if ($handle) {
+            $result = $handle->handleClean();
+            if ($result) {
+                return $this->showmessage('删除成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
+            }
+            return $this->showmessage('删除失败', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+        }
+        return $this->showmessage('操作失败，当前code无效', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
     }
 
     /**

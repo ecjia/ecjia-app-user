@@ -9,6 +9,10 @@
 namespace Ecjia\App\User\UserCleanHandlers;
 
 use Ecjia\App\User\UserCleanAbstract;
+use RC_Uri;
+use RC_DB;
+use RC_Api;
+use ecjia_admin;
 
 class UserAddressClear extends  UserCleanAbstract
 {
@@ -33,7 +37,13 @@ class UserAddressClear extends  UserCleanAbstract
     {
         $count = $this->handleCount();
 
+        $url = RC_Uri::url('user/admin/address_list', array('id' => $this->user_id));
+
         return <<<HTML
+
+<span class="controls-info w200">总共有<span class="ecjiafc-red ecjiaf-fs3">{$count}</span>个收货地址</span>
+
+<span class="controls-info"><a href="{$url}" target="__blank">查看全部>>></a></span>
 
 HTML;
 
@@ -46,7 +56,9 @@ HTML;
      */
     public function handleCount()
     {
+        $user_address_count = RC_DB::table('user_address')->where('user_id', $this->user_id)->count();
 
+        return $user_address_count;
     }
 
 
@@ -57,7 +69,13 @@ HTML;
      */
     public function handleClean()
     {
+        $result = RC_DB::table('user_address')->where('user_id', $this->user_id)->delete();
 
+        if ($result) {
+            $this->handleAdminLog();
+        }
+
+        return $result;
     }
 
     /**
@@ -67,7 +85,23 @@ HTML;
      */
     public function handleAdminLog()
     {
+        \Ecjia\App\User\Helper::assign_adminlog_content();
 
+        $user_info = RC_Api::api('user', 'user_info', array('user_id' => $this->user_id));
+
+        $user_name = !empty($user_info) ? '用户名是'.$user_info['user_name'] : '用户ID是'.$this->user_id;
+
+        ecjia_admin::admin_log($user_name, 'clean', 'user_address');
+    }
+
+    /**
+     * 是否允许删除
+     *
+     * @return mixed
+     */
+    public function handleCanRemove()
+    {
+        return !empty($this->handleCount()) ? true : false;
     }
 
 
