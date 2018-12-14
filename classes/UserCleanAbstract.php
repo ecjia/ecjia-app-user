@@ -12,6 +12,8 @@ namespace Ecjia\App\User;
 abstract class UserCleanAbstract
 {
 
+    protected $user_id;
+
     /**
      * 代号标识
      * @var string
@@ -35,6 +37,12 @@ abstract class UserCleanAbstract
      * @var int
      */
     protected $sort = 0;
+
+
+    public function __construct($user_id)
+    {
+        $this->user_id = $user_id;
+    }
 
 
     public function getCode()
