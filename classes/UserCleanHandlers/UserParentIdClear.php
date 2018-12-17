@@ -68,6 +68,11 @@ HTML;
      */
     public function handleClean()
     {
+        $count = $this->handleCount();
+        if (empty($count)) {
+            return true;
+        }
+        
         $result = RC_DB::table('users')->where('user_id', $this->user_id)->update(array('parent_id' => 0));
 
         if ($result) {

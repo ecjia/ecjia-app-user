@@ -92,6 +92,11 @@ class admin extends ecjia_admin
     {
         $this->admin_priv('user_manage');
 
+        if (session('status')) {
+            ecjia_screen::get_current_screen()->add_admin_notice(new admin_notice(session('status'), 'alert-success'));
+            unset($_SESSION['status']);
+        }
+
         //解决点击左侧菜单 添加会员和会员等级 切换 左侧菜单会收起问题
         RC_Style::enqueue_style('bootstrap-editable', RC_Uri::admin_url('statics/lib/x-editable/bootstrap-editable/css/bootstrap-editable.css'));
         RC_Script::enqueue_script('bootstrap-editable.min', RC_Uri::admin_url('statics/lib/x-editable/bootstrap-editable/js/bootstrap-editable.min.js'));
@@ -773,26 +778,95 @@ class admin extends ecjia_admin
         $this->admin_priv('user_delete', ecjia::MSGTYPE_JSON);
 
         $user_id = !empty($_GET['id']) ? intval($_GET['id']) : 0;
+
+        $handles = (new \Ecjia\App\User\UserCleanManager($user_id))->getFactories();
+
+        $count = 0;
+        if (!empty($handles)) {
+            foreach ($handles as $k => $v) {
+                $count += $v->handleCount();
+            }
+        }
+
+        if (!empty($count)) {
+            return $this->showmessage('当前还有用户数据未清除，请先清除后再执行删除会员操作', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+        }
+
+        RC_DB::table('users')->where('user_id', $user_id)->delete();
+
+        RC_Session::flash('status', '删除会员成功');
+
+        return $this->showmessage('', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('url' => RC_Uri::url('user/admin/init')));
+    }
+
+    /**
+     * 删除会员帐号单项数据
+     */
+    public function remove_item()
+    {
+        $this->admin_priv('user_delete', ecjia::MSGTYPE_JSON);
+
+        $user_id = !empty($_GET['id']) ? intval($_GET['id']) : 0;
         $code    = trim($_GET['handle']);
 
         $handles = (new \Ecjia\App\User\UserCleanManager($user_id))->getFactories();
         $handle  = array_get($handles, $code);
 
-        if ($handle) {
-            $result = $handle->handleClean();
-            if ($result) {
-                return $this->showmessage('删除成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
-            }
-            return $this->showmessage('删除失败', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+        if (empty($handle)) {
+            return $this->showmessage('操作失败，当前code无效', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
         }
 
-        if (empty($code)) {
+        $result = $handle->handleClean();
+        if ($result) {
+            return $this->showmessage($handle->getName() . '删除成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
+        }
+        return $this->showmessage($handle->getName() . '删除失败', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+    }
+
+    /**
+     * 一键删除会员帐号
+     */
+    public function remove_all()
+    {
+        $this->admin_priv('user_delete', ecjia::MSGTYPE_JSON);
+
+        $user_id = !empty($_GET['id']) ? intval($_GET['id']) : 0;
+
+        $handles = (new \Ecjia\App\User\UserCleanManager($user_id))->getFactories();
+
+        if (!empty($handles)) {
+            $remove_result = [];
+            foreach ($handles as $k => $handle) {
+                $handle_result = array(
+                    'code'   => $handle->getCode(),
+                    'name'   => $handle->getName(),
+                    'result' => $handle->handleClean()
+                );
+
+                $remove_result[] = $handle_result;
+            }
+
+            $filter = [];
+            if (!empty($remove_result)) {
+                $filter = collect($remove_result)->where('result', false)->all();
+            }
+
+            if (!empty($filter)) {
+                $error_html = '';
+                foreach ($filter as $v) {
+                    $error_html .= $v['name'] . '删除失败；<br/>';
+                }
+                return $this->showmessage($error_html, ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+            }
+
             RC_DB::table('users')->where('user_id', $user_id)->delete();
 
-            return $this->showmessage('删除成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('user/admin/init')));
+            RC_Session::flash('status', '一键删除会员成功');
+
+            return $this->showmessage('一键删除会员成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('url' => RC_Uri::url('user/admin/init')));
         }
 
-        return $this->showmessage('操作失败，当前code无效', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+        return $this->showmessage('操作失败', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
     }
 
     /**

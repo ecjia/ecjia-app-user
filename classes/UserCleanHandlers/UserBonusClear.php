@@ -69,6 +69,11 @@ HTML;
      */
     public function handleClean()
     {
+        $count = $this->handleCount();
+        if (empty($count)) {
+            return true;
+        }
+        
         $result = RC_DB::table('user_bonus')->where('user_id', $this->user_id)->where('used_time', 0)->delete();
 
         if ($result) {

@@ -97,6 +97,11 @@ HTML;
      */
     public function handleClean()
     {
+        $count = $this->handleCount();
+        if (empty($count)) {
+            return true;
+        }
+        
         $order_list    = RC_DB::table('order_info')->where('user_id', $this->user_id)->lists('order_id');
         $order_sn_list = RC_DB::table('order_info')->where('user_id', $this->user_id)->lists('order_sn');
 

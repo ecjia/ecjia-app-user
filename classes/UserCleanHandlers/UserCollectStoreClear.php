@@ -70,6 +70,11 @@ HTML;
      */
     public function handleClean()
     {
+        $count = $this->handleCount();
+        if (empty($count)) {
+            return true;
+        }
+        
         $result = RC_DB::table('collect_store')->where('user_id', $this->user_id)->delete();
 
         if ($result) {

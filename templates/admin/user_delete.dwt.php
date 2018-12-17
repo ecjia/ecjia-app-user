@@ -9,30 +9,6 @@
 
 <!-- {block name="main_content"} -->
 
-<style>
-	.ecjia-delete-user .controls.p_t4 {
-		padding-top: 4px;
-	}
-
-	.ecjia-delete-user .ecjiafc-red.ecjiaf-fs3 {
-		margin: 0 5px;
-	}
-
-	.ecjia-delete-user .form-horizontal .control-label {
-		text-align: left;
-	}
-
-	.ecjia-delete-user .form-horizontal .control-group {
-		padding-left: 10px;
-		padding-right: 10px;
-	}
-
-	.ecjia-delete-user .form-horizontal .controls-info {
-		color: #595959;
-		display: inline-block;
-	}
-</style>
-
 <div>
 	<h3 class="heading">
 		<!-- {if $ur_here}{$ur_here}{/if} -->
@@ -62,7 +38,7 @@
 						{$val->handlePrintData()}
 						{if $val->handleCanRemove()}
 						<span class="controls-info-right f_r">
-							<a class="btn btn-gebo" data-toggle="ajaxremove" data-msg="您确定要这么做吗？" href="{RC_Uri::url('user/admin/remove')}&id={$id}&handle={$val->getCode()}">删除数据</a>
+							<a class="btn btn-gebo" data-toggle="ajaxremove" data-msg="您确定要这么做吗？" href="{RC_Uri::url('user/admin/remove_item')}&id={$id}&handle={$val->getCode()}">删除数据</a>
 						</span>
 						{/if}
 					</div>
@@ -72,12 +48,10 @@
 
 			<div class="control-group">
 				{if $delete_all}
-				<a class="btn">一键删除所有</a>
+				<a class="btn delete_confirm" data-msg="您确定要彻底删除该会员所有信息吗？" href="{RC_Uri::url('user/admin/remove_all')}&id={$id}">一键删除所有</a>
 				{/if}
 
-                {if $count eq 0}
-				<a class="btn btn-gebo" data-toggle="ajaxremove" data-msg="您确定要彻底删除该会员吗？" href="{RC_Uri::url('user/admin/remove')}&id={$id}">删除会员</a>
-                {/if}
+				<a class="btn btn-gebo delete_confirm m_l10" data-msg="您确定要彻底删除该会员吗？" href="{RC_Uri::url('user/admin/remove')}&id={$id}">删除会员</a>
 
 				<div class="help-block">
 					<p>注：一键删除：点击后，会将以上所有有关当前账号的数据全部删除，一旦删除后将不可恢复。</p>
