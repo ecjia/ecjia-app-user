@@ -76,6 +76,8 @@ class Helper
 
         ecjia_admin_log::instance()->add_object('user_log', '账户日志');
 
+        ecjia_admin_log::instance()->add_object('user_wechat_account', '账户微信粉丝账号');
+
         ecjia_admin_log::instance()->add_action('clean', '清空');
     }
 
