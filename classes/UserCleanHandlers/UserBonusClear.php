@@ -10,6 +10,8 @@ namespace Ecjia\App\User\UserCleanHandlers;
 
 use Ecjia\App\User\UserCleanAbstract;
 use RC_DB;
+use RC_Api;
+use ecjia_admin;
 
 class UserBonusClear extends  UserCleanAbstract
 {
@@ -62,7 +64,13 @@ HTML;
      */
     public function handleClean()
     {
+        $result = RC_DB::table('user_bonus')->where('user_id', $this->user_id)->where('used_time', 0)->delete();
 
+        if ($result) {
+            $this->handleAdminLog();
+        }
+
+        return $result;
     }
 
     /**
@@ -72,7 +80,13 @@ HTML;
      */
     public function handleAdminLog()
     {
+        \Ecjia\App\User\Helper::assign_adminlog_content();
 
+        $user_info = RC_Api::api('user', 'user_info', array('user_id' => $this->user_id));
+
+        $user_name = !empty($user_info) ? '用户名是'.$user_info['user_name'] : '用户ID是'.$this->user_id;
+
+        ecjia_admin::admin_log($user_name, 'clean', 'user_bonus');
     }
 
     /**
