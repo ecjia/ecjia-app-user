@@ -66,13 +66,15 @@ class Helper
         
         ecjia_admin_log::instance()->add_action('check', RC_Lang::get('user::users.check'));
 
-        ecjia_admin_log::instance()->add_object('user_address', '用户收货地址');
         ecjia_admin_log::instance()->add_object('user_bonus', '用户红包');
+        ecjia_admin_log::instance()->add_object('user_address', '用户收货地址');
+        ecjia_admin_log::instance()->add_object('user_money', '用户账户余额');
+
         ecjia_admin_log::instance()->add_object('user_collect_goods', '用户收藏商品');
 
         ecjia_admin_log::instance()->add_action('clean', '清空');
     }
-    
+
 }
 
 // end

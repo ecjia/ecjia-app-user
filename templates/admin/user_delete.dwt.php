@@ -70,30 +70,6 @@
 				<!-- {/foreach} -->
 
 			<div class="control-group formSep">
-				<label class="control-label">账户余额</label>
-				<div class="controls p_t4">
-					<span class="controls-info w200">账户内可用余额<span class="ecjiafc-red ecjiaf-fs3">¥1200.00</span></span>
-					<span class="controls-info"><a href="javascript:;" target="__blank">查看全部>>></a></span>
-					<span class="controls-info-right f_r"><a class="btn btn-gebo">删除数据</a></span>
-				</div>
-			</div>
-			<div class="control-group formSep">
-				<label class="control-label">账户红包</label>
-				<div class="controls p_t4">
-					<span class="controls-info">账户内可用红包<span class="ecjiafc-red ecjiaf-fs3">8</span>个</span>
-					<span class="controls-info"></span>
-					<span class="controls-info-right f_r"><a class="btn btn-gebo">删除数据</a></span>
-				</div>
-			</div>
-			<div class="control-group formSep">
-				<label class="control-label">账户收藏商品</label>
-				<div class="controls p_t4">
-					<span class="controls-info">账户共收藏<span class="ecjiafc-red ecjiaf-fs3">12</span>件商品</span>
-					<span class="controls-info"></span>
-					<span class="controls-info-right f_r"><a class="btn btn-gebo">删除数据</a></span>
-				</div>
-			</div>
-			<div class="control-group formSep">
 				<label class="control-label">第三方账号关联</label>
 				<div class="controls p_t4">
 					<span class="controls-info  w200">已关联<span class="ecjiafc-red ecjiaf-fs3">QQ、微信</span></span>

@@ -9,30 +9,31 @@
 namespace Ecjia\App\User\UserCleanHandlers;
 
 use Ecjia\App\User\UserCleanAbstract;
+use RC_Uri;
 use RC_DB;
 use RC_Api;
 use ecjia_admin;
 
-class UserBonusClear extends  UserCleanAbstract
+class UserCollectGoodsClear extends  UserCleanAbstract
 {
 
     /**
      * 代号标识
      * @var string
      */
-    protected $code = 'user_bonus_clear';
+    protected $code = 'user_collect_goods_clear';
 
     /**
      * 名称
      * @var string
      */
-    protected $name = '账户红包';
+    protected $name = '账户收藏商品';
 
     /**
      * 排序
      * @var int
      */
-    protected $sort = 2;
+    protected $sort = 21;
 
     /**
      * 数据描述及输出显示内容
@@ -43,9 +44,10 @@ class UserBonusClear extends  UserCleanAbstract
 
         return <<<HTML
 
-<span class="controls-info">账户内可用红包<span class="ecjiafc-red ecjiaf-fs3">{$count}</span>个</span>
+<span class="controls-info">账户共收藏<span class="ecjiafc-red ecjiaf-fs3">{$count}</span>件商品</span>
 
 HTML;
+
     }
 
     /**
@@ -55,10 +57,9 @@ HTML;
      */
     public function handleCount()
     {
-        $user_bonus_count = RC_DB::table('user_bonus')->where('user_id', $this->user_id)->where('used_time', 0)->count();
+        $count = RC_DB::table('collect_goods')->where('user_id', $this->user_id)->count();
 
-        return $user_bonus_count;
-
+        return $count;
     }
 
 
@@ -69,7 +70,7 @@ HTML;
      */
     public function handleClean()
     {
-        $result = RC_DB::table('user_bonus')->where('user_id', $this->user_id)->where('used_time', 0)->delete();
+        $result = RC_DB::table('collect_goods')->where('user_id', $this->user_id)->delete();
 
         if ($result) {
             $this->handleAdminLog();
@@ -91,7 +92,7 @@ HTML;
 
         $user_name = !empty($user_info) ? '用户名是'.$user_info['user_name'] : '用户ID是'.$this->user_id;
 
-        ecjia_admin::admin_log($user_name, 'clean', 'user_bonus');
+        ecjia_admin::admin_log($user_name, 'clean', 'user_collect_goods');
     }
 
     /**

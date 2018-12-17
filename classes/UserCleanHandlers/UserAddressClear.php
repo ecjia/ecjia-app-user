@@ -29,6 +29,11 @@ class UserAddressClear extends  UserCleanAbstract
      */
     protected $name = '账户收货地址';
 
+    /**
+     * 排序
+     * @var int
+     */
+    protected $sort = 1;
 
     /**
      * 数据描述及输出显示内容
