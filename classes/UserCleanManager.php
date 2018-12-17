@@ -93,7 +93,7 @@ class UserCleanManager
     public function handler($code)
     {
         if (!array_key_exists($code, $this->factories)) {
-            throw new InvalidArgumentException("Component '$code' is not supported.");
+            throw new InvalidArgumentException("Handler '$code' is not supported.");
         }
     
         return $this->factories[$code];
