@@ -82,7 +82,12 @@ class UserCleanManager
 
         usort($factories, array($this, 'listMenuBySort'));
 
-        return $factories;
+        $new_factories = [];
+        foreach ($factories as $item) {
+            $new_factories[$item->getCode()] = $item;
+        }
+
+        return $new_factories;
     }
     
     public function handler($code)
