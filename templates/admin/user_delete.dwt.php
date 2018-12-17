@@ -68,23 +68,6 @@
 					</div>
 				</div>
 				<!-- {/foreach} -->
-
-----------
-
-			<div class="control-group formSep">
-				<label class="control-label">会员父集ID</label>
-				<div class="controls p_t4">
-					<span class="controls-info">会员推荐注册时绑定的会员父级ID</span>
-					<span class="controls-info-right f_r"><a class="btn btn-gebo">删除数据</a></span>
-				</div>
-			</div>
-			<div class="control-group formSep">
-				<label class="control-label">会员邀请记录</label>
-				<div class="controls p_t4">
-					<span class="controls-info">会员推荐邀请的所有记录</span>
-					<span class="controls-info-right f_r"><a class="btn btn-gebo">删除数据</a></span>
-				</div>
-			</div>
 			{/if}
 
 			<div class="control-group">
