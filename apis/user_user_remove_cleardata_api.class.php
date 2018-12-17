@@ -68,6 +68,7 @@ class user_user_remove_cleardata_api extends Component_Event_Api
             new \Ecjia\App\User\UserCleanHandlers\UserBonusClear($user_id),
             new \Ecjia\App\User\UserCleanHandlers\UserCollectGoodsClear($user_id),
             new \Ecjia\App\User\UserCleanHandlers\UserLogClear($user_id),
+            new \Ecjia\App\User\UserCleanHandlers\UserCollectStoreClear($user_id),
         ];
     }
     

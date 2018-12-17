@@ -86,6 +86,12 @@ class Helper
 
         ecjia_admin_log::instance()->add_object('user_trading_record', '用户充值/提现记录');
 
+        ecjia_admin_log::instance()->add_object('user_collect_store', '用户收藏店铺');
+
+        ecjia_admin_log::instance()->add_object('user_finance_invoice', '账户发票信息');
+
+        ecjia_admin_log::instance()->add_object('user_account_log', '用户积分记录');
+
         ecjia_admin_log::instance()->add_action('clean', '清空');
     }
 

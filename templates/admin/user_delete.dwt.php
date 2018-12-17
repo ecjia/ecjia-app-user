@@ -72,34 +72,6 @@
 ----------
 
 			<div class="control-group formSep">
-				<label class="control-label">用户充值/提现记录</label>
-				<div class="controls p_t4">
-					<span class="controls-info">账户充值、提现有关的所有记录</span>
-					<span class="controls-info-right f_r"><a class="btn btn-gebo">删除数据</a></span>
-				</div>
-			</div>
-			<div class="control-group formSep">
-				<label class="control-label">账户收藏店铺</label>
-				<div class="controls p_t4">
-					<span class="controls-info">账户共收藏<span class="ecjiafc-red ecjiaf-fs3">12</span>家店铺</span>
-					<span class="controls-info-right f_r"><a class="btn btn-gebo">删除数据</a></span>
-				</div>
-			</div>
-			<div class="control-group formSep">
-				<label class="control-label">账户发票信息</label>
-				<div class="controls p_t4">
-					<span class="controls-info">账号添加的发票信息</span>
-					<span class="controls-info-right f_r"><a class="btn btn-gebo">删除数据</a></span>
-				</div>
-			</div>
-			<div class="control-group formSep">
-				<label class="control-label">会员积分记录</label>
-				<div class="controls p_t4">
-					<span class="controls-info">账户积分所有的变动记录</span>
-					<span class="controls-info-right f_r"><a class="btn btn-gebo">删除数据</a></span>
-				</div>
-			</div>
-			<div class="control-group formSep">
 				<label class="control-label">会员父集ID</label>
 				<div class="controls p_t4">
 					<span class="controls-info">会员推荐注册时绑定的会员父级ID</span>
