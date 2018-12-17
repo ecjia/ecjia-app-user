@@ -13,7 +13,7 @@ use RC_DB;
 use RC_Api;
 use ecjia_admin;
 
-class UserBonusClear extends  UserCleanAbstract
+class UserBonusClear extends UserCleanAbstract
 {
 
     /**
@@ -89,7 +89,7 @@ HTML;
 
         $user_info = RC_Api::api('user', 'user_info', array('user_id' => $this->user_id));
 
-        $user_name = !empty($user_info) ? '用户名是'.$user_info['user_name'] : '用户ID是'.$this->user_id;
+        $user_name = !empty($user_info) ? '用户名是' . $user_info['user_name'] : '用户ID是' . $this->user_id;
 
         ecjia_admin::admin_log($user_name, 'clean', 'user_bonus');
     }

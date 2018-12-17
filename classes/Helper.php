@@ -74,6 +74,8 @@ class Helper
 
         ecjia_admin_log::instance()->add_object('user_connect', '用户第三方关联');
 
+        ecjia_admin_log::instance()->add_object('user_log', '账户日志');
+
         ecjia_admin_log::instance()->add_action('clean', '清空');
     }
 

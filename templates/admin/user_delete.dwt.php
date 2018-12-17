@@ -70,13 +70,6 @@
 				<!-- {/foreach} -->
 
 			<div class="control-group formSep">
-				<label class="control-label">账户日志</label>
-				<div class="controls p_t4">
-					<span class="controls-info">与账号有关的所有日志记录</span>
-					<span class="controls-info-right f_r"><a class="btn btn-gebo">删除数据</a></span>
-				</div>
-			</div>
-			<div class="control-group formSep">
 				<label class="control-label">账户微信粉丝账号</label>
 				<div class="controls p_t4">
 					<span class="controls-info">账户关注微信公众号对应的粉丝账号</span>
