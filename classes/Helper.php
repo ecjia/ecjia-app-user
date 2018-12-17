@@ -72,6 +72,8 @@ class Helper
 
         ecjia_admin_log::instance()->add_object('user_collect_goods', '用户收藏商品');
 
+        ecjia_admin_log::instance()->add_object('user_connect', '用户第三方关联');
+
         ecjia_admin_log::instance()->add_action('clean', '清空');
     }
 
