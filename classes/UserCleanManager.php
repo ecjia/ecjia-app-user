@@ -80,7 +80,7 @@ class UserCleanManager
 
         $factories = RC_Hook::apply_filters('ecjia_user_clean_component_filter', $factories, $this->user_id);
 
-        usort($factories, array('ecjia_utility', 'admin_menu_by_sort'));
+        usort($factories, array($this, 'MenuBySort'));
 
         return $factories;
     }
@@ -102,7 +102,7 @@ class UserCleanManager
      * @param UserCleanAbstract $b
      * @return number
      */
-    protected function admin_menu_by_sort(UserCleanAbstract $a, UserCleanAbstract $b)
+    protected function MenuBySort(UserCleanAbstract $a, UserCleanAbstract $b)
     {
         if ($a->getSort() == $b->getSort()) {
             return 0;
