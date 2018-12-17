@@ -46,7 +46,7 @@
 <div class="row-fluid ecjia-delete-user">
 	<div class="span12">
 		<div class="form-horizontal">
-			{if $user_log_empty}
+			{if $count eq 0}
 			<div class="alert alert-warning">
 				<a class="close" data-dismiss="alert">×</a>
 				<strong>
@@ -62,7 +62,7 @@
 						{$val->handlePrintData()}
 						{if $val->handleCanRemove()}
 						<span class="controls-info-right f_r">
-							<a class="btn btn-gebo" data-toggle="ajaxremove" data-msg="您确定要这么做吗？" href="{RC_Uri::url('user/admin/remove')}&id={$user.user_id}&handle={$val->getCode()}">删除数据</a>
+							<a class="btn btn-gebo" data-toggle="ajaxremove" data-msg="您确定要这么做吗？" href="{RC_Uri::url('user/admin/remove')}&id={$id}&handle={$val->getCode()}">删除数据</a>
 						</span>
 						{/if}
 					</div>
@@ -75,7 +75,9 @@
 				<a class="btn">一键删除所有</a>
 				{/if}
 
-				<a class="btn btn-gebo" data-toggle="ajaxremove" data-msg="当前账户还有关联数据没有删除，请删除完关联数据后，再删除会员" href="{RC_Uri::url('user/admin/remove')}&id={$user.user_id}">删除会员</a>
+                {if $count eq 0}
+				<a class="btn btn-gebo" data-toggle="ajaxremove" data-msg="您确定要彻底删除该会员吗？" href="{RC_Uri::url('user/admin/remove')}&id={$id}">删除会员</a>
+                {/if}
 
 				<div class="help-block">
 					<p>注：一键删除：点击后，会将以上所有有关当前账号的数据全部删除，一旦删除后将不可恢复。</p>

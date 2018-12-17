@@ -742,14 +742,18 @@ class admin extends ecjia_admin
         $delete_all = $_SESSION['action_list'] == 'all' ? true : false;
         $this->assign('delete_all', $delete_all);
 
-        $data = $this->get_user_account($id);
-        $this->assign('data', $data);
-
-        $user = $data['user'];
-        $this->assign('user', $user);
+        $this->assign('id', $id);
 
         $handles = (new \Ecjia\App\User\UserCleanManager($id))->getFactories();
         $this->assign('handles', $handles);
+
+        $count = 0;
+        if (!empty($handles)) {
+            foreach ($handles as $k => $v) {
+                $count += $v->handleCount();
+            }
+        }
+        $this->assign('count', $count);
 
         $this->display('user_delete.dwt');
     }
@@ -774,6 +778,13 @@ class admin extends ecjia_admin
             }
             return $this->showmessage('删除失败', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
         }
+
+        if (empty($code)) {
+            RC_DB::table('users')->where('user_id', $user_id)->delete();
+
+            return $this->showmessage('删除成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('user/admin/init')));
+        }
+
         return $this->showmessage('操作失败，当前code无效', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
     }
 
@@ -880,7 +891,7 @@ class admin extends ecjia_admin
         $pay_log_count           = 0;
         $refund_status_log_count = 0;
         $payment_record_count    = 0;
-        $refund_payrecord_count = 0;
+        $refund_payrecord_count  = 0;
 
         if (!empty($order_list)) {
             $order_status_log_count = RC_DB::table('order_status_log')->whereIn('order_id', $order_list)->count(); //订单状态日志
