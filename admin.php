@@ -730,7 +730,14 @@ class admin extends ecjia_admin
     {
         $this->admin_priv('user_delete');
 
-        $id            = intval($_GET['id']);
+        $id = intval($_GET['id']);
+
+        $user_info = RC_Api::api('user', 'user_info', array('user_id' => $id));
+        if (empty($user_info)) {
+            $links[] = array('text' => '会员列表', 'href' => RC_Uri::url('user/admin/init'));
+            return $this->showmessage('该用户不存在', ecjia::MSGTYPE_HTML | ecjia::MSGSTAT_ERROR, array('links' => $links));
+        }
+
         $user_info_url = RC_Uri::url('user/admin/info', array('id' => $id));
 
         ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('会员详情', $user_info_url));
@@ -825,8 +832,6 @@ class admin extends ecjia_admin
 
         $default_address_count = empty($address_id['address_id']) ? 0 : 1;
 
-        $field = '';
-        $order = array();
         /* 用户地址列表*/
         $db_user_address = RC_DB::table('user_address as ua')
             ->leftJoin('regions as c', RC_DB::raw('c.region_id'), '=', RC_DB::raw('ua.country'))
@@ -864,119 +869,6 @@ class admin extends ecjia_admin
         $this->display('user_address_list.dwt');
     }
 
-    private function get_user_account($user_id = 0)
-    {
-        //收货地址
-        $user_address_count = RC_DB::table('user_address')->where('user_id', $user_id)->count();
-
-        //账户余额信息
-        $user = RC_Api::api('user', 'user_info', array('user_id' => $user_id));
-
-        //红包
-        $user_bonus_count = RC_DB::table('user_bonus')->where('user_id', $user_id)->where('used_time', 0)->count();
-
-        //收藏商品
-        $collect_goods_count = RC_DB::table('collect_goods')->where('user_id', $user_id)->count();
-
-        //绑定 qq wx
-        $bind_qq_count = RC_DB::table('connect_user')->where('user_id', $user_id)->where('connect_code', 'sns_qq')->count();
-        $bind_wx_count = RC_DB::table('connect_user')->where('user_id', $user_id)->where('connect_code', 'sns_wechat')->count();
-
-        //账户日志
-        $account_log_count = RC_DB::table('account_log')->where('user_id', $user_id)->count();
-        $order_list        = RC_DB::table('order_info')->where('user_id', $user_id)->lists('order_id');
-        $order_sn_list     = RC_DB::table('order_info')->where('user_id', $user_id)->lists('order_sn');
-
-        $order_status_log_count  = 0;
-        $pay_log_count           = 0;
-        $refund_status_log_count = 0;
-        $payment_record_count    = 0;
-        $refund_payrecord_count  = 0;
-
-        if (!empty($order_list)) {
-            $order_status_log_count = RC_DB::table('order_status_log')->whereIn('order_id', $order_list)->count(); //订单状态日志
-            $pay_log_count          = RC_DB::table('pay_log')->whereIn('order_id', $order_list)->count(); //支付日志
-        }
-        $refund_order_list = RC_DB::table('refund_order')->where('user_id', $user_id)->lists('refund_id');
-        if (!empty($refund_order_list)) {
-            $refund_status_log_count = RC_DB::table('refund_status_log')->whereIn('refund_id', $refund_order_list)->count(); //退款日志
-            $refund_payrecord_count  = RC_DB::table('refund_payrecord')->whereIn('refund_id', $refund_order_list)->count(); //退款支付方式日志
-        }
-        if (!empty($order_sn_list)) {
-            $payment_record_count = RC_DB::table('payment_record')->whereIn('order_sn', $order_sn_list)->count(); //支付方式日志
-        }
-        $service_sms_account_log_count = RC_DB::table('service_sms_account_log')->where('user_id', $user_id)->count(); //短信账户日志
-
-        $log_count = 1;
-        if (empty($order_status_log_count) && empty($pay_log_count)
-            && empty($refund_status_log_count) && empty($refund_payrecord_count)
-            && empty($payment_record_count) && empty($service_sms_account_log_count)) {
-            $log_count = 0;
-        }
-
-        //账户微信粉丝账号
-        $wechat_user_info              = RC_DB::table('wechat_user')->where('ect_uid', $user_id)->first();
-        $wechat_user_count             = 0;
-        $wechat_customer_record_count  = 0;
-        $wechat_customer_session_count = 0;
-        $wechat_prize_count            = 0;
-
-        if (!empty($wechat_user_info)) {
-            $wechat_user_count = 1;
-
-            //账户发送消息记录
-            $wechat_customer_record_count = RC_DB::table('wechat_customer_record')->where('openid', $wechat_user_info['openid'])->count();
-
-            //微信客服消息记录
-            $wechat_customer_session_count = RC_DB::table('wechat_customer_session')->where('openid', $wechat_user_info['openid'])->count();
-
-            //账户抽奖记录
-            $wechat_prize_count = RC_DB::table('wechat_prize')->where('openid', $wechat_user_info['openid'])->count();
-        }
-
-        //账户抽奖记录
-        $market_activity_log_count = RC_DB::table('market_activity_log')->where('user_id', $user_id)->count();
-
-        //账户充值/提现记录
-        $user_count_count = RC_DB::table('user_account')->where('user_id', $user_id)->count();
-
-        //收藏店铺
-        $collect_store_count = RC_DB::table('collect_store')->where('user_id', $user_id)->count();
-
-        //账户发票记录
-        $finance_invoice_count = RC_DB::table('finance_invoice')->where('user_id', $user_id)->count();
-
-        //账户积分记录
-        $account_log_count = RC_DB::table('account_log')->where('user_id', $user_id)->count();
-
-        //父级会员
-        $parent_id_count = !empty($user['parent_id']) ? 1 : 0;
-
-        //账户邀请记录
-        $invitee_record_count = RC_DB::table('invitee_record')->where('invite_id', $user_id)->count();
-
-        $data = array(
-            'user_address_count'            => $user_address_count,
-            'user'                          => $user,
-            'user_bonus_count'              => $user_bonus_count,
-            'collect_goods_count'           => $collect_goods_count,
-            'bind_qq_count'                 => $bind_qq_count,
-            'bind_wx_count'                 => $bind_wx_count,
-            'log_count'                     => $log_count,
-            'wechat_user_count'             => $wechat_user_count,
-            'wechat_customer_record_count'  => $wechat_customer_record_count,
-            'prize_count'                   => empty($wechat_prize_count) && empty($market_activity_log_count) ? 0 : 1,
-            'wechat_customer_session_count' => $wechat_customer_session_count,
-            'user_count_count'              => $user_count_count,
-            'collect_store_count'           => $collect_store_count,
-            'finance_invoice_count'         => $finance_invoice_count,
-            'account_log_count'             => $account_log_count,
-            'parent_id_count'               => $parent_id_count,
-            'invitee_record_count'          => $invitee_record_count,
-        );
-
-        return $data;
-    }
 }
 
 // end
