@@ -63,8 +63,6 @@ class UserCleanManager
     public function __construct($user_id)
     {
         $this->user_id = $user_id;
-//        dd($this);
-//        $this->factories = $this->getFactories();
     }
     
     public function getFactories()
@@ -80,7 +78,11 @@ class UserCleanManager
             }
         }
 
-        return RC_Hook::apply_filters('ecjia_user_clean_component_filter', $factories, $this->user_id);
+        $factories = RC_Hook::apply_filters('ecjia_user_clean_component_filter', $factories, $this->user_id);
+
+        usort($factories, array('ecjia_utility', 'admin_menu_by_sort'));
+
+        return $factories;
     }
     
     public function handler($code)
@@ -91,6 +93,22 @@ class UserCleanManager
     
         return $this->factories[$code];
     }
-    
+
+
+    /**
+     * 列表排序
+     *
+     * @param UserCleanAbstract $a
+     * @param UserCleanAbstract $b
+     * @return number
+     */
+    protected function admin_menu_by_sort(UserCleanAbstract $a, UserCleanAbstract $b)
+    {
+        if ($a->getSort() == $b->getSort()) {
+            return 0;
+        } else {
+            return ($a->getSort() > $b->getSort()) ? 1 : -1;
+        }
+    }
     
 }
