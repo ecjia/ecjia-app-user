@@ -78,6 +78,12 @@ class Helper
 
         ecjia_admin_log::instance()->add_object('user_wechat_account', '账户微信粉丝账号');
 
+        ecjia_admin_log::instance()->add_object('user_wechat_custom_message', '账户发送消息记录');
+
+        ecjia_admin_log::instance()->add_object('user_wechat_prize', '账户抽奖记录');
+
+        ecjia_admin_log::instance()->add_object('user_wechat_customer_record', '微信客服消息记录');
+
         ecjia_admin_log::instance()->add_action('clean', '清空');
     }
 
