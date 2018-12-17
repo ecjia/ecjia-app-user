@@ -84,6 +84,8 @@ class Helper
 
         ecjia_admin_log::instance()->add_object('user_wechat_customer_record', '微信客服消息记录');
 
+        ecjia_admin_log::instance()->add_object('user_trading_record', '用户充值/提现记录');
+
         ecjia_admin_log::instance()->add_action('clean', '清空');
     }
 
