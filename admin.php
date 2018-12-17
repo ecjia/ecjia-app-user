@@ -71,13 +71,13 @@ class admin extends ecjia_admin
         RC_Style::enqueue_style('user_info_css', RC_App::apps_url('statics/css/user_info.css', __FILE__));
 
         $user_jslang = array(
-            'keywords_required' => RC_Lang::get('user::users.keywords_required'),
-            'username_required' => RC_Lang::get('user::users.username_required'),
-            'email_required' => RC_Lang::get('user::users.email_required'),
-            'password_required' => RC_Lang::get('user::users.password_required'),
-            'password_length' => RC_Lang::get('user::users.password_length'),
-            'password_check' => RC_Lang::get('user::users.password_check'),
-            'email_check' => RC_Lang::get('user::users.email_check'),
+            'keywords_required'     => RC_Lang::get('user::users.keywords_required'),
+            'username_required'     => RC_Lang::get('user::users.username_required'),
+            'email_required'        => RC_Lang::get('user::users.email_required'),
+            'password_required'     => RC_Lang::get('user::users.password_required'),
+            'password_length'       => RC_Lang::get('user::users.password_length'),
+            'password_check'        => RC_Lang::get('user::users.password_check'),
+            'email_check'           => RC_Lang::get('user::users.email_check'),
             'mobile_phone_required' => RC_Lang::get('user::users.mobile_phone_required'),
         );
         RC_Script::localize_script('user_info', 'user_jslang', $user_jslang);
@@ -99,8 +99,8 @@ class admin extends ecjia_admin
         ecjia_screen::get_current_screen()->remove_last_nav_here();
         ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('user::users.user_list')));
         ecjia_screen::get_current_screen()->add_help_tab(array(
-            'id' => 'overview',
-            'title' => RC_Lang::get('user::users.overview'),
+            'id'      => 'overview',
+            'title'   => RC_Lang::get('user::users.overview'),
             'content' => '<p>' . RC_Lang::get('user::users.user_list_help') . '</p>',
         ));
 
@@ -112,7 +112,7 @@ class admin extends ecjia_admin
         $this->assign('ur_here', RC_Lang::get('user::users.user_list'));
         $this->assign('action_link', array('text' => RC_Lang::get('system::system.04_users_add'), 'href' => RC_Uri::url('user/admin/add')));
 
-        $ranks = RC_DB::table('user_rank')->select('rank_id', 'rank_name', 'min_points')->orderBy('min_points', 'asc')->get();
+        $ranks     = RC_DB::table('user_rank')->select('rank_id', 'rank_name', 'min_points')->orderBy('min_points', 'asc')->get();
         $user_list = get_user_list($_REQUEST);
 
         $this->assign('user_ranks', $ranks);
@@ -132,8 +132,8 @@ class admin extends ecjia_admin
 
         ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('system::system.04_users_add')));
         ecjia_screen::get_current_screen()->add_help_tab(array(
-            'id' => 'overview',
-            'title' => RC_Lang::get('user::users.overview'),
+            'id'      => 'overview',
+            'title'   => RC_Lang::get('user::users.overview'),
             'content' => '<p>' . RC_Lang::get('user::users.user_add_help') . '</p>',
         ));
 
@@ -144,8 +144,8 @@ class admin extends ecjia_admin
 
         $user = array(
             'rank_points' => ecjia::config('register_points'),
-            'pay_points' => ecjia::config('register_points'),
-            'sex' => 0,
+            'pay_points'  => ecjia::config('register_points'),
+            'sex'         => 0,
             'credit_line' => 0,
         );
 
@@ -159,7 +159,7 @@ class admin extends ecjia_admin
         /* 给扩展字段加入key */
         if (!empty($extend_info_list)) {
             foreach ($extend_info_list as $key => $val) {
-                $val['key'] = $key + 1;
+                $val['key']             = $key + 1;
                 $extend_info_list[$key] = $val;
             }
         }
@@ -185,20 +185,20 @@ class admin extends ecjia_admin
 
         RC_Loader::load_app_class('integrate', 'user', false);
 
-        $username = empty($_POST['username']) ? '' : trim($_POST['username']);
-        $password = empty($_POST['password']) ? '' : trim($_POST['password']);
+        $username         = empty($_POST['username']) ? '' : trim($_POST['username']);
+        $password         = empty($_POST['password']) ? '' : trim($_POST['password']);
         $confirm_password = empty($_POST['confirm_password']) ? '' : trim($_POST['confirm_password']);
-        $email = empty($_POST['email']) ? '' : trim($_POST['email']);
-        $mobile_phone = empty($_POST['mobile_phone']) ? '' : trim($_POST['mobile_phone']);
+        $email            = empty($_POST['email']) ? '' : trim($_POST['email']);
+        $mobile_phone     = empty($_POST['mobile_phone']) ? '' : trim($_POST['mobile_phone']);
 
-        $sex = empty($_POST['sex']) ? 0 : intval($_POST['sex']);
+        $sex       = empty($_POST['sex']) ? 0 : intval($_POST['sex']);
         $sex_array = array(0, 1, 2);
 
-        $sex = in_array($sex, $sex_array) ? $sex : 0;
-        $birthday = empty($_POST['birthday']) ? '1000-01-01' : $_POST['birthday'];
-        $rank = empty($_POST['user_rank']) ? 0 : intval($_POST['user_rank']);
+        $sex         = in_array($sex, $sex_array) ? $sex : 0;
+        $birthday    = empty($_POST['birthday']) ? '1000-01-01' : $_POST['birthday'];
+        $rank        = empty($_POST['user_rank']) ? 0 : intval($_POST['user_rank']);
         $credit_line = empty($_POST['credit_line']) ? 0 : trim($_POST['credit_line']);
-        $reg_time = RC_Time::gmtime();
+        $reg_time    = RC_Time::gmtime();
 
         /* 验证参数的合法性*/
         /* 邮箱*/
@@ -230,12 +230,12 @@ class admin extends ecjia_admin
         }
 
         /* 更新会员的其它信息 */
-        $other['credit_line'] = $credit_line;
-        $other['user_rank'] = $rank;
-        $other['msn'] = isset($_POST['extend_field1']) ? htmlspecialchars(trim($_POST['extend_field1'])) : '';
-        $other['qq'] = isset($_POST['extend_field2']) ? htmlspecialchars(trim($_POST['extend_field2'])) : '';
+        $other['credit_line']  = $credit_line;
+        $other['user_rank']    = $rank;
+        $other['msn']          = isset($_POST['extend_field1']) ? htmlspecialchars(trim($_POST['extend_field1'])) : '';
+        $other['qq']           = isset($_POST['extend_field2']) ? htmlspecialchars(trim($_POST['extend_field2'])) : '';
         $other['office_phone'] = isset($_POST['extend_field3']) ? htmlspecialchars(trim($_POST['extend_field3'])) : '';
-        $other['home_phone'] = isset($_POST['extend_field4']) ? htmlspecialchars(trim($_POST['extend_field4'])) : '';
+        $other['home_phone']   = isset($_POST['extend_field4']) ? htmlspecialchars(trim($_POST['extend_field4'])) : '';
 
         $check_mobile = Ecjia\App\Sms\Helper::check_mobile($mobile_phone);
         if (is_ecjia_error($check_mobile)) {
@@ -269,10 +269,10 @@ class admin extends ecjia_admin
                     $extend_field_index = 'extend_field' . $val['id'];
                     if (!empty($_POST[$extend_field_index])) {
                         $temp_field_content = strlen($_POST[$extend_field_index]) > 100 ? mb_substr($_POST[$extend_field_index], 0, 99) : $_POST[$extend_field_index];
-                        $data = array(
-                            'user_id' => $max_id,
+                        $data               = array(
+                            'user_id'      => $max_id,
                             'reg_field_id' => $val['id'],
-                            'content' => $temp_field_content,
+                            'content'      => $temp_field_content,
                         );
                         RC_DB::table('reg_extend_info')->insert($data);
                     }
@@ -306,10 +306,10 @@ class admin extends ecjia_admin
 
         ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('user::users.users_edit')));
         ecjia_screen::get_current_screen()->add_help_tab(array(
-            'id' => 'overview',
-            'title' => RC_Lang::get('user::users.overview'),
+            'id'      => 'overview',
+            'title'   => RC_Lang::get('user::users.overview'),
             'content' =>
-            '<p>' . RC_Lang::get('user::users.user_edit_help') . '</p>',
+                '<p>' . RC_Lang::get('user::users.user_edit_help') . '</p>',
         ));
 
         ecjia_screen::get_current_screen()->set_help_sidebar(
@@ -323,24 +323,24 @@ class admin extends ecjia_admin
         $row = RC_DB::table('users')->where('user_id', $_GET['id'])->first();
 
         if ($row) {
-            $user['user_id'] = $row['user_id'];
-            $user['email'] = $row['email'];
-            $user['user_name'] = $row['user_name'];
-            $user['sex'] = $row['sex'];
-            $user['birthday'] = date($row['birthday']);
-            $user['pay_points'] = $row['pay_points'];
-            $user['rank_points'] = $row['rank_points'];
-            $user['user_rank'] = $row['user_rank'];
-            $user['user_money'] = $row['user_money'];
-            $user['frozen_money'] = $row['frozen_money'];
-            $user['credit_line'] = $row['credit_line'];
-            $user['formated_user_money'] = price_format($row['user_money']);
+            $user['user_id']               = $row['user_id'];
+            $user['email']                 = $row['email'];
+            $user['user_name']             = $row['user_name'];
+            $user['sex']                   = $row['sex'];
+            $user['birthday']              = date($row['birthday']);
+            $user['pay_points']            = $row['pay_points'];
+            $user['rank_points']           = $row['rank_points'];
+            $user['user_rank']             = $row['user_rank'];
+            $user['user_money']            = $row['user_money'];
+            $user['frozen_money']          = $row['frozen_money'];
+            $user['credit_line']           = $row['credit_line'];
+            $user['formated_user_money']   = price_format($row['user_money']);
             $user['formated_frozen_money'] = price_format($row['frozen_money']);
-            $user['qq'] = $row['qq'];
-            $user['msn'] = $row['msn'];
-            $user['office_phone'] = $row['office_phone'];
-            $user['home_phone'] = $row['home_phone'];
-            $user['mobile_phone'] = $row['mobile_phone'];
+            $user['qq']                    = $row['qq'];
+            $user['msn']                   = $row['msn'];
+            $user['office_phone']          = $row['office_phone'];
+            $user['home_phone']            = $row['home_phone'];
+            $user['mobile_phone']          = $row['mobile_phone'];
         }
 
         /* 取出注册扩展字段 */
@@ -352,7 +352,7 @@ class admin extends ecjia_admin
             ->orderBy('dis_order', 'asc')
             ->orderBy('id', 'asc')
             ->get();
-        $extend_info_arr = RC_DB::table('reg_extend_info')->where('user_id', $user['user_id'])->select('reg_field_id', 'content')->get();
+        $extend_info_arr  = RC_DB::table('reg_extend_info')->where('user_id', $user['user_id'])->select('reg_field_id', 'content')->get();
 
         $temp_arr = array();
         if (isset($extend_info_arr)) {
@@ -364,16 +364,23 @@ class admin extends ecjia_admin
         if (!empty($extend_info_list)) {
             foreach ($extend_info_list as $key => $val) {
                 switch ($val['id']) {
-                    case 1:$extend_info_list[$key]['content'] = $user['msn'];
+                    case 1:
+                        $extend_info_list[$key]['content'] = $user['msn'];
                         break;
-                    case 2:$extend_info_list[$key]['content'] = $user['qq'];
+                    case 2:
+                        $extend_info_list[$key]['content'] = $user['qq'];
                         break;
-                    case 3:$extend_info_list[$key]['content'] = $user['office_phone'];
+                    case 3:
+                        $extend_info_list[$key]['content'] = $user['office_phone'];
                         break;
-                    case 4:$extend_info_list[$key]['content'] = $user['home_phone'];
+                    case 4:
+                        $extend_info_list[$key]['content'] = $user['home_phone'];
                         break;
-                    // case 5:     $extend_info_list[$key]['content'] = $user['mobile_phone']; break;
-                    default:$extend_info_list[$key]['content'] = empty($temp_arr[$val['id']]) ? '' : $temp_arr[$val['id']];
+//                    case 5:
+//                        $extend_info_list[$key]['content'] = $user['mobile_phone'];
+//                        break;
+                    default:
+                        $extend_info_list[$key]['content'] = empty($temp_arr[$val['id']]) ? '' : $temp_arr[$val['id']];
                 }
             }
         }
@@ -386,14 +393,14 @@ class admin extends ecjia_admin
         empty($affiliate) && $affiliate = array();
         if (empty($affiliate['config']['separate_by'])) {
             //推荐注册分成
-            $affdb = array();
-            $num = count($affiliate['item']);
+            $affdb  = array();
+            $num    = count($affiliate['item']);
             $up_uid = $_GET['id'];
             for ($i = 1; $i <= $num; $i++) {
                 $count = 0;
                 if ($up_uid) {
                     $up_uid = explode(',', $up_uid);
-                    $data = RC_DB::table('users')->whereIn('parent_id', $up_uid)->select('user_id')->get();
+                    $data   = RC_DB::table('users')->whereIn('parent_id', $up_uid)->select('user_id')->get();
 
                     $up_uid = '';
                     if (!empty($data)) {
@@ -427,17 +434,17 @@ class admin extends ecjia_admin
     {
         $this->admin_priv('user_update', ecjia::MSGTYPE_JSON);
 
-        $username = empty($_POST['username']) ? '' : trim($_POST['username']);
-        $user_id = trim($_POST['id']);
-        $password = trim($_POST['newpassword']);
+        $username         = empty($_POST['username']) ? '' : trim($_POST['username']);
+        $user_id          = trim($_POST['id']);
+        $password         = trim($_POST['newpassword']);
         $confirm_password = empty($_POST['confirm_password']) ? '' : trim($_POST['confirm_password']);
-        $email = empty($_POST['email']) ? '' : trim($_POST['email']);
-        $mobile_phone = empty($_POST['mobile_phone']) ? '' : trim($_POST['mobile_phone']);
+        $email            = empty($_POST['email']) ? '' : trim($_POST['email']);
+        $mobile_phone     = empty($_POST['mobile_phone']) ? '' : trim($_POST['mobile_phone']);
 
-        $sex = empty($_POST['sex']) ? 0 : intval($_POST['sex']);
-        $sex = in_array($sex, array(0, 1, 2)) ? $sex : 0;
-        $birthday = empty($_POST['birthday']) ? '' : $_POST['birthday'];
-        $rank = empty($_POST['user_rank']) ? 0 : intval($_POST['user_rank']);
+        $sex         = empty($_POST['sex']) ? 0 : intval($_POST['sex']);
+        $sex         = in_array($sex, array(0, 1, 2)) ? $sex : 0;
+        $birthday    = empty($_POST['birthday']) ? '' : $_POST['birthday'];
+        $rank        = empty($_POST['user_rank']) ? 0 : intval($_POST['user_rank']);
         $credit_line = empty($_POST['credit_line']) ? 0 : trim($_POST['credit_line']);
 
         /* 验证参数的合法性*/
@@ -481,16 +488,16 @@ class admin extends ecjia_admin
                 $extend_field_index = 'extend_field' . $val['id'];
                 if (isset($_POST[$extend_field_index])) {
                     $temp_field_content = strlen($_POST[$extend_field_index]) > 100 ? mb_substr($_POST[$extend_field_index], 0, 99) : $_POST[$extend_field_index];
-                    $sql_one = RC_DB::table('reg_extend_info')->where('reg_field_id', $val['id'])->where('user_id', $user_id)->first();
+                    $sql_one            = RC_DB::table('reg_extend_info')->where('reg_field_id', $val['id'])->where('user_id', $user_id)->first();
                     /* 如果之前没有记录，则插入 */
                     if ($sql_one) {
                         $data = array('content' => $temp_field_content);
                         RC_DB::table('reg_extend_info')->where('reg_field_id', $val['id'])->where('user_id', $user_id)->update($data);
                     } else {
                         $data = array(
-                            'user_id' => $user_id,
+                            'user_id'      => $user_id,
                             'reg_field_id' => $val['id'],
-                            'content' => $temp_field_content,
+                            'content'      => $temp_field_content,
                         );
                         RC_DB::table('reg_extend_info')->insert($data);
                     }
@@ -499,17 +506,17 @@ class admin extends ecjia_admin
         }
 
         /* 更新会员的其它信息 */
-        $other = array();
-        $other['user_name'] = $username;
-        $other['email'] = $email;
-        $other['credit_line'] = $credit_line;
-        $other['sex'] = $sex;
-        $other['birthday'] = $birthday;
-        $other['user_rank'] = $rank;
-        $other['msn'] = isset($_POST['extend_field1']) ? htmlspecialchars(trim($_POST['extend_field1'])) : '';
-        $other['qq'] = isset($_POST['extend_field2']) ? htmlspecialchars(trim($_POST['extend_field2'])) : '';
+        $other                 = array();
+        $other['user_name']    = $username;
+        $other['email']        = $email;
+        $other['credit_line']  = $credit_line;
+        $other['sex']          = $sex;
+        $other['birthday']     = $birthday;
+        $other['user_rank']    = $rank;
+        $other['msn']          = isset($_POST['extend_field1']) ? htmlspecialchars(trim($_POST['extend_field1'])) : '';
+        $other['qq']           = isset($_POST['extend_field2']) ? htmlspecialchars(trim($_POST['extend_field2'])) : '';
         $other['office_phone'] = isset($_POST['extend_field3']) ? htmlspecialchars(trim($_POST['extend_field3'])) : '';
-        $other['home_phone'] = isset($_POST['extend_field4']) ? htmlspecialchars(trim($_POST['extend_field4'])) : '';
+        $other['home_phone']   = isset($_POST['extend_field4']) ? htmlspecialchars(trim($_POST['extend_field4'])) : '';
         // $other['mobile_phone']    = isset($_POST['extend_field5']) ? htmlspecialchars(trim($_POST['extend_field5'])) : '';
         $other['mobile_phone'] = $mobile_phone;
 
@@ -526,8 +533,8 @@ class admin extends ecjia_admin
         if (!ecjia_integrate::editUser([
             'username' => $username,
             'password' => $password,
-            'email' => $email,
-            'gender' => $sex,
+            'email'    => $email,
+            'gender'   => $sex,
             'birthday' => $birthday,
         ])) {
             return $this->showmessage(ecjia_integrate::getErrorMessage(), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
@@ -555,10 +562,10 @@ class admin extends ecjia_admin
 
         ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('user::users.user_info')));
         ecjia_screen::get_current_screen()->add_help_tab(array(
-            'id' => 'overview',
-            'title' => RC_Lang::get('user::users.overview'),
+            'id'      => 'overview',
+            'title'   => RC_Lang::get('user::users.overview'),
             'content' =>
-            '<p>' . RC_Lang::get('user::users.user_view_help') . '</p>',
+                '<p>' . RC_Lang::get('user::users.user_view_help') . '</p>',
         ));
 
         ecjia_screen::get_current_screen()->set_help_sidebar(
@@ -568,7 +575,7 @@ class admin extends ecjia_admin
         $this->assign('ur_here', RC_Lang::get('user::users.user_info'));
         $this->assign('action_link', array('text' => RC_Lang::get('user::users.user_list'), 'href' => RC_Uri::url('user/admin/init')));
 
-        $id = !empty($_GET['id']) ? intval($_GET['id']) : 0;
+        $id       = !empty($_GET['id']) ? intval($_GET['id']) : 0;
         $keywords = !empty($_GET['keywords']) ? trim($_GET['keywords']) : '';
 
         if (!empty($keywords)) {
@@ -597,32 +604,32 @@ class admin extends ecjia_admin
             $row_rank = RC_DB::table('user_rank')->where('rank_id', $row['user_rank'])->first();
         }
         $user['user_rank_name'] = $row_rank['rank_name'];
-        $user['user_rank_id'] = $row_rank['rank_id'];
+        $user['user_rank_id']   = $row_rank['rank_id'];
 
         if ($row) {
-            $user['user_id'] = $row['user_id'];
-            $user['user_name'] = $row['user_name'];
-            $user['email'] = $row['email'];
-            $user['sex'] = $row['sex'];
-            $user['reg_time'] = RC_Time::local_date(ecjia::config('time_format'), $row['reg_time']);
-            $user['birthday'] = date($row['birthday']);
-            $user['pay_points'] = $row['pay_points'];
-            $user['rank_points'] = $row['rank_points'];
-            $user['user_money'] = $row['user_money'];
-            $user['frozen_money'] = $row['frozen_money'];
-            $user['credit_line'] = $row['credit_line'];
-            $user['formated_user_money'] = price_format($row['user_money']);
+            $user['user_id']               = $row['user_id'];
+            $user['user_name']             = $row['user_name'];
+            $user['email']                 = $row['email'];
+            $user['sex']                   = $row['sex'];
+            $user['reg_time']              = RC_Time::local_date(ecjia::config('time_format'), $row['reg_time']);
+            $user['birthday']              = date($row['birthday']);
+            $user['pay_points']            = $row['pay_points'];
+            $user['rank_points']           = $row['rank_points'];
+            $user['user_money']            = $row['user_money'];
+            $user['frozen_money']          = $row['frozen_money'];
+            $user['credit_line']           = $row['credit_line'];
+            $user['formated_user_money']   = price_format($row['user_money']);
             $user['formated_frozen_money'] = price_format($row['frozen_money']);
-            $user['parent_id'] = $row['parent_id'];
-            $user['parent_username'] = isset($row['parent_username']) ? $row['parent_username'] : '';
-            $user['qq'] = $row['qq'];
-            $user['msn'] = $row['msn'];
-            $user['office_phone'] = $row['office_phone'];
-            $user['home_phone'] = $row['home_phone'];
-            $user['mobile_phone'] = $row['mobile_phone'];
-            $user['is_validated'] = $row['is_validated'] == 0 ? RC_Lang::get('user::users.not_validated') : RC_Lang::get('user::users.is_validated');
-            $user['last_time'] = $row['last_login'] == '0' ? '新用户还未登录' : RC_Time::local_date(ecjia::config('time_format'), $row['last_login']);
-            $user['last_ip'] = $row['last_ip'];
+            $user['parent_id']             = $row['parent_id'];
+            $user['parent_username']       = isset($row['parent_username']) ? $row['parent_username'] : '';
+            $user['qq']                    = $row['qq'];
+            $user['msn']                   = $row['msn'];
+            $user['office_phone']          = $row['office_phone'];
+            $user['home_phone']            = $row['home_phone'];
+            $user['mobile_phone']          = $row['mobile_phone'];
+            $user['is_validated']          = $row['is_validated'] == 0 ? RC_Lang::get('user::users.not_validated') : RC_Lang::get('user::users.is_validated');
+            $user['last_time']             = $row['last_login'] == '0' ? '新用户还未登录' : RC_Time::local_date(ecjia::config('time_format'), $row['last_login']);
+            $user['last_ip']               = $row['last_ip'];
 
             $row['address_id'] = !empty($row['address_id']) ? intval($row['address_id']) : 0;
             /* 用户地址列表*/
@@ -652,9 +659,9 @@ class admin extends ecjia_admin
             if (!empty($order)) {
                 foreach ($order as $k => $v) {
                     $order[$k]['add_time'] = RC_Time::local_date(ecjia::config('time_format'), $v['add_time']);
-                    $is_cod = $v['pay_code'] == 'pay_cod' ? 1 : 0;
-                    $label_status = with(new Ecjia\App\Orders\OrderStatus())->getOrderStatusLabel($v['order_status'], $v['shipping_status'], $v['pay_status'], $is_cod);
-                    $order[$k]['status'] = $label_status[0];
+                    $is_cod                = $v['pay_code'] == 'pay_cod' ? 1 : 0;
+                    $label_status          = with(new Ecjia\App\Orders\OrderStatus())->getOrderStatusLabel($v['order_status'], $v['shipping_status'], $v['pay_status'], $is_cod);
+                    $order[$k]['status']   = $label_status[0];
                 }
             }
         }
@@ -693,7 +700,7 @@ class admin extends ecjia_admin
         if (!empty($_SESSION['ru_id'])) {
             return $this->showmessage(RC_Lang::get('user::user_account.merchants_notice'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
         }
-        $id = intval($_REQUEST['pk']);
+        $id    = intval($_REQUEST['pk']);
         $email = trim($_REQUEST['value']);
 
         /* 验证邮箱*/
@@ -723,7 +730,7 @@ class admin extends ecjia_admin
     {
         $this->admin_priv('user_delete');
 
-        $id = intval($_GET['id']);
+        $id            = intval($_GET['id']);
         $user_info_url = RC_Uri::url('user/admin/info', array('id' => $id));
 
         ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('会员详情', $user_info_url));
@@ -755,10 +762,10 @@ class admin extends ecjia_admin
         $this->admin_priv('user_delete', ecjia::MSGTYPE_JSON);
 
         $user_id = !empty($_GET['id']) ? intval($_GET['id']) : 0;
-        $code = trim($_GET['handle']);
+        $code    = trim($_GET['handle']);
 
         $handles = (new \Ecjia\App\User\UserCleanManager($user_id))->getFactories();
-        $handle = array_get($handles, $code);
+        $handle  = array_get($handles, $code);
 
         if ($handle) {
             $result = $handle->handleClean();
@@ -779,10 +786,10 @@ class admin extends ecjia_admin
 
         ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('user::users.address_list')));
         ecjia_screen::get_current_screen()->add_help_tab(array(
-            'id' => 'overview',
-            'title' => RC_Lang::get('user::users.overview'),
+            'id'      => 'overview',
+            'title'   => RC_Lang::get('user::users.overview'),
             'content' =>
-            '<p>' . RC_Lang::get('user::users.user_address_help') . '</p>',
+                '<p>' . RC_Lang::get('user::users.user_address_help') . '</p>',
         ));
 
         ecjia_screen::get_current_screen()->set_help_sidebar(
@@ -793,7 +800,7 @@ class admin extends ecjia_admin
         $this->assign('ur_here', RC_Lang::get('user::users.address_list'));
         $this->assign('action_link', array('text' => RC_Lang::get('user::users.user_list'), 'href' => RC_Uri::url('user/admin/init')));
 
-        $id = !empty($_GET['id']) ? intval($_GET['id']) : 0;
+        $id        = !empty($_GET['id']) ? intval($_GET['id']) : 0;
         $user_name = RC_DB::table('users')->where('user_id', $id)->pluck('user_name');
 
         $act = !empty($_GET['type']) ? intval($_GET['type']) : '';
@@ -866,23 +873,23 @@ class admin extends ecjia_admin
 
         //账户日志
         $account_log_count = RC_DB::table('account_log')->where('user_id', $user_id)->count();
-        $order_list = RC_DB::table('order_info')->where('user_id', $user_id)->lists('order_id');
-        $order_sn_list = RC_DB::table('order_info')->where('user_id', $user_id)->lists('order_sn');
+        $order_list        = RC_DB::table('order_info')->where('user_id', $user_id)->lists('order_id');
+        $order_sn_list     = RC_DB::table('order_info')->where('user_id', $user_id)->lists('order_sn');
 
-        $order_status_log_count = 0;
-        $pay_log_count = 0;
+        $order_status_log_count  = 0;
+        $pay_log_count           = 0;
         $refund_status_log_count = 0;
-        $payment_record_count = 0;
-        $$refund_payrecord_count = 0;
+        $payment_record_count    = 0;
+        $refund_payrecord_count = 0;
 
         if (!empty($order_list)) {
             $order_status_log_count = RC_DB::table('order_status_log')->whereIn('order_id', $order_list)->count(); //订单状态日志
-            $pay_log_count = RC_DB::table('pay_log')->whereIn('order_id', $order_list)->count(); //支付日志
+            $pay_log_count          = RC_DB::table('pay_log')->whereIn('order_id', $order_list)->count(); //支付日志
         }
         $refund_order_list = RC_DB::table('refund_order')->where('user_id', $user_id)->lists('refund_id');
         if (!empty($refund_order_list)) {
             $refund_status_log_count = RC_DB::table('refund_status_log')->whereIn('refund_id', $refund_order_list)->count(); //退款日志
-            $refund_payrecord_count = RC_DB::table('refund_payrecord')->whereIn('refund_id', $refund_order_list)->count(); //退款支付方式日志
+            $refund_payrecord_count  = RC_DB::table('refund_payrecord')->whereIn('refund_id', $refund_order_list)->count(); //退款支付方式日志
         }
         if (!empty($order_sn_list)) {
             $payment_record_count = RC_DB::table('payment_record')->whereIn('order_sn', $order_sn_list)->count(); //支付方式日志
@@ -897,11 +904,11 @@ class admin extends ecjia_admin
         }
 
         //账户微信粉丝账号
-        $wechat_user_info = RC_DB::table('wechat_user')->where('ect_uid', $user_id)->first();
-        $wechat_user_count = 0;
-        $wechat_customer_record_count = 0;
+        $wechat_user_info              = RC_DB::table('wechat_user')->where('ect_uid', $user_id)->first();
+        $wechat_user_count             = 0;
+        $wechat_customer_record_count  = 0;
         $wechat_customer_session_count = 0;
-        $wechat_prize_count = 0;
+        $wechat_prize_count            = 0;
 
         if (!empty($wechat_user_info)) {
             $wechat_user_count = 1;
@@ -938,33 +945,23 @@ class admin extends ecjia_admin
         $invitee_record_count = RC_DB::table('invitee_record')->where('invite_id', $user_id)->count();
 
         $data = array(
-            'user_address_count' => $user_address_count,
-            'user' => $user,
-            'user_bonus_count' => $user_bonus_count,
-
-            'collect_goods_count' => $collect_goods_count,
-            'bind_qq_count' => $bind_qq_count,
-            'bind_wx_count' => $bind_wx_count,
-            'log_count' => $log_count,
-
-            'wechat_user_count' => $wechat_user_count,
-            'wechat_customer_record_count' => $wechat_customer_record_count,
-
-            'prize_count' => empty($wechat_prize_count) && empty($market_activity_log_count) ? 0 : 1,
-
+            'user_address_count'            => $user_address_count,
+            'user'                          => $user,
+            'user_bonus_count'              => $user_bonus_count,
+            'collect_goods_count'           => $collect_goods_count,
+            'bind_qq_count'                 => $bind_qq_count,
+            'bind_wx_count'                 => $bind_wx_count,
+            'log_count'                     => $log_count,
+            'wechat_user_count'             => $wechat_user_count,
+            'wechat_customer_record_count'  => $wechat_customer_record_count,
+            'prize_count'                   => empty($wechat_prize_count) && empty($market_activity_log_count) ? 0 : 1,
             'wechat_customer_session_count' => $wechat_customer_session_count,
-
-            'user_count_count' => $user_count_count,
-
-            'collect_store_count' => $collect_store_count,
-
-            'finance_invoice_count' => $finance_invoice_count,
-
-            'account_log_count' => $account_log_count,
-
-            'parent_id_count' => $parent_id_count,
-
-            'invitee_record_count' => $invitee_record_count,
+            'user_count_count'              => $user_count_count,
+            'collect_store_count'           => $collect_store_count,
+            'finance_invoice_count'         => $finance_invoice_count,
+            'account_log_count'             => $account_log_count,
+            'parent_id_count'               => $parent_id_count,
+            'invitee_record_count'          => $invitee_record_count,
         );
 
         return $data;
