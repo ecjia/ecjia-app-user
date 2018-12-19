@@ -825,8 +825,9 @@ function EM_user_info($user_id, $mobile = '') {
 		'user_bonus_count' 		=> $bonus_count,
 		'reg_time'				=> empty($user_info['reg_time']) ? '' : RC_Time::local_date(ecjia::config('time_format'), $user_info['reg_time']),
 		'update_username_time'	=> empty($username_update_time) ? '' : RC_Time::local_date(ecjia::config('time_format'), $username_update_time['meta_value']),
-		'open_id'               => $connect_user_info['open_id'],
-		'access_token'          => $connect_user_info['access_token'],
+		'open_id'               => !empty($connect_user_info['open_id']) ? $connect_user_info['open_id'] : '',
+		'access_token'          => !empty($connect_user_info['access_token']) ? $connect_user_info['access_token'] : '',
+		'refresh_token'         => !empty($connect_user_info['refresh_token']) ? $connect_user_info['refresh_token'] : '',
 		'user_type'				=> 'user',
 		'has_paypassword'		=> empty($user_info['pay_password']) ? 0 : 1
 	);
