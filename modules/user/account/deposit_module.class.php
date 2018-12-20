@@ -62,6 +62,16 @@ class user_account_deposit_module extends api_front implements api_interface {
  		$payment_id = $this->requestData('payment_id', 0);
  		$user_id    = $_SESSION['user_id'];
  		
+ 		$api_version = $this->request->header('api-version');
+ 		//判断用户有没申请注销
+ 		if (version_compare($api_version, '1.25', '>=')) {
+ 			$account_status = Ecjia\App\User\Users::UserAccountStatus($user_id);
+ 			if ($account_status == Ecjia\App\User\Users::WAITDELETE) {
+ 				return new ecjia_error('account_status_error', '当前账号已申请注销，不可执行此操作！');
+ 			}
+ 		}
+ 		
+ 		
  		$amount = floatval($amount);
  		if ($amount <= 0) {
  			$result = new ecjia_error('amount_gt_zero', __('请在“金额”栏输入大于0的数字！'));
