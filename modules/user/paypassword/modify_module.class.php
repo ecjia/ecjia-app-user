@@ -81,14 +81,9 @@ class user_paypassword_modify_module extends api_front implements api_interface 
 		}
 		
 		//设置支付密码
-		$salt = $user_info['ec_salt'];
 		$md5_password = md5($paypassword);
-		if (!empty($salt)) {
-			$password_final = md5($md5_password.$salt);
-		} else {
-			$password_final = md5($md5_password);
-		}
-
+		$password_final = md5($md5_password.$user_id);
+		
         if ($user_info['pay_password'] == $password_final) {
             return new ecjia_error( 'paypassword_error', '新密码不能与原密码相同');
         }
