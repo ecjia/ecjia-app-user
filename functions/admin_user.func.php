@@ -714,6 +714,9 @@ function EM_user_info($user_id, $mobile = '') {
 	}
 	
 	$collection_num = RC_DB::table('collect_goods')->where('user_id', $user_id)->orderBy('add_time', 'desc')->count();
+	//收藏店铺数
+	$collect_store_num =  RC_DB::table('collect_store')->where('user_id', $user_id)->count();
+	
 	$db1 = RC_DB::table('order_info');
 	/*货到付款订单不在待付款里显示*/
 	$pay_cod_id = RC_DB::table('payment')->where('pay_code', 'pay_cod')->pluck('pay_id');
@@ -807,6 +810,7 @@ function EM_user_info($user_id, $mobile = '') {
 		'rank_name'			=> $user_info['user_rank_name'],
 		'rank_level' 		=> $level,
 		'collection_num' 	=> $collection_num,
+		'collect_store_num' => $collect_store_num,
 		'email'				=> $user_info['email'],
 		'mobile_phone'		=> $user_info['mobile_phone'],
 		'address'			=> $user_info['address'],
