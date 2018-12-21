@@ -80,7 +80,7 @@ class Users
     /**
      * 获取用户状态
      * @param int $user_id
-     * @return array
+     * @return string
      */
     public static function UserAccountStatus($user_id = 0) {
     	$user_info = RC_Api::api('user', 'user_info', array('user_id' => $user_id));
