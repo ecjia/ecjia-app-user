@@ -88,6 +88,10 @@ class user_paypassword_modify_module extends api_front implements api_interface 
 		} else {
 			$password_final = md5($md5_password);
 		}
+
+        if ($user_info['pay_password'] == $password_final) {
+            return new ecjia_error( 'paypassword_error', '新密码不能与原密码相同');
+        }
 		
 		//更新支付密码
 		RC_DB::table('users')->where('user_id', $user_id)->update(array('pay_password' => $password_final));
