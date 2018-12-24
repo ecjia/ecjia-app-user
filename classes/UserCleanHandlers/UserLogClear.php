@@ -77,12 +77,11 @@ HTML;
         if (!empty($order_sn_list)) {
             $payment_record_count = RC_DB::table('payment_record')->whereIn('order_sn', $order_sn_list)->count(); //支付方式日志
         }
-        $service_sms_account_log_count = RC_DB::table('service_sms_account_log')->where('user_id', $this->user_id)->count(); //短信账户日志
 
         $log_count = 1;
         if (empty($order_status_log_count) && empty($pay_log_count)
             && empty($refund_status_log_count) && empty($refund_payrecord_count)
-            && empty($payment_record_count) && empty($service_sms_account_log_count)) {
+            && empty($payment_record_count)) {
             $log_count = 0;
         }
 
