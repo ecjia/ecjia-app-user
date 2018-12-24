@@ -153,9 +153,9 @@ class store_collect_list_module extends api_front implements api_interface {
 				$goods_list[] = array(
 						'goods_id' 						=> intval($val['goods_id']),
 						'goods_name'					=> trim($val['goods_name']),
-						'market_price'					=> $val['market_price'],
+						'market_price'					=> sprintf("%.2f",$val['market_price']),
 						'formatted_market_price'		=> ecjia_price_format($val['market_price'], false),
-						'shop_price'					=> $val['shop_price'],
+						'shop_price'					=> sprintf("%.2f",$val['shop_price']),
 						'formatted_shop_price'			=> ecjia_price_format($val['shop_price'], false),
 						'promote_price'					=> ($promote_price > 0) ? $promote_price : '',
 						'formatted_promote_price'		=> ($promote_price > 0) ? price_format($promote_price) : '',
