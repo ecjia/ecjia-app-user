@@ -132,7 +132,12 @@ class user_account_delete_apply_module extends api_front implements api_interfac
 	private function _getUnfinishOrder($user_id)
 	{
 		//未付款的
-		$unpay_count = RC_DB::table('order_info')->where('is_delete', 0)->where('user_id', $user_id)->where('pay_status', PS_UNPAYED)->count();
+		$unpay_count = RC_DB::table('order_info')
+							->where('is_delete', 0)
+							->where('user_id', $user_id)
+							->where('pay_status', PS_UNPAYED)
+							->whereNotIn('order_status', array(OS_CANCELED, OS_INVALID))
+							->count();
 		//待发货的
 		$await_ship_count = $this->get_await_order_count($user_id); 
 		//待确认收货的
@@ -140,7 +145,7 @@ class user_account_delete_apply_module extends api_front implements api_interfac
 									->where('user_id', $user_id)
 									->where('shipping_status', '>', SS_UNSHIPPED)
                 					->where('shipping_status', '<>', SS_RECEIVED)
-                					->where('order_status', '<>', OS_RETURNED)
+                					->whereNotIn('order_status', array(OS_RETURNED, OS_CANCELED, OS_INVALID))
 									->count();
 		//退款中的
 		$unrefunded_count = RC_DB::table('refund_order')
