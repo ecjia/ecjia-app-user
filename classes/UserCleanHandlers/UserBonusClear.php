@@ -12,6 +12,7 @@ use Ecjia\App\User\UserCleanAbstract;
 use RC_DB;
 use RC_Api;
 use ecjia_admin;
+use RC_Time;
 
 class UserBonusClear extends UserCleanAbstract
 {
@@ -55,10 +56,20 @@ HTML;
      */
     public function handleCount()
     {
-        $user_bonus_count = RC_DB::table('user_bonus')->where('user_id', $this->user_id)->where('used_time', 0)->count();
+        $db = RC_DB::table('bonus_type as bt')
+            ->leftJoin('user_bonus as ub', RC_DB::raw('bt.type_id'), '=', RC_DB::raw('ub.bonus_type_id'))
+            ->leftJoin('store_franchisee as s', RC_DB::raw('bt.store_id'), '=', RC_DB::raw('s.store_id'));
+
+        $cur_date = RC_Time::gmtime();
+
+        $db->where(RC_DB::raw('ub.user_id'), $this->user_id)
+            ->where(RC_DB::raw('bt.use_end_date'), '>=', $cur_date)
+            ->where(RC_DB::raw('ub.order_id'), 0)
+            ->where(RC_DB::raw('ub.used_time'), 0);
+
+        $user_bonus_count = $db->count(RC_DB::raw('ub.bonus_id'));
 
         return $user_bonus_count;
-
     }
 
 
