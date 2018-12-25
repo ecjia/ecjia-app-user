@@ -835,6 +835,7 @@ function EM_user_info($user_id, $mobile = '') {
 		'user_type'				=> 'user',
 		'has_paypassword'		=> empty($user_info['pay_password']) ? 0 : 1,
 		'account_status'		=> $user_info['account_status'],
+		'delete_time'			=> $user_info['delete_time'] > 0 ? RC_Time::local_date('Y/m/d H:i:s O', $user_info['delete_time']) : '',
 	);
 }
 
