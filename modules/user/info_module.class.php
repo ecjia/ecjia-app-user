@@ -54,6 +54,7 @@ class user_info_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	
         //如果用户登录获取其session
+    	$api_version = $this->request->header('api-version');
         $user_id = $_SESSION['user_id'];
     	if ($user_id <= 0) {
     		return new ecjia_error(100, 'Invalid session');
@@ -75,7 +76,28 @@ class user_info_module extends api_front implements api_interface {
 				$user_info['wechat_nickname'] = empty($profile['nickname']) ? '' : $profile['nickname'];
 			}
 		} 
+		
+		//用户是否绑定银行卡
+		$user_info['bank_is_bind'] = 0;
+		if (version_compare($api_version, '1.25', '>=')) {
+			$bank_info = $this->user_bank_info($user_id);
+			if (!empty($bank_info)) {
+				$user_info['bank_is_bind'] = 1;
+			} 
+		}
+		
 		return $user_info;
+	}
+	
+	/**
+	 * 用户绑定的银行卡信息
+	 * @param int $user_id
+	 */
+	private function user_bank_info($user_id)
+	{
+		$bank_info = [];
+		$bank_info = RC_DB::table('bank_user')->where('user_id', $user_id)->first();
+		return $bank_info;
 	}
 }
 
