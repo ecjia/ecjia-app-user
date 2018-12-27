@@ -49,6 +49,7 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * 用户信息
  * @author royalwang
+ * @lastupdate 1.25
  */
 class user_info_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
@@ -75,9 +76,9 @@ class user_info_module extends api_front implements api_interface {
 				$profile = unserialize($connect_wechat_info['profile']);
 				$user_info['wechat_nickname'] = empty($profile['nickname']) ? '' : $profile['nickname'];
 			}
-		} 
+		}
 		
-		//用户是否绑定银行卡
+		//用户是否绑定银行卡 1.25新增
 		$user_info['bank_is_bind'] = 0;
 		if (version_compare($api_version, '1.25', '>=')) {
 			$bank_info = $this->user_bank_info($user_id);
@@ -96,7 +97,7 @@ class user_info_module extends api_front implements api_interface {
 	private function user_bank_info($user_id)
 	{
 		$bank_info = [];
-		$bank_info = RC_DB::table('bank_user')->where('user_id', $user_id)->first();
+		$bank_info = RC_DB::table('bank_user')->where('user_id', $user_id)->where('user_id', $user_id)->where('user_type', 'user')->first();
 		return $bank_info;
 	}
 }
