@@ -54,7 +54,7 @@ defined('IN_ECJIA') or exit('No permission resources.');
  * @lastupdate 1.25
  */
 class user_account_withdraw_module extends api_front implements api_interface {
-    public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
+    public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {
         
         $user_id    = $_SESSION['user_id']/*  = 1040 */;
     	if ($_SESSION['user_id'] <= 0) {
@@ -155,15 +155,6 @@ class user_account_withdraw_module extends api_front implements api_interface {
  		/* 如果成功提交 */
  		if ($surplus['account_id'] > 0) {
  			
- 			/* 插入支付流水记录*/
- 		    RC_Api::api('payment', 'save_payment_record', [
-     		    'order_sn' 		 => $surplus['order_sn'],
-     		    'total_fee'      => $amount,
-     		    'trade_type'	 => 'withdraw',
- 		        'pay_code'       => isset($payment[$withdraw_way]['pay_code']) ? $payment[$withdraw_way]['pay_code'] : '',
- 		        'pay_name'       => isset($payment[$withdraw_way]['pay_name']) ? $payment[$withdraw_way]['pay_name'] : '',
- 		    ]);
- 		    
 			//提现申请成功，记录account_log；从余额中冻结提现金额
  		    $frozen_money = $amount;
  		    
