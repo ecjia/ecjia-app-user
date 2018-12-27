@@ -199,7 +199,7 @@ function get_account_list($args = array()) {
  *
  * @access  public
  * @param   array     $surplus  会员余额信息
- * @param   string    $amount   余额
+ * @param   string    $amount   金额
  *
  * @return  int
  */
@@ -214,12 +214,17 @@ function insert_user_account($surplus, $amount) {
 		'admin_note'	=> !empty($surplus['admin_note']) ? $surplus['admin_note'] : '',
 		'user_note'		=> !empty($surplus['user_note']) ? $surplus['user_note'] : '',
 		'process_type'	=> $surplus['process_type'] ,
-		'payment'		=> $surplus['payment'] ,
+		'payment'		=> $surplus['payment'],
 		'is_paid'		=> 0,
 		'from_type'		=> empty($surplus['from_type']) ? '' : $surplus['from_type'],
 		'from_value'	=> empty($surplus['from_value']) ? '' : $surplus['from_value'],
 		'pay_fee'		=> empty($surplus['pay_fee']) ? '0.00' : $surplus['pay_fee'],
 		'real_amount'	=> empty($surplus['real_amount']) ? '0.00' : $surplus['real_amount'],
+	    'bank_name'     => empty($surplus['bank_name']) ? '' : $surplus['bank_name'],
+	    'bank_branch_name'=> empty($surplus['bank_branch_name']) ? '' : $surplus['bank_branch_name'],
+	    'bank_card'    => empty($surplus['bank_card']) ? '' : $surplus['bank_card'],
+	    'cardholder'   => empty($surplus['cardholder']) ? '' : $surplus['cardholder'],
+	    'bank_en_short'=> empty($surplus['bank_en_short']) ? '' : $surplus['bank_en_short'],
 	);
 	return RC_DB::table('user_account')->insertGetId($data);
 }

@@ -58,7 +58,7 @@ defined('IN_ECJIA') or exit('No permission resources.');
 class bank_bind_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	
-        $user_id = $_SESSION['user_id']/*  = 1040 */;
+        $user_id = $_SESSION['user_id'] /*  = 1040 */;
     	if ($user_id <= 0) {
     		return new ecjia_error(100, 'Invalid session');
     	}
@@ -96,7 +96,7 @@ class bank_bind_module extends api_front implements api_interface {
     	//每个人只能绑定一次，后续为更新
     	$bank_user = RC_DB::table('bank_user')->where('user_id', $user_id)->where('user_type', 'user')->first();
     	$data = [
-    	    'bank_name' => $bank_name,//TODO
+    	    'bank_name' => Ecjia\App\Setting\BankWithdraw::getBankNameByEnShort($bank_en_short),
     	    'bank_en_short' => $bank_en_short,
     	    'bank_card' => $bank_card,
     	    'bank_branch_name' => $bank_branch_name,

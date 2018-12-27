@@ -64,9 +64,10 @@ class bank_bankcard_module extends api_front implements api_interface {
     	
     	$bank_info = RC_DB::table('bank_user')->where('user_id', $user_id)->where('user_type', 'user')->first();
     	if($bank_info) {
+    	    $bank = Ecjia\App\Setting\BankWithdraw::getBankInfoByEnShort($bank_info['bank_en_short']);
     	    $data = [
-    	        'bank_name' => 'TODO',
-    	        'bank_icon' => 'TODO',
+    	        'bank_name' => $bank_info['bank_name'],
+    	        'bank_icon' => $bank['bank_icon'],
     	        'bank_card' => $bank_info['bank_card'],
     	        'cardholder' => $bank_info['cardholder'],
     	        'bank_branch_name' => $bank_info['bank_branch_name'],
