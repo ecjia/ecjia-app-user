@@ -47,35 +47,70 @@
 defined('IN_ECJIA') or exit('No permission resources.');
 
 /**
- * 获取用户绑定的银行卡信息
+ * 会员绑定/更新银行卡
+ * 
+ * 1.只能绑定一张卡
+ * 2.sms type = 'user_bind_bank'
  * @author hyy
  * @add 1.25
  * @lastupdate 1.25
  */
-class bank_bankcard_module extends api_front implements api_interface {
+class user_bank_bind_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	
-        $user_id = $_SESSION['user_id']/*   = 1040 */ ;
+        $user_id = $_SESSION['user_id'] /*  = 1040 */;
     	if ($user_id <= 0) {
     		return new ecjia_error(100, 'Invalid session');
     	}
     	
-    	$data = [];
+    	$smscode = $this->requestData('smscode', '');
+    	$cardholder = $this->requestData('cardholder', '');//持卡人
+    	$bank_en_short = $this->requestData('bank_en_short', '');//银行英文简称
+    	$bank_card = $this->requestData('bank_card', '');//银行卡号
+    	$bank_branch_name = $this->requestData('bank_branch_name', '');//开户行 
     	
-    	$bank_info = RC_DB::table('bank_user')->where('user_id', $user_id)->where('user_type', 'user')->first();
-    	if($bank_info) {
-    	    $bank = Ecjia\App\Setting\BankWithdraw::getBankInfoByEnShort($bank_info['bank_en_short']);
-    	    $data = [
-    	        'bank_name' => $bank_info['bank_name'],
-    	        'bank_icon' => $bank['bank_icon'],
-    	        'bank_card' => $bank_info['bank_card'],
-    	        'cardholder' => $bank_info['cardholder'],
-    	        'bank_branch_name' => $bank_info['bank_branch_name'],
-    	        'bank_en_short' => $bank_info['bank_en_short'],
-    	    ];
+    	if (empty($smscode)) {
+    	    return new ecjia_error( 'invalid_parameter', RC_Lang::get ('system::system.invalid_parameter' ));
+    	}
+    	//判断校验码是否过期
+    	if ($_SESSION['captcha']['sms']['user_bind_bank']['lifetime'] < RC_Time::gmtime()) {
+    	    return new ecjia_error('code_timeout', '验证码已过期，请重新获取！');
+    	}
+    	//判断校验码是否正确
+    	if ($smscode != $_SESSION['captcha']['sms']['user_bind_bank']['code'] ) {
+    	    return new ecjia_error('code_error', '验证码错误，请重新填写！');
     	}
     	
-    	return $data;
+    	if (empty($cardholder)) {
+    	    return new ecjia_error( 'cardholder_can_not_empty', '请输入持卡人姓名');
+    	}
+    	
+    	if (empty($bank_en_short)) {
+    	    return new ecjia_error( 'bank_can_not_empty', '请选择所属银行');
+    	}
+    	
+    	if (empty($bank_card)) {
+    	    return new ecjia_error( 'bank_card_can_not_empty', '请输入对应银行卡号');
+    	}
+    	
+    	//每个人只能绑定一次，后续为更新
+    	$bank_user = RC_DB::table('bank_user')->where('user_id', $user_id)->where('user_type', 'user')->first();
+    	$data = [
+    	    'bank_name' => Ecjia\App\Setting\BankWithdraw::getBankNameByEnShort($bank_en_short),
+    	    'bank_en_short' => $bank_en_short,
+    	    'bank_card' => $bank_card,
+    	    'bank_branch_name' => $bank_branch_name,
+    	    'cardholder' => $cardholder,
+    	];
+    	if($bank_user) {
+    	    RC_DB::table('bank_user')->where('user_id', $user_id)->where('user_type', 'user')->update($data);
+    	} else {
+    	    $data['user_id'] = $user_id;
+    	    $data['user_type'] = 'user';
+    	    RC_DB::table('bank_user')->insert($data);
+    	}
+    	
+    	return [];
 	}
 }
 
