@@ -97,7 +97,7 @@ class user_info_module extends api_front implements api_interface {
 	private function user_bank_info($user_id)
 	{
 		$bank_info = [];
-		$bank_info = RC_DB::table('bank_user')->where('user_id', $user_id)->where('user_id', $user_id)->where('user_type', 'user')->first();
+		$bank_info = RC_DB::table('bank_user')->where('user_id', $user_id)->where('user_type', 'user')->first();
 		return $bank_info;
 	}
 }
