@@ -63,11 +63,13 @@ class user_account_withdraw_module extends api_front implements api_interface {
     	
     	$api_version = $this->request->header('api-version');
     	//判断用户有没申请注销
-		$account_status = Ecjia\App\User\Users::UserAccountStatus($user_id);
-		if ($account_status == Ecjia\App\User\Users::WAITDELETE) {
-			return new ecjia_error('account_status_error', '当前账号已申请注销，不可执行此操作！');
-		}
-    	
+    	if (version_compare($api_version, '1.25', '>=')) {
+    		$account_status = Ecjia\App\User\Users::UserAccountStatus($user_id);
+    		if ($account_status == Ecjia\App\User\Users::WAITDELETE) {
+    			return new ecjia_error('account_status_error', '当前账号已申请注销，不可执行此操作！');
+    		}
+    	}
+		
  		$amount = $this->requestData('amount');
  		$user_note = $this->requestData('note', '');
  		$withdraw_way = $this->requestData('withdraw_way', '');//提现方式（wechat微信钱包，bank银行转账） 
