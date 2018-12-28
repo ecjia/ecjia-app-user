@@ -117,7 +117,9 @@ class user_account_record_detail_module extends api_front implements api_interfa
 				'pay_fee'					=> $account_info['pay_fee'],
 				'formatted_pay_fee'			=> price_format($account_info['pay_fee'], false),
 				'real_amount'				=> $account_info['real_amount'],
-				'formatted_real_amount'		=> price_format($account_info['real_amount'], false)
+				'formatted_real_amount'		=> price_format($account_info['real_amount'], false),
+				'bank_name'					=> empty($account_info['bank_name']) ? '' : $account_info['bank_name'],
+				'bank_card'					=> empty($account_info['bank_card']) ? '' : $account_info['bank_card'],
 			);
 		}
 		
