@@ -61,13 +61,10 @@ class user_account_withdraw_module extends api_front implements api_interface {
     		return new ecjia_error(100, 'Invalid session');
     	}
     	
-    	$api_version = $this->request->header('api-version');
     	//判断用户有没申请注销
-    	if (version_compare($api_version, '1.25', '>=')) {
-    		$account_status = Ecjia\App\User\Users::UserAccountStatus($user_id);
-    		if ($account_status == Ecjia\App\User\Users::WAITDELETE) {
-    			return new ecjia_error('account_status_error', '当前账号已申请注销，不可执行此操作！');
-    		}
+    	$account_status = Ecjia\App\User\Users::UserAccountStatus($user_id);
+    	if ($account_status == Ecjia\App\User\Users::WAITDELETE) {
+    		return new ecjia_error('account_status_error', '当前账号已申请注销，不可执行此操作！');
     	}
 		
  		$amount = $this->requestData('amount');
@@ -140,15 +137,16 @@ class user_account_withdraw_module extends api_front implements api_interface {
  		    'cardholder'   => empty($surplus['cardholder']) ? '' : $surplus['cardholder'],
  		    'bank_en_short'=> empty($surplus['bank_en_short']) ? '' : $surplus['bank_en_short'],
  		);
- 		if($withdraw_way == 'bank') {
- 		    $bank_info = RC_DB::table('bank_user')->where('user_id', $user_id)->where('user_type', 'user')->first();
- 		    
- 		    $surplus['bank_name'] = empty($bank_info['bank_name']) ? '' : $bank_info['bank_name'];
- 		    $surplus['bank_branch_name']= empty($bank_info['bank_branch_name']) ? '' : $bank_info['bank_branch_name'];
- 		    $surplus['bank_card']    = empty($bank_info['bank_card']) ? '' : $bank_info['bank_card'];
- 		    $surplus['cardholder']   = empty($bank_info['cardholder']) ? '' : $bank_info['cardholder'];
- 		    $surplus['bank_en_short']= empty($bank_info['bank_en_short']) ? '' : $bank_info['bank_en_short'];
- 		}
+ 		
+ 		//绑定的提现方式信息
+ 		$bank_info = RC_DB::table('withdraw_user_bank')->where('user_id', $user_id)->where('user_type', 'user')->where('bank_type', $withdraw_way)->first();
+ 		
+ 		$surplus['bank_name'] 		= empty($bank_info['bank_name']) 		? '' : $bank_info['bank_name'];
+ 		$surplus['bank_branch_name']= empty($bank_info['bank_branch_name']) ? '' : $bank_info['bank_branch_name'];
+ 		$surplus['bank_card']    	= empty($bank_info['bank_card']) 		? '' : $bank_info['bank_card'];
+ 		$surplus['cardholder']   	= empty($bank_info['cardholder']) 		? '' : $bank_info['cardholder'];
+ 		$surplus['bank_en_short']	= empty($bank_info['bank_en_short']) 	? '' : $bank_info['bank_en_short'];
+ 		
  		
  		//插入会员账目明细
  		$change_amount = $amount * -1;
