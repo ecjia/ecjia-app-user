@@ -52,7 +52,7 @@ defined('IN_ECJIA') or exit('No permission resources.');
  * @add 1.25
  * @lastupdate 1.25
  */
-class user_bank_bankcard_module extends api_front implements api_interface {
+class user_info_bankcard_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {	
     	
         $user_id = $_SESSION['user_id']/*   = 1040 */ ;
@@ -60,22 +60,34 @@ class user_bank_bankcard_module extends api_front implements api_interface {
     		return new ecjia_error(100, 'Invalid session');
     	}
     	
-    	$data = [];
-    	
-    	$bank_info = RC_DB::table('bank_user')->where('user_id', $user_id)->where('user_type', 'user')->first();
-    	if($bank_info) {
-    	    $bank = Ecjia\App\Setting\BankWithdraw::getBankInfoByEnShort($bank_info['bank_en_short']);
-    	    $data = [
-    	        'bank_name' => $bank_info['bank_name'],
-    	        'bank_icon' => $bank['bank_icon'],
-    	        'bank_card' => $bank_info['bank_card'],
-    	        'cardholder' => $bank_info['cardholder'],
-    	        'bank_branch_name' => $bank_info['bank_branch_name'],
-    	        'bank_en_short' => $bank_info['bank_en_short'],
-    	    ];
+    	$user_binded_list = [];
+    	$available_list = [];
+    	//用户已绑定的提现方式
+    	$bank_list = RC_DB::table('withdraw_user_bank')->where('user_id', $user_id)->where('user_type', 'user')->get();
+    	if($bank_list) {
+    	    foreach ($bank_list as $val) {
+    	    	if ($val['bank_type'] == 'bank') {
+    	    		$bank 		= Ecjia\App\Setting\BankWithdraw::getBankInfoByEnShort($val['bank_en_short']);
+    	    		$bank_icon 	= $bank['bank_icon'];
+    	    	} elseif ($val['bank_type'] == 'wechat') {
+    	    		$bank_icon 	= RC_App::apps_url('user/statics/images/bank', '').'/wechat.png';
+    	    	}
+    	    	$user_binded_list[] = [
+    	    	    'id'				=> intval($val['id']),
+	    	    	'bank_name' 		=> $val['bank_name'],
+	    	    	'bank_icon' 		=> $bank_icon,
+	    	    	'bank_card' 		=> $val['bank_card'],
+	    	    	'cardholder'		=> $val['cardholder'],
+	    	    	'bank_branch_name' 	=> empty($val['bank_branch_name']) ? '' : $val['bank_branch_name'],
+	    	    	'bank_en_short' 	=> $val['bank_en_short'],
+    	    	];
+    	    }
     	}
     	
-    	return $data;
+    	//网站开启支持的提现方式
+    	
+    	
+    	return array('user_binded_list' => $user_binded_list, 'available_list' => $available_list);
 	}
 }
 
