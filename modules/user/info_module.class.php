@@ -78,36 +78,7 @@ class user_info_module extends api_front implements api_interface {
 			}
 		}
 		
-		//用户是否绑定银行卡；是否绑定微信钱包 1.25新增
-		$user_info['bank_is_bind'] = 0;
-		$user_info['wechat_wallet_isbind'] = 0;
-		if (version_compare($api_version, '1.25', '>=')) {
-			$bank_info = $this->user_bank_info($user_id, 'bank');
-			if (!empty($bank_info)) {
-				$user_info['bank_is_bind'] = 1;
-			} 
-			$wechat_bank_info = $this->user_bank_info($user_id, 'wechat');
-			if (!empty($wechat_bank_info)) {
-				$user_info['wechat_wallet_isbind'] = 1;
-			}
-		}
-		
 		return $user_info;
-	}
-	
-	/**
-	 * 用户绑定的银行卡信息
-	 * @param int $user_id
-	 */
-	private function user_bank_info($user_id, $bank_type)
-	{
-		$bank_info = [];
-		$bank_info = RC_DB::table('bank_user')
-						->where('user_id', $user_id)
-						->where('user_type', 'user')
-						->where('bank_type', $bank_type)
-						->first();
-		return $bank_info;
 	}
 }
 
