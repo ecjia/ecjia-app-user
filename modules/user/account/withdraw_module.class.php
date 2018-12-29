@@ -56,7 +56,7 @@ defined('IN_ECJIA') or exit('No permission resources.');
 class user_account_withdraw_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {
         
-        $user_id    = $_SESSION['user_id']/*  = 1040 */;
+        $user_id    = $_SESSION['user_id'];
     	if ($_SESSION['user_id'] <= 0) {
     		return new ecjia_error(100, 'Invalid session');
     	}
@@ -67,9 +67,14 @@ class user_account_withdraw_module extends api_front implements api_interface {
     		return new ecjia_error('account_status_error', '当前账号已申请注销，不可执行此操作！');
     	}
 		
- 		$amount = $this->requestData('amount');
- 		$user_note = $this->requestData('note', '');
- 		$withdraw_way = $this->requestData('withdraw_way', '');//提现方式（wechat微信钱包，bank银行转账） 
+ 		$amount 			= $this->requestData('amount');
+ 		$user_note 			= $this->requestData('note', '');
+ 		$withdraw_way 		= $this->requestData('withdraw_way', '');//提现方式（wechat微信钱包，bank银行转账） 
+ 		$withdraw_way_arr 	= array('wechat', 'bank');
+ 		
+ 		if (empty($withdraw_way) || !in_array($withdraw_way, $withdraw_way_arr)) {
+ 			return new ecjia_error('invalid_parameter', '请求接口user_account_withdraw_module参数错误！');
+ 		}
  		
  		$amount = floatval($amount);
 		if ($amount <= 0) {
@@ -131,11 +136,6 @@ class user_account_withdraw_module extends api_front implements api_interface {
  		    'from_value'   => $user_id,
  		    'pay_fee'	   => $pay_fee,
  		    'real_amount'  => $real_amount,
- 		    'bank_name'     => empty($surplus['bank_name']) ? '' : $surplus['bank_name'],
- 		    'bank_branch_name'=> empty($surplus['bank_branch_name']) ? '' : $surplus['bank_branch_name'],
- 		    'bank_card'    => empty($surplus['bank_card']) ? '' : $surplus['bank_card'],
- 		    'cardholder'   => empty($surplus['cardholder']) ? '' : $surplus['cardholder'],
- 		    'bank_en_short'=> empty($surplus['bank_en_short']) ? '' : $surplus['bank_en_short'],
  		);
  		
  		//绑定的提现方式信息

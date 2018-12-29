@@ -120,6 +120,7 @@ class user_account_record_detail_module extends api_front implements api_interfa
 				'formatted_real_amount'		=> price_format($account_info['real_amount'], false),
 				'bank_name'					=> empty($account_info['bank_name']) ? '' : $account_info['bank_name'],
 				'bank_card'					=> empty($account_info['bank_card']) ? '' : $account_info['bank_card'],
+				'cardholder'				=> empty($account_info['cardholder']) ? '' : $account_info['cardholder'],
 			);
 		}
 		
