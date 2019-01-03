@@ -80,6 +80,7 @@ class user_info_bankcard_module extends api_front implements api_interface {
 	    	    	'cardholder'		=> $val['cardholder'],
 	    	    	'bank_branch_name' 	=> empty($val['bank_branch_name']) ? '' : $val['bank_branch_name'],
 	    	    	'bank_en_short' 	=> $val['bank_en_short'],
+	    	    	'bank_type'			=> empty($val['bank_type']) ? '' : $val['bank_type'],
     	    	];
     	    }
     	}
