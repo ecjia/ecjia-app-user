@@ -116,7 +116,8 @@ class user_account_record_detail_module extends api_front implements api_interfa
 				'user_note'					=> empty($account_info['user_note']) ? '' : $account_info['user_note'],
 				'type'						=> $account_info['process_type'] == 0 ? 'deposit' : 'withdraw',
 				'lable_type'				=> $account_info['process_type'] == 0 ? '充值' : '提现',
-				'pay_name'					=> $pay_name,
+				'pay_name'					=> $account_info['process_type'] == 0 ? (empty($payment_info['pay_name']) ? '' : $payment_info['pay_name']) : $pay_name,
+
 				'pay_id'					=> empty($payment_info['pay_id']) ? '' : intval($payment_info['pay_id']),
 				'pay_code'					=> empty($account_info['payment']) ? '' : $account_info['payment'],
 				'pay_status'				=> $pay_status,
