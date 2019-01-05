@@ -290,7 +290,7 @@ function get_user_surplus($user_id) {
  * @param   int     $start      开始显示的条数
  * @return  array
  */
-function get_account_log($user_id, $num = 15, $start, $process_type = '') {
+function get_account_log($user_id, $num = 15, $start, $process_type = '', $is_paid_arr = array()) {
 	$account_log = array();
 	
 	$db = RC_DB::table('user_account');
@@ -303,6 +303,9 @@ function get_account_log($user_id, $num = 15, $start, $process_type = '') {
 		}
 	} else {
 		$db->whereIn('process_type', array(SURPLUS_SAVE, SURPLUS_RETURN));
+	}
+	if (!empty($is_paid_arr)) {
+		$db->whereIn('is_paid', $is_paid_arr);
 	}
 	$res = $db->take($num)->skip($start->start_id-1)->orderBy('add_time', 'desc')->get();
 	

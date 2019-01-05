@@ -91,6 +91,7 @@ class user_account_record_module extends api_front implements api_interface {
 		
  		/* 获取记录条数 */
 		$record_count = $db->count();
+		$db->where('is_paid', '!=', Ecjia\App\Withdraw\WithdrawConstant::ORDER_PAY_STATUS_CANCEL);
 		
  		//加载分页类
 		RC_Loader::load_sys_class('ecjia_page', false);
@@ -100,7 +101,8 @@ class user_account_record_module extends api_front implements api_interface {
  		RC_Loader::load_app_func('admin_user' ,'user');
 
  		//获取余额记录
- 		$account_log = get_account_log($user_id, $size, $page_row, $process_type);
+ 		$is_paid_arr = array(ORDER_PAY_STATUS_UNPAY, ORDER_PAY_STATUS_PAYED, ORDER_PAY_STATUS_FAILED);
+ 		$account_log = get_account_log($user_id, $size, $page_row, $process_type, $is_paid_arr);
  		
  		if (!empty($account_log) && is_array($account_log)) {
  			$account_list = array();
