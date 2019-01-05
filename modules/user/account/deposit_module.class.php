@@ -114,6 +114,7 @@ class user_account_deposit_module extends api_front implements api_interface {
             $result = new ecjia_error('select_payment_pls_again', __('支付方式无效，请重新选择支付方式！'));
         }
  		$surplus['payment'] = $payment_info['pay_code'];
+ 		$surplus['payment_name'] = $payment_info['pay_name'];
  		
  		if ($surplus['account_id'] > 0) {
  			//更新会员账目明细

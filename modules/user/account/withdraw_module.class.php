@@ -47,7 +47,7 @@
 defined('IN_ECJIA') or exit('No permission resources.');
 
 /**
- * 用户提现申请 替换 user/account/withdraw
+ * 用户提现申请 替换 user/account/raply
  * @author hyy
  * 
  * @add 1.25
@@ -75,6 +75,12 @@ class user_account_withdraw_module extends api_front implements api_interface {
  		if (empty($withdraw_way) || !in_array($withdraw_way, $withdraw_way_arr)) {
  			return new ecjia_error('invalid_parameter', '请求接口user_account_withdraw_module参数错误！');
  		}
+ 		
+ 		//判断用户有没绑定微信钱包和银行卡
+ 		$withdraw_way_bind = $this->is_bind_withdraw_way($withdraw_way, $user_id);
+ 		if (!$withdraw_way_bind) {
+ 			return new ecjia_error('not_bind_withdraw_way', '您还未绑定此提现方式！');
+ 		} 
  		
  		$amount = floatval($amount);
 		if ($amount <= 0) {
@@ -115,14 +121,15 @@ class user_account_withdraw_module extends api_front implements api_interface {
  		//支付方式
  		$payment = [
  		    'bank' => [
- 		        'pay_code' => 'pay_bank',
- 		        'pay_name' => '银行转账'
+ 		        'pay_code' => 'withdraw_bank',
+ 		        'pay_name' => '银行转账提现'
  		        ],
  		    'wechat' => [
- 		        'pay_code' => 'pay_wxpay',
- 		        'pay_name' => '微信支付'
+ 		        'pay_code' => 'withdraw_wxpay',
+ 		        'pay_name' => '微信钱包提现'
  		    ],
  		];
+ 		
  		
  		/* 变量初始化 */
  		$surplus = array(
@@ -130,6 +137,7 @@ class user_account_withdraw_module extends api_front implements api_interface {
  		    'order_sn'	   => ecjia_order_deposit_sn(),
  		    'process_type' => 1,
  		    'payment'      => isset($payment[$withdraw_way]['pay_code']) ? $payment[$withdraw_way]['pay_code'] : '',
+ 			'payment_name' => isset($payment[$withdraw_way]['pay_name']) ? $payment[$withdraw_way]['pay_name'] : '',
  		    'user_note'    => $user_note,
  		    'amount'       => $amount,
  		    'from_type'	   => 'user',
@@ -173,6 +181,23 @@ class user_account_withdraw_module extends api_front implements api_interface {
  			$result = new ecjia_error('process_false', '此次操作失败，请返回重试！');
  			return $result;
  		}
+	}
+	
+	/**
+	 * 判断是否有绑定此提现方式
+	 */
+	private function is_bind_withdraw_way($withdraw_way, $user_id)
+	{
+		$withdraw_way_arr 	= array('wechat', 'bank');
+		if (in_array($withdraw_way, $withdraw_way_arr)) {
+			$withdraw_way_info = RC_DB::table('withdraw_user_bank')->where('user_id', $user_id)->where('user_type', 'user')->where('bank_type', $withdraw_way)->first();
+			if (empty($withdraw_way_info)) {
+				return false;
+			}
+		} else {
+			return false;
+		}
+		return true;
 	}
 }
 

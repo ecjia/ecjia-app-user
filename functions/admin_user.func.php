@@ -215,6 +215,7 @@ function insert_user_account($surplus, $amount) {
 		'user_note'		=> !empty($surplus['user_note']) ? $surplus['user_note'] : '',
 		'process_type'	=> $surplus['process_type'] ,
 		'payment'		=> $surplus['payment'],
+		'payment_name'	=> empty($surplus['payment_name']) ? '' : $surplus['payment_name'],
 		'is_paid'		=> 0,
 		'from_type'		=> empty($surplus['from_type']) ? '' : $surplus['from_type'],
 		'from_value'	=> empty($surplus['from_value']) ? '' : $surplus['from_value'],
