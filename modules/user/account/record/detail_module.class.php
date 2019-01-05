@@ -99,7 +99,7 @@ class user_account_record_detail_module extends api_front implements api_interfa
 				$pay_status = '未确认';
 			}
 
-            if ($account_info['payment'] == 'withdraw_bank') {
+            if ($account_info['bank_en_short'] !== 'WECHAT') {
                 $bank_card_str = substr($account_info['bank_card'], -4);
                 $pay_name = $account_info['bank_name'] . ' (' . $bank_card_str . ')';
             } else {
