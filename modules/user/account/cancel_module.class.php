@@ -77,23 +77,8 @@ class user_account_cancel_module extends api_front implements api_interface {
  		
  		if ($result) {
  			if ($account_info['process_type'] == '1') {
- 				$frozen_money 		= $account_info['amount'];
  				$user_money			= abs($account_info['amount']);
- 				//资金变动记录
- 				$data = [
-	 				'user_id' 		=> $user_id,
-	 				'user_money' 	=> $user_money,
-	 				'frozen_money' 	=> $frozen_money,
-	 				'change_desc' 	=> '提现取消',
-	 				'change_time' 	=> RC_Time::gmtime(),
-	 				'change_type' 	=> Ecjia\App\Finance\AccountConstant::BALANCE_SAVING, //充入
-	 				'from_type' 	=> '',
-	 				'from_value' 	=> '',
- 				];
- 				$log_id = RC_DB::table('account_log')->insertGetId($data);
- 				
- 				user_account::change_user_money($user_id, $user_money);	 	//返还余额
- 				user_account::change_frozen_money($user_id, $frozen_money); //减掉冻结金额
+ 				(new Ecjia\App\Finance\UserAccountBalance($user_id))->withdrawCancel($user_money, '提现取消');
  			}
  			return array();
  		} else {
