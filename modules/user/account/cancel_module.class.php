@@ -78,7 +78,7 @@ class user_account_cancel_module extends api_front implements api_interface {
  		if ($result) {
  			if ($account_info['process_type'] == '1') {
  				$user_money			= abs($account_info['amount']);
- 				(new Ecjia\App\Finance\UserAccountBalance($user_id))->withdrawCancel($user_money, '提现取消');
+ 				(new Ecjia\App\Finance\UserAccountBalance($user_id))->withdrawCancel($user_money, '提现取消', '', '');
  			}
  			return array();
  		} else {
