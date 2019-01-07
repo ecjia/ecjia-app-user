@@ -87,6 +87,14 @@ class user_info_bankcard_module extends api_front implements api_interface {
     	
     	//网站开启支持的提现方式
     	$available_list = (new \Ecjia\App\Withdraw\WithdrawBankType())->getDisplayBankType();
+    	//用户端不支持现金提现方式
+    	if (!empty($available_list)) {
+    		foreach ($available_list as $key => $val) {
+    			if ($val['bank_type'] == 'cash') {
+    				unset($available_list[$key]);
+    			}
+    		}
+    	}
     	
     	return array('user_binded_list' => $user_binded_list, 'available_withdraw_way' => $available_list);
 	}
