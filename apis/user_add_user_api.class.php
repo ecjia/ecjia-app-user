@@ -80,7 +80,7 @@ class user_add_user_api extends Component_Event_Api
         /**
          * @debug royalwang
          */
-        ecjia_log_debug('user_add_user_api', $options);
+//        ecjia_log_debug('user_add_user_api', $options);
 
         if (empty($username)) {
             return new ecjia_error('invalid_parameter', '调用接口user_add_user_api参数无效');
