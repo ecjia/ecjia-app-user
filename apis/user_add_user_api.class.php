@@ -50,7 +50,8 @@ defined('IN_ECJIA') or exit('No permission resources.');
  * 添加会员帐号接口
  * @author royalwang
  */
-class user_add_user_api extends Component_Event_Api {
+class user_add_user_api extends Component_Event_Api
+{
 
     /**
      * 创建用户
@@ -66,13 +67,13 @@ class user_add_user_api extends Component_Event_Api {
      * @param array $options
      * @return ecjia_error
      */
-    public function call(&$options) {
-
+    public function call(&$options)
+    {
         $username = array_get($options, 'username');
-        $mobile = array_get($options, 'mobile');
+        $mobile   = array_get($options, 'mobile');
         $password = array_get($options, 'password');
-        $email = array_get($options, 'email');
-        $gender = array_get($options, 'gender');
+        $email    = array_get($options, 'email');
+        $gender   = array_get($options, 'gender');
         $birthday = array_get($options, 'birthday');
         $reg_date = array_get($options, 'reg_date');
 
@@ -81,7 +82,7 @@ class user_add_user_api extends Component_Event_Api {
          */
         ecjia_log_debug('user_add_user_api', $options);
 
-        if (empty($username) || empty($mobile)) {
+        if (empty($username)) {
             return new ecjia_error('invalid_parameter', '调用接口user_add_user_api参数无效');
         }
 
