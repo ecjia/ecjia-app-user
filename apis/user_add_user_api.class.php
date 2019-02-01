@@ -76,6 +76,11 @@ class user_add_user_api extends Component_Event_Api {
         $birthday = array_get($options, 'birthday');
         $reg_date = array_get($options, 'reg_date');
 
+        /**
+         * @debug royalwang
+         */
+        ecjia_log_debug('user_add_user_api', $options);
+
         if (empty($username) || empty($mobile)) {
             return new ecjia_error('invalid_parameter', '调用接口user_add_user_api参数无效');
         }
