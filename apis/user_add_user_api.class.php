@@ -91,7 +91,7 @@ class user_add_user_api extends Component_Event_Api
             $profile = ecjia_integrate::getProfileByName($username);
             return $profile;
         } else {
-            return new ecjia_error('create_user_failed', '创建用户失败');
+            return new ecjia_error('create_user_failed', '创建用户失败' . ecjia_integrate::getError());
         }
     }
 }
