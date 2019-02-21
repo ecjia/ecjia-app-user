@@ -56,7 +56,7 @@ class user_account_pay_module extends api_front implements api_interface
     {
 
         if ($_SESSION['user_id'] <= 0) {
-            return new ecjia_error(100, 'Invalid session');
+            return new ecjia_error(100, __('Invalid session', 'user'));
         }
 
         //变量初始化
@@ -66,13 +66,13 @@ class user_account_pay_module extends api_front implements api_interface
         $user_id       = $_SESSION['user_id'];
         $wxpay_open_id = $this->requestData('wxpay_open_id', 0);
         if ($account_id <= 0 || $payment_id <= 0) {
-            return new ecjia_error(101, '参数错误');
+            return new ecjia_error(101, __('参数错误', 'user'));
         }
 
         //获取单条会员帐目信息
         $order = $this->get_surplus_info($account_id, $user_id);
         if (empty($order)) {
-            return new ecjia_error('deposit_log_not_exist', '充值记录不存在');
+            return new ecjia_error('deposit_log_not_exist', __('充值记录不存在', 'user'));
         }
 
         $plugin       = new Ecjia\App\Payment\PaymentPlugin();
@@ -131,7 +131,7 @@ class user_account_pay_module extends api_front implements api_interface
             return array('payment' => $order['payment']);
         } else {
             /* 重新选择支付方式 */
-            return new ecjia_error('select_payment_pls_again', __('支付方式无效，请重新选择支付方式！'));
+            return new ecjia_error('select_payment_pls_again', __('支付方式无效，请重新选择支付方式！', 'user'));
         }
     }
 

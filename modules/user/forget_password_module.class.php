@@ -62,7 +62,7 @@ class user_forget_password_module extends api_front implements api_interface
         $api_version = $this->request->header('api-version');
 
         if (empty($type) || empty($value)) {
-            return new ecjia_error('invalid_parameter', RC_Lang::get('system::system.invalid_parameter'));
+            return new ecjia_error('invalid_parameter', __('参数无效', 'user'));
         }
 
         $db = RC_Model::model('user/users_model');
@@ -82,18 +82,18 @@ class user_forget_password_module extends api_front implements api_interface
             if (version_compare($api_version, '1.14', '>=')) {
                 $captcha_code = $this->requestData('captcha_code');
                 if (empty($captcha_code)) {
-                    return new ecjia_error('invalid_parameter', RC_Lang::get('system::system.invalid_parameter'));
+                    return new ecjia_error('invalid_parameter', __('参数无效', 'user'));
                 }
                 //判断验证码是否正确
                 if (isset($captcha_code) && $_SESSION['captcha_word'] != strtolower($captcha_code)) {
-                    return new ecjia_error('captcha_code_error', '验证码错误');
+                    return new ecjia_error('captcha_code_error', __('验证码错误', 'user'));
                 }
             }
 
             $user_count = $db->where(array('mobile_phone' => $value))->count();
             //如果用户数量大于1
             if ($user_count > 1) {
-                return new ecjia_error('mobile_repeat_error', __('手机号重复，请与管理员联系！'));
+                return new ecjia_error('mobile_repeat_error', __('手机号重复，请与管理员联系！', 'user'));
             }
             $userinfo = $db->find(array('mobile_phone' => $value));
         }
@@ -102,7 +102,7 @@ class user_forget_password_module extends api_front implements api_interface
         }
 
         if (empty($userinfo)) {
-            return new ecjia_error('user_error', __('用户信息错误！'));
+            return new ecjia_error('user_error', __('用户信息错误！', 'user'));
         }
 
         $code = rand(100000, 999999);
@@ -130,7 +130,7 @@ class user_forget_password_module extends api_front implements api_interface
             $tpl      = RC_Api::api('mail', 'mail_template', $tpl_name);
             /* 判断短信模板是否存在*/
             if (!empty($tpl)) {
-                ecjia_api::$controller->assign('action', __('通过短信找回密码'));
+                ecjia_api::$controller->assign('action', __('通过短信找回密码', 'user'));
                 ecjia_api::$controller->assign('code', $code);
                 ecjia_api::$controller->assign('service_phone', ecjia::config('service_phone'));
                 $content  = ecjia_api::$controller->fetch_string($tpl['template_content']);
@@ -140,9 +140,9 @@ class user_forget_password_module extends api_front implements api_interface
 
         /* 判断是否发送成功*/
         if ($response === true) {
-            return array('data' => '验证码发送成功！');
+            return array('data' => __('验证码发送成功！', 'user'));
         } else {
-            return new ecjia_error('send_code_error', __('验证码发送失败！'));
+            return new ecjia_error('send_code_error', __('验证码发送失败！', 'user'));
         }
     }
 }

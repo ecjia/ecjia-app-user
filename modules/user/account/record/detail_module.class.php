@@ -56,13 +56,13 @@ class user_account_record_detail_module extends api_front implements api_interfa
     {
 
         if ($_SESSION['user_id'] <= 0) {
-            return new ecjia_error(100, 'Invalid session');
+            return new ecjia_error(100, __('Invalid session', 'user'));
         }
         $account_id = $this->requestData('account_id', 0);
         $user_id    = $_SESSION['user_id'];
 
         if (empty($account_id)) {
-            return new ecjia_error('invalid_parameter', RC_Lang::get('system::system.invalid_parameter'));
+            return new ecjia_error('invalid_parameter', __('参数无效', 'user'));
         }
 
         $account_info = RC_Api::api('user', 'user_account_info', array('account_id' => intval($account_id)));
@@ -72,7 +72,7 @@ class user_account_record_detail_module extends api_front implements api_interfa
         }
 
         if (empty($account_info)) {
-            return new ecjia_error('user_account_info_error', '充值/提现记录不存在！');
+            return new ecjia_error('user_account_info_error', __('充值/提现记录不存在！', 'user'));
         }
         //数据处理
         $formatted_account_info = $this->getFormatInfo($account_info);
@@ -94,11 +94,11 @@ class user_account_record_detail_module extends api_front implements api_interfa
             }
             //支付状态
             if ($account_info['is_paid'] == '1') {
-                $pay_status = '已完成';
+                $pay_status = __('已完成', 'user');
             } elseif ($account_info['is_paid'] == '2') {
-                $pay_status = '已取消';
+                $pay_status = __('已取消', 'user');
             } else {
-                $pay_status = '未确认';
+                $pay_status = __('未确认', 'user');
             }
 
             if ($account_info['payment'] == 'withdraw_cash') {
@@ -119,7 +119,7 @@ class user_account_record_detail_module extends api_front implements api_interfa
                 'formatted_amount' => price_format(abs($account_info['amount']), false),
                 'user_note'        => empty($account_info['user_note']) ? '' : $account_info['user_note'],
                 'type'             => $account_info['process_type'] == 0 ? 'deposit' : 'withdraw',
-                'lable_type'       => $account_info['process_type'] == 0 ? '充值' : '提现',
+                'lable_type'       => $account_info['process_type'] == 0 ? __('充值', 'user') : __('提现', 'user'),
                 'pay_name'         => $account_info['process_type'] == 0 ? (empty($payment_info['pay_name']) ? '' : $payment_info['pay_name']) : $pay_name,
 
                 'pay_id'                => empty($payment_info['pay_id']) ? '' : intval($payment_info['pay_id']),

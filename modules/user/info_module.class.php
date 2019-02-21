@@ -60,7 +60,7 @@ class user_info_module extends api_front implements api_interface
         $api_version = $this->request->header('api-version');
         $user_id     = $_SESSION['user_id'];
         if ($user_id <= 0) {
-            return new ecjia_error(100, 'Invalid session');
+            return new ecjia_error(100, __('Invalid session', 'user'));
         }
 
         RC_Loader::load_app_func('admin_user', 'user');

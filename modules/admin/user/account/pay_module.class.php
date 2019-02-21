@@ -13,7 +13,7 @@ class admin_user_account_pay_module extends api_admin implements api_interface
         $this->authadminSession();
 
         if ($_SESSION['staff_id'] <= 0) {
-            return new ecjia_error(100, 'Invalid session');
+            return new ecjia_error(100, __('Invalid session', 'user'));
         }
 
         //变量初始化
@@ -21,18 +21,18 @@ class admin_user_account_pay_module extends api_admin implements api_interface
         $payment_id = $this->requestData('payment_id', 0);
 
         if ($account_id <= 0) {
-            return new ecjia_error('invalid_parameter', '参数错误');
+            return new ecjia_error('invalid_parameter', __('参数错误', 'user'));
         }
 
         if ($payment_id <= 0) {
-            return new ecjia_error('please_select_payment', '请选择支付方式');
+            return new ecjia_error('please_select_payment', __('请选择支付方式', 'user'));
         }
         //获取单条会员帐目信息
         $order = array();
         $order = $this->get_surplus_info($account_id);
 
         if (empty($order)) {
-            return new ecjia_error('deposit_log_not_exist', '充值记录不存在');
+            return new ecjia_error('deposit_log_not_exist', __('充值记录不存在', 'user'));
         }
 
         $plugin       = new Ecjia\App\Payment\PaymentPlugin();
@@ -87,7 +87,7 @@ class admin_user_account_pay_module extends api_admin implements api_interface
 
         } else {
             /* 重新选择支付方式 */
-            return new ecjia_error('select_payment_pls_again', __('支付方式无效，请重新选择支付方式！'));
+            return new ecjia_error('select_payment_pls_again', __('支付方式无效，请重新选择支付方式！', 'user'));
         }
     }
 

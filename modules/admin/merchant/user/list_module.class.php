@@ -12,7 +12,7 @@ class admin_merchant_user_list_module extends api_admin implements api_interface
     {
         $this->authadminSession();
         if ($_SESSION['staff_id'] <= 0) {
-            return new ecjia_error(100, 'Invalid session');
+            return new ecjia_error(100, __('Invalid session', 'user'));
         }
 
         $size = $this->requestData('pagination.count', 15);
@@ -23,7 +23,7 @@ class admin_merchant_user_list_module extends api_admin implements api_interface
         }
 
         if (empty($store_id)) {
-            return new ecjia_error('invalid_parameter', '参数无效');
+            return new ecjia_error('invalid_parameter', __('参数无效', 'user'));
         }
 
         $filter = array(

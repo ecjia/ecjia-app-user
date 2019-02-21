@@ -62,7 +62,7 @@ class user_userbind_module extends api_front implements api_interface
         $type_array  = array('mobile');
         //判断值是否为空，且type是否是在此类型中
         if (empty($type) || empty($value) || !in_array($type, $type_array)) {
-            return new ecjia_error('invalid_parameter', RC_Lang::get('system::system.invalid_parameter'));
+            return new ecjia_error('invalid_parameter', __('参数无效', 'user'));
         }
 
         //手机号码格式判断
@@ -79,11 +79,11 @@ class user_userbind_module extends api_front implements api_interface
         if (version_compare($api_version, '1.14', '>=')) {
             $captcha_code = $this->requestData('captcha_code');
             if (empty($captcha_code)) {
-                return new ecjia_error('invalid_parameter', RC_Lang::get('system::system.invalid_parameter'));
+                return new ecjia_error('invalid_parameter', __('参数无效', 'user'));
             }
             //判断验证码是否正确
             if (isset($captcha_code) && $_SESSION['captcha_word'] != strtolower($captcha_code)) {
-                return new ecjia_error('captcha_code_error', '验证码错误');
+                return new ecjia_error('captcha_code_error', __('验证码错误', 'user'));
             }
         }
 
@@ -119,7 +119,7 @@ class user_userbind_module extends api_front implements api_interface
             $_SESSION['bind_type']         = $type;
 
             if (is_ecjia_error($response)) {
-                return new ecjia_error('sms_error', '短信发送失败！');
+                return new ecjia_error('sms_error', __('短信发送失败！', 'user'));
             } else {
                 //版本兼容
                 if (version_compare($api_version, '1.14', '<')) {

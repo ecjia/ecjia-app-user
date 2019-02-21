@@ -61,7 +61,7 @@ class admin_user_signin_module extends api_admin implements api_interface
         $password = $this->requestData('password');
         $device   = $this->requestData('device', array());
         if (empty($username) || empty($password)) {
-            $result = new ecjia_error('login_error', __('您输入的帐号信息不正确。'));
+            $result = new ecjia_error('login_error', __('您输入的帐号信息不正确。', 'user'));
             return $result;
         }
 
@@ -164,10 +164,10 @@ class admin_user_signin_module extends api_admin implements api_interface
                 'avator_img' => RC_Uri::admin_url('statics/images/admin_avatar.png'),
             );
 
-            if (in_array($device['code'], $codes)) {
-                $out['userinfo']['username'] = $adviser_info['username'];
-                $out['userinfo']['email']    = $adviser_info['email'];
-            }
+//            if (in_array($device['code'], $codes)) {
+//                $out['userinfo']['username'] = $adviser_info['username'];
+//                $out['userinfo']['email']    = $adviser_info['email'];
+//            }
 
             //修正关联设备号
             $result = ecjia_app::validate_application('mobile');

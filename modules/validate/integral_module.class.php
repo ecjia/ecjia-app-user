@@ -57,11 +57,11 @@ class validate_integral_module extends api_front implements api_interface
 
         $this->authSession();
         if (empty($_SESSION['user_id'])) {
-            return new ecjia_error(100, 'Invalid session');
+            return new ecjia_error(100, __('Invalid session', 'user'));
         }
         $integral = $this->requestData('integral', 0);
         if (!$integral) {
-            return new ecjia_error('invalid_parameter', RC_Lang::get('system::system.invalid_parameter'));
+            return new ecjia_error('invalid_parameter', __('参数无效', 'user'));
         }
 
         RC_Loader::load_app_func('admin_order', 'orders');

@@ -58,18 +58,18 @@ class user_collect_create_module extends api_front implements api_interface
         $this->authSession();
         $user_id = $_SESSION['user_id'];
         if ($user_id <= 0) {
-            return new ecjia_error(100, 'Invalid session');
+            return new ecjia_error(100, __('Invalid session', 'user'));
         }
         $goods_id = $this->requestData('goods_id', 0);
         if (!$goods_id) {
-            return new ecjia_error(101, '参数错误');
+            return new ecjia_error(101, __('参数错误', 'user'));
         }
 
         RC_Loader::load_app_func('admin_goods', 'goods');
         $goods = get_goods_info($goods_id);
 
         if (!$goods) {
-            return new ecjia_error('not_exists_info', '不存在的信息');
+            return new ecjia_error('not_exists_info', __('不存在的信息', 'user'));
         }
         /* 检查是否已经存在于用户的收藏夹 */
 
@@ -77,7 +77,7 @@ class user_collect_create_module extends api_front implements api_interface
         $count            = $db_collect_goods->where(array('user_id' => $user_id, 'goods_id' => $goods_id))->count();
 
         if ($count > 0) {
-            return new ecjia_error(10007, '您已收藏过此商品');
+            return new ecjia_error(10007, __('您已收藏过此商品', 'user'));
         } else {
             $time = RC_Time::gmtime();
             $data = $db_collect_goods->insert(array('user_id' => $user_id, 'goods_id' => $goods_id, 'add_time' => $time));

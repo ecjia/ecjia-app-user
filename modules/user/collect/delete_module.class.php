@@ -58,12 +58,12 @@ class user_collect_delete_module extends api_front implements api_interface
         $this->authSession();
         $user_id = $_SESSION['user_id'];
         if ($user_id <= 0) {
-            return new ecjia_error(100, 'Invalid session');
+            return new ecjia_error(100, __('Invalid session', 'user'));
         }
         $collection_id = $this->requestData('rec_id');
         $goods_id      = $this->requestData('goods_id', 0);
         if (empty($collection_id) && !goods_id) {
-            return new ecjia_error('invalid_parameter', RC_Lang::get('system::system.invalid_parameter'));
+            return new ecjia_error('invalid_parameter', __('参数无效', 'user'));
         }
 
         $db_collect_goods = RC_Model::model('goods/collect_goods_model');

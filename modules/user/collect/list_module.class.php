@@ -58,7 +58,7 @@ class user_collect_list_module extends api_front implements api_interface
         $this->authSession();
         $user_id = $_SESSION['user_id'];
         if ($user_id <= 0) {
-            return new ecjia_error(100, 'Invalid session');
+            return new ecjia_error(100, __('Invalid session', 'user'));
         }
 
         $size    = $this->requestData('pagination.count', 15);
@@ -128,7 +128,7 @@ class user_collect_list_module extends api_front implements api_interface
                 $temp['activity_type']          = $activity_type;
                 $temp['object_id']              = $object_id;
                 $temp['saving_price']           = $saving_price;
-                $temp['formatted_saving_price'] = '已省' . $saving_price . '元';
+                $temp['formatted_saving_price'] = sprintf(__('已省%s元', 'user'), $saving_price);
 
                 $temp['rec_id']         = $value['rec_id'];
                 $temp['attention_rate'] = $value['click_count'];

@@ -57,27 +57,27 @@ class payConfirm_module extends api_admin implements api_interface
     {
         $this->authadminSession();
         if ($_SESSION['admin_id'] <= 0 && $_SESSION['staff_id'] <= 0) {
-            return new ecjia_error(100, 'Invalid session');
+            return new ecjia_error(100, __('Invalid session', 'user'));
         }
         $device = $this->device;
 
         /* 获取请求当前数据的device信息*/
         $codes = RC_Loader::load_app_config('cashier_device_code', 'cashier');
         if (!is_array($device) || !isset($device['code']) || !in_array($device['code'], $codes)) {
-            return new ecjia_error('caskdesk_error', '非收银台请求！');
+            return new ecjia_error('caskdesk_error', __('非收银台请求！', 'user'));
         }
 
         $account_id = $this->requestData('account_id');
 
         if (empty($account_id)) {
-            return new ecjia_error('invalid_parameter', '参数错误');
+            return new ecjia_error('invalid_parameter', __('参数错误', 'user'));
         }
 
         /* 查询充值订单信息 */
         $user_account_info = RC_DB::table('user_account')->where('id', $account_id)->first();
 
         if (empty($user_account_info)) {
-            return new ecjia_error('deposit_log_not_exist', '充值记录不存在');
+            return new ecjia_error('deposit_log_not_exist', __('充值记录不存在', 'user'));
         }
         $payment_method = new Ecjia\App\Payment\PaymentPlugin();
         $pay_info       = $payment_method->getPluginDataByCode($user_account_info['payment']);
@@ -101,13 +101,13 @@ class payConfirm_module extends api_admin implements api_interface
                     'pay_code'         => $pay_info['pay_code'],
                     'pay_name'         => $pay_info['pay_name'],
                     'pay_status'       => 'success',
-                    'desc'             => '订单支付成功！'
+                    'desc'             => __('订单支付成功！', 'user')
                 );
                 $print_data = $this->_get_print_data($user_account_info);
                 return array('payment' => $data, 'print_data' => $print_data);
             }
         } else {
-            return new ecjia_error('not_support_payment', '此充值记录对应的支付方式不支持收银台充值支付！');
+            return new ecjia_error('not_support_payment', __('此充值记录对应的支付方式不支持收银台充值支付！', 'user'));
         }
     }
 

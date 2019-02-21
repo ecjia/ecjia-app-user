@@ -56,12 +56,12 @@ class user_account_cancel_module extends api_front implements api_interface
     {
 
         if ($_SESSION['user_id'] <= 0) {
-            return new ecjia_error(100, 'Invalid session');
+            return new ecjia_error(100, __('Invalid session', 'user'));
         }
         $id      = $this->requestData('account_id', 0);
         $user_id = $_SESSION['user_id'];
         if ($id <= 0 || $user_id == 0) {
-            return new ecjia_error('invalid_parameter', RC_Lang::get('system::system.invalid_parameter'));
+            return new ecjia_error('invalid_parameter', __('参数无效', 'user'));
         }
 
         RC_Loader::load_app_func('admin_user', 'user');
@@ -80,11 +80,11 @@ class user_account_cancel_module extends api_front implements api_interface
         if ($result) {
             if ($account_info['process_type'] == '1') {
                 $user_money = abs($account_info['amount']);
-                (new Ecjia\App\Finance\UserAccountBalance($user_id))->withdrawCancel($user_money, '提现取消', '', '');
+                (new Ecjia\App\Finance\UserAccountBalance($user_id))->withdrawCancel($user_money, __('提现取消', 'user'), '', '');
             }
             return array();
         } else {
-            return new ecjia_error('cancel_fail', '取消失败');
+            return new ecjia_error('cancel_fail', __('取消失败', 'user'));
         }
     }
 }

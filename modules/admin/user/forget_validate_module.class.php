@@ -62,11 +62,11 @@ class admin_user_forget_validate_module extends api_admin implements api_interfa
         $type = $this->requestData('type');
         $time = RC_Time::gmtime() - 6000 * 3;//三分有效期
         if (empty($code)) {
-            $result = new ecjia_error('code_empty_error', __('请填写校验码！'));
+            $result = new ecjia_error('code_empty_error', __('请填写校验码！', 'user'));
             return $result;
         }
         if ($time > $_SESSION['temp_code_time'] || empty($_SESSION['temp_code_time'])) {
-            $result = new ecjia_error('code_timeout_error', __('校验码已过期！'));
+            $result = new ecjia_error('code_timeout_error', __('校验码已过期！', 'user'));
             return $result;
         }
 
@@ -74,7 +74,7 @@ class admin_user_forget_validate_module extends api_admin implements api_interfa
             //校验成功
             return array();
         } else {
-            $result = new ecjia_error('code_error', __('校验码错误！'));
+            $result = new ecjia_error('code_error', __('校验码错误！', 'user'));
             return $result;
         }
     }

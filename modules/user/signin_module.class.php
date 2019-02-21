@@ -63,7 +63,7 @@ class user_signin_module extends api_front implements api_interface
 
         if (version_compare($api_version, '1.14', '>=')) {
             if (empty($login_type) || !in_array($login_type, $login_type_array) || empty($name) || empty($password)) {
-                return new ecjia_error('invalid_parameter', RC_Lang::get('system::system.invalid_parameter'));
+                return new ecjia_error('invalid_parameter', __('参数无效', 'user'));
             }
 
             if ($login_type == 'password') {
@@ -74,7 +74,7 @@ class user_signin_module extends api_front implements api_interface
                 if ($check_mobile === true) {
                     $user_count = RC_DB::table('users')->where('mobile_phone', $name)->count();
                     if ($user_count > 1) {
-                        return new ecjia_error('user_repeat', '用户重复，请与管理员联系！');
+                        return new ecjia_error('user_repeat', __('用户重复，请与管理员联系！', 'user'));
                     }
                     $check_user = RC_DB::table('users')->where('mobile_phone', $name)->pluck('user_name');
                     /* 获取用户名进行判断验证*/
@@ -88,7 +88,7 @@ class user_signin_module extends api_front implements api_interface
                 /* 如果不是手机号码*/
                 if (!$is_mobile) {
                     if (!ecjia_integrate::login($name, $password)) {
-                        return new ecjia_error('userinfo_error', '您输入的账号信息不正确 ！');
+                        return new ecjia_error('userinfo_error', __('您输入的账号信息不正确 ！', 'user'));
                     }
                 }
             } else {
@@ -96,15 +96,15 @@ class user_signin_module extends api_front implements api_interface
                 //判断校验码是否过期
                 if ($_SESSION['bindcode_lifetime'] + 1800 < RC_Time::gmtime()) {
                     //过期
-                    return new ecjia_error('code_timeout', __('验证码已过期，请重新获取！'));
+                    return new ecjia_error('code_timeout', __('验证码已过期，请重新获取！', 'user'));
                 }
                 //判断校验码是否正确
                 if ($password != $_SESSION['bind_code']) {
-                    return new ecjia_error('code_error', __('验证码错误，请重新填写！'));
+                    return new ecjia_error('code_error', __('验证码错误，请重新填写！', 'user'));
                 }
                 //校验其他信息
                 if ($name != $_SESSION['bind_value']) {
-                    return new ecjia_error('msg_error', __('信息错误，请重新获取验证码'));
+                    return new ecjia_error('msg_error', __('信息错误，请重新获取验证码', 'user'));
                 }
 
                 $check_mobile = Ecjia\App\Sms\Helper::check_mobile($name);
@@ -113,12 +113,12 @@ class user_signin_module extends api_front implements api_interface
                 }
                 $user_count = RC_DB::table('users')->where('mobile_phone', $name)->count();
                 if ($user_count > 1) {
-                    return new ecjia_error('user_repeat', '用户重复，请与管理员联系！');
+                    return new ecjia_error('user_repeat', __('用户重复，请与管理员联系！', 'user'));
                 }
                 $user_name = RC_DB::table('users')->where('mobile_phone', $name)->pluck('user_name');
                 //账号信息检查
                 if (!ecjia_integrate::login($user_name, null)) {
-                    return new ecjia_error('userinfo_error', '您输入的账号信息不正确 ！');
+                    return new ecjia_error('userinfo_error', __('您输入的账号信息不正确 ！', 'user'));
                 }
             }
         } else {
@@ -129,7 +129,7 @@ class user_signin_module extends api_front implements api_interface
             if ($check_mobile === true) {
                 $user_count = RC_DB::table('users')->where('mobile_phone', $name)->count();
                 if ($user_count > 1) {
-                    return new ecjia_error('user_repeat', '用户重复，请与管理员联系！');
+                    return new ecjia_error('user_repeat', __('用户重复，请与管理员联系！', 'user'));
                 }
                 $check_user = RC_DB::table('users')->where('mobile_phone', $name)->pluck('user_name');
 
@@ -144,7 +144,7 @@ class user_signin_module extends api_front implements api_interface
             /* 如果不是手机号码*/
             if (!$is_mobile) {
                 if (!ecjia_integrate::login($name, $password)) {
-                    return new ecjia_error('userinfo_error', '您输入的账号信息不正确 ！');
+                    return new ecjia_error('userinfo_error', __('您输入的账号信息不正确 ！', 'user'));
                 }
             }
         }

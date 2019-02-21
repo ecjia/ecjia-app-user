@@ -56,7 +56,7 @@ class user_account_raply_module extends api_front implements api_interface
     {
 
         if ($_SESSION['user_id'] <= 0) {
-            return new ecjia_error(100, 'Invalid session');
+            return new ecjia_error(100, __('Invalid session', 'user'));
         }
 
         $user_id     = $_SESSION['user_id'];
@@ -65,7 +65,7 @@ class user_account_raply_module extends api_front implements api_interface
         if (version_compare($api_version, '1.25', '>=')) {
             $account_status = Ecjia\App\User\Users::UserAccountStatus($user_id);
             if ($account_status == Ecjia\App\User\Users::WAITDELETE) {
-                return new ecjia_error('account_status_error', '当前账号已申请注销，不可执行此操作！');
+                return new ecjia_error('account_status_error', __('当前账号已申请注销，不可执行此操作！', 'user'));
             }
         }
 
@@ -73,7 +73,7 @@ class user_account_raply_module extends api_front implements api_interface
         $user_note = $this->requestData('note', '');
         $amount    = floatval($amount);
         if ($amount <= 0) {
-            return new ecjia_error('amount_gt_zero', __('请在“金额”栏输入大于0的数字！'));
+            return new ecjia_error('amount_gt_zero', __('请在“金额”栏输入大于0的数字！', 'user'));
         }
 
         $pay_fee     = '0.00';
@@ -85,7 +85,7 @@ class user_account_raply_module extends api_front implements api_interface
             $withdraw_min_amount = ecjia::config('withdraw_min_amount');
             if ($withdraw_min_amount > 0) {
                 if ($amount < $withdraw_min_amount) {
-                    return new ecjia_error('withdraw_min_amount_error', '提现金额不可小于最小提现金额：' . $withdraw_min_amount . '元');
+                    return new ecjia_error('withdraw_min_amount_error', sprintf(__('提现金额不可小于最小提现金额：%s元', 'user')), $withdraw_min_amount);
                 }
             }
             /* 提现手续费 */
@@ -124,7 +124,7 @@ class user_account_raply_module extends api_front implements api_interface
         RC_Loader::load_app_class('user_account', 'user', false);
         $user_current_money = user_account::get_user_money($user_id);
         if ($amount > $user_current_money) {
-            return new ecjia_error('surplus_amount_error', __('您要申请提现的金额超过了您现有的余额，此操作将不可进行！'));
+            return new ecjia_error('surplus_amount_error', __('您要申请提现的金额超过了您现有的余额，此操作将不可进行！', 'user'));
         }
 
         //插入会员账目明细
@@ -151,14 +151,14 @@ class user_account_raply_module extends api_front implements api_interface
                 'frozen_money' => $frozen_money,
                 'user_money'   => $user_money,
                 'change_type'  => ACT_DRAWING,
-                'change_desc'  => '【申请提现】'
+                'change_desc'  => __('【申请提现】', 'user')
             );
 
             RC_Api::api('user', 'account_change_log', $options);
 
-            return array('data' => "您的提现申请已成功提交，请等待管理员的审核！");
+            return array('data' => __("您的提现申请已成功提交，请等待管理员的审核！", 'user'));
         } else {
-            $result = new ecjia_error('process_false', __('此次操作失败，请返回重试！'));
+            $result = new ecjia_error('process_false', __('此次操作失败，请返回重试！', 'user'));
             return $result;
         }
     }

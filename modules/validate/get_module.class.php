@@ -56,7 +56,7 @@ class validate_get_module extends api_front implements api_interface
         $type  = $this->requestData('type');
         $value = $this->requestData('value', '');
         if (empty($type) || empty($value)) {
-            return new ecjia_error('invalid_parameter', RC_Lang::get('system::system.invalid_parameter'));
+            return new ecjia_error('invalid_parameter', __('参数无效', 'user'));
         }
 
         $code = rand(100001, 999999);

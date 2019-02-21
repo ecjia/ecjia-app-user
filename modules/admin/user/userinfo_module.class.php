@@ -57,7 +57,7 @@ class admin_user_userinfo_module extends api_admin implements api_interface
 
         $this->authadminSession();
         if ($_SESSION['admin_id'] <= 0 && $_SESSION['staff_id'] <= 0) {
-            return new ecjia_error(100, 'Invalid session');
+            return new ecjia_error(100, __('Invalid session', 'user'));
         }
 
         if (isset($_SESSION['store_id']) && $_SESSION['store_id'] > 0) {
@@ -79,7 +79,7 @@ class admin_user_userinfo_module extends api_admin implements api_interface
             'last_login'  => RC_Time::local_date(ecjia::config('time_format'), $result['last_login']),
             'last_ip'     => RC_Ip::area($result['last_ip']),
             'role_name'   => RC_DB::table('role')->where('role_id', $result['role_id'])->pluck('role_name'),
-            'avator_img'  => RC_Uri::admin_url('statics/images/admin_avatar.png'),//错误后期废弃
+            'avator_img'  => RC_Uri::admin_url('statics/images/admin_avatar.png'), //错误后期废弃
             'avatar_img'  => RC_Uri::admin_url('statics/images/admin_avatar.png'),
             'action_list' => $_SESSION['action_list']
         );
@@ -105,7 +105,7 @@ class admin_user_userinfo_module extends api_admin implements api_interface
             'last_login'  => RC_Time::local_date(ecjia::config('time_format'), $result['last_login']),
             'last_ip'     => RC_Ip::area($result['last_ip']),
             'role_name'   => $result['group_name'],
-            'avator_img'  => $result['avatar_img'],//错误后期废弃
+            'avator_img'  => $result['avatar_img'], //错误后期废弃
             'avatar_img'  => $result['avatar_img'],
             'action_list' => $_SESSION['action_list']
         );

@@ -58,18 +58,18 @@ class goods_collect_create_module extends api_front implements api_interface
         $this->authSession();
         $user_id = $_SESSION['user_id'];
         if ($user_id <= 0) {
-            return new ecjia_error(100, 'Invalid session');
+            return new ecjia_error(100, __('Invalid session', 'user'));
         }
         $goods_id = $this->requestData('goods_id', 0);
         if (empty($goods_id)) {
-            return new ecjia_error('invalid_parameter', RC_Lang::get('system::system.invalid_parameter'));
+            return new ecjia_error('invalid_parameter', __('参数无效', 'user'));
         }
 
         RC_Loader::load_app_func('admin_goods', 'goods');
         $goods = get_goods_info($goods_id);
 
         if (!$goods) {
-            return new ecjia_error('not_exists_info', '不存在的信息');
+            return new ecjia_error('not_exists_info', __('不存在的信息', 'user'));
         }
         /* 检查是否已经存在于用户的收藏夹 */
         $count = RC_DB::table('collect_goods')->where('user_id', $user_id)->where('goods_id', $goods_id)->count();

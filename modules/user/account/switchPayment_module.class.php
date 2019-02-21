@@ -57,21 +57,21 @@ class user_account_switchPayment_module extends api_front implements api_interfa
 
         $user_id = $_SESSION['user_id'];
         if ($user_id < 1) {
-            return new ecjia_error(100, 'Invalid session');
+            return new ecjia_error(100, __('Invalid session', 'user'));
         }
         $order_sn = $this->requestData('order_sn', '');
         $order_sn = trim($order_sn);
         $pay_code = $this->requestData('pay_code', '');
 
         if (empty($order_sn) || empty($pay_code)) {
-            return new ecjia_error('invalid_parameter', RC_Lang::get('orders::order.invalid_parameter'));
+            return new ecjia_error('invalid_parameter', __('参数无效', 'user'));
         }
 
         $payment_info = with(new Ecjia\App\Payment\PaymentPlugin)->getPluginDataByCode($pay_code);
 
         $user_account_info = $this->get_account_detail($order_sn);
         if (empty($user_account_info)) {
-            return new ecjia_error('not_exists_info', '不存在的信息！');
+            return new ecjia_error('not_exists_info', __('不存在的信息！', 'user'));
         }
 
         $data = array(
@@ -83,7 +83,7 @@ class user_account_switchPayment_module extends api_front implements api_interfa
         if ($result) {
             return array();
         } else {
-            return new ecjia_error('fail_error', '处理失败！');
+            return new ecjia_error('fail_error', __('处理失败！', 'user'));
         }
     }
 

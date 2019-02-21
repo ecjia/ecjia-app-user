@@ -59,11 +59,11 @@ class address_info_module extends api_front implements api_interface
         $this->authSession();
         $user_id = $_SESSION['user_id'];
         if ($user_id <= 0) {
-            return new ecjia_error(100, 'Invalid session');
+            return new ecjia_error(100, __('Invalid session', 'user'));
         }
         $id = $this->requestData('address_id', 0);
         if (intval($id) < 1 || empty($user_id)) {
-            return new ecjia_error('invalid_parameter', RC_Lang::get('system::system.invalid_parameter'));
+            return new ecjia_error('invalid_parameter', __('参数无效', 'user'));
         }
         $location  = $this->requestData('location', array());
         $seller_id = $this->requestData('seller_id');
@@ -73,7 +73,7 @@ class address_info_module extends api_front implements api_interface
         $info = RC_DB::table('user_address')->where('address_id', $id)->where('user_id', $user_id)->first();
         /* 验证地址id */
         if (empty($info)) {
-            return new ecjia_error(13, '不存在的信息');
+            return new ecjia_error(13, __('不存在的信息', 'user'));
         }
         $consignee = get_consignee($user_id); // 取得默认地址
 

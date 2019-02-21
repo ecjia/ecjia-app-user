@@ -52,7 +52,7 @@ class user_signup_module extends api_front implements api_interface
     {
         $shop_reg_closed = ecjia::config('shop_reg_closed');
         if ($shop_reg_closed == '1') {
-            return new ecjia_error('shop_reg_closed', '会员注册关闭');
+            return new ecjia_error('shop_reg_closed', __('会员注册关闭', 'user'));
         }
 
         $username      = $this->requestData('name');
@@ -87,7 +87,7 @@ class user_signup_module extends api_front implements api_interface
 
         if (version_compare($api_version, '1.17', '>=')) {
             if (empty($username) && empty($mobile)) {
-                return new ecjia_error('invalid_parameter', RC_Lang::get('system::system.invalid_parameter'));
+                return new ecjia_error('invalid_parameter', __('参数无效', 'user'));
             }
             if (!empty($username) && empty($mobile)) {
                 /* 判断是否为手机*/
@@ -132,7 +132,7 @@ class user_signup_module extends api_front implements api_interface
         if ($check_mobile === true) {
             $mobile_count = RC_DB::table('users')->where('mobile_phone', $other['mobile_phone'])->count();
             if ($mobile_count > 0) {
-                return new ecjia_error('user_exists', '用户已存在！');
+                return new ecjia_error('user_exists', __('用户已存在！', 'user'));
             }
         } else {
             $other['mobile_phone'] = '';
@@ -265,25 +265,25 @@ class user_signup_module extends api_front implements api_interface
         /* 检查注册是否关闭 */
         $shop_reg_closed = ecjia::config('shop_reg_closed');
         if ($shop_reg_closed == '1') {
-            return new ecjia_error('shop_reg_closed', '会员注册关闭');
+            return new ecjia_error('shop_reg_closed', __('会员注册关闭', 'user'));
         }
 
         if (version_compare($api_version, '1.17', '>=')) {
             /* 检查username */
             if (empty($username)) {
-                return new ecjia_error('username_not_empty', '用户名不能为空！');
+                return new ecjia_error('username_not_empty', __('用户名不能为空！', 'user'));
             } else {
                 if (preg_match('/\'\/^\\s*$|^c:\\\\con\\\\con$|[%,\\\"\\s\\t\\<\\>\\&\'\\\\]/', $username)) {
-                    return new ecjia_error('username_error', '用户名有敏感字符');
+                    return new ecjia_error('username_error', __('用户名有敏感字符', 'user'));
                 }
             }
         } else {
             /* 检查username */
             if (empty($username)) {
-                return new ecjia_error('username_not_empty', '用户名不能为空！');
+                return new ecjia_error('username_not_empty', __('用户名不能为空！', 'user'));
             } else {
                 if (preg_match('/\'\/^\\s*$|^c:\\\\con\\\\con$|[%,\\*\\"\\s\\t\\<\\>\\&\'\\\\]/', $username)) {
-                    return new ecjia_error('username_error', '用户名有敏感字符');
+                    return new ecjia_error('username_error', __('用户名有敏感字符', 'user'));
                 }
             }
         }

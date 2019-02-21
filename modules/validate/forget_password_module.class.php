@@ -61,7 +61,7 @@ class validate_forget_password_module extends api_front implements api_interface
         $code  = $this->requestData('code');
 
         if (empty($type) || empty($value) || empty($code)) {
-            return new ecjia_error('invalid_parameter', RC_Lang::get('system::system.invalid_parameter'));
+            return new ecjia_error('invalid_parameter', __('参数无效', 'user'));
         }
         $db = RC_Model::model('user/users_model');
         if ($type == 'mobile') {

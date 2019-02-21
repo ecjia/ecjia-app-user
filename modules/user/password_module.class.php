@@ -60,14 +60,14 @@ class user_password_module extends api_front implements api_interface
         $user_id     = $_SESSION['user_id'];
         $api_version = $this->request->header('api-version');
         if ($user_id <= 0) {
-            return new ecjia_error(100, 'Invalid session');
+            return new ecjia_error(100, __('Invalid session', 'user'));
         }
 
         //判断用户有没申请注销
         if (version_compare($api_version, '1.25', '>=')) {
             $account_status = Ecjia\App\User\Users::UserAccountStatus($user_id);
             if ($account_status == Ecjia\App\User\Users::WAITDELETE) {
-                return new ecjia_error('account_status_error', '当前账号已申请注销，不可执行此操作！');
+                return new ecjia_error('account_status_error', __('当前账号已申请注销，不可执行此操作！', 'user'));
             }
         }
 
@@ -79,14 +79,14 @@ class user_password_module extends api_front implements api_interface
         $type_array   = array('use_sms', 'use_password');
 
         if (strlen($new_password) < 6) {
-            return new ecjia_error('password_shorter', __('- 登录密码不能少于 6 个字符。'));
+            return new ecjia_error('password_shorter', __('- 登录密码不能少于 6 个字符。', 'user'));
         }
 
         $user_info = ecjia_integrate::getProfileById($user_id); //论坛记录
 
         if (version_compare($api_version, '1.14', '<')) {
             if ($old_password == $new_password) {
-                return new ecjia_error('password_shorter', '新密码不能与旧密码相同！');
+                return new ecjia_error('password_shorter', __('新密码不能与旧密码相同！', 'user'));
             }
 
             if (($user_info && (!empty($code) && md5($user_info['user_id'] . ecjia::config('hash_code') . $user_info['reg_time']) == $code))
@@ -106,10 +106,10 @@ class user_password_module extends api_front implements api_interface
 
                     return array();
                 } else {
-                    $result = new ecjia_error('edit_password_failure', __('您输入的旧密码不正确！'));
+                    $result = new ecjia_error('edit_password_failure', __('您输入的旧密码不正确！', 'user'));
                 }
             } else {
-                $result = new ecjia_error('edit_password_failure', __('您输入的旧密码不正确！'));
+                $result = new ecjia_error('edit_password_failure', __('您输入的旧密码不正确！', 'user'));
             }
 
             if (is_ecjia_error($result)) {
@@ -117,24 +117,24 @@ class user_password_module extends api_front implements api_interface
             }
         } else {
             if (empty($type) || !in_array($type, $type_array)) {
-                return new ecjia_error('invalid_parameter', RC_Lang::get('system::system.invalid_parameter'));
+                return new ecjia_error('invalid_parameter', __('参数无效', 'user'));
             }
             if ($type == 'use_sms') {
                 $mobile_phone = RC_DB::table('users')->where('user_id', $user_id)->pluck('mobile_phone');
                 if (empty($mobile_phone)) {
-                    return new ecjia_error('mobile_unbind', '请先绑定手机号码！');
+                    return new ecjia_error('mobile_unbind', __('请先绑定手机号码！', 'user'));
                 }
                 if (empty($old_password)) {
-                    return new ecjia_error('empty_sms_code', '请填写验证码');
+                    return new ecjia_error('empty_sms_code', __('请填写验证码', 'user'));
                 }
                 if (RC_Time::gmtime() > $_SESSION['captcha']['sms']['user_modify_password']['lifetime']) {
-                    return new ecjia_error('code_pasted', '验证码已过期');
+                    return new ecjia_error('code_pasted', __('验证码已过期', 'user'));
                 }
                 if ($old_password != $_SESSION['captcha']['sms']['user_modify_password']['code']) {
-                    return new ecjia_error('code_error', '验证码错误');
+                    return new ecjia_error('code_error', __('验证码错误', 'user'));
                 }
                 if ($mobile_phone != $_SESSION['captcha']['sms']['user_modify_password']['value']) {
-                    return new ecjia_error('mobile_error', '接收和验证的手机号不同');
+                    return new ecjia_error('mobile_error', __('接收和验证的手机号不同', 'user'));
                 }
                 if (ecjia_integrate::editUser([
                     'username'     => $_SESSION['user_name'],
@@ -148,11 +148,11 @@ class user_password_module extends api_front implements api_interface
 
                     return array();
                 } else {
-                    return new ecjia_error('update_password_error', '修改密码失败！');
+                    return new ecjia_error('update_password_error', __('修改密码失败！', 'user'));
                 }
             } else {
                 if ($old_password == $new_password) {
-                    return new ecjia_error('password_shorter', '新密码不能与旧密码相同！');
+                    return new ecjia_error('password_shorter', __('新密码不能与旧密码相同！', 'user'));
                 }
                 if (($user_info && (!empty($code) && md5($user_info['user_id'] . ecjia::config('hash_code') . $user_info['reg_time']) == $code))
                     || ($_SESSION['user_id'] > 0 && $_SESSION['user_id'] == $user_id && ecjia_integrate::checkUser($_SESSION['user_name'], $old_password))) {
@@ -171,10 +171,10 @@ class user_password_module extends api_front implements api_interface
 
                         return array();
                     } else {
-                        $result = new ecjia_error('edit_password_failure', __('您输入的旧密码不正确！'));
+                        $result = new ecjia_error('edit_password_failure', __('您输入的旧密码不正确！', 'user'));
                     }
                 } else {
-                    $result = new ecjia_error('edit_password_failure', __('您输入的旧密码不正确！'));
+                    $result = new ecjia_error('edit_password_failure', __('您输入的旧密码不正确！', 'user'));
                 }
 
                 if (is_ecjia_error($result)) {

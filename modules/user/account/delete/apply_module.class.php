@@ -56,13 +56,13 @@ class user_account_delete_apply_module extends api_front implements api_interfac
     {
 
         if ($_SESSION['user_id'] <= 0) {
-            return new ecjia_error(100, 'Invalid session');
+            return new ecjia_error(100, __('Invalid session', 'user'));
         }
 
         $smscode = $this->requestData('smscode', '');
         //参数判断
         if (empty($smscode)) {
-            return new ecjia_error('invalid_parameter', '请求接口user_account_delete_apply_module参数错误');
+            return new ecjia_error('invalid_parameter', sprintf(__('请求接口%s参数错误', 'user'), 'user_account_delete_apply_module'));
         }
         $user_id = $_SESSION['user_id'];
         //用户信息
@@ -81,7 +81,7 @@ class user_account_delete_apply_module extends api_front implements api_interfac
         $user_handle       = array_get($handles, $user_money_code);
         $user_money_result = $user_handle->handleCount();
         if (!empty($user_money_result)) {
-            return new ecjia_error('user_money_unclear', '请确保账号内无余额或已结清！');
+            return new ecjia_error('user_money_unclear', __('请确保账号内无余额或已结清！', 'user'));
         }
 
         /* 有没未解除的第三方关联账号 */
@@ -89,13 +89,13 @@ class user_account_delete_apply_module extends api_front implements api_interfac
         $user_connect_handle = array_get($handles, $user_connect_code);
         $user_connect_count  = $user_connect_handle->handleCount();
         if (!empty($user_connect_count)) {
-            return new ecjia_error('connected_user_unclear', '请先解除要注销账号与其他网站、其他APP的授权登录或绑定关系！');
+            return new ecjia_error('connected_user_unclear', __('请先解除要注销账号与其他网站、其他APP的授权登录或绑定关系！', 'user'));
         }
 
         /*有没未完成（未付款，已付款未发货，未确认收货，退款中）的订单*/
         $unfinish_order_count = $this->_getUnfinishOrder($user_id);
         if (!empty($unfinish_order_count)) {
-            return new ecjia_error('unfinished_order_error', '请确保账号内交易无未完成订单！');
+            return new ecjia_error('unfinished_order_error', __('请确保账号内交易无未完成订单！', 'user'));
         }
 
         //更新用户账号状态
@@ -113,16 +113,16 @@ class user_account_delete_apply_module extends api_front implements api_interfac
         //判断校验码是否过期
         if ($_SESSION['captcha']['sms']['user_delete_account']['sendtime'] + 1800 < RC_Time::gmtime()) {
             //过期
-            return new ecjia_error('code_timeout', __('验证码已过期，请重新获取！'));
+            return new ecjia_error('code_timeout', __('验证码已过期，请重新获取！', 'user'));
         }
         //判断校验码是否正确
         if ($smscode != $_SESSION['captcha']['sms']['user_delete_account']['code']) {
-            return new ecjia_error('code_error', __('验证码错误，请重新填写！'));
+            return new ecjia_error('code_error', __('验证码错误，请重新填写！', 'user'));
         }
 
         //校验其他信息
         if ($user_info['mobile_phone'] != $_SESSION['captcha']['sms']['user_delete_account']['value']) {
-            return new ecjia_error('msg_error', __('接受验证码手机号与用户绑定手机号不同！'));
+            return new ecjia_error('msg_error', __('接受验证码手机号与用户绑定手机号不同！', 'user'));
         }
 
         return true;

@@ -56,7 +56,7 @@ class user_account_record_module extends api_front implements api_interface
     {
 
         if ($_SESSION['user_id'] <= 0) {
-            return new ecjia_error(100, 'Invalid session');
+            return new ecjia_error(100, __('Invalid session', 'user'));
         }
 
         $user_id     = $_SESSION['user_id'];
@@ -65,7 +65,7 @@ class user_account_record_module extends api_front implements api_interface
         if (version_compare($api_version, '1.25', '>=')) {
             $account_status = Ecjia\App\User\Users::UserAccountStatus($user_id);
             if ($account_status == Ecjia\App\User\Users::WAITDELETE) {
-                return new ecjia_error('account_status_error', '当前账号已申请注销，不可查看此数据！');
+                return new ecjia_error('account_status_error', __('当前账号已申请注销，不可查看此数据！', 'user'));
             }
         }
 
@@ -74,10 +74,10 @@ class user_account_record_module extends api_front implements api_interface
         $process_type = $this->requestData('type');
         $type         = array('', 'deposit', 'raply');
         if (!in_array($process_type, $type)) {
-            return new ecjia_error('invalid_parameter', RC_Lang::get('system::system.invalid_parameter'));
+            return new ecjia_error('invalid_parameter', __('参数无效', 'user'));
         }
         if (!$user_id) {
-            return new ecjia_error(100, 'Invalid session');
+            return new ecjia_error(100, __('Invalid session', 'user'));
         }
 
         $db = RC_DB::table('user_account')->where('user_id', $user_id);
@@ -118,7 +118,7 @@ class user_account_record_module extends api_front implements api_interface
                 $account_list[$key]['user_note']             = $value['user_note'];
                 $account_list[$key]['type']                  = $value['process_type'] == '0' ? 'deposit' : 'raply';
                 $account_list[$key]['type_lable']            = $value['type'];
-                $account_list[$key]['payment_name']          = (empty($value['payment']) && $value['process_type'] == '0') ? '管理员操作' : strip_tags($value['payment']);
+                $account_list[$key]['payment_name']          = (empty($value['payment']) && $value['process_type'] == '0') ? __('管理员操作', 'user') : strip_tags($value['payment']);
                 $account_list[$key]['payment_id']            = $value['pid'];
                 $account_list[$key]['is_paid']               = $value['is_paid'];
                 $account_list[$key]['pay_status']            = $value['pay_status'];

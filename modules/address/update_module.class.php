@@ -59,14 +59,14 @@ class address_update_module extends api_front implements api_interface
         $this->authSession();
         $user_id = $_SESSION['user_id'];
         if ($user_id <= 0) {
-            return new ecjia_error(100, 'Invalid session');
+            return new ecjia_error(100, __('Invalid session', 'user'));
         }
 
         $address               = $this->requestData('address', array());
         $address['user_id']    = $user_id;
         $address['address_id'] = $this->requestData('address_id', 0);
         if (empty($address['address_id']) || empty($address['user_id'])) {
-            return new ecjia_error('invalid_parameter', RC_Lang::get('system::system.invalid_parameter'));
+            return new ecjia_error('invalid_parameter', __('参数无效', 'user'));
         }
 
         $address_update_data               = array();

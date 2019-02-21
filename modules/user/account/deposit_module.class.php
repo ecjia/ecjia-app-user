@@ -56,7 +56,7 @@ class user_account_deposit_module extends api_front implements api_interface
     {
 
         if ($_SESSION['user_id'] <= 0) {
-            return new ecjia_error(100, 'Invalid session');
+            return new ecjia_error(100, __('Invalid session', 'user'));
         }
         $amount     = $this->requestData('amount');
         $user_note  = $this->requestData('note', '');
@@ -69,18 +69,18 @@ class user_account_deposit_module extends api_front implements api_interface
         if (version_compare($api_version, '1.25', '>=')) {
             $account_status = Ecjia\App\User\Users::UserAccountStatus($user_id);
             if ($account_status == Ecjia\App\User\Users::WAITDELETE) {
-                return new ecjia_error('account_status_error', '当前账号已申请注销，不可执行此操作！');
+                return new ecjia_error('account_status_error', __('当前账号已申请注销，不可执行此操作！', 'user'));
             }
         }
 
 
         $amount = floatval($amount);
         if ($amount <= 0) {
-            $result = new ecjia_error('amount_gt_zero', __('请在“金额”栏输入大于0的数字！'));
+            $result = new ecjia_error('amount_gt_zero', __('请在“金额”栏输入大于0的数字！', 'user'));
             return $result;
         }
         if (!$user_id) {
-            return new ecjia_error(100, 'Invalid session');
+            return new ecjia_error(100, __('Invalid session', 'user'));
         }
 
         RC_Loader::load_app_func('admin_order', 'orders');
@@ -106,14 +106,14 @@ class user_account_deposit_module extends api_front implements api_interface
         );
 
         if ($surplus['payment_id'] <= 0) {
-            $result = new ecjia_error('select_payment_pls', __('请选择支付方式！'));
+            $result = new ecjia_error('select_payment_pls', __('请选择支付方式！', 'user'));
             return $result;
         }
 
         //获取支付方式名称
         $payment_info = with(new Ecjia\App\Payment\PaymentPlugin)->getPluginDataById($surplus['payment_id']);
         if (empty($payment_info)) {
-            $result = new ecjia_error('select_payment_pls_again', __('支付方式无效，请重新选择支付方式！'));
+            $result = new ecjia_error('select_payment_pls_again', __('支付方式无效，请重新选择支付方式！', 'user'));
         }
         $surplus['payment']      = $payment_info['pay_code'];
         $surplus['payment_name'] = $payment_info['pay_name'];

@@ -61,7 +61,7 @@ class validate_bonus_module extends api_front implements api_interface
         $bonus_sn = $this->requestData('bonus_sn');
 
         if (empty($_SESSION['user_id'])) {
-            return new ecjia_error(100, 'Invalid session');
+            return new ecjia_error(100, __('Invalid session', 'user'));
         }
 
         if (is_numeric($bonus_sn)) {

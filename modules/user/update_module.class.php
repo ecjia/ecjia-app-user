@@ -57,7 +57,7 @@ class user_update_module extends api_front implements api_interface
 
         $user_id = $_SESSION['user_id'];
         if ($user_id <= 0) {
-            return new ecjia_error(100, 'Invalid session');
+            return new ecjia_error(100, __('Invalid session', 'user'));
         }
 
         //判断用户有没申请注销
@@ -65,7 +65,7 @@ class user_update_module extends api_front implements api_interface
         if (version_compare($api_version, '1.25', '>=')) {
             $account_status = Ecjia\App\User\Users::UserAccountStatus($user_id);
             if ($account_status == Ecjia\App\User\Users::WAITDELETE) {
-                return new ecjia_error('account_status_error', '当前账号已申请注销，不可执行此操作！');
+                return new ecjia_error('account_status_error', __('当前账号已申请注销，不可执行此操作！', 'user'));
             }
         }
 
@@ -85,7 +85,7 @@ class user_update_module extends api_front implements api_interface
                 }
                 $db->where(array('user_id' => $_SESSION['user_id']))->update(array('avatar_img' => $avatar_img));
             } else {
-                return new ecjia_error('avatar_img_error', '头像上传失败！');
+                return new ecjia_error('avatar_img_error', __('头像上传失败！', 'user'));
             }
 
 // 			$uid = $user_id;
@@ -122,7 +122,7 @@ class user_update_module extends api_front implements api_interface
         if (!empty($user_name)) {
             $user_exists = $db->where(array('user_id' => array('neq' => $_SESSION['user_id']), 'user_name' => $user_name))->find();
             if ($user_exists) {
-                return new ecjia_error('user_name_exists', '用户名已存在！');
+                return new ecjia_error('user_name_exists', __('用户名已存在！', 'user'));
             } else {
                 $data = array('object_type' => 'ecjia.user', 'object_group' => 'update_user_name', 'object_id' => $_SESSION['user_id'], 'meta_key' => 'update_time');
 
@@ -141,7 +141,7 @@ class user_update_module extends api_front implements api_interface
                         RC_Model::model('term_meta_model')->where($data)->update(array('meta_value' => $time));
                     }
                 } else {
-                    return new ecjia_error('not_repeat_update_username', '30天内只允许修改一次会员名称！');
+                    return new ecjia_error('not_repeat_update_username', __('30天内只允许修改一次会员名称！', 'user'));
                 }
 
             }

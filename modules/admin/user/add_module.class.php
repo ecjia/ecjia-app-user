@@ -12,7 +12,7 @@ class admin_user_add_module extends api_admin implements api_interface
     {
         $this->authadminSession();
         if ($_SESSION['staff_id'] <= 0) {
-            return new ecjia_error(100, 'Invalid session');
+            return new ecjia_error(100, __('Invalid session', 'user'));
         }
         $device   = $this->device;
         $username = $this->requestData('user_name');
@@ -25,7 +25,7 @@ class admin_user_add_module extends api_admin implements api_interface
         }
 
         if (empty($username) || empty($mobile) || empty($store_id)) {
-            return new ecjia_error('invalid_parameter', RC_Lang::get('system::system.invalid_parameter'));
+            return new ecjia_error('invalid_parameter', __('参数无效', 'user'));
         }
 
         $other = [];
@@ -50,17 +50,17 @@ class admin_user_add_module extends api_admin implements api_interface
         }
         //用户名过滤
         if (preg_match('/\'\/^\\s*$|^c:\\\\con\\\\con$|[%,\\*\\"\\s\\t\\<\\>\\&\'\\\\]/', $username)) {
-            return new ecjia_error('username_error', '用户名有敏感字符');
+            return new ecjia_error('username_error', __('用户名有敏感字符', 'user'));
         }
         //用户名是否重复
         $username_count = RC_DB::table('users')->where('user_name', $username)->count();
         if ($username_count > 0) {
-            return new ecjia_error('user_exists', '用户名已存在！');
+            return new ecjia_error('user_exists', __('用户名已存在！', 'user'));
         }
         //手机号码是否重复
         $mobile_count = RC_DB::table('users')->where('mobile_phone', $mobile)->count();
         if ($mobile_count > 0) {
-            return new ecjia_error('mobile_exists', '手机号已存在！');
+            return new ecjia_error('mobile_exists', __('手机号已存在！', 'user'));
         }
         $userinfo = [];
         if (ecjia_integrate::addUser($username, null, $email, $mobile)) {
@@ -83,7 +83,7 @@ class admin_user_add_module extends api_admin implements api_interface
                 'user_name' => $user_info['user_name']
             );
         } else {
-            return new ecjia_error('add_user_fail', '添加会员失败！');
+            return new ecjia_error('add_user_fail', __('添加会员失败！', 'user'));
         }
 
         return $userinfo;

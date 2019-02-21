@@ -56,7 +56,7 @@ class user_account_integral_record_module extends api_front implements api_inter
     {
 
         if ($_SESSION['user_id'] <= 0) {
-            return new ecjia_error(100, 'Invalid session');
+            return new ecjia_error(100, __('Invalid session', 'user'));
         }
         $size    = $this->requestData('pagination.count', 15);
         $page    = $this->requestData('pagination.page', 1);

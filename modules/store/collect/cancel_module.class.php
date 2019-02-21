@@ -58,11 +58,11 @@ class store_collect_cancel_module extends api_front implements api_interface
         $this->authSession();
         $user_id = $_SESSION['user_id'];
         if ($user_id <= 0) {
-            return new ecjia_error(100, 'Invalid session');
+            return new ecjia_error(100, __('Invalid session', 'user'));
         }
         $store_id = $this->requestData('store_id', '0');
         if (empty($store_id)) {
-            return new ecjia_error('invalid_parameter', RC_Lang::get('system::system.invalid_parameter'));
+            return new ecjia_error('invalid_parameter', __('参数无效', 'user'));
         }
 
         $info = RC_DB::table('collect_store')->where('store_id', $store_id)->where('user_id', $user_id)->first();

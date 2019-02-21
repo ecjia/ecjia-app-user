@@ -60,13 +60,13 @@ class user_account_withdraw_module extends api_front implements api_interface
 
         $user_id = $_SESSION['user_id'];
         if ($_SESSION['user_id'] <= 0) {
-            return new ecjia_error(100, 'Invalid session');
+            return new ecjia_error(100, __('Invalid session', 'user'));
         }
 
         //判断用户有没申请注销
         $account_status = Ecjia\App\User\Users::UserAccountStatus($user_id);
         if ($account_status == Ecjia\App\User\Users::WAITDELETE) {
-            return new ecjia_error('account_status_error', '当前账号已申请注销，不可执行此操作！');
+            return new ecjia_error('account_status_error', __('当前账号已申请注销，不可执行此操作！', 'user'));
         }
 
         $amount           = $this->requestData('amount');
@@ -75,18 +75,18 @@ class user_account_withdraw_module extends api_front implements api_interface
         $withdraw_way_arr = array('wechat', 'bank');
 
         if (empty($withdraw_way) || !in_array($withdraw_way, $withdraw_way_arr)) {
-            return new ecjia_error('invalid_parameter', '请求接口user_account_withdraw_module参数错误！');
+            return new ecjia_error('invalid_parameter', sprintf(__('请求接口%s参数错误！', 'user'), 'user_account_withdraw_module'));
         }
 
         //判断用户有没绑定微信钱包和银行卡
         $withdraw_way_bind = $this->is_bind_withdraw_way($withdraw_way, $user_id);
         if (!$withdraw_way_bind) {
-            return new ecjia_error('not_bind_withdraw_way', '您还未绑定此提现方式！');
+            return new ecjia_error('not_bind_withdraw_way', __('您还未绑定此提现方式！', 'user'));
         }
 
         $amount = floatval($amount);
         if ($amount <= 0) {
-            return new ecjia_error('amount_gt_zero', __('请在“金额”栏输入大于0的数字！'));
+            return new ecjia_error('amount_gt_zero', __('请在“金额”栏输入大于0的数字！', 'user'));
         }
 
         $pay_fee     = '0.00';
@@ -96,7 +96,7 @@ class user_account_withdraw_module extends api_front implements api_interface
         $withdraw_min_amount = ecjia::config('withdraw_min_amount');
         if ($withdraw_min_amount > 0) {
             if ($amount < $withdraw_min_amount) {
-                return new ecjia_error('withdraw_min_amount_error', '提现金额不可小于最小提现金额：' . $withdraw_min_amount . '元');
+                return new ecjia_error('withdraw_min_amount_error', sprintf(__('提现金额不可小于最小提现金额：%s元', 'user'), $withdraw_min_amount));
             }
         }
 
@@ -106,7 +106,7 @@ class user_account_withdraw_module extends api_front implements api_interface
         RC_Loader::load_app_class('user_account', 'user', false);
         $user_current_money = user_account::get_user_money($user_id);
         if ($amount > $user_current_money) {
-            return new ecjia_error('surplus_amount_error', '您申请提现的金额超过了现有余额，此操作将不可进行！');
+            return new ecjia_error('surplus_amount_error', __('您申请提现的金额超过了现有余额，此操作将不可进行！', 'user'));
         }
 
         /* 提现手续费 */
@@ -124,11 +124,11 @@ class user_account_withdraw_module extends api_front implements api_interface
         $payment = [
             'bank'   => [
                 'pay_code' => 'withdraw_bank',
-                'pay_name' => '银行转账提现'
+                'pay_name' => __('银行转账提现', 'user')
             ],
             'wechat' => [
                 'pay_code' => 'withdraw_wxpay',
-                'pay_name' => '微信钱包提现'
+                'pay_name' => __('微信钱包提现', 'user')
             ],
         ];
 
@@ -173,14 +173,14 @@ class user_account_withdraw_module extends api_front implements api_interface
                 'frozen_money' => $frozen_money,
                 'user_money'   => $change_amount,
                 'change_type'  => ACT_DRAWING,
-                'change_desc'  => '【申请提现】'
+                'change_desc'  => __('【申请提现】', 'user')
             );
 
             RC_Api::api('user', 'account_change_log', $options);
 
-            return array('data' => "您的提现申请已成功提交，请等待管理员的审核！");
+            return array('data' => __("您的提现申请已成功提交，请等待管理员的审核！", 'user'));
         } else {
-            $result = new ecjia_error('process_false', '此次操作失败，请返回重试！');
+            $result = new ecjia_error('process_false', __('此次操作失败，请返回重试！', 'user'));
             return $result;
         }
     }

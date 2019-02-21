@@ -60,7 +60,7 @@ class user_info_bankcard_module extends api_front implements api_interface
         $user_id = $_SESSION['user_id']/*   = 1040 */
         ;
         if ($user_id <= 0) {
-            return new ecjia_error(100, 'Invalid session');
+            return new ecjia_error(100, __('Invalid session', 'user'));
         }
 
         $user_binded_list = [];
