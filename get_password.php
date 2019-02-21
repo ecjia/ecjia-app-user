@@ -147,11 +147,11 @@ class get_password extends ecjia_front
             exit;
         }
 
-        $_SESSION['temp_user_id']         = $userinfo['user_id'];            //设置临时用户，不具有有效身份
-        $_SESSION['temp_user_name']       = $userinfo['user_name'];        //设置临时用户，不具有有效身份
-        $_SESSION['temp_email']           = $userinfo['email'];            //设置临时用户，不具有有效身份
-        $_SESSION['temp_passwd_question'] = $userinfo['passwd_question'];    //存储密码问题，减少一次数据库访问
-        $_SESSION['temp_passwd_answer']   = $userinfo['passwd_answer'];    //存储密码问题答案，减少一次数据库访问
+        $_SESSION['temp_user_id']         = $userinfo['user_id'];           //设置临时用户，不具有有效身份
+        $_SESSION['temp_user_name']       = $userinfo['user_name'];         //设置临时用户，不具有有效身份
+        $_SESSION['temp_email']           = $userinfo['email'];             //设置临时用户，不具有有效身份
+        $_SESSION['temp_passwd_question'] = $userinfo['passwd_question'];   //存储密码问题，减少一次数据库访问
+        $_SESSION['temp_passwd_answer']   = $userinfo['passwd_answer'];     //存储密码问题答案，减少一次数据库访问
 
         if ($type == 'email') {
             $this->assign('passwd_answer', !empty($userinfo['passwd_answer']));

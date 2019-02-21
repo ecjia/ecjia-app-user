@@ -303,7 +303,7 @@ class user_signup_module extends api_front implements api_interface
                     'user_id'     => $_SESSION['user_id'],
                     'rank_points' => ecjia::config('register_points'),
                     'pay_points'  => ecjia::config('register_points'),
-                    'change_desc' => RC_Lang::get('user::user.register_points')
+                    'change_desc' => __('注册送积分', 'user')
                 );
                 $result  = RC_Api::api('user', 'account_change_log', $options);
             }

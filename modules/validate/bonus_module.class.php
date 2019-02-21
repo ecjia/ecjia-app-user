@@ -83,7 +83,7 @@ class validate_bonus_module extends api_front implements api_interface
         $cart_goods = cart_goods($flow_type); // 取得商品列表，计算合计
 
         if (empty($cart_goods) || !check_consignee_info($consignee, $flow_type)) {
-            $result['error'] = RC_Lang::get('user::user.no_goods_in_cart');
+            $result['error'] = '您的购物车中没有商品！';
         } else {
             /* 取得订单信息 */
             $order = flow_order_info();
@@ -94,14 +94,14 @@ class validate_bonus_module extends api_front implements api_interface
 
                 if ($now > $bonus['use_end_date']) {
                     $order['bonus_id'] = '';
-                    $result['error']   = RC_Lang::get('user::user.bonus_use_expire');
+                    $result['error']   = __('该红包已经过了使用期！', 'user');
                 } else {
                     $order['bonus_id'] = $bonus['bonus_id'];
                     $order['bonus_sn'] = $bonus_sn;
                 }
             } else {
                 $order['bonus_id'] = '';
-                $result['error']   = RC_Lang::get('user::user.invalid_bonus');
+                $result['error']   = __('您选择的红包并不存在。', 'user');
             }
 
             /* 计算订单的费用 */
@@ -111,7 +111,7 @@ class validate_bonus_module extends api_front implements api_interface
                 $order['bonus_id'] = '';
                 /* 重新计算订单 */
                 $total           = order_fee($order, $cart_goods, $consignee);
-                $result['error'] = sprintf(RC_Lang::get('user::user.bonus_min_amount_error'), price_format($bonus['min_goods_amount'], false));
+                $result['error'] = sprintf(__('订单商品金额没有达到使用该红包的最低金额 %s', 'user'), price_format($bonus['min_goods_amount'], false));
             }
             /* 团购标志 */
             if ($flow_type == CART_GROUP_BUY_GOODS) {
