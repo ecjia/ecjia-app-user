@@ -76,7 +76,7 @@ class admin_reg_fields extends ecjia_admin
         );
         RC_Script::localize_script('user_info', 'reg_jslang', $reg_field_jslang);
 
-        ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('会员注册项设置', RC_Uri::url('user/admin_reg_fields/init')));
+        ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('会员注册项设置', 'user'), RC_Uri::url('user/admin_reg_fields/init')));
     }
 
     /**
@@ -87,20 +87,20 @@ class admin_reg_fields extends ecjia_admin
         $this->admin_priv('reg_fields');
 
         ecjia_screen::get_current_screen()->remove_last_nav_here();
-        ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('会员注册项设置'));
+        ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('会员注册项设置', 'user')));
         ecjia_screen::get_current_screen()->add_help_tab(array(
             'id'      => 'overview',
             'title'   => __('概述', 'user'),
-            'content' => '<p>' . '欢迎访问ECJia智能后台会员注册项列表页面，系统中所有的会员注册项都会显示在此列表中。' . '</p>'
+            'content' => '<p>' . __('欢迎访问ECJia智能后台会员注册项列表页面，系统中所有的会员注册项都会显示在此列表中。', 'user') . '</p>'
         ));
 
         ecjia_screen::get_current_screen()->set_help_sidebar(
             '<p><strong>' . __('更多信息：', 'user') . '</strong></p>' .
-            '<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:会员注册项设置" target="_blank">' . '关于会员注册项帮助文档' . '</a>') . '</p>'
+            '<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:会员注册项设置" target="_blank">' . __('关于会员注册项帮助文档', 'user') . '</a>') . '</p>'
         );
 
-        $this->assign('ur_here', '会员注册项设置');
-        $this->assign('action_link', array('text' => '添加会员注册项', 'href' => RC_Uri::url('user/admin_reg_fields/add')));
+        $this->assign('ur_here', __('会员注册项设置', 'user'));
+        $this->assign('action_link', array('text' => __('添加会员注册项', 'user'), 'href' => RC_Uri::url('user/admin_reg_fields/add')));
 
         $fields = RC_DB::table('reg_fields')->orderBy('dis_order', 'asc')->orderBy('id', 'asc')->get();
         $this->assign('reg_fields', $fields);
@@ -115,20 +115,20 @@ class admin_reg_fields extends ecjia_admin
     {
         $this->admin_priv('reg_fields');
 
-        ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('添加会员注册项'));
+        ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('添加会员注册项', 'user')));
         ecjia_screen::get_current_screen()->add_help_tab(array(
             'id'      => 'overview',
             'title'   => __('概述', 'user'),
-            'content' => '<p>' . '欢迎访问ECJia智能后台添加会员注册项页面，在此页面可以进行添加会员注册项操作。' . '</p>'
+            'content' => '<p>' . __('欢迎访问ECJia智能后台添加会员注册项页面，在此页面可以进行添加会员注册项操作。', 'user') . '</p>'
         ));
 
         ecjia_screen::get_current_screen()->set_help_sidebar(
             '<p><strong>' . __('更多信息：', 'user') . '</strong></p>' .
-            '<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:会员注册项设置" target="_blank">' . '关于添加会员注册项帮助文档' . '</a>') . '</p>'
+            '<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:会员注册项设置" target="_blank">' . __('关于添加会员注册项帮助文档', 'user') . '</a>') . '</p>'
         );
 
-        $this->assign('ur_here', '添加会员注册项');
-        $this->assign('action_link', array('text' => '会员注册项设置', 'href' => RC_Uri::url('user/admin_reg_fields/init')));
+        $this->assign('ur_here', __('添加会员注册项', 'user'));
+        $this->assign('action_link', array('text' => __('会员注册项设置', 'user'), 'href' => RC_Uri::url('user/admin_reg_fields/init')));
 
         $reg_field['reg_field_order']   = 100;
         $reg_field['reg_field_display'] = 1;
@@ -154,7 +154,7 @@ class admin_reg_fields extends ecjia_admin
         /* 检查是否存在重名的会员注册项 */
         if (RC_DB::table('reg_fields')->where('reg_field_name', $field_name)->count() != 0) {
 
-            return $this->showmessage(sprintf('会员注册项名 %s 已经存在。', $field_name), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+            return $this->showmessage(sprintf(__('会员注册项名 %s 已经存在。', 'user'), $field_name), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
         }
 
         $data   = array(
@@ -166,9 +166,9 @@ class admin_reg_fields extends ecjia_admin
         $max_id = RC_DB::table('reg_fields')->insertGetId($data);
         ecjia_admin::admin_log($field_name, 'add', 'reg_fields');
 
-        $links[] = array('text' => '返回会员注册项列表', 'href' => RC_Uri::url('user/admin_reg_fields/init'));
-        $links[] = array('text' => '继续添加会员注册项', 'href' => RC_Uri::url('user/admin_reg_fields/add'));
-        return $this->showmessage('会员注册项已经添加成功。', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('links' => $links, 'pjaxurl' => RC_Uri::url('user/admin_reg_fields/edit', array('id' => $max_id))));
+        $links[] = array('text' => __('返回会员注册项列表', 'user'), 'href' => RC_Uri::url('user/admin_reg_fields/init'));
+        $links[] = array('text' => __('继续添加会员注册项', 'user'), 'href' => RC_Uri::url('user/admin_reg_fields/add'));
+        return $this->showmessage(__('会员注册项已经添加成功。', 'user'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('links' => $links, 'pjaxurl' => RC_Uri::url('user/admin_reg_fields/edit', array('id' => $max_id))));
     }
 
     /**
@@ -178,20 +178,20 @@ class admin_reg_fields extends ecjia_admin
     {
         $this->admin_priv('reg_fields');
 
-        ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('编辑会员注册项'));
+        ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('编辑会员注册项', 'user')));
         ecjia_screen::get_current_screen()->add_help_tab(array(
             'id'      => 'overview',
             'title'   => __('概述', 'user'),
-            'content' => '<p>' . '欢迎访问ECJia智能后台编辑会员注册项页面，在此页面可以进行编辑会员注册项操作。' . '</p>'
+            'content' => '<p>' . __('欢迎访问ECJia智能后台编辑会员注册项页面，在此页面可以进行编辑会员注册项操作。', 'user') . '</p>'
         ));
 
         ecjia_screen::get_current_screen()->set_help_sidebar(
             '<p><strong>' . __('更多信息：', 'user') . '</strong></p>' .
-            '<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:会员注册项设置" target="_blank">' . '关于编辑会员注册项帮助文档' . '</a>') . '</p>'
+            '<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:会员注册项设置" target="_blank">' . __('关于编辑会员注册项帮助文档', 'user') . '</a>') . '</p>'
         );
 
-        $this->assign('ur_here', '编辑会员注册项');
-        $this->assign('action_link', array('text' => '会员注册项设置', 'href' => RC_Uri::url('user/admin_reg_fields/init')));
+        $this->assign('ur_here', __('编辑会员注册项', 'user'));
+        $this->assign('action_link', array('text' => __('会员注册项设置', 'user'), 'href' => RC_Uri::url('user/admin_reg_fields/init')));
 
         $reg_field = RC_DB::table('reg_fields')
             ->where('id', $_REQUEST['id'])
@@ -224,7 +224,7 @@ class admin_reg_fields extends ecjia_admin
         /* 检查是否存在重名的会员注册项 */
         if ($field_name != $old_name) {
             if (RC_DB::table('reg_fields')->where('reg_field_name', $field_name)->count() != 0) {
-                return $this->showmessage(sprintf('会员注册项名 %s 已经存在。', $field_name), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+                return $this->showmessage(sprintf(__('会员注册项名 %s 已经存在。', 'user'), $field_name), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
             }
         }
 
@@ -237,8 +237,8 @@ class admin_reg_fields extends ecjia_admin
         RC_DB::table('reg_fields')->where('id', $id)->update($data);
 
         ecjia_admin::admin_log($field_name, 'edit', 'reg_fields');
-        $links[] = array('text' => '返回会员注册项列表', 'href' => RC_Uri::url('user/admin_reg_fields/init'));
-        return $this->showmessage('会员注册项已经修改成功。', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('links' => $links, 'pjaxurl' => RC_Uri::url('user/admin_reg_fields/edit', array('id' => $id))));
+        $links[] = array('text' => __('返回会员注册项列表', 'user'), 'href' => RC_Uri::url('user/admin_reg_fields/init'));
+        return $this->showmessage(__('会员注册项已经修改成功。', 'user'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('links' => $links, 'pjaxurl' => RC_Uri::url('user/admin_reg_fields/edit', array('id' => $id))));
     }
 
     /**
@@ -256,7 +256,7 @@ class admin_reg_fields extends ecjia_admin
             RC_DB::table('reg_extend_info')->where('reg_field_id', $field_id)->delete();
             ecjia_admin::admin_log(addslashes($field_name), 'remove', 'reg_fields');
 
-            return $this->showmessage('删除成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
+            return $this->showmessage(__('删除成功', 'user'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
         }
     }
 
@@ -271,7 +271,7 @@ class admin_reg_fields extends ecjia_admin
         $val = empty($_REQUEST['value']) ? '' : trim($_REQUEST['value']);
 
         if (empty($val)) {
-            return $this->showmessage('您没有输入会员注册字段名称。', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+            return $this->showmessage(__('您没有输入会员注册字段名称。', 'user'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
         }
 
         /* 验证名称,根据id获取之前的名字  */
@@ -279,16 +279,16 @@ class admin_reg_fields extends ecjia_admin
 
         if ($val != $old_name) {
             if (RC_DB::table('reg_fields')->where('reg_field_name', $val)->count() != 0) {
-                return $this->showmessage(sprintf('会员注册项名 %s 已经存在。', htmlspecialchars($val)), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+                return $this->showmessage(sprintf(__('会员注册项名 %s 已经存在。', 'user'), htmlspecialchars($val)), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
             }
         }
 
         if (RC_DB::table('reg_fields')->where('id', $id)->update(array('reg_field_name' => $val))) {
             /* 管理员日志 */
             ecjia_admin::admin_log($val, 'edit', 'reg_fields');
-            return $this->showmessage('编辑成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
+            return $this->showmessage(__('编辑成功', 'user'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
         } else {
-            return $this->showmessage('编辑失败', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+            return $this->showmessage(__('编辑失败', 'user'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
         }
     }
 
@@ -304,14 +304,14 @@ class admin_reg_fields extends ecjia_admin
 
         /* 验证参数有效性  */
         if (!is_numeric($val) || empty($val) || $val < 0 || strpos($val, '.') > 0) {
-            return $this->showmessage('输入的排序权值不是有效的数字。', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+            return $this->showmessage(__('输入的排序权值不是有效的数字。', 'user'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
         }
         RC_DB::table('reg_fields')->where('id', $id)->update(array('dis_order' => $val));
 
         if (RC_DB::table('reg_fields')->where('id', $id)->update(array('dis_order' => $val)) == 0) {
-            return $this->showmessage('编辑成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('user/admin_reg_fields/init')));
+            return $this->showmessage(__('编辑成功', 'user'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('user/admin_reg_fields/init')));
         } else {
-            return $this->showmessage('编辑失败', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+            return $this->showmessage(__('编辑失败', 'user'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
         }
     }
 
@@ -326,9 +326,9 @@ class admin_reg_fields extends ecjia_admin
         $is_dis = intval($_POST['val']);
 
         if (RC_DB::table('reg_fields')->where('id', $id)->update(array('display' => $is_dis))) {
-            return $this->showmessage('切换成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('content' => $is_dis));
+            return $this->showmessage(__('切换成功', 'user'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('content' => $is_dis));
         } else {
-            return $this->showmessage('编辑失败', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+            return $this->showmessage(__('编辑失败', 'user'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
         }
     }
 
@@ -343,9 +343,9 @@ class admin_reg_fields extends ecjia_admin
         $is_need = intval($_POST['val']);
 
         if (RC_DB::table('reg_fields')->where('id', $id)->update(array('is_need' => $is_need))) {
-            return $this->showmessage('切换成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('content' => $is_need));
+            return $this->showmessage(__('切换成功', 'user'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('content' => $is_need));
         } else {
-            return $this->showmessage('编辑失败', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+            return $this->showmessage(__('编辑失败', 'user'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
         }
     }
 }

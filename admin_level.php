@@ -84,7 +84,7 @@ class admin_level extends ecjia_admin
     {
         $this->admin_priv('user_manage');
 
-        $nav_here = '会员排行榜';
+        $nav_here = __('会员排行榜', 'user');
         ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here($nav_here));
 
         $this->assign('ur_here', $nav_here);

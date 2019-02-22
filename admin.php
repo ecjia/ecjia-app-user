@@ -111,11 +111,11 @@ class admin extends ecjia_admin
 
         ecjia_screen::get_current_screen()->set_help_sidebar(
             '<p><strong>' . __('更多信息：', 'user') . '</strong></p>' .
-            '<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:会员列表" target="_blank">' . '关于会员列表帮助文档' . '</a>') . '</p>'
+            '<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:会员列表" target="_blank">' . __('关于会员列表帮助文档', 'user') . '</a>') . '</p>'
         );
 
         $this->assign('ur_here', __('会员列表', 'user'));
-        $this->assign('action_link', array('text' => '添加会员', 'href' => RC_Uri::url('user/admin/add')));
+        $this->assign('action_link', array('text' => __('添加会员', 'user'), 'href' => RC_Uri::url('user/admin/add')));
 
         $ranks     = RC_DB::table('user_rank')->select('rank_id', 'rank_name', 'min_points')->orderBy('min_points', 'asc')->get();
         $user_list = get_user_list($_REQUEST);
@@ -135,16 +135,16 @@ class admin extends ecjia_admin
     {
         $this->admin_priv('user_update');
 
-        ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('添加会员'));
+        ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('添加会员', 'user')));
         ecjia_screen::get_current_screen()->add_help_tab(array(
             'id'      => 'overview',
             'title'   => __('概述', 'user'),
-            'content' => '<p>' . '欢迎访问ECJia智能后台添加会员页面，在此页面可以进行添加会员操作。' . '</p>',
+            'content' => '<p>' . __('欢迎访问ECJia智能后台添加会员页面，在此页面可以进行添加会员操作。', 'user') . '</p>',
         ));
 
         ecjia_screen::get_current_screen()->set_help_sidebar(
             '<p><strong>' . __('更多信息：', 'user') . '</strong></p>' .
-            '<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:添加会员" target="_blank">' . '关于添加会员帮助文档' . '</a>') . '</p>'
+            '<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:添加会员" target="_blank">' . __('关于添加会员帮助文档', 'user') . '</a>') . '</p>'
         );
 
         $user = array(
@@ -154,7 +154,7 @@ class admin extends ecjia_admin
             'credit_line' => 0,
         );
 
-        $this->assign('ur_here', '添加会员');
+        $this->assign('ur_here', __('添加会员', 'user'));
         $this->assign('action_link', array('text' => __('会员列表', 'user'), 'href' => RC_Uri::url('user/admin/init')));
 
         /* 取出注册扩展字段 */
@@ -176,7 +176,7 @@ class admin extends ecjia_admin
         $this->assign('user', $user);
         $this->assign('special_ranks', $rank_list);
         $this->assign('extend_info_list', $extend_info_list);
-        $this->assign('lang_sex', array('保密', '男', '女'));
+        $this->assign('lang_sex', array(__('保密', 'user'), __('男', 'user'), __('女', 'user')));
 
         $this->display('user_edit.dwt');
     }
@@ -208,30 +208,30 @@ class admin extends ecjia_admin
         /* 验证参数的合法性*/
         /* 邮箱*/
         if (!empty($email) && !preg_match('/\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/', $email)) {
-            return $this->showmessage('没有输入邮件地址或者输入了一个无效的邮件地址。', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+            return $this->showmessage(__('没有输入邮件地址或者输入了一个无效的邮件地址。', 'user'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
         }
 
         if (!empty($password)) {
             if (!preg_match("/^[A-Za-z0-9_\/|\~|\!|\@|\#|\\$|\%|\^|\&|\*|\(|\)|\_|\+|\{|\}|\:|\<|\>|\?|\[|\]|\,|\.|\/|\;|\'|\`|\-|\=|\\\|\|]+$/", $password)) {
-                return $this->showmessage('密码不能有中文或非法字符。', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+                return $this->showmessage(__('密码不能有中文或非法字符。', 'user'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
             }
             if (empty($confirm_password)) {
-                return $this->showmessage('没有输入确认密码。', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+                return $this->showmessage(__('没有输入确认密码。', 'user'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
             }
             if ($password != $confirm_password) {
-                return $this->showmessage('确认密码和输入的密码不一致。', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+                return $this->showmessage(__('确认密码和输入的密码不一致。', 'user'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
             }
             if (strlen($password) < 6 || strlen($confirm_password) < 6) {
-                return $this->showmessage('密码和确认密码的长度不能小于6。', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+                return $this->showmessage(__('密码和确认密码的长度不能小于6。', 'user'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
             }
             if (preg_match("/ /", $password)) {
-                return $this->showmessage('密码中不能包含空格。', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+                return $this->showmessage(__('密码中不能包含空格。', 'user'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
             }
         }
 
         /* 信用额度*/
         if (!is_numeric($credit_line) || $credit_line < 0) {
-            return $this->showmessage('信用额度不为空且为数值类型。', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+            return $this->showmessage(__('信用额度不为空且为数值类型。', 'user'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
         }
 
         /* 更新会员的其它信息 */
@@ -249,7 +249,7 @@ class admin extends ecjia_admin
 
         $count = RC_DB::table('users')->where('mobile_phone', $mobile_phone)->count();
         if (!empty($count)) {
-            return $this->showmessage('手机号码已存在', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+            return $this->showmessage(__('手机号码已存在', 'user'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
         }
 
         if (ecjia_integrate::addUser($username, $password, $email, $mobile_phone, $sex, $birthday, $reg_time)) {
@@ -286,16 +286,16 @@ class admin extends ecjia_admin
 
             /* 注册送积分 */
             if (ecjia_config::has('register_points')) {
-                change_account_log($user_info['user_id'], 0, 0, ecjia::config('register_points'), ecjia::config('register_points'), '注册送积分');
+                change_account_log($user_info['user_id'], 0, 0, ecjia::config('register_points'), ecjia::config('register_points'), __('注册送积分', 'user'));
             }
 
             /* 记录管理员操作 */
             ecjia_admin::admin_log($username, 'add', 'users');
 
             /* 提示信息 */
-            $links[] = array('text' => '返回会员列表', 'href' => RC_Uri::url('user/admin/init'));
-            $links[] = array('text' => '继续添加会员', 'href' => RC_Uri::url('user/admin/add'));
-            return $this->showmessage('会员账号添加成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('links' => $links, 'pjaxurl' => RC_Uri::url('user/admin/edit', array('id' => $max_id))));
+            $links[] = array('text' => __('返回会员列表', 'user'), 'href' => RC_Uri::url('user/admin/init'));
+            $links[] = array('text' => __('继续添加会员', 'user'), 'href' => RC_Uri::url('user/admin/add'));
+            return $this->showmessage(__('会员账号添加成功', 'user'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('links' => $links, 'pjaxurl' => RC_Uri::url('user/admin/edit', array('id' => $max_id))));
 
         } else {
             return $this->showmessage(ecjia_integrate::getErrorMessage(), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
@@ -309,20 +309,20 @@ class admin extends ecjia_admin
     {
         $this->admin_priv('user_update');
 
-        ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('编辑会员账号'));
+        ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('编辑会员账号', 'user')));
         ecjia_screen::get_current_screen()->add_help_tab(array(
             'id'      => 'overview',
             'title'   => __('概述', 'user'),
             'content' =>
-                '<p>' . '欢迎访问ECJia智能后台编辑会员页面，在此页面可以进行编辑会员操作。' . '</p>',
+                '<p>' . __('欢迎访问ECJia智能后台编辑会员页面，在此页面可以进行编辑会员操作。', 'user') . '</p>',
         ));
 
         ecjia_screen::get_current_screen()->set_help_sidebar(
             '<p><strong>' . __('更多信息：', 'user') . '</strong></p>' .
-            '<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:会员列表#.E4.BC.9A.E5.91.98.E7.BC.96.E8.BE.91" target="_blank">' . '关于编辑会员帮助文档' . '</a>') . '</p>'
+            '<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:会员列表#.E4.BC.9A.E5.91.98.E7.BC.96.E8.BE.91" target="_blank">' . __('关于编辑会员帮助文档', 'user') . '</a>') . '</p>'
         );
 
-        $this->assign('ur_here', '编辑会员账号');
+        $this->assign('ur_here', __('编辑会员账号', 'user'));
         $this->assign('action_link', array('text' => __('会员列表', 'user'), 'href' => RC_Uri::url('user/admin/init')));
 
         $row = RC_DB::table('users')->where('user_id', $_GET['id'])->first();
@@ -422,7 +422,7 @@ class admin extends ecjia_admin
             }
         }
 
-        $this->assign('lang_sex', array('保密', '男', '女'));
+        $this->assign('lang_sex', array(__('保密', 'user'), __('男', 'user'), __('女', 'user')));
         $this->assign('special_ranks', get_user_rank_list(true));
         $this->assign('form_act', 'update');
         $this->assign('action', 'edit');
@@ -455,32 +455,32 @@ class admin extends ecjia_admin
         /* 验证参数的合法性*/
         /* 邮箱*/
         if (!empty($email) && !preg_match("/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,})$/", $email)) {
-            return $this->showmessage('没有输入邮件地址或者输入了一个无效的邮件地址。', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+            return $this->showmessage(__('没有输入邮件地址或者输入了一个无效的邮件地址。', 'user'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
         }
 
         /* 密码 */
         if (!empty($password)) {
             if (!preg_match("/^[A-Za-z0-9_\/|\~|\!|\@|\#|\\$|\%|\^|\&|\*|\(|\)|\_|\+|\{|\}|\:|\<|\>|\?|\[|\]|\,|\.|\/|\;|\'|\`|\-|\=|\\\|\|]+$/", $password)) {
-                return $this->showmessage('密码不能有中文或非法字符。', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+                return $this->showmessage(__('密码不能有中文或非法字符。', 'user'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
             }
             if (empty($confirm_password)) {
-                return $this->showmessage('没有输入确认密码。', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+                return $this->showmessage(__('没有输入确认密码。', 'user'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
             }
             if ($password != $confirm_password) {
-                return $this->showmessage('确认密码和输入的密码不一致。', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+                return $this->showmessage(__('确认密码和输入的密码不一致。', 'user'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
             }
             if (strlen($password) < 6 || strlen($confirm_password) < 6) {
-                return $this->showmessage('密码和确认密码的长度不能小于6。', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+                return $this->showmessage(__('密码和确认密码的长度不能小于6。', 'user'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
             }
             if (preg_match("/ /", $password)) {
-                return $this->showmessage('密码中不能包含空格。', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+                return $this->showmessage(__('密码中不能包含空格。', 'user'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
             }
             RC_DB::table('users')->where('user_id', $user_id)->update(array('ec_salt' => '0'));
         }
 
         /* 信用额度*/
         if (!is_numeric($credit_line) || $credit_line < 0) {
-            return $this->showmessage('信用额度不为空且为数值类型。', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+            return $this->showmessage(__('信用额度不为空且为数值类型。', 'user'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
         }
 
         /* 更新用户扩展字段的数据 */
@@ -532,7 +532,7 @@ class admin extends ecjia_admin
 
         $count = RC_DB::table('users')->where('user_id', '!=', $user_id)->where('mobile_phone', $other['mobile_phone'])->count();
         if (!empty($count)) {
-            return $this->showmessage('手机号码已存在', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+            return $this->showmessage(__('手机号码已存在', 'user'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
         }
 
         if (!ecjia_integrate::editUser([
@@ -553,9 +553,9 @@ class admin extends ecjia_admin
         RC_Api::api('cart', 'mark_cart_goods', array('user_id' => $user_id));
 
         /* 提示信息 */
-        $links[0]['text'] = '返回会员列表';
+        $links[0]['text'] = __('返回会员列表', 'user');
         $links[0]['href'] = RC_Uri::url('user/admin/init');
-        return $this->showmessage('编辑成功！', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('links' => $links, 'pjaxurl' => RC_Uri::url('user/admin/edit', array('id' => $user_id))));
+        return $this->showmessage(__('编辑成功！', 'user'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('links' => $links, 'pjaxurl' => RC_Uri::url('user/admin/edit', array('id' => $user_id))));
     }
 
     /**
@@ -565,19 +565,19 @@ class admin extends ecjia_admin
     {
         $this->admin_priv('user_manage');
 
-        ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('会员详情'));
+        ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('会员详情', 'user'));
         ecjia_screen::get_current_screen()->add_help_tab(array(
             'id'      => 'overview',
             'title'   => __('概述', 'user'),
             'content' =>
-                '<p>' . '欢迎访问ECJia智能后台会员详情页面，在此页面可以进行对会员的详细信息查看。' . '</p>',
+                '<p>' . __('欢迎访问ECJia智能后台会员详情页面，在此页面可以进行对会员的详细信息查看。', 'user') . '</p>',
         ));
 
         ecjia_screen::get_current_screen()->set_help_sidebar(
             '<p><strong>' . __('更多信息：', 'user') . '</strong></p>' .
-            '<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:会员列表#.E8.AF.A6.E7.BB.86.E4.BF.A1.E6.81.AF" target="_blank">' . '关于查看会员帮助文档' . '</a>') . '</p>'
+            '<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:会员列表#.E8.AF.A6.E7.BB.86.E4.BF.A1.E6.81.AF" target="_blank">' . __('关于查看会员帮助文档', 'user') . '</a>') . '</p>'
         );
-        $this->assign('ur_here', '会员详情');
+        $this->assign('ur_here', __('会员详情', 'user'));
         $this->assign('action_link', array('text' => __('会员列表', 'user'), 'href' => RC_Uri::url('user/admin/init')));
 
         $id       = !empty($_GET['id']) ? intval($_GET['id']) : 0;
@@ -594,7 +594,7 @@ class admin extends ecjia_admin
         }
 
         if (empty($row)) {
-            return $this->showmessage('没有查询到该会员的信息', ecjia::MSGTYPE_HTML | ecjia::MSGSTAT_ERROR);
+            return $this->showmessage(__('没有查询到该会员的信息', 'user'), ecjia::MSGTYPE_HTML | ecjia::MSGSTAT_ERROR);
         }
         if (!empty($row['parent_id'])) {
             $row['parent_username'] = RC_DB::table('users')->where('user_id', $row['parent_id'])->pluck('user_name');
@@ -632,8 +632,8 @@ class admin extends ecjia_admin
             $user['office_phone']          = $row['office_phone'];
             $user['home_phone']            = $row['home_phone'];
             $user['mobile_phone']          = $row['mobile_phone'];
-            $user['is_validated']          = $row['is_validated'] == 0 ? '未验证' : '已验证';
-            $user['last_time']             = $row['last_login'] == '0' ? '新用户还未登录' : RC_Time::local_date(ecjia::config('time_format'), $row['last_login']);
+            $user['is_validated']          = $row['is_validated'] == 0 ? __('未验证', 'user') : __('已验证', 'user');
+            $user['last_time']             = $row['last_login'] == '0' ? __('新用户还未登录', 'user') : RC_Time::local_date(ecjia::config('time_format'), $row['last_login']);
             $user['last_ip']               = $row['last_ip'];
 
             $row['address_id'] = !empty($row['address_id']) ? intval($row['address_id']) : 0;
@@ -711,7 +711,7 @@ class admin extends ecjia_admin
 
         /* 验证邮箱*/
         if (!preg_match("/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,})$/", $email)) {
-            return $this->showmessage('没有输入邮件地址或者输入了一个无效的邮件地址。', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+            return $this->showmessage(__('没有输入邮件地址或者输入了一个无效的邮件地址。', 'user'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
         }
 
         if (!empty($email)) {
@@ -721,13 +721,13 @@ class admin extends ecjia_admin
 
                     ecjia_admin::admin_log($user_name . '邮箱信息', 'edit', 'users');
 
-                    return $this->showmessage('编辑成功！', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
+                    return $this->showmessage(__('编辑成功！', 'user'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
                 }
             } else {
-                return $this->showmessage('该邮件地址已经存在。', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+                return $this->showmessage(__('该邮件地址已经存在。', 'user'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
             }
         } else {
-            return $this->showmessage('请输入邮箱地址！', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+            return $this->showmessage(__('请输入邮箱地址！', 'user'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
         }
     }
 
@@ -740,17 +740,17 @@ class admin extends ecjia_admin
 
         $user_info = RC_Api::api('user', 'user_info', array('user_id' => $id));
         if (empty($user_info)) {
-            $links[] = array('text' => '会员列表', 'href' => RC_Uri::url('user/admin/init'));
-            return $this->showmessage('该用户不存在', ecjia::MSGTYPE_HTML | ecjia::MSGSTAT_ERROR, array('links' => $links));
+            $links[] = array('text' => __('会员列表', 'user'), 'href' => RC_Uri::url('user/admin/init'));
+            return $this->showmessage(__('该用户不存在', 'user'), ecjia::MSGTYPE_HTML | ecjia::MSGSTAT_ERROR, array('links' => $links));
         }
 
         $user_info_url = RC_Uri::url('user/admin/info', array('id' => $id));
 
-        ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('会员详情', $user_info_url));
-        ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('删除帐号数据'));
+        ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('会员详情', 'user'), $user_info_url));
+        ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('删除帐号数据', 'user')));
 
-        $this->assign('ur_here', '删除帐号数据');
-        $this->assign('action_link', array('text' => '会员详情', 'href' => $user_info_url));
+        $this->assign('ur_here', __('删除帐号数据', 'user'));
+        $this->assign('action_link', array('text' => __('会员详情', 'user'), 'href' => $user_info_url));
 
         $delete_all = $_SESSION['action_list'] == 'all' ? true : false;
         $this->assign('delete_all', $delete_all);
@@ -790,12 +790,12 @@ class admin extends ecjia_admin
         }
 
         if (!empty($count)) {
-            return $this->showmessage('当前还有用户数据未清除，请先清除后再执行删除会员操作', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+            return $this->showmessage(__('当前还有用户数据未清除，请先清除后再执行删除会员操作', 'user'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
         }
 
         RC_DB::table('users')->where('user_id', $user_id)->delete();
 
-        RC_Session::flash('status', '删除会员成功');
+        RC_Session::flash('status', __('删除会员成功', 'user'));
 
         return $this->showmessage('', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('url' => RC_Uri::url('user/admin/init')));
     }
@@ -814,14 +814,14 @@ class admin extends ecjia_admin
         $handle  = array_get($handles, $code);
 
         if (empty($handle)) {
-            return $this->showmessage('操作失败，当前code无效', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+            return $this->showmessage(__('操作失败，当前code无效', 'user'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
         }
 
         $result = $handle->handleClean();
         if ($result) {
-            return $this->showmessage($handle->getName() . '删除成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
+            return $this->showmessage(sprintf(__('%s删除成功', 'user'), $handle->getName()), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
         }
-        return $this->showmessage($handle->getName() . '删除失败', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+        return $this->showmessage(sprintf(__('%s删除失败', 'user'), $handle->getName()), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
     }
 
     /**
@@ -855,19 +855,19 @@ class admin extends ecjia_admin
             if (!empty($filter)) {
                 $error_html = '';
                 foreach ($filter as $v) {
-                    $error_html .= $v['name'] . '删除失败；<br/>';
+                    $error_html .= sprintf(__('%s删除失败；<br>', 'user'), $v['name']);
                 }
                 return $this->showmessage($error_html, ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
             }
 
             RC_DB::table('users')->where('user_id', $user_id)->delete();
 
-            RC_Session::flash('status', '一键删除会员成功');
+            RC_Session::flash('status', __('一键删除会员成功', 'user'));
 
-            return $this->showmessage('一键删除会员成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('url' => RC_Uri::url('user/admin/init')));
+            return $this->showmessage(__('一键删除会员成功', 'user'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('url' => RC_Uri::url('user/admin/init')));
         }
 
-        return $this->showmessage('操作失败', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+        return $this->showmessage(__('操作失败', 'user'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
     }
 
     /**
@@ -877,20 +877,20 @@ class admin extends ecjia_admin
     {
         $this->admin_priv('user_manage');
 
-        ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('收货地址'));
+        ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('收货地址', 'user')));
         ecjia_screen::get_current_screen()->add_help_tab(array(
             'id'      => 'overview',
             'title'   => __('概述', 'user'),
             'content' =>
-                '<p>' . '欢迎访问ECJia智能后台会员收获地址列表页面，系统中所有的会员收获地址都会显示在此列表中。' . '</p>',
+                '<p>' . __('欢迎访问ECJia智能后台会员收获地址列表页面，系统中所有的会员收获地址都会显示在此列表中。', 'user') . '</p>',
         ));
 
         ecjia_screen::get_current_screen()->set_help_sidebar(
             '<p><strong>' . __('更多信息：', 'user') . '</strong></p>' .
-            '<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:会员列表#.E6.94.B6.E8.B4.A7.E5.9C.B0.E5.9D.80" target="_blank">' . '关于会员收获地址列表帮助文档' . '</a>') . '</p>'
+            '<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:会员列表#.E6.94.B6.E8.B4.A7.E5.9C.B0.E5.9D.80" target="_blank">' . __('关于会员收获地址列表帮助文档', 'user') . '</a>') . '</p>'
         );
 
-        $this->assign('ur_here', '收货地址');
+        $this->assign('ur_here', __('收货地址', 'user'));
         $this->assign('action_link', array('text' => __('会员列表', 'user'), 'href' => RC_Uri::url('user/admin/init')));
 
         $id        = !empty($_GET['id']) ? intval($_GET['id']) : 0;

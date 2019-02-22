@@ -50,13 +50,10 @@ RC_Loader::load_app_class('integrate', 'user', false);
 
 class get_password extends ecjia_front
 {
-    private $db_users;
-
     public function __construct()
     {
         parent::__construct();
 
-        $this->db_users = RC_Model::model('user/users_model');
         /* js加载ecjia.js*/
         $this->assign('ecjia_js', RC_Uri::admin_url('statics/ecjia.js/ecjia.js'));
         /* js与css加载路径*/
@@ -81,7 +78,6 @@ class get_password extends ecjia_front
     /* 验证用户信息是否正确*/
     public function check_userinfo()
     {
-
         $username = isset($_POST['user_name']) ? trim($_POST['user_name']) : '';
         $email    = isset($_POST['email']) ? trim($_POST['email']) : '';
         $type     = isset($_POST['type']) ? trim($_POST['type']) : 'email';
@@ -105,7 +101,7 @@ class get_password extends ecjia_front
                 $captcha_url = $captcha->current_captcha_url();
                 $this->assign('captcha_url', $captcha_url);
             }
-            $error_msg = $captcha_error ? __("验证码错误！") : __("请填全用户信息！");
+            $error_msg = $captcha_error ? __("验证码错误！", 'user') : __("请填全用户信息！", 'user');
             $this->assign('error_msg', $error_msg);
             $this->assign('type', $type);
             $this->assign('action', 'forget_pwd');
@@ -125,7 +121,7 @@ class get_password extends ecjia_front
                     $captcha_url = $captcha->current_captcha_url();
                     $this->assign('captcha_url', $captcha_url);
                 }
-                $error_msg = __('手机号绑定多个用户，请联系管理员！');
+                $error_msg = __('手机号绑定多个用户，请联系管理员！', 'user');
                 $this->assign('error_msg', $error_msg);
                 $this->assign('type', $type);
                 $this->assign('action', 'forget_pwd');
@@ -140,7 +136,7 @@ class get_password extends ecjia_front
                 $captcha_url = $captcha->current_captcha_url();
                 $this->assign('captcha_url', $captcha_url);
             }
-            $this->assign('error_msg', __("用户信息不正确！"));
+            $this->assign('error_msg', __("用户信息不正确！", 'user'));
             $this->assign('type', $type);
             $this->assign('action', 'forget_pwd');
             $this->display('forget_password.dwt');
@@ -180,12 +176,12 @@ class get_password extends ecjia_front
                     $captcha_url = $captcha->current_captcha_url();
                     $this->assign('captcha_url', $captcha_url);
                 }
-                $this->assign('error_msg', __("短信发送失败！"));
+                $this->assign('error_msg', __("短信发送失败！", 'user'));
                 $this->assign('type', $type);
                 $this->assign('action', 'forget_pwd');
                 $this->display('forget_password.dwt');
             } else {
-                $user_email = '请输入<font style="color:#f00;">' . $username . '</font>收到的手机校验码。';
+                $user_email = sprintf(__('请输入%s收到的手机校验码。', 'user'), '<font style="color:#f00;">' . $username . '</font>');
                 $this->assign('email_msg', $user_email);
                 $this->assign('type', $type);
                 $this->assign('action', 'reset_pwd_mail');
@@ -200,19 +196,16 @@ class get_password extends ecjia_front
         $uid       = $_SESSION['temp_user_id'];
         $user_name = $_SESSION['temp_user_name'];
         $email     = $_SESSION['temp_email'];
+        $tmp_mail  = explode("@", $email);
 
-        $tmp_mail = explode("@", $email);
-        if (strlen($tmp_mail) > 5) {
-
-        } else {
-
-        }
-        $user_email = '请输入<font style="color:#f00;">' . $email . '</font>收到的邮箱校验码。';
+        $user_email = sprintf(__('请输入%s收到的邮箱校验码。', 'user'), '<font style="color:#f00;">' . $email . '</font>');
 
         $code    = rand(111111, 999999);
-        $content = "[" . ecjia::config('shop_name') . "]您的账户正在变更账户信息，校验码：" . $code . "，打死都不能告诉别人哦！唯一热线" . ecjia::config('service_phone');
+        $content = sprintf(__("[ %s ]您的账户正在变更账户信息，校验码：%s，打死都不能告诉别人哦！唯一热线 %s", 'user'), ecjia::config('shop_name'), $code, ecjia::config('service_phone'));
+
+        $title = __('账户变更校验码', 'user');
         /* 发送确认重置密码的确认邮件 */
-        if (RC_Mail::send_mail($user_name, $email, '账户变更校验码', $content, 1)) {
+        if (RC_Mail::send_mail($user_name, $email, $title, $content, 1)) {
             $_SESSION['temp_code']      = $code;
             $_SESSION['temp_code_time'] = RC_Time::gmtime();
             $this->assign('action', 'reset_pwd_mail');
@@ -241,11 +234,11 @@ class get_password extends ecjia_front
             $this->display('forget_password.dwt');
         } else {
             if ($type == 'mobile') {
-                $user_email = '请输入<font style="color:#f00;">' . $_SESSION['temp_user_name'] . '</font>收到的手机校验码。';
+                $user_email = sprintf(__('请输入%s收到的手机校验码。', 'user'), '<font style="color:#f00;">' . $_SESSION['temp_user_name'] . '</font>');
             } else {
-                $user_email = '请输入<font style="color:#f00;">' . $_SESSION['temp_email'] . '</font>收到的邮箱校验码。';
+                $user_email = sprintf(__('请输入%s收到的邮箱校验码。', 'user'), '<font style="color:#f00;">' . $_SESSION['temp_email'] . '</font>');
             }
-            $this->assign('error_msg', __("校验码错误！"));
+            $this->assign('error_msg', __("校验码错误！", 'user'));
             $this->assign('action', 'reset_pwd_mail');
             $this->assign('type', $type);
             $this->assign('email_msg', $user_email);
@@ -263,9 +256,10 @@ class get_password extends ecjia_front
 
         $code = rand(111111, 999999);
         if ($type == 'email') {
-            $content = "[" . ecjia::config('shop_name') . "]您的账户正在变更账户信息，校验码：" . $code . "，打死都不能告诉别人哦！唯一热线" . ecjia::config('service_phone');
+            $content = sprintf(__("[ %s ]您的账户正在变更账户信息，校验码：%s，打死都不能告诉别人哦！唯一热线 %s", 'user'), ecjia::config('shop_name'), $code, ecjia::config('service_phone'));
             /* 发送确认重置密码的确认邮件 */
-            if (RC_Mail::send_mail($user_name, $email, '账户变更校验码', $content, 1)) {
+            $title = __('账户变更校验码', 'user');
+            if (RC_Mail::send_mail($user_name, $email, $title, $content, 1)) {
                 $_SESSION['temp_code']      = $code;
                 $_SESSION['temp_code_time'] = RC_Time::gmtime();
                 return $this->showmessage('', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
@@ -324,7 +318,10 @@ class get_password extends ecjia_front
     public function reset_pwd_question()
     {
         $this->assign('action', 'reset_pwd_question');
-        $this->assign('passwd_question', RC_Lang::get('user::user.passwd_questions.' . $_SESSION['temp_passwd_question']));
+
+        $passwd_question = Ecjia\App\User\UserPasswdQuestions::getQuestionsLabel($_SESSION['temp_passwd_question']);
+
+        $this->assign('passwd_question', $passwd_question);
 
         $this->display('forget_password.dwt');
     }
@@ -342,9 +339,11 @@ class get_password extends ecjia_front
             $this->assign('action', 'reset_pwd_form');
             $this->display('forget_password.dwt');
         } else {
-            $this->assign('error_msg', __("问题答案错误！"));
+            $this->assign('error_msg', __("问题答案错误！", 'user'));
             $this->assign('action', 'reset_pwd_question');
-            $this->assign('passwd_question', RC_Lang::get('user::user.passwd_questions.' . $_SESSION['temp_passwd_question']));
+
+            $passwd_question = Ecjia\App\User\UserPasswdQuestions::getQuestionsLabel($_SESSION['temp_passwd_question']);
+            $this->assign('passwd_question', $passwd_question);
             $this->display('forget_password.dwt');
         }
     }
@@ -367,12 +366,12 @@ class get_password extends ecjia_front
         $user_id          = isset($_POST['uid']) ? intval($_POST['uid']) : $_SESSION['user_id'];
         $code             = isset($_POST['code']) ? trim($_POST['code']) : '';
         if (strlen($new_password) < 6) {
-            $this->assign('error_msg', __("密码长度最少6位！"));
+            $this->assign('error_msg', __("密码长度最少6位！", 'user'));
             $this->assign('uid', $_SESSION['user_id']);
             $this->assign('action', 'reset_pwd_form');
             $this->display('forget_password.dwt');
         } elseif ($new_password != $confirm_password) {
-            $this->assign('error_msg', __("两次密码不一致！"));
+            $this->assign('error_msg', __("两次密码不一致！", 'user'));
             $this->assign('uid', $_SESSION['user_id']);
             $this->assign('action', 'reset_pwd_form');
             $this->display('forget_password.dwt');
@@ -395,12 +394,12 @@ class get_password extends ecjia_front
                     $this->assign('action', 'success');
                     $this->display('forget_password.dwt');
                 } else {
-                    $this->assign('error_msg', __("处理失败！请重新操作！"));
+                    $this->assign('error_msg', __("处理失败！请重新操作！", 'user'));
                     $this->assign('action', 'forget_pwd');
                     $this->display('forget_password.dwt');
                 }
             } else {
-                $this->assign('error_msg', __("处理失败！请重新操作！"));
+                $this->assign('error_msg', __("处理失败！请重新操作！", 'user'));
                 $this->assign('action', 'forget_pwd');
                 $this->display('forget_password.dwt');
             }

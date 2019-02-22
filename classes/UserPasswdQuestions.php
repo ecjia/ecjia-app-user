@@ -44,48 +44,34 @@
 //
 //  ---------------------------------------------------------------------------------
 //
-defined('IN_ECJIA') or exit('No permission resources.');
+namespace Ecjia\App\User;
 
-class admin_config extends ecjia_admin
+class UserPasswdQuestions
 {
     public function __construct()
     {
-        parent::__construct();
-
-        Ecjia\App\User\Helper::assign_adminlog_content();
-
-        /* 加载所有全局 js/css */
-        RC_Script::enqueue_script('jquery-validate');
-        RC_Script::enqueue_script('jquery-form');
-        RC_Script::enqueue_script('jquery-uniform');
-        RC_Style::enqueue_style('uniform-aristo');
-        RC_Script::enqueue_script('user_config', RC_App::apps_url('statics/js/user_config.js', __FILE__));
     }
 
-    public function init()
+    public static function getQuestionsLabel($passwd_question_key = '')
     {
-        $this->admin_priv('user_setting');
+        $passwd_questions = array(
+            'friend_birthday' => __('我最好朋友的生日？', 'user'),
+            'old_address'     => __('我儿时居住地的地址？', 'user'),
+            'motto'           => __('我的座右铭是？', 'user'),
+            'favorite_movie'  => __('我最喜爱的电影？', 'user'),
+            'favorite_song'   => __('我最喜爱的歌曲？', 'user'),
+            'favorite_food'   => __('我最喜爱的食物？', 'user'),
+            'interest'        => __('我最大的爱好？', 'user'),
+            'favorite_novel'  => __('我最喜欢的小说？', 'user'),
+            'favorite_equipe' => __('我最喜欢的运动队？', 'user')
+        );
 
-        ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('会员中心', 'user')));
-        $this->assign('ur_here', __('PC设置', 'user'));
+        if (!array_key_exists($passwd_question_key, $passwd_questions)) {
+            return '';
+        }
 
-        $this->assign('pc_enabled_member', ecjia::config('pc_enabled_member'));
-
-        $this->assign('current_code', 'user_center');
-        $this->assign('form_action', RC_Uri::url('user/admin_config/update'));
-
-        $this->display('user_config.dwt');
+        return array_get($passwd_questions, $passwd_question_key);
     }
 
-    public function update()
-    {
-        $this->admin_priv('user_setting', ecjia::MSGTYPE_JSON);
-
-        ecjia_config::instance()->write_config('pc_enabled_member', intval($_POST['pc_enabled_member']));
-
-        ecjia_admin::admin_log(__('会员中心->PC设置', 'user'), 'edit', 'config');
-        return $this->showmessage(__('修改成功', 'user'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('user/admin_config/init')));
-    }
 }
 
-//end
