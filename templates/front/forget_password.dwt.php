@@ -107,7 +107,7 @@
 	<!--{/if}-->
 	<!-- *通过发送邮件校验码找回账号方式界面 end -->
 	
-	<!--*通过问题找回密码的确认找回账号界面      暂时没用到 -->
+	<!--*通过问题找回密码的确认找回账号界面 暂时没用到 -->
     <!--{if $action eq 'qpassword_name'} -->
     <div class="forget-password">
     	<div class="title-content">

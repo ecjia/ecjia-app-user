@@ -72,13 +72,7 @@ class admin_rank extends ecjia_admin
         RC_Script::enqueue_script('jquery-uniform');
         RC_Style::enqueue_style('uniform-aristo');
         RC_Script::enqueue_script('user_info', RC_App::apps_url('statics/js/user_info.js', __FILE__));
-        $rank_jslang = array(
-            'rank_name_required'  => RC_Lang::get('user::user_rank.rank_name_confirm'),
-            'min_points_required' => RC_Lang::get('user::user_rank.min_points_confirm'),
-            'max_points_required' => RC_Lang::get('user::user_rank.max_points_confirm'),
-            'discount_required'   => RC_Lang::get('user::user_rank.discount_required_confirm'),
-        );
-        RC_Script::localize_script('user_info', 'rank_jslang', $rank_jslang);
+        RC_Script::localize_script('user_info', 'js_lang', config('app-user::jslang.admin_rank_page'));
 
         ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('会员等级', 'user'), RC_Uri::url('user/admin_rank/init')));
     }

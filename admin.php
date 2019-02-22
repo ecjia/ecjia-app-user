@@ -69,18 +69,7 @@ class admin extends ecjia_admin
 
         RC_Script::enqueue_script('user_info', RC_App::apps_url('statics/js/user_info.js', __FILE__));
         RC_Style::enqueue_style('user_info_css', RC_App::apps_url('statics/css/user_info.css', __FILE__));
-
-        $user_jslang = array(
-            'keywords_required'     => RC_Lang::get('user::users.keywords_required'),
-            'username_required'     => RC_Lang::get('user::users.username_required'),
-            'email_required'        => RC_Lang::get('user::users.email_required'),
-            'password_required'     => RC_Lang::get('user::users.password_required'),
-            'password_length'       => RC_Lang::get('user::users.password_length'),
-            'password_check'        => RC_Lang::get('user::users.password_check'),
-            'email_check'           => RC_Lang::get('user::users.email_check'),
-            'mobile_phone_required' => RC_Lang::get('user::users.mobile_phone_required'),
-        );
-        RC_Script::localize_script('user_info', 'user_jslang', $user_jslang);
+        RC_Script::localize_script('user_info', 'js_lang', config('app-user::jslang.admin_page'));
 
         ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('会员列表', 'user'), RC_Uri::url('user/admin/init')));
     }
