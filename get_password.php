@@ -57,7 +57,9 @@ class get_password extends ecjia_front
         /* js加载ecjia.js*/
         $this->assign('ecjia_js', RC_Uri::admin_url('statics/ecjia.js/ecjia.js'));
         /* js与css加载路径*/
-        $this->assign('front_url', RC_App::apps_url('templates/front', __FILE__));
+        $this->assign('front_url', RC_App::apps_url('statics/front', __FILE__));
+
+        $this->load_default_script_style();
     }
 
     /* 找回密码信息填写界面 */
@@ -72,7 +74,7 @@ class get_password extends ecjia_front
         $type = empty($_GET['type']) ? 'email' : $_GET['type'];
         $this->assign('type', $type);
         $this->assign('action', 'forget_pwd');
-        $this->display('forget_password.dwt');
+        $this->displayAppTemplate('user', 'front/forget_password.dwt');
     }
 
     /* 验证用户信息是否正确*/
@@ -105,7 +107,7 @@ class get_password extends ecjia_front
             $this->assign('error_msg', $error_msg);
             $this->assign('type', $type);
             $this->assign('action', 'forget_pwd');
-            $this->display('forget_password.dwt');
+            $this->displayAppTemplate('user', 'front/forget_password.dwt');
             exit;
         }
         if ($type == 'email') {
@@ -125,7 +127,7 @@ class get_password extends ecjia_front
                 $this->assign('error_msg', $error_msg);
                 $this->assign('type', $type);
                 $this->assign('action', 'forget_pwd');
-                $this->display('forget_password.dwt');
+                $this->displayAppTemplate('user', 'front/forget_password.dwt');
                 exit;
             }
             $userinfo = RC_DB::table('users')->where('mobile_phone', $username)->select('user_id', 'user_name', 'email', 'passwd_question', 'passwd_answer')->first();
@@ -139,7 +141,7 @@ class get_password extends ecjia_front
             $this->assign('error_msg', __("用户信息不正确！", 'user'));
             $this->assign('type', $type);
             $this->assign('action', 'forget_pwd');
-            $this->display('forget_password.dwt');
+            $this->displayAppTemplate('user', 'front/forget_password.dwt');
             exit;
         }
 
@@ -153,7 +155,7 @@ class get_password extends ecjia_front
             $this->assign('passwd_answer', !empty($userinfo['passwd_answer']));
             $this->assign('type', $type);
             $this->assign('action', 'editpassword_method');
-            $this->display('forget_password.dwt');
+            $this->displayAppTemplate('user', 'front/forget_password.dwt');
             exit;
         } elseif ($type == 'mobile') {
             //发送短信
@@ -179,13 +181,13 @@ class get_password extends ecjia_front
                 $this->assign('error_msg', __("短信发送失败！", 'user'));
                 $this->assign('type', $type);
                 $this->assign('action', 'forget_pwd');
-                $this->display('forget_password.dwt');
+                $this->displayAppTemplate('user', 'front/forget_password.dwt');
             } else {
                 $user_email = sprintf(__('请输入%s收到的手机校验码。', 'user'), '<font style="color:#f00;">' . $username . '</font>');
                 $this->assign('email_msg', $user_email);
                 $this->assign('type', $type);
                 $this->assign('action', 'reset_pwd_mail');
-                $this->display('forget_password.dwt');
+                $this->displayAppTemplate('user', 'front/forget_password.dwt');
             }
         }
     }
@@ -210,7 +212,7 @@ class get_password extends ecjia_front
             $_SESSION['temp_code_time'] = RC_Time::gmtime();
             $this->assign('action', 'reset_pwd_mail');
             $this->assign('email_msg', $user_email);
-            $this->display('forget_password.dwt');
+            $this->displayAppTemplate('user', 'front/forget_password.dwt');
         } else {
             return false;
         }
@@ -231,7 +233,7 @@ class get_password extends ecjia_front
 
             $this->assign('uid', $_SESSION['user_id']);
             $this->assign('action', 'reset_pwd_form');
-            $this->display('forget_password.dwt');
+            $this->displayAppTemplate('user', 'front/forget_password.dwt');
         } else {
             if ($type == 'mobile') {
                 $user_email = sprintf(__('请输入%s收到的手机校验码。', 'user'), '<font style="color:#f00;">' . $_SESSION['temp_user_name'] . '</font>');
@@ -242,7 +244,7 @@ class get_password extends ecjia_front
             $this->assign('action', 'reset_pwd_mail');
             $this->assign('type', $type);
             $this->assign('email_msg', $user_email);
-            $this->display('forget_password.dwt');
+            $this->displayAppTemplate('user', 'front/forget_password.dwt');
         }
     }
 
@@ -323,7 +325,7 @@ class get_password extends ecjia_front
 
         $this->assign('passwd_question', $passwd_question);
 
-        $this->display('forget_password.dwt');
+        $this->displayAppTemplate('user', 'front/forget_password.dwt');
     }
 
     /* 密码找回（方式二）-->根据提交的密码答案进行相应处理 */
@@ -337,14 +339,14 @@ class get_password extends ecjia_front
 
             $this->assign('uid', $_SESSION['user_id']);
             $this->assign('action', 'reset_pwd_form');
-            $this->display('forget_password.dwt');
+            $this->displayAppTemplate('user', 'front/forget_password.dwt');
         } else {
             $this->assign('error_msg', __("问题答案错误！", 'user'));
             $this->assign('action', 'reset_pwd_question');
 
             $passwd_question = Ecjia\App\User\UserPasswdQuestions::getQuestionsLabel($_SESSION['temp_passwd_question']);
             $this->assign('passwd_question', $passwd_question);
-            $this->display('forget_password.dwt');
+            $this->displayAppTemplate('user', 'front/forget_password.dwt');
         }
     }
 
@@ -353,7 +355,7 @@ class get_password extends ecjia_front
     {
         $this->assign('passwd_answer', !empty($_SESSION['temp_passwd_answer']));
         $this->assign('action', 'editpassword_method');
-        $this->display('forget_password.dwt');
+        $this->displayAppTemplate('user', 'front/forget_password.dwt');
     }
 
     /* 修改会员密码 */
@@ -369,12 +371,12 @@ class get_password extends ecjia_front
             $this->assign('error_msg', __("密码长度最少6位！", 'user'));
             $this->assign('uid', $_SESSION['user_id']);
             $this->assign('action', 'reset_pwd_form');
-            $this->display('forget_password.dwt');
+            $this->displayAppTemplate('user', 'front/forget_password.dwt');
         } elseif ($new_password != $confirm_password) {
             $this->assign('error_msg', __("两次密码不一致！", 'user'));
             $this->assign('uid', $_SESSION['user_id']);
             $this->assign('action', 'reset_pwd_form');
-            $this->display('forget_password.dwt');
+            $this->displayAppTemplate('user', 'front/forget_password.dwt');
         } else {
             $user_info = ecjia_integrate::getProfileById($user_id); //论坛记录
             if (($user_info && (!empty($code) && md5($user_info['user_id'] . ecjia::config('hash_code') . $user_info['reg_time']) == $code)) ||
@@ -392,16 +394,16 @@ class get_password extends ecjia_front
                     RC_DB::table('users')->where('user_id', $user_id)->update($data);
                     ecjia_integrate::logout();
                     $this->assign('action', 'success');
-                    $this->display('forget_password.dwt');
+                    $this->displayAppTemplate('user', 'front/forget_password.dwt');
                 } else {
                     $this->assign('error_msg', __("处理失败！请重新操作！", 'user'));
                     $this->assign('action', 'forget_pwd');
-                    $this->display('forget_password.dwt');
+                    $this->displayAppTemplate('user', 'front/forget_password.dwt');
                 }
             } else {
                 $this->assign('error_msg', __("处理失败！请重新操作！", 'user'));
                 $this->assign('action', 'forget_pwd');
-                $this->display('forget_password.dwt');
+                $this->displayAppTemplate('user', 'front/forget_password.dwt');
             }
         }
     }
@@ -410,15 +412,51 @@ class get_password extends ecjia_front
     public function qpassword_name()
     {
         $this->assign('action', 'qpassword_name');
-        $this->display('forget_password.dwt');
+        $this->displayAppTemplate('user', 'front/forget_password.dwt');
     }
 
     /* 密码找回-->修改密码界面  赞无用到*/
     public function get_password()
     {
         $this->assign('action', 'get_password');
-        $this->display('forget_password.dwt');
+        $this->displayAppTemplate('user', 'front/forget_password.dwt');
     }
+
+    public function front_print_styles()
+    {
+        ecjia_loader::print_admin_styles();
+    }
+
+    public function front_print_head_scripts()
+    {
+        ecjia_loader::print_head_scripts();
+    }
+
+    public function front_print_footer_scripts()
+    {
+        ecjia_loader::_admin_footer_scripts();
+    }
+
+    public function _front_footer_scripts()
+    {
+        ecjia_loader::_admin_footer_scripts();
+    }
+
+    protected function load_default_script_style()
+    {
+        //自定义加载
+        RC_Style::enqueue_style('app', RC_App::apps_url('statics/front/css/app.css', __FILE__));
+
+        RC_Script::enqueue_script('jquery', RC_App::apps_url('statics/front/js/jquery.min.js', __FILE__), array('jquery'), false, true);
+        RC_Script::enqueue_script('ecjia', RC_App::apps_url('statics/front/js/ecjia.js', __FILE__), array('ecjia'), false, true);
+        RC_Script::enqueue_script('ecjia-front', RC_App::apps_url('statics/front/js/ecjia-front.js', __FILE__), array('ecjia-front'), false, true);
+
+        RC_Script::enqueue_script('forget_password', RC_App::apps_url('statics/front/js/forget_password.js', __FILE__), array('ecjia-front'), false, true);
+
+        RC_Script::enqueue_script('js-sprintf');
+        RC_Script::localize_script('forget_password', 'js_lang', config('app-user::jslang.get_password_page'));
+    }
+
 }
 
 // end

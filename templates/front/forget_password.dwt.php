@@ -7,7 +7,7 @@
 <meta content="width=device-width, initial-scale=1" name="viewport" />
 <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport" />
 <title>{$page_title}</title>
-<link href="{$front_url}/app.css" rel="stylesheet" type="text/css" />
+{ecjia:hook id=front_head}
 </head>
 
 <body>
@@ -199,11 +199,7 @@
 	<!--#找回密码界面 end-->
 	
 <!-- {* 包含脚本文件 *} -->
-<script src="{$front_url}/js/jquery.min.js" type="text/javascript"></script>
-<script src="{$ecjia_js}" type="text/javascript"></script>
-
-<script src="{$front_url}/js/ecjia-front.js" type="text/javascript"></script>
-<script src="{$front_url}/js/forget_password.js" type="text/javascript"></script>
+    {ecjia:hook id=front_print_footer_scripts}
 
 <script type="text/javascript">
 	ecjia.front.get_password.init();
