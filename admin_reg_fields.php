@@ -68,13 +68,9 @@ class admin_reg_fields extends ecjia_admin
         RC_Style::enqueue_style('chosen');
         RC_Script::enqueue_script('jquery-uniform');
         RC_Style::enqueue_style('uniform-aristo');
-        RC_Script::enqueue_script('user_info', RC_App::apps_url('statics/js/user_info.js', __FILE__));
 
-        $reg_field_jslang = array(
-            'reg_field_name_required'  => RC_Lang::get('user::reg_fields.reg_field_name_confirm'),
-            'reg_field_order_required' => RC_Lang::get('user::reg_fields.reg_field_order_confirm'),
-        );
-        RC_Script::localize_script('user_info', 'reg_jslang', $reg_field_jslang);
+        RC_Script::enqueue_script('user_info', RC_App::apps_url('statics/js/user_info.js', __FILE__));
+        RC_Script::localize_script('user_info', 'js_lang', config('app-user::jslang.admin_reg_fields_page'));
 
         ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('会员注册项设置', 'user'), RC_Uri::url('user/admin_reg_fields/init')));
     }

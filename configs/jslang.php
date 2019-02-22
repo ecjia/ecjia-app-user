@@ -47,7 +47,7 @@
 defined('IN_ECJIA') or exit('No permission resources.');
 
 return array(
-    'admin_page'        => array(
+    'admin_page'            => array(
         'keywords_required'         => __('请先输入关键字', 'user'),
         'username_required'         => __('请输入会员名称！', 'user'),
         'email_required'            => __('请输入邮箱地址！', 'user'),
@@ -65,7 +65,7 @@ return array(
         'ok'                        => __('确定', 'user'),
         'cancel'                    => __('取消', 'user'),
     ),
-    'admin_level_page'  => array(
+    'admin_level_page'      => array(
         'year_required'       => __('请选择年份', 'user'),
         'time_error'          => __('开始时间不能大于或等于结束时间', 'user'),
         'search_time_error'   => __('查询时间间隔不超过90天', 'user'),
@@ -73,7 +73,7 @@ return array(
         'end_date_required'   => __('结束时间不能为空', 'user'),
         'no_records'          => __('没有找到任何记录', 'user'),
     ),
-    'admin_rank_page'   => array(
+    'admin_rank_page'       => array(
         'keywords_required'         => __('请先输入关键字', 'user'),
         'username_required'         => __('请输入会员名称！', 'user'),
         'email_required'            => __('请输入邮箱地址！', 'user'),
@@ -91,9 +91,27 @@ return array(
         'ok'                        => __('确定', 'user'),
         'cancel'                    => __('取消', 'user'),
     ),
-    'get_password_page' => array(
+    'get_password_page'     => array(
         'sixty_seconds_resend' => '60秒后重发',
         'resend'               => '%s秒后重发',
+    ),
+    'admin_reg_fields_page' => array(
+        'keywords_required'         => __('请先输入关键字', 'user'),
+        'username_required'         => __('请输入会员名称！', 'user'),
+        'email_required'            => __('请输入邮箱地址！', 'user'),
+        'email_check'               => __('请输入正确的邮箱地址格式！', 'user'),
+        'password_required'         => __('请输入密码！', 'user'),
+        'password_length'           => __('密码长度不能小于6！', 'user'),
+        'password_check'            => __('两次密码不一致！', 'user'),
+        'mobile_phone_required'     => __('请输入手机号码！', 'user'),
+        'rank_name_confirm'         => __('请输入会员等级名称', 'user'),
+        'min_points_confirm'        => __('请输入成长值下限', 'user'),
+        'max_points_confirm'        => __('请输入成长值上限', 'user'),
+        'discount_required_confirm' => __('请输入折扣率', 'user'),
+        'reg_field_name_confirm'    => __('请输入注册项名称', 'user'),
+        'reg_field_order_confirm'   => __('请输入排序', 'user'),
+        'ok'                        => __('确定', 'user'),
+        'cancel'                    => __('取消', 'user'),
     )
 );
 
