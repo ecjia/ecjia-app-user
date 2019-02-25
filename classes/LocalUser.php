@@ -86,7 +86,7 @@ class LocalUser
     public function getProfileByName($username)
     {
         $row = $this->model
-            ->select('user_id', 'user_name', 'email', 'sex', 'birthday', 'reg_time', 'password', 'mobile_phone')
+            ->select('user_id', 'user_name', 'email', 'sex', 'birthday', 'reg_time', 'mobile_phone')
             ->where('user_name', $username)
             ->first();
 
@@ -102,7 +102,7 @@ class LocalUser
     public function getProfileByMobile($mobile)
     {
         $row = $this->model
-            ->select('user_id', 'user_name', 'email', 'sex', 'birthday', 'reg_time', 'password', 'mobile_phone')
+            ->select('user_id', 'user_name', 'email', 'sex', 'birthday', 'reg_time', 'mobile_phone')
             ->where('mobile_phone', $mobile)
             ->first();
 
@@ -118,7 +118,7 @@ class LocalUser
     public function getProfileByEmail($email)
     {
         $row = $this->model
-            ->select('user_id', 'user_name', 'email', 'sex', 'birthday', 'reg_time', 'password', 'mobile_phone')
+            ->select('user_id', 'user_name', 'email', 'sex', 'birthday', 'reg_time', 'mobile_phone')
             ->where('email', $email)
             ->first();
 
@@ -135,7 +135,7 @@ class LocalUser
     public function getProfileById($id)
     {
         $row = $this->model
-            ->select('user_id', 'user_name', 'email', 'sex', 'birthday', 'reg_time', 'password', 'mobile_phone')
+            ->select('user_id', 'user_name', 'email', 'sex', 'birthday', 'reg_time', 'mobile_phone')
             ->where('user_id', $id)
             ->first();
 
