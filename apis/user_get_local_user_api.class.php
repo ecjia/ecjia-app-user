@@ -98,7 +98,7 @@ class user_get_local_user_api extends Component_Event_Api
             $profile = $localUser->getProfileByModel($model);
             return $profile;
         } else {
-            return new ecjia_error('create_user_failed', __('未找到用户', 'user'));
+            return new ecjia_error('user_not_found', __('未找到用户', 'user'));
         }
 
     }
