@@ -67,9 +67,13 @@ use RC_Loader;
 class UserManager
 {
 
+    protected static $instance;
+
     public function __construct()
     {
-        self::$instance = ecjia_integrate::init_users();
+        if (is_null(self::$instance)) {
+            self::$instance = ecjia_integrate::init_users();
+        }
     }
 
 
