@@ -82,7 +82,7 @@ class user_get_local_user_api extends Component_Event_Api
         $localUser = new \Ecjia\App\User\LocalUser();
 
         if (!empty($mobile)) {
-            $model = $localUser->getProfileByMobile($username);
+            $model = $localUser->getProfileByMobile($mobile);
         }
         elseif (!empty($email)) {
             $model = $localUser->getProfileByEmail($email);
