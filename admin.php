@@ -182,7 +182,7 @@ class admin extends ecjia_admin
         $username         = empty($_POST['username']) ? '' : trim($_POST['username']);
         $password         = empty($_POST['password']) ? '' : trim($_POST['password']);
         $confirm_password = empty($_POST['confirm_password']) ? '' : trim($_POST['confirm_password']);
-        $email            = empty($_POST['email']) ? '' : trim($_POST['email']);
+        $email            = empty($_POST['email']) ? null : trim($_POST['email']);
         $mobile_phone     = empty($_POST['mobile_phone']) ? '' : trim($_POST['mobile_phone']);
 
         $sex       = empty($_POST['sex']) ? 0 : intval($_POST['sex']);
