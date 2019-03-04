@@ -100,7 +100,7 @@ class admin extends ecjia_admin
 
         ecjia_screen::get_current_screen()->set_help_sidebar(
             '<p><strong>' . __('更多信息：', 'user') . '</strong></p>' .
-            '<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:会员列表" target="_blank">' . __('关于会员列表帮助文档', 'user') . '</a>') . '</p>'
+            '<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:会员列表" target="_blank">关于会员列表帮助文档</a>', 'user') . '</p>'
         );
 
         $this->assign('ur_here', __('会员列表', 'user'));
@@ -133,7 +133,7 @@ class admin extends ecjia_admin
 
         ecjia_screen::get_current_screen()->set_help_sidebar(
             '<p><strong>' . __('更多信息：', 'user') . '</strong></p>' .
-            '<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:添加会员" target="_blank">' . __('关于添加会员帮助文档', 'user') . '</a>') . '</p>'
+            '<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:添加会员" target="_blank">关于添加会员帮助文档</a>', 'user') . '</p>'
         );
 
         $user = array(
@@ -308,7 +308,7 @@ class admin extends ecjia_admin
 
         ecjia_screen::get_current_screen()->set_help_sidebar(
             '<p><strong>' . __('更多信息：', 'user') . '</strong></p>' .
-            '<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:会员列表#.E4.BC.9A.E5.91.98.E7.BC.96.E8.BE.91" target="_blank">' . __('关于编辑会员帮助文档', 'user') . '</a>') . '</p>'
+            '<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:会员列表#.E4.BC.9A.E5.91.98.E7.BC.96.E8.BE.91" target="_blank">关于编辑会员帮助文档</a>', 'user') . '</p>'
         );
 
         $this->assign('ur_here', __('编辑会员账号', 'user'));
@@ -564,7 +564,7 @@ class admin extends ecjia_admin
 
         ecjia_screen::get_current_screen()->set_help_sidebar(
             '<p><strong>' . __('更多信息：', 'user') . '</strong></p>' .
-            '<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:会员列表#.E8.AF.A6.E7.BB.86.E4.BF.A1.E6.81.AF" target="_blank">' . __('关于查看会员帮助文档', 'user') . '</a>') . '</p>'
+            '<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:会员列表#.E8.AF.A6.E7.BB.86.E4.BF.A1.E6.81.AF" target="_blank">关于查看会员帮助文档</a>', 'user') . '</p>'
         );
         $this->assign('ur_here', __('会员详情', 'user'));
         $this->assign('action_link', array('text' => __('会员列表', 'user'), 'href' => RC_Uri::url('user/admin/init')));
@@ -876,7 +876,7 @@ class admin extends ecjia_admin
 
         ecjia_screen::get_current_screen()->set_help_sidebar(
             '<p><strong>' . __('更多信息：', 'user') . '</strong></p>' .
-            '<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:会员列表#.E6.94.B6.E8.B4.A7.E5.9C.B0.E5.9D.80" target="_blank">' . __('关于会员收获地址列表帮助文档', 'user') . '</a>') . '</p>'
+            '<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:会员列表#.E6.94.B6.E8.B4.A7.E5.9C.B0.E5.9D.80" target="_blank">关于会员收获地址列表帮助文档</a>', 'user') . '</p>'
         );
 
         $this->assign('ur_here', __('收货地址', 'user'));
