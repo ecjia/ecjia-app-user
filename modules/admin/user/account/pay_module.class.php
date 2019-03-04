@@ -65,11 +65,14 @@ class admin_user_account_pay_module extends api_admin implements api_interface
 
             RC_Loader::load_app_func('admin_order', 'orders');
             //计算支付手续费用
-            $payment_info['pay_fee'] = pay_fee($payment_id, $order['surplus_amount'], 0);
-
+            //$payment_info['pay_fee'] = pay_fee($payment_id, $order['surplus_amount'], 0);
             //计算此次预付款需要支付的总金额
-            $order['order_amount'] = strval($order['surplus_amount'] + $payment_info['pay_fee']);
-
+            //$order['order_amount'] = strval($order['surplus_amount'] + $payment_info['pay_fee']);
+            
+            //用户充值不计支付手续费
+            $order['order_amount'] = strval($order['surplus_amount']);
+            
+            
             $handler = $plugin->channel($payment_info['pay_code']);
             $handler->set_orderinfo($order);
             $handler->set_mobile(true);
@@ -81,7 +84,7 @@ class admin_user_account_pay_module extends api_admin implements api_interface
                 return $result;
             } else {
                 $order['payment'] = $result;
-                $order['payment']['pay_fee'] = $payment_info['pay_fee'] > 0 ? $payment_info['pay_fee'] : 0;
+                $order['payment']['pay_fee'] = 0;
                 $order['payment']['formatted_pay_fee'] = ecjia_price_format($payment_info['pay_fee'], false);
             }
 
