@@ -58,6 +58,7 @@ use ecjia_config;
 use ecjia_integrate;
 use RC_Hook;
 use RC_Loader;
+use RC_Api;
 
 /**
  * Class UserManager
@@ -195,7 +196,10 @@ class UserManager
         return true;
     }
 
-
+    /**
+     * 登录后操作
+     * @param array $user_info
+     */
     public function loginSuccessHook($user_info)
     {
         //设置session,设置cookie
@@ -209,6 +213,26 @@ class UserManager
         update_user_info(); // 更新用户信息
         RC_Loader::load_app_func('cart', 'cart');
         recalculate_price(); // 重新计算购物车中的商品价格
+    }
+
+    /**
+     * API登录后操作
+     * @param array $user_info
+     */
+    public function apiLoginSuccessHook($user_info)
+    {
+        $this->loginSuccessHook($user_info);
+
+        $request = royalcms('request');
+
+        //修正关联设备号
+        RC_Api::api('mobile', 'bind_device_user', array(
+            'device_udid'   => $request->header('device-udid'),
+            'device_client' => $request->header('device-client'),
+            'device_code'   => $request->header('device-code'),
+            'user_type'     => 'user',
+            'user_id'       => $user_info['user_id'],
+        ));
     }
 
 }
