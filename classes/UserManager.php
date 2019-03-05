@@ -53,6 +53,7 @@
 
 namespace Ecjia\App\User;
 
+use Ecjia\App\Cart\CartFunction;
 use ecjia_error;
 use ecjia_config;
 use ecjia_integrate;
@@ -207,12 +208,10 @@ class UserManager
         ecjia_integrate::setCookie($user_info['user_name']);
 
         //同步会员信息
-        RC_Loader::load_app_func('admin_user', 'user');
-        $user_info = EM_user_info($user_info['user_id']);
+        $user_info = UserInfoFunction::EM_user_info($user_info['user_id']);
 
-        update_user_info(); // 更新用户信息
-        RC_Loader::load_app_func('cart', 'cart');
-        recalculate_price(); // 重新计算购物车中的商品价格
+        UserInfoFunction::update_user_info(); // 更新用户信息
+        CartFunction::recalculate_price(); // 重新计算购物车中的商品价格
     }
 
     /**
