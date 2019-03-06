@@ -49,6 +49,69 @@ class UserInfoFunction
         return $user;
     }
 
+    /**
+     * 生成查询订单的sql
+     * @param   string $type 类型
+     * @param   string $alias order表的别名（包括.例如 o.）
+     * @return  string
+     */
+    public static function EM_order_query_sql($type = 'finished', $alias = '')
+    {
+        /* 已完成订单 */
+        if ($type == 'finished') {
+            return "{$alias}order_status " . ecjia_db_create_in(array(OS_CONFIRMED, OS_SPLITED)) . " AND {$alias}shipping_status " . ecjia_db_create_in(array(SS_RECEIVED)) . " AND {$alias}pay_status " . ecjia_db_create_in(array(PS_PAYED, PS_PAYING)) . " ";
+        } elseif ($type == 'await_ship') {
+            /* 待发货订单 */
+            return "{$alias}order_status " . ecjia_db_create_in(array(OS_UNCONFIRMED, OS_CONFIRMED, OS_SPLITED, OS_SPLITING_PART)) . " AND   {$alias}shipping_status " . ecjia_db_create_in(array(SS_UNSHIPPED, SS_PREPARING, SS_SHIPPED_ING)) . " AND ( {$alias}pay_status " . ecjia_db_create_in(array(PS_PAYED, PS_PAYING)) . " OR {$alias}pay_id " . ecjia_db_create_in(self::payment_id_list(true)) . ") ";
+        } elseif ($type == 'await_pay') {
+            /* 待付款订单 */
+            return "{$alias}order_status " . ecjia_db_create_in(array(OS_CONFIRMED, OS_SPLITED, OS_UNCONFIRMED)) . " AND   {$alias}pay_status = '" . PS_UNPAYED . "'" . " AND ( {$alias}shipping_status " . ecjia_db_create_in(array(SS_SHIPPED, SS_RECEIVED)) . " OR {$alias}pay_id " . ecjia_db_create_in(self::payment_id_list(false)) . ") ";
+        } elseif ($type == 'unconfirmed') {
+            /* 未确认订单 */
+            return "{$alias}order_status = '" . OS_UNCONFIRMED . "' ";
+        } elseif ($type == 'unprocessed') {
+            /* 未处理订单：用户可操作 */
+            return "{$alias}order_status " . ecjia_db_create_in(array(OS_UNCONFIRMED, OS_CONFIRMED)) . " AND {$alias}shipping_status = '" . SS_UNSHIPPED . "'" . " AND {$alias}pay_status = '" . PS_UNPAYED . "' ";
+        } elseif ($type == 'unpay_unship') {
+            /* 未付款未发货订单：管理员可操作 */
+            return "{$alias}order_status " . ecjia_db_create_in(array(OS_UNCONFIRMED, OS_CONFIRMED)) . " AND {$alias}shipping_status " . ecjia_db_create_in(array(SS_UNSHIPPED, SS_PREPARING)) . " AND {$alias}pay_status = '" . PS_UNPAYED . "' ";
+        } elseif ($type == 'shipped') {
+            /* 已发货订单：不论是否付款 */
+            return "{$alias}shipping_status " . ecjia_db_create_in(array(SS_SHIPPED)) . " AND {$alias}order_status != '" . OS_RETURNED . "'";
+        } else {
+            //@todo return new ecjia_error()
+            die('函数 order_query_sql 参数错误');
+        }
+    }
+
+    /**
+     * 取得支付方式id列表
+     * @param   bool    $is_cod 是否货到付款
+     * @return  array
+     */
+    public static function payment_id_list($is_cod) {
+        $db_payment = RC_DB::table('payment');
+        if ($is_cod) {
+            // $where = "is_cod = 1" ;
+            $db_payment->where('is_cod', 1);
+
+        } else {
+            // $where = "is_cod = 0" ;
+            $db_payment->where('is_cod', 0);
+        }
+        // $row = $this->db->field('pay_id')->where($where)->select();
+        $row = $db_payment->select('pay_id')->get();
+
+        $arr = array();
+        if(!empty($row) && is_array($row)) {
+            foreach ($row as $val) {
+                $arr[] = $val['pay_id'];
+            }
+        }
+
+        return $arr;
+    }
+
     public static function EM_user_info($user_id, $mobile = '')
     {
         $user_info = self::user_info($user_id, $mobile);
@@ -68,8 +131,8 @@ class UserInfoFunction
             $db1->where('pay_id', '!=', $pay_cod_id);
         }
         $await_pay  = $db1->where('user_id', $user_id)->where('extension_code', '!=', "group_buy")->where('pay_status', PS_UNPAYED)->whereIn('order_status', array(OS_UNCONFIRMED, OS_CONFIRMED, OS_SPLITED))->count();
-        $await_ship = RC_DB::table('order_info')->where('user_id', $user_id)->where('extension_code', '!=', "group_buy")->whereRaw(EM_order_query_sql('await_ship', ''))->count();
-        $shipped    = RC_DB::table('order_info')->where('user_id', $user_id)->where('extension_code', "!=", "group_buy")->whereRaw(EM_order_query_sql('shipped', ''))->count();
+        $await_ship = RC_DB::table('order_info')->where('user_id', $user_id)->where('extension_code', '!=', "group_buy")->whereRaw(self::EM_order_query_sql('await_ship', ''))->count();
+        $shipped    = RC_DB::table('order_info')->where('user_id', $user_id)->where('extension_code', "!=", "group_buy")->whereRaw(self::EM_order_query_sql('shipped', ''))->count();
         $finished   = RC_DB::table('order_info')->where('user_id', $user_id)->whereIn('order_status', array(OS_CONFIRMED, OS_SPLITED))
             ->whereIn('shipping_status', array(SS_RECEIVED))
             ->whereIn('pay_status', array(PS_PAYED, PS_PAYING))
