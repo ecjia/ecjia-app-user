@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the Ecjia App user package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Ecjia App user 1.27.4\n"
+"Project-Id-Version: Ecjia App user 1.28.0\n"
 "Report-Msgid-Bugs-To: https://make.ecjia.com/polyglots/\n"
-"POT-Creation-Date: 2019-03-01 01:49:53+00:00\n"
+"POT-Creation-Date: 2019-03-06 09:04:45+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -30,6 +30,12 @@ msgstr ""
 msgid "更多信息："
 msgstr ""
 
+#: admin.php:103
+msgid ""
+"<a href=\"https://ecjia.com/wiki/帮助:ECJia智能后台:会员列表\" target="
+"\"_blank\">关于会员列表帮助文档</a>"
+msgstr ""
+
 #: admin.php:107 admin.php:127 admin.php:146
 #: apis/user_admin_menu_api.class.php:60
 msgid "添加会员"
@@ -37,6 +43,12 @@ msgstr ""
 
 #: admin.php:131
 msgid "欢迎访问ECJia智能后台添加会员页面，在此页面可以进行添加会员操作。"
+msgstr ""
+
+#: admin.php:136
+msgid ""
+"<a href=\"https://ecjia.com/wiki/帮助:ECJia智能后台:添加会员\" target="
+"\"_blank\">关于添加会员帮助文档</a>"
 msgstr ""
 
 #: admin.php:168 admin.php:414
@@ -108,6 +120,12 @@ msgstr ""
 msgid "欢迎访问ECJia智能后台编辑会员页面，在此页面可以进行编辑会员操作。"
 msgstr ""
 
+#: admin.php:311
+msgid ""
+"<a href=\"https://ecjia.com/wiki/帮助:ECJia智能后台:会员列表#.E4.BC.9A."
+"E5.91.98.E7.BC.96.E8.BE.91\" target=\"_blank\">关于编辑会员帮助文档</a>"
+msgstr ""
+
 #: admin.php:547 admin.php:713
 msgid "编辑成功！"
 msgstr ""
@@ -115,6 +133,12 @@ msgstr ""
 #: admin.php:562
 msgid ""
 "欢迎访问ECJia智能后台会员详情页面，在此页面可以进行对会员的详细信息查看。"
+msgstr ""
+
+#: admin.php:567
+msgid ""
+"<a href=\"https://ecjia.com/wiki/帮助:ECJia智能后台:会员列表#.E8.AF.A6.E7."
+"BB.86.E4.BF.A1.E6.81.AF\" target=\"_blank\">关于查看会员帮助文档</a>"
 msgstr ""
 
 #: admin.php:569 admin.php:738 admin.php:742
@@ -196,6 +220,12 @@ msgid ""
 "此列表中。"
 msgstr ""
 
+#: admin.php:879
+msgid ""
+"<a href=\"https://ecjia.com/wiki/帮助:ECJia智能后台:会员列表#.E6.94.B6.E8.B4."
+"A7.E5.9C.B0.E5.9D.80\" target=\"_blank\">关于会员收获地址列表帮助文档</a>"
+msgstr ""
+
 #: admin_config.php:69 classes/hooks/admin_user.class.php:54
 msgid "会员中心"
 msgstr ""
@@ -227,6 +257,12 @@ msgid ""
 "中。"
 msgstr ""
 
+#: admin_rank.php:97
+msgid ""
+"<a href=\"https://ecjia.com/wiki/帮助:ECJia智能后台:会员等级\" target="
+"\"_blank\">关于会员等级列表帮助文档</a>"
+msgstr ""
+
 #: admin_rank.php:100 admin_rank.php:115 admin_rank.php:127
 msgid "添加会员等级"
 msgstr ""
@@ -234,6 +270,13 @@ msgstr ""
 #: admin_rank.php:119
 msgid ""
 "欢迎访问ECJia智能后台添加会员等级页面，在此页面可以进行添加会员等级操作。"
+msgstr ""
+
+#: admin_rank.php:124
+msgid ""
+"<a href=\"https://ecjia.com/wiki/帮助:ECJia智能后台:会员等级#.E6.B7.BB.E5.8A."
+"A0.E4.BC.9A.E5.91.98.E7.AD.89.E7.BA.A7\" target=\"_blank\">关于添加会员等级帮"
+"助文档</a>"
 msgstr ""
 
 #: admin_rank.php:158 admin_rank.php:252 admin_rank.php:337
@@ -275,6 +318,13 @@ msgstr ""
 #: admin_rank.php:211
 msgid ""
 "欢迎访问ECJia智能后台编辑会员等级页面，在此页面可以进行编辑会员等级操作。"
+msgstr ""
+
+#: admin_rank.php:216
+msgid ""
+"<a href=\"https://ecjia.com/wiki/帮助:ECJia智能后台:会员等级#.E7.BC.96.E8."
+"BE.91.E4.BC.9A.E5.91.98.E7.AD.89.E7.BA.A7\" target=\"_blank\">关于编辑会员等"
+"级帮助文档</a>"
 msgstr ""
 
 #: admin_rank.php:295
@@ -343,6 +393,12 @@ msgid ""
 "表中。"
 msgstr ""
 
+#: admin_reg_fields.php:95
+msgid ""
+"<a href=\"https://ecjia.com/wiki/帮助:ECJia智能后台:会员注册项设置\" target="
+"\"_blank\">关于会员注册项帮助文档</a>"
+msgstr ""
+
 #: admin_reg_fields.php:99 admin_reg_fields.php:114 admin_reg_fields.php:126
 msgid "添加会员注册项"
 msgstr ""
@@ -350,6 +406,12 @@ msgstr ""
 #: admin_reg_fields.php:118
 msgid ""
 "欢迎访问ECJia智能后台添加会员注册项页面，在此页面可以进行添加会员注册项操作。"
+msgstr ""
+
+#: admin_reg_fields.php:123
+msgid ""
+"<a href=\"https://ecjia.com/wiki/帮助:ECJia智能后台:会员注册项设置\" target="
+"\"_blank\">关于添加会员注册项帮助文档</a>"
 msgstr ""
 
 #: admin_reg_fields.php:153 admin_reg_fields.php:223 admin_reg_fields.php:278
@@ -377,6 +439,12 @@ msgid ""
 "欢迎访问ECJia智能后台编辑会员注册项页面，在此页面可以进行编辑会员注册项操作。"
 msgstr ""
 
+#: admin_reg_fields.php:186
+msgid ""
+"<a href=\"https://ecjia.com/wiki/帮助:ECJia智能后台:会员注册项设置\" target="
+"\"_blank\">关于编辑会员注册项帮助文档</a>"
+msgstr ""
+
 #: admin_reg_fields.php:237
 msgid "会员注册项已经修改成功。"
 msgstr ""
@@ -400,7 +468,9 @@ msgstr ""
 #: apis/user_neighbors_address_api.class.php:63
 #: apis/user_neighbors_address_store_api.class.php:63
 #: apis/user_update_user_rank_api.class.php:60
-#: apis/user_user_info_api.class.php:59 modules/address/add_module.class.php:66
+#: apis/user_user_info_api.class.php:59
+#: apis/user_user_session_logins_api.class.php:70
+#: modules/address/add_module.class.php:66
 #: modules/address/delete_module.class.php:66
 #: modules/address/info_module.class.php:66
 #: modules/address/setDefault_module.class.php:66
@@ -665,57 +735,57 @@ msgstr ""
 msgid "用户ID是%s"
 msgstr ""
 
-#: classes/UserManager.php:93 classes/integrate.class.php:225
+#: classes/UserManager.php:95 classes/integrate.class.php:225
 msgid "该网店暂停注册"
 msgstr ""
 
-#: classes/UserManager.php:98 classes/UserManager.php:179
+#: classes/UserManager.php:100 classes/UserManager.php:181
 #: classes/integrate.class.php:229 classes/integrate.class.php:307
 msgid "用户名不能为空"
 msgstr ""
 
-#: classes/UserManager.php:102 classes/UserManager.php:183
+#: classes/UserManager.php:104 classes/UserManager.php:185
 #: classes/integrate.class.php:232 classes/integrate.class.php:310
 msgid "用户名含有敏感字符"
 msgstr ""
 
-#: classes/UserManager.php:107 classes/integrate.class.php:238
+#: classes/UserManager.php:109 classes/integrate.class.php:238
 msgid "email不能为空"
 msgstr ""
 
-#: classes/UserManager.php:111 classes/integrate.class.php:241
+#: classes/UserManager.php:113 classes/integrate.class.php:241
 msgid "不是合法的email地址"
 msgstr ""
 
-#: classes/UserManager.php:118 classes/integrate.class.php:253
+#: classes/UserManager.php:120 classes/integrate.class.php:253
 msgid "用户名 %s 含有敏感字符"
 msgstr ""
 
-#: classes/UserManager.php:122 classes/integrate.class.php:255
+#: classes/UserManager.php:124 classes/integrate.class.php:255
 msgid "用户名 %s 不允许注册"
 msgstr ""
 
-#: classes/UserManager.php:126 classes/integrate.class.php:257
+#: classes/UserManager.php:128 classes/integrate.class.php:257
 msgid "用户名 %s 已经存在"
 msgstr ""
 
-#: classes/UserManager.php:130 classes/integrate.class.php:259
+#: classes/UserManager.php:132 classes/integrate.class.php:259
 msgid "%s 不是合法的email地址"
 msgstr ""
 
-#: classes/UserManager.php:134 classes/integrate.class.php:261
+#: classes/UserManager.php:136 classes/integrate.class.php:261
 msgid "Email %s 不允许注册"
 msgstr ""
 
-#: classes/UserManager.php:138 classes/integrate.class.php:263
+#: classes/UserManager.php:140 classes/integrate.class.php:263
 msgid "%s 已经存在"
 msgstr ""
 
-#: classes/UserManager.php:142 classes/integrate.class.php:265
+#: classes/UserManager.php:144 classes/integrate.class.php:265
 msgid "未知错误！"
 msgstr ""
 
-#: classes/UserManager.php:187 classes/integrate.class.php:318
+#: classes/UserManager.php:189 classes/integrate.class.php:318
 msgid "登录失败"
 msgstr ""
 
@@ -889,7 +959,7 @@ msgstr ""
 msgid "付款"
 msgstr ""
 
-#: functions/admin_user.func.php:903
+#: functions/admin_user.func.php:906
 msgid "免费"
 msgstr ""
 
@@ -1024,9 +1094,9 @@ msgid "请选择支付方式！"
 msgstr ""
 
 #: modules/admin/user/account/deposit_module.class.php:63
-#: modules/admin/user/account/pay_module.class.php:92
+#: modules/admin/user/account/pay_module.class.php:95
 #: modules/user/account/deposit_module.class.php:116
-#: modules/user/account/pay_module.class.php:134
+#: modules/user/account/pay_module.class.php:136
 msgid "支付方式无效，请重新选择支付方式！"
 msgstr ""
 
