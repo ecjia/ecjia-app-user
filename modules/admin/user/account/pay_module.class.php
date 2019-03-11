@@ -76,7 +76,7 @@ class admin_user_account_pay_module extends api_admin implements api_interface
             $handler = $plugin->channel($payment_info['pay_code']);
             $handler->set_orderinfo($order);
             $handler->set_mobile(true);
-            $handler->setOrderType(Ecjia\App\Payment\PayConstant::PAY_SURPLUS);
+            $handler->setOrderType(\Ecjia\App\Payment\Enums\PayEnum::PAY_SURPLUS);
             $handler->setPaymentRecord(new Ecjia\App\Payment\Repositories\PaymentRecordRepository());
 
             $result = $handler->get_code(Ecjia\App\Payment\PayConstant::PAYCODE_PARAM);
