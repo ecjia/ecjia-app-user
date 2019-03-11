@@ -153,7 +153,7 @@ class user_account_delete_apply_module extends api_front implements api_interfac
         $unrefunded_count     = RC_DB::table('refund_order')
             ->where('user_id', $user_id)
             ->where('status', '!=', \Ecjia\App\Refund\Enums\RefundOrderEnum::ORDER_REFUSED)
-            ->where('refund_status', '!=', Ecjia\App\Refund\RefundStatus::PAY_TRANSFERED)
+            ->where('refund_status', '!=', \Ecjia\App\Refund\Enums\RefundPayEnum::PAY_TRANSFERED)
             ->count();
         $total_unfinish_count = $unpay_count + $await_ship_count + $await_confirm_count + $unrefunded_count;
 
