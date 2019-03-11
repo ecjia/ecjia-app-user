@@ -79,7 +79,7 @@ class admin_user_account_pay_module extends api_admin implements api_interface
             $handler->setOrderType(\Ecjia\App\Payment\Enums\PayEnum::PAY_SURPLUS);
             $handler->setPaymentRecord(new Ecjia\App\Payment\Repositories\PaymentRecordRepository());
 
-            $result = $handler->get_code(Ecjia\App\Payment\PayConstant::PAYCODE_PARAM);
+            $result = $handler->get_code(\Ecjia\App\Payment\Enums\PayCodeEnum::PAYCODE_PARAM);
             if (is_ecjia_error($result)) {
                 return $result;
             } else {
