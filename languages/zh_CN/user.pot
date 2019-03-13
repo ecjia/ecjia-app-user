@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Ecjia App user 1.28.0\n"
 "Report-Msgid-Bugs-To: https://make.ecjia.com/polyglots/\n"
-"POT-Creation-Date: 2019-03-06 09:04:45+00:00\n"
+"POT-Creation-Date: 2019-03-13 05:24:32+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -858,7 +858,6 @@ msgid "密码长度不能小于6！"
 msgstr ""
 
 #: configs/jslang.php:57 configs/jslang.php:83 configs/jslang.php:105
-#: get_password.php:376
 msgid "两次密码不一致！"
 msgstr ""
 
@@ -961,60 +960,6 @@ msgstr ""
 
 #: functions/admin_user.func.php:906
 msgid "免费"
-msgstr ""
-
-#: get_password.php:106 modules/validate/forget_password_module.class.php:89
-msgid "验证码错误！"
-msgstr ""
-
-#: get_password.php:106
-msgid "请填全用户信息！"
-msgstr ""
-
-#: get_password.php:126
-msgid "手机号绑定多个用户，请联系管理员！"
-msgstr ""
-
-#: get_password.php:141
-msgid "用户信息不正确！"
-msgstr ""
-
-#: get_password.php:181 modules/admin/validate/get_module.class.php:93
-#: modules/user/userbind_module.class.php:122
-msgid "短信发送失败！"
-msgstr ""
-
-#: get_password.php:186 get_password.php:239
-msgid "请输入%s收到的手机校验码。"
-msgstr ""
-
-#: get_password.php:203 get_password.php:241
-msgid "请输入%s收到的邮箱校验码。"
-msgstr ""
-
-#: get_password.php:206 get_password.php:261
-msgid ""
-"[ %s ]您的账户正在变更账户信息，校验码：%s，打死都不能告诉别人哦！唯一热线 %s"
-msgstr ""
-
-#: get_password.php:208 get_password.php:263
-msgid "账户变更校验码"
-msgstr ""
-
-#: get_password.php:243 modules/admin/user/forget_validate_module.class.php:77
-msgid "校验码错误！"
-msgstr ""
-
-#: get_password.php:344
-msgid "问题答案错误！"
-msgstr ""
-
-#: get_password.php:371
-msgid "密码长度最少6位！"
-msgstr ""
-
-#: get_password.php:399 get_password.php:404
-msgid "处理失败！请重新操作！"
 msgstr ""
 
 #: modules/address/add_module.class.php:62
@@ -1175,6 +1120,10 @@ msgstr ""
 msgid "校验码已过期！"
 msgstr ""
 
+#: modules/admin/user/forget_validate_module.class.php:77
+msgid "校验码错误！"
+msgstr ""
+
 #: modules/admin/user/signin_module.class.php:64
 #: modules/admin/user/signin_module.class.php:189
 msgid "您输入的帐号信息不正确。"
@@ -1183,6 +1132,11 @@ msgstr ""
 #: modules/admin/validate/get_module.class.php:73
 #: modules/admin/validate/get_module.class.php:106
 msgid "发送频率过高，请一分钟后再试"
+msgstr ""
+
+#: modules/admin/validate/get_module.class.php:93
+#: modules/user/userbind_module.class.php:122
+msgid "短信发送失败！"
 msgstr ""
 
 #: modules/admin/validate/get_module.class.php:103
@@ -1481,6 +1435,10 @@ msgstr ""
 
 #: modules/validate/bonus_module.class.php:114
 msgid "订单商品金额没有达到使用该红包的最低金额 %s"
+msgstr ""
+
+#: modules/validate/forget_password_module.class.php:89
+msgid "验证码错误！"
 msgstr ""
 
 #: content/apps/user/templates/admin/user_address_list.dwt.php:11
@@ -2024,101 +1982,4 @@ msgstr ""
 
 #: content/apps/user/templates/admin/user_info.dwt.php:230
 msgid "该会员暂无订单信息"
-msgstr ""
-
-#: content/apps/user/templates/front/forget_password.dwt.php:26
-msgid "请输入您注册时的手机号"
-msgstr ""
-
-#: content/apps/user/templates/front/forget_password.dwt.php:26
-msgid "请输入您注册时的用户名"
-msgstr ""
-
-#: content/apps/user/templates/front/forget_password.dwt.php:31
-msgid "请输入您注册时的邮件地址"
-msgstr ""
-
-#: content/apps/user/templates/front/forget_password.dwt.php:37
-msgid "验证码"
-msgstr ""
-
-#: content/apps/user/templates/front/forget_password.dwt.php:44
-#: content/apps/user/templates/front/forget_password.dwt.php:98
-#: content/apps/user/templates/front/forget_password.dwt.php:124
-#: content/apps/user/templates/front/forget_password.dwt.php:150
-#: content/apps/user/templates/front/forget_password.dwt.php:184
-msgid "下一步"
-msgstr ""
-
-#: content/apps/user/templates/front/forget_password.dwt.php:55
-msgid "基于对您当前的操作环境的检测，请选择以下任一种方式进行校验"
-msgstr ""
-
-#: content/apps/user/templates/front/forget_password.dwt.php:60
-msgid "验证电子邮箱"
-msgstr ""
-
-#: content/apps/user/templates/front/forget_password.dwt.php:66
-msgid "回答安全保护问题"
-msgstr ""
-
-#: content/apps/user/templates/front/forget_password.dwt.php:80
-msgid "验证码已发送到您的手机"
-msgstr ""
-
-#: content/apps/user/templates/front/forget_password.dwt.php:82
-msgid "验证码已发送到您的邮箱"
-msgstr ""
-
-#: content/apps/user/templates/front/forget_password.dwt.php:91
-msgid "校验码"
-msgstr ""
-
-#: content/apps/user/templates/front/forget_password.dwt.php:92
-msgid "60秒后重发"
-msgstr ""
-
-#: content/apps/user/templates/front/forget_password.dwt.php:93
-msgid "重发校验码"
-msgstr ""
-
-#: content/apps/user/templates/front/forget_password.dwt.php:103
-#: content/apps/user/templates/front/forget_password.dwt.php:154
-msgid "选择其它校验方式"
-msgstr ""
-
-#: content/apps/user/templates/front/forget_password.dwt.php:114
-msgid "请输入您注册的用户名以取得您的密码提示问题。"
-msgstr ""
-
-#: content/apps/user/templates/front/forget_password.dwt.php:119
-msgid "用户名"
-msgstr ""
-
-#: content/apps/user/templates/front/forget_password.dwt.php:139
-msgid "填入答案"
-msgstr ""
-
-#: content/apps/user/templates/front/forget_password.dwt.php:162
-msgid "新登录密码仅用于本店账户登录"
-msgstr ""
-
-#: content/apps/user/templates/front/forget_password.dwt.php:167
-msgid "新密码"
-msgstr ""
-
-#: content/apps/user/templates/front/forget_password.dwt.php:171
-msgid "确认密码"
-msgstr ""
-
-#: content/apps/user/templates/front/forget_password.dwt.php:176
-msgid "密码由6-20位英文字母、数字或者符号组成"
-msgstr ""
-
-#: content/apps/user/templates/front/forget_password.dwt.php:179
-msgid "显示密码"
-msgstr ""
-
-#: content/apps/user/templates/front/forget_password.dwt.php:195
-msgid "密码修改成功，请返回重新登录！"
 msgstr ""
