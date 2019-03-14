@@ -60,6 +60,8 @@ use ecjia_integrate;
 use RC_Hook;
 use RC_Loader;
 use RC_Api;
+use RC_Time;
+use RC_Session;
 
 /**
  * Class UserManager
