@@ -708,7 +708,7 @@ class admin extends ecjia_admin
                 if (RC_DB::table('users')->where('user_id', $id)->update(array('email' => $email))) {
                     $user_name = RC_DB::table('users')->where('user_id', $id)->pluck('user_name');
 
-                    ecjia_admin::admin_log($user_name . '邮箱信息', 'edit', 'users');
+                    ecjia_admin::admin_log(sprintf(__('%s邮箱信息', 'user'), $user_name), 'edit', 'users');
 
                     return $this->showmessage(__('编辑成功！', 'user'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
                 }

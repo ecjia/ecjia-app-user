@@ -37,7 +37,7 @@
 					<div class="accordion-heading">
 						<div class="accordion-toggle acc-in" data-toggle="collapse" data-target="#telescopic1">
 							<strong>{t domain="user"}基本信息{/t}</strong>
-							<a target="_blank" href='{url path="user/admin/edit" args="id={$user.user_id}"}'>编辑</a>
+							<a target="_blank" href='{url path="user/admin/edit" args="id={$user.user_id}"}'>{t domain="user"}编辑{/t}</a>
 						</div>
 					</div>
 					<div class="accordion-body in collapse" id="telescopic1">
@@ -158,8 +158,7 @@
 					<div class="accordion-heading">
 						<div class="accordion-toggle acc-in" data-toggle="collapse" data-target="#telescopic3">
 							<strong>{t domain="user"}收货地址{/t}</strong>
-							<a target="_blank" href='{url path="user/admin/address_list" args="id={$user.user_id}"}'>{lang
-								key='user::users.more'}</a>
+							<a target="_blank" href='{url path="user/admin/address_list" args="id={$user.user_id}"}'>{t domain="user"}更多{/t}</a>
 						</div>
 					</div>
 					<div class="accordion-body in collapse" id="telescopic3">
