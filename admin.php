@@ -274,7 +274,7 @@ class admin extends ecjia_admin
             }
 
             /* 注册送积分 */
-            if (ecjia_config::has('register_points')) {
+            if (ecjia_config::has('register_points') && ecjia::config('register_points') > 0) {
                 change_account_log($user_info['user_id'], 0, 0, ecjia::config('register_points'), ecjia::config('register_points'), __('注册送积分', 'user'));
             }
 
@@ -554,7 +554,7 @@ class admin extends ecjia_admin
     {
         $this->admin_priv('user_manage');
 
-        ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('会员详情', 'user'));
+        ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('会员详情', 'user')));
         ecjia_screen::get_current_screen()->add_help_tab(array(
             'id'      => 'overview',
             'title'   => __('概述', 'user'),
@@ -574,7 +574,7 @@ class admin extends ecjia_admin
 
         if (!empty($keywords)) {
             $row = RC_DB::table('users')
-                ->where('user_id', $keywords)
+                ->where('mobile_phone', $keywords)
                 ->orWhere('user_name', $keywords)
                 ->orWhere('email', $keywords)
                 ->first();

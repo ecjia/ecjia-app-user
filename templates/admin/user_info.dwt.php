@@ -21,7 +21,7 @@
 <div class="row-fluid">
 	<div class="choose_list">
 		<form method="post" action="{url path='user/admin/info'}" name="searchForm" data-id="{$user.user_id}">
-			<input type="text" name="keywords" value="{$smarty.get.keywords}" placeholder='{t domain="user"}请输入ID或会员名称或邮箱{/t}' />
+			<input type="text" name="keywords" value="{$smarty.get.keywords}" placeholder='{t domain="user"}请输入会员名称／邮箱／手机{/t}' />
 			<button class="btn" type="submit">{t domain="user"}查看{/t}</button>
 		</form>
 	</div>
