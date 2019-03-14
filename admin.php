@@ -274,7 +274,7 @@ class admin extends ecjia_admin
             }
 
             /* 注册送积分 */
-            if (ecjia_config::has('register_points')) {
+            if (ecjia_config::has('register_points') && ecjia::config('register_points') > 0) {
                 change_account_log($user_info['user_id'], 0, 0, ecjia::config('register_points'), ecjia::config('register_points'), __('注册送积分', 'user'));
             }
 
