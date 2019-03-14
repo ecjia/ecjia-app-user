@@ -199,7 +199,7 @@ class UserManager
 
     /**
      * 登录后操作
-     * @param array $user_info
+     * @param array $user_info [user_id,user_name]
      */
     public function loginSuccessHook($user_info)
     {
