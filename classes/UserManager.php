@@ -207,8 +207,19 @@ class UserManager
         ecjia_integrate::setSession($user_info['user_name']);
         ecjia_integrate::setCookie($user_info['user_name']);
 
-        //同步会员信息
-        $user_info = UserInfoFunction::EM_user_info($user_info['user_id']);
+        //ecjia账号同步登录用户信息更新
+        $connect_options = [
+            'connect_code'  => 'app',
+            'user_id'       => $_SESSION['user_id'],
+            'user_type'     => 'user',
+            'open_id'       => md5(RC_Time::gmtime() . $_SESSION['user_id']),
+            'access_token'  => RC_Session::session_id(),
+            'refresh_token' => md5($_SESSION['user_id'] . 'user_refresh_token'),
+        ];
+        $ecjiaAppUser = RC_Api::api('connect', 'ecjia_syncappuser_add', $connect_options);
+        if (is_ecjia_error($ecjiaAppUser)) {
+            return $ecjiaAppUser;
+        }
 
         UserInfoFunction::update_user_info(); // 更新用户信息
         CartFunction::recalculate_price(); // 重新计算购物车中的商品价格
@@ -216,7 +227,7 @@ class UserManager
 
     /**
      * API登录后操作
-     * @param array $user_info
+     * @param array $user_info [user_id,user_name]
      */
     public function apiLoginSuccessHook($user_info)
     {
