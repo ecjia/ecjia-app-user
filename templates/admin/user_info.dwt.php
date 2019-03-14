@@ -21,7 +21,7 @@
 <div class="row-fluid">
 	<div class="choose_list">
 		<form method="post" action="{url path='user/admin/info'}" name="searchForm" data-id="{$user.user_id}">
-			<input type="text" name="keywords" value="{$smarty.get.keywords}" placeholder='{t domain="user"}请输入ID或会员名称或邮箱{/t}' />
+			<input type="text" name="keywords" value="{$smarty.get.keywords}" placeholder='{t domain="user"}请输入会员名称／邮箱／手机{/t}' />
 			<button class="btn" type="submit">{t domain="user"}查看{/t}</button>
 		</form>
 	</div>
@@ -37,7 +37,7 @@
 					<div class="accordion-heading">
 						<div class="accordion-toggle acc-in" data-toggle="collapse" data-target="#telescopic1">
 							<strong>{t domain="user"}基本信息{/t}</strong>
-							<a target="_blank" href='{url path="user/admin/edit" args="id={$user.user_id}"}'>编辑</a>
+							<a target="_blank" href='{url path="user/admin/edit" args="id={$user.user_id}"}'>{t domain="user"}编辑{/t}</a>
 						</div>
 					</div>
 					<div class="accordion-body in collapse" id="telescopic1">

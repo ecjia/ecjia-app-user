@@ -574,7 +574,7 @@ class admin extends ecjia_admin
 
         if (!empty($keywords)) {
             $row = RC_DB::table('users')
-                ->where('user_id', $keywords)
+                ->where('mobile_phone', $keywords)
                 ->orWhere('user_name', $keywords)
                 ->orWhere('email', $keywords)
                 ->first();
