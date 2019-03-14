@@ -554,7 +554,7 @@ class admin extends ecjia_admin
     {
         $this->admin_priv('user_manage');
 
-        ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('会员详情'));
+        ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('会员详情', 'user')));
         ecjia_screen::get_current_screen()->add_help_tab(array(
             'id'      => 'overview',
             'title'   => __('概述', 'user'),
