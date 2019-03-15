@@ -24,16 +24,17 @@ class UserAddressClear extends UserCleanAbstract
     protected $code = 'user_address_clear';
 
     /**
-     * 名称
-     * @var string
-     */
-    protected $name = '账户收货地址';
-
-    /**
      * 排序
      * @var int
      */
     protected $sort = 1;
+
+    public function __construct($user_id)
+    {
+        $this->name = __('账户收货地址', 'user');
+
+        parent::__construct($user_id);
+    }
 
     /**
      * 数据描述及输出显示内容
