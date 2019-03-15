@@ -44,11 +44,15 @@ class UserAddressClear extends UserCleanAbstract
 
         $url = RC_Uri::url('user/admin/address_list', array('id' => $this->user_id));
 
+        $text = sprintf(__('总共有<span class="ecjiafc-red ecjiaf-fs3">%s</span>个收货地址', 'user'), $count);
+
+        $view_all = __('查看全部>>>', 'user');
+
         return <<<HTML
 
-<span class="controls-info w300">总共有<span class="ecjiafc-red ecjiaf-fs3">{$count}</span>个收货地址</span>
+<span class="controls-info w300">{$text}</span>
 
-<span class="controls-info"><a href="{$url}" target="_blank">查看全部>>></a></span>
+<span class="controls-info"><a href="{$url}" target="_blank">{$view_all}</a></span>
 
 HTML;
 
