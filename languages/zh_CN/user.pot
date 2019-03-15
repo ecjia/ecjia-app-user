@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Ecjia App user 1.28.0\n"
 "Report-Msgid-Bugs-To: https://make.ecjia.com/polyglots/\n"
-"POT-Creation-Date: 2019-03-13 05:24:32+00:00\n"
+"POT-Creation-Date: 2019-03-15 01:49:12+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -130,6 +130,10 @@ msgstr ""
 msgid "编辑成功！"
 msgstr ""
 
+#: admin.php:557 admin.php:569 admin.php:738 admin.php:742
+msgid "会员详情"
+msgstr ""
+
 #: admin.php:562
 msgid ""
 "欢迎访问ECJia智能后台会员详情页面，在此页面可以进行对会员的详细信息查看。"
@@ -139,10 +143,6 @@ msgstr ""
 msgid ""
 "<a href=\"https://ecjia.com/wiki/帮助:ECJia智能后台:会员列表#.E8.AF.A6.E7."
 "BB.86.E4.BF.A1.E6.81.AF\" target=\"_blank\">关于查看会员帮助文档</a>"
-msgstr ""
-
-#: admin.php:569 admin.php:738 admin.php:742
-msgid "会员详情"
 msgstr ""
 
 #: admin.php:586
@@ -159,6 +159,10 @@ msgstr ""
 
 #: admin.php:625
 msgid "新用户还未登录"
+msgstr ""
+
+#: admin.php:711
+msgid "%s邮箱信息"
 msgstr ""
 
 #: admin.php:716 classes/integrate_abstract.class.php:208
@@ -735,57 +739,57 @@ msgstr ""
 msgid "用户ID是%s"
 msgstr ""
 
-#: classes/UserManager.php:95 classes/integrate.class.php:225
+#: classes/UserManager.php:97 classes/integrate.class.php:225
 msgid "该网店暂停注册"
 msgstr ""
 
-#: classes/UserManager.php:100 classes/UserManager.php:181
+#: classes/UserManager.php:102 classes/UserManager.php:183
 #: classes/integrate.class.php:229 classes/integrate.class.php:307
 msgid "用户名不能为空"
 msgstr ""
 
-#: classes/UserManager.php:104 classes/UserManager.php:185
+#: classes/UserManager.php:106 classes/UserManager.php:187
 #: classes/integrate.class.php:232 classes/integrate.class.php:310
 msgid "用户名含有敏感字符"
 msgstr ""
 
-#: classes/UserManager.php:109 classes/integrate.class.php:238
+#: classes/UserManager.php:111 classes/integrate.class.php:238
 msgid "email不能为空"
 msgstr ""
 
-#: classes/UserManager.php:113 classes/integrate.class.php:241
+#: classes/UserManager.php:115 classes/integrate.class.php:241
 msgid "不是合法的email地址"
 msgstr ""
 
-#: classes/UserManager.php:120 classes/integrate.class.php:253
+#: classes/UserManager.php:122 classes/integrate.class.php:253
 msgid "用户名 %s 含有敏感字符"
 msgstr ""
 
-#: classes/UserManager.php:124 classes/integrate.class.php:255
+#: classes/UserManager.php:126 classes/integrate.class.php:255
 msgid "用户名 %s 不允许注册"
 msgstr ""
 
-#: classes/UserManager.php:128 classes/integrate.class.php:257
+#: classes/UserManager.php:130 classes/integrate.class.php:257
 msgid "用户名 %s 已经存在"
 msgstr ""
 
-#: classes/UserManager.php:132 classes/integrate.class.php:259
+#: classes/UserManager.php:134 classes/integrate.class.php:259
 msgid "%s 不是合法的email地址"
 msgstr ""
 
-#: classes/UserManager.php:136 classes/integrate.class.php:261
+#: classes/UserManager.php:138 classes/integrate.class.php:261
 msgid "Email %s 不允许注册"
 msgstr ""
 
-#: classes/UserManager.php:140 classes/integrate.class.php:263
+#: classes/UserManager.php:142 classes/integrate.class.php:263
 msgid "%s 已经存在"
 msgstr ""
 
-#: classes/UserManager.php:144 classes/integrate.class.php:265
+#: classes/UserManager.php:146 classes/integrate.class.php:265
 msgid "未知错误！"
 msgstr ""
 
-#: classes/UserManager.php:189 classes/integrate.class.php:318
+#: classes/UserManager.php:191 classes/integrate.class.php:318
 msgid "登录失败"
 msgstr ""
 
@@ -1456,7 +1460,7 @@ msgid "默认地址"
 msgstr ""
 
 #: content/apps/user/templates/admin/user_address_list.dwt.php:29
-#: content/apps/user/templates/admin/user_info.dwt.php:205
+#: content/apps/user/templates/admin/user_info.dwt.php:204
 msgid "收货人"
 msgstr ""
 
@@ -1469,7 +1473,7 @@ msgid "详细地址"
 msgstr ""
 
 #: content/apps/user/templates/admin/user_address_list.dwt.php:32
-#: content/apps/user/templates/admin/user_info.dwt.php:176
+#: content/apps/user/templates/admin/user_info.dwt.php:175
 msgid "邮编"
 msgstr ""
 
@@ -1486,7 +1490,7 @@ msgid "手机："
 msgstr ""
 
 #: content/apps/user/templates/admin/user_address_list.dwt.php:52
-#: content/apps/user/templates/admin/user_info.dwt.php:184
+#: content/apps/user/templates/admin/user_info.dwt.php:183
 msgid "该用户暂无收货地址"
 msgstr ""
 
@@ -1561,6 +1565,7 @@ msgid "筛选"
 msgstr ""
 
 #: content/apps/user/templates/admin/user_list.dwt.php:30
+#: content/apps/user/templates/admin/user_info.dwt.php:24
 msgid "请输入会员名称／邮箱／手机"
 msgstr ""
 
@@ -1603,6 +1608,7 @@ msgstr ""
 #: content/apps/user/templates/admin/user_list.dwt.php:62
 #: content/apps/user/templates/admin/user_rank_list.dwt.php:58
 #: content/apps/user/templates/admin/reg_fields_list.dwt.php:42
+#: content/apps/user/templates/admin/user_info.dwt.php:40
 msgid "编辑"
 msgstr ""
 
@@ -1611,7 +1617,7 @@ msgid "详细信息"
 msgstr ""
 
 #: content/apps/user/templates/admin/user_list.dwt.php:65
-#: content/apps/user/templates/admin/user_info.dwt.php:213
+#: content/apps/user/templates/admin/user_info.dwt.php:212
 msgid "查看订单"
 msgstr ""
 
@@ -1872,10 +1878,6 @@ msgstr ""
 msgid "查看详情"
 msgstr ""
 
-#: content/apps/user/templates/admin/user_info.dwt.php:24
-msgid "请输入ID或会员名称或邮箱"
-msgstr ""
-
 #: content/apps/user/templates/admin/user_info.dwt.php:25
 #: content/apps/user/templates/admin/user_info.dwt.php:141
 #: content/apps/user/templates/admin/user_info.dwt.php:148
@@ -1948,38 +1950,42 @@ msgstr ""
 msgid "成长值："
 msgstr ""
 
-#: content/apps/user/templates/admin/user_info.dwt.php:171
+#: content/apps/user/templates/admin/user_info.dwt.php:161
+msgid "更多"
+msgstr ""
+
+#: content/apps/user/templates/admin/user_info.dwt.php:170
 msgid "（默认地址）"
 msgstr ""
 
-#: content/apps/user/templates/admin/user_info.dwt.php:174
+#: content/apps/user/templates/admin/user_info.dwt.php:173
 msgid "电话"
 msgstr ""
 
-#: content/apps/user/templates/admin/user_info.dwt.php:175
+#: content/apps/user/templates/admin/user_info.dwt.php:174
 msgid "手机"
 msgstr ""
 
-#: content/apps/user/templates/admin/user_info.dwt.php:194
+#: content/apps/user/templates/admin/user_info.dwt.php:193
 msgid "会员订单"
 msgstr ""
 
-#: content/apps/user/templates/admin/user_info.dwt.php:203
+#: content/apps/user/templates/admin/user_info.dwt.php:202
 msgid "订单号"
 msgstr ""
 
-#: content/apps/user/templates/admin/user_info.dwt.php:204
+#: content/apps/user/templates/admin/user_info.dwt.php:203
 msgid "下单时间"
 msgstr ""
 
-#: content/apps/user/templates/admin/user_info.dwt.php:206
+#: content/apps/user/templates/admin/user_info.dwt.php:205
 msgid "总金额"
 msgstr ""
 
-#: content/apps/user/templates/admin/user_info.dwt.php:207
+#: content/apps/user/templates/admin/user_info.dwt.php:206
 msgid "订单状态"
 msgstr ""
 
-#: content/apps/user/templates/admin/user_info.dwt.php:230
+#: content/apps/user/templates/admin/user_info.dwt.php:229
 msgid "该会员暂无订单信息"
 msgstr ""
