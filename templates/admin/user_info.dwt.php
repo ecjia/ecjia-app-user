@@ -81,7 +81,7 @@
 									<td>
 										<div align="right"><strong>QQ：</strong></div>
 									</td>
-									<td>{if $qq_info}{t domain="user"}已绑定{/t}{else}{t domain="user"}未绑定{/t}{/if}</td>
+									<td>{if $qq_info}{$qq_info.nickname}{else}{t domain="user"}未绑定{/t}{/if}</td>
 									<td>
 										<div align="right"><strong>{t domain="user"}会员等级：{/t}</strong></div>
 									</td>

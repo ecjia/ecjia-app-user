@@ -664,8 +664,12 @@ class admin extends ecjia_admin
         $this->assign('order_list', $order);
         $this->assign('address_list', $address_list);
 
-        $qq_info = RC_DB::table('connect_user')->where('connect_code', 'sns_qq')->where('user_id', $id)->where('user_type', 'user')->first();
+        $qq_info = RC_DB::table('connect_user')->where('connect_platform', 'qq')->where('user_id', $id)->where('user_type', 'user')->first();
         if (!empty($qq_info)) {
+            if (!empty($qq_info['profile'])) {
+                $profile             = unserialize($qq_info['profile']);
+                $qq_info['nickname'] = empty($profile['nickname']) ? __('已绑定', 'user') : $profile['nickname'];
+            }
             $this->assign('qq_info', $qq_info);
         }
 
