@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Ecjia App user 1.28.0\n"
 "Report-Msgid-Bugs-To: https://make.ecjia.com/polyglots/\n"
-"POT-Creation-Date: 2019-03-20 07:33:57+00:00\n"
+"POT-Creation-Date: 2019-03-22 03:53:28+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -13,18 +13,18 @@ msgstr ""
 "Language-Team: LANGUAGE <ecjia@ecjia.com>\n"
 
 #: admin.php:74 admin.php:94 admin.php:106 admin.php:147 admin.php:315
-#: admin.php:570 admin.php:732 admin.php:883
+#: admin.php:570 admin.php:736 admin.php:887
 #: apis/user_admin_menu_api.class.php:59
 msgid "会员列表"
 msgstr ""
 
-#: admin.php:97 admin.php:130 admin.php:304 admin.php:560 admin.php:872
+#: admin.php:97 admin.php:130 admin.php:304 admin.php:560 admin.php:876
 #: admin_rank.php:91 admin_rank.php:118 admin_rank.php:210
 #: admin_reg_fields.php:89 admin_reg_fields.php:117 admin_reg_fields.php:180
 msgid "概述"
 msgstr ""
 
-#: admin.php:102 admin.php:135 admin.php:310 admin.php:566 admin.php:878
+#: admin.php:102 admin.php:135 admin.php:310 admin.php:566 admin.php:882
 #: admin_rank.php:96 admin_rank.php:123 admin_rank.php:215
 #: admin_reg_fields.php:94 admin_reg_fields.php:122 admin_reg_fields.php:185
 msgid "更多信息："
@@ -63,7 +63,7 @@ msgstr ""
 msgid "女"
 msgstr ""
 
-#: admin.php:200 admin.php:447 admin.php:703
+#: admin.php:200 admin.php:447 admin.php:707
 msgid "没有输入邮件地址或者输入了一个无效的邮件地址。"
 msgstr ""
 
@@ -126,11 +126,11 @@ msgid ""
 "E5.91.98.E7.BC.96.E8.BE.91\" target=\"_blank\">关于编辑会员帮助文档</a>"
 msgstr ""
 
-#: admin.php:547 admin.php:713
+#: admin.php:547 admin.php:717
 msgid "编辑成功！"
 msgstr ""
 
-#: admin.php:557 admin.php:569 admin.php:738 admin.php:742
+#: admin.php:557 admin.php:569 admin.php:742 admin.php:746
 msgid "会员详情"
 msgstr ""
 
@@ -161,70 +161,74 @@ msgstr ""
 msgid "新用户还未登录"
 msgstr ""
 
-#: admin.php:711
+#: admin.php:671
+msgid "已绑定"
+msgstr ""
+
+#: admin.php:715
 msgid "%s邮箱信息"
 msgstr ""
 
-#: admin.php:716 classes/integrate_abstract.class.php:208
+#: admin.php:720 classes/integrate_abstract.class.php:208
 msgid "该邮件地址已经存在。"
 msgstr ""
 
-#: admin.php:719 configs/jslang.php:53 configs/jslang.php:79
+#: admin.php:723 configs/jslang.php:53 configs/jslang.php:79
 #: configs/jslang.php:101
 msgid "请输入邮箱地址！"
 msgstr ""
 
-#: admin.php:733
+#: admin.php:737
 msgid "该用户不存在"
 msgstr ""
 
-#: admin.php:739 admin.php:741
+#: admin.php:743 admin.php:745
 msgid "删除帐号数据"
 msgstr ""
 
-#: admin.php:782
+#: admin.php:786
 msgid "当前还有用户数据未清除，请先清除后再执行删除会员操作"
 msgstr ""
 
-#: admin.php:787
+#: admin.php:791
 msgid "删除会员成功"
 msgstr ""
 
-#: admin.php:806
+#: admin.php:810
 msgid "操作失败，当前code无效"
 msgstr ""
 
-#: admin.php:811
+#: admin.php:815
 msgid "%s删除成功"
 msgstr ""
 
-#: admin.php:813
+#: admin.php:817
 msgid "%s删除失败"
 msgstr ""
 
-#: admin.php:847
+#: admin.php:851
 msgid "%s删除失败；<br>"
 msgstr ""
 
-#: admin.php:854 admin.php:856
+#: admin.php:858 admin.php:860
 msgid "一键删除会员成功"
 msgstr ""
 
-#: admin.php:859
+#: admin.php:863
 msgid "操作失败"
 msgstr ""
 
-#: admin.php:869 admin.php:882
+#: admin.php:873 admin.php:886
 msgid "收货地址"
 msgstr ""
 
-#: admin.php:874
+#: admin.php:878
 msgid ""
 "欢迎访问ECJia智能后台会员收获地址列表页面，系统中所有的会员收获地址都会显示在"
 "此列表中。"
 msgstr ""
 
-#: admin.php:879
+#: admin.php:883
 msgid ""
 "<a href=\"https://ecjia.com/wiki/帮助:ECJia智能后台:会员列表#.E6.94.B6.E8.B4."
 "A7.E5.9C.B0.E5.9D.80\" target=\"_blank\">关于会员收获地址列表帮助文档</a>"
@@ -496,14 +500,14 @@ msgstr ""
 #: modules/user/bind_module.class.php:79
 #: modules/user/collect/delete_module.class.php:66
 #: modules/user/forget_password_module.class.php:65
-#: modules/user/forget_password_module.class.php:85
+#: modules/user/forget_password_module.class.php:81
 #: modules/user/password_module.class.php:120
 #: modules/user/paypassword/modify_module.class.php:68
 #: modules/user/reset_password_module.class.php:62
 #: modules/user/signin_module.class.php:66
 #: modules/user/signup_module.class.php:90
 #: modules/user/userbind_module.class.php:65
-#: modules/user/userbind_module.class.php:82
+#: modules/user/userbind_module.class.php:78
 #: modules/validate/bind_module.class.php:66
 #: modules/validate/forget_password_module.class.php:63
 #: modules/validate/get_module.class.php:59
@@ -1192,32 +1196,32 @@ msgstr ""
 msgid "您输入的帐号信息不正确。"
 msgstr ""
 
-#: modules/admin/validate/get_module.class.php:73
-#: modules/admin/validate/get_module.class.php:106
+#: modules/admin/validate/get_module.class.php:69
+#: modules/admin/validate/get_module.class.php:102
 msgid "发送频率过高，请一分钟后再试"
 msgstr ""
 
-#: modules/admin/validate/get_module.class.php:93
-#: modules/user/userbind_module.class.php:122
+#: modules/admin/validate/get_module.class.php:89
+#: modules/user/userbind_module.class.php:118
 msgid "短信发送失败！"
 msgstr ""
 
-#: modules/admin/validate/get_module.class.php:103
+#: modules/admin/validate/get_module.class.php:99
 msgid "邮箱账号格式错误"
 msgstr ""
 
-#: modules/admin/validate/get_module.class.php:121
+#: modules/admin/validate/get_module.class.php:117
 #: modules/validate/get_module.class.php:119
 msgid "请检查短信模板send_validate"
 msgstr ""
 
-#: modules/admin/validate/get_module.class.php:133
-#: modules/user/forget_password_module.class.php:143
+#: modules/admin/validate/get_module.class.php:129
+#: modules/user/forget_password_module.class.php:139
 msgid "验证码发送成功！"
 msgstr ""
 
-#: modules/admin/validate/get_module.class.php:135
-#: modules/user/forget_password_module.class.php:145
+#: modules/admin/validate/get_module.class.php:131
+#: modules/user/forget_password_module.class.php:141
 #: modules/validate/get_module.class.php:133
 msgid "验证码发送失败！"
 msgstr ""
@@ -1365,9 +1369,9 @@ msgid "验证码已过期"
 msgstr ""
 
 #: modules/user/bind_module.class.php:97 modules/user/bind_module.class.php:114
-#: modules/user/forget_password_module.class.php:89
+#: modules/user/forget_password_module.class.php:85
 #: modules/user/password_module.class.php:134
-#: modules/user/userbind_module.class.php:86
+#: modules/user/userbind_module.class.php:82
 msgid "验证码错误"
 msgstr ""
 
@@ -1392,19 +1396,19 @@ msgstr ""
 msgid "已省%s元"
 msgstr ""
 
-#: modules/user/forget_password_module.class.php:96
+#: modules/user/forget_password_module.class.php:92
 #: modules/user/reset_password_module.class.php:71
 #: modules/validate/forget_password_module.class.php:70
 msgid "手机号重复，请与管理员联系！"
 msgstr ""
 
-#: modules/user/forget_password_module.class.php:105
+#: modules/user/forget_password_module.class.php:101
 #: modules/user/reset_password_module.class.php:80
 #: modules/validate/forget_password_module.class.php:78
 msgid "用户信息错误！"
 msgstr ""
 
-#: modules/user/forget_password_module.class.php:133
+#: modules/user/forget_password_module.class.php:129
 msgid "通过短信找回密码"
 msgstr ""
 
@@ -1959,10 +1963,6 @@ msgstr ""
 #: content/apps/user/templates/admin/user_info.dwt.php:77
 #: content/apps/user/templates/admin/user_info.dwt.php:84
 msgid "未绑定"
-msgstr ""
-
-#: content/apps/user/templates/admin/user_info.dwt.php:84
-msgid "已绑定"
 msgstr ""
 
 #: content/apps/user/templates/admin/user_info.dwt.php:97
