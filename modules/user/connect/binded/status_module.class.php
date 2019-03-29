@@ -78,7 +78,7 @@ class user_connect_binded_status_module extends api_front implements api_interfa
         	
         	$collect = collect($wechat_platform);
         	
-        	$platform_list = $collect->map(function ($value) use ($binded_platform) {
+        	$platform_list = $collect->map(function ($value) use ($binded_platform, $user_id) {
         		$value['status'] = 0;
         		$value['selected_status'] = 0;
         		if (in_array($value['connect_code'], $binded_platform)) {
@@ -102,7 +102,9 @@ class user_connect_binded_status_module extends api_front implements api_interfa
      */
     private function is_wechat_withdraw_bank($connect_code, $user_id, $bank_type)
     {
+    	
     	$withdraw_user_bank = RC_DB::table('withdraw_user_bank')->where('user_id', $user_id)->where('user_type', 'user')->where('bank_type', $bank_type)->where('bank_branch_name', $connect_code)->first();
+		
 		if (!empty($withdraw_user_bank)) {
 			return true;
 		}
