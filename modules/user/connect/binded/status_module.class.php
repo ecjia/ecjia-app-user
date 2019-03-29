@@ -85,7 +85,7 @@ class user_connect_binded_status_module extends api_front implements api_interfa
         			$value['status'] = 1;
         		} 
         		//微信提现方式当前绑定的平台
-        		if ($this->withdraw_bank_wechat($value['connect_code'], $user_id, 'wechat')) {
+        		if ($this->is_wechat_withdraw_bank($value['connect_code'], $user_id, 'wechat')) {
         			$value['selected_status'] = 1;
         		}
         		return $value;
