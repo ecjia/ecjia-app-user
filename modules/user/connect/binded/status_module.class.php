@@ -62,7 +62,7 @@ class user_connect_binded_status_module extends api_front implements api_interfa
             return new ecjia_error(100, __('Invalid session', 'user'));
         }
 
-        $platform = $this->requestData('platform', '');
+        $platform = $this->requestData('platform', 'wechat');
         $platform_arr = ['wechat', 'qq', 'alipay'];
         
         if (empty($platform) || !in_array($platform, $platform_arr)) {
@@ -80,9 +80,14 @@ class user_connect_binded_status_module extends api_front implements api_interfa
         	
         	$platform_list = $collect->map(function ($value) use ($binded_platform) {
         		$value['status'] = 0;
+        		$value['selected_status'] = 0;
         		if (in_array($value['connect_code'], $binded_platform)) {
         			$value['status'] = 1;
         		} 
+        		//微信提现方式当前绑定的平台
+        		if ($this->withdraw_bank_wechat($value['connect_code'], $user_id, 'wechat')) {
+        			$value['selected_status'] = 1;
+        		}
         		return $value;
         	});
         }
@@ -90,6 +95,18 @@ class user_connect_binded_status_module extends api_front implements api_interfa
         $platform_list = $platform_list->toArray();
        	
         return $platform_list;
+    }
+    
+    /**
+     * 当前平台有没绑定微信提现方式
+     */
+    private function is_wechat_withdraw_bank($connect_code, $user_id, $bank_type)
+    {
+    	$withdraw_user_bank = RC_DB::table('withdraw_user_bank')->where('user_id', $user_id)->where('user_type', 'user')->where('bank_type', $bank_type)->where('bank_branch_name', $connect_code)->first();
+		if (!empty($withdraw_user_bank)) {
+			return true;
+		}
+		return false;
     }
 }
 
