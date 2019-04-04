@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Ecjia App user 1.28.0\n"
 "Report-Msgid-Bugs-To: https://make.ecjia.com/polyglots/\n"
-"POT-Creation-Date: 2019-03-29 01:41:53+00:00\n"
+"POT-Creation-Date: 2019-04-04 05:54:40+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1090,7 +1090,8 @@ msgstr ""
 #: modules/user/collect/list_module.class.php:61
 #: modules/user/connect/binded/status_module.class.php:62
 #: modules/user/info/bankcard_module.class.php:63
-#: modules/user/info_module.class.php:63
+#: modules/user/info_module.class.php:65
+#: modules/user/orders/summary_module.class.php:62
 #: modules/user/password_module.class.php:63
 #: modules/user/paypassword/modify_module.class.php:61
 #: modules/user/update_module.class.php:60
