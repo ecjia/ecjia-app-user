@@ -61,13 +61,15 @@ class user_orders_summary_module extends api_front implements api_interface
         if ($user_id <= 0) {
             return new ecjia_error(100, __('Invalid session', 'user'));
         }
+        
+        $store_id = $this->requestData('store_id');
 
-        $await_pay 			= Ecjia\App\User\UserInfoFunction::await_pay_num($user_id);
-        $await_ship 		= Ecjia\App\User\UserInfoFunction::await_ship_num($user_id);
-        $shipped			= Ecjia\App\User\UserInfoFunction::shipped_num($user_id);
-        $finished			= Ecjia\App\User\UserInfoFunction::finished_num($user_id);
-        $allow_comment_count= Ecjia\App\User\UserInfoFunction::allow_comment_num($user_id);
-        $refund_order 		= Ecjia\App\User\UserInfoFunction::refund_order_num($user_id);
+        $await_pay 			= Ecjia\App\User\UserInfoFunction::await_pay_num($user_id, $store_id);
+        $await_ship 		= Ecjia\App\User\UserInfoFunction::await_ship_num($user_id, $store_id);
+        $shipped			= Ecjia\App\User\UserInfoFunction::shipped_num($user_id, $store_id);
+        $finished			= Ecjia\App\User\UserInfoFunction::finished_num($user_id, $store_id);
+        $allow_comment_count= Ecjia\App\User\UserInfoFunction::allow_comment_num($user_id, $store_id);
+        $refund_order 		= Ecjia\App\User\UserInfoFunction::refund_order_num($user_id, $store_id);
         
         $order_num = [
 	        'await_pay'     => $await_pay,

@@ -328,9 +328,12 @@ class UserInfoFunction
 	 * @param int $user_id
 	 * @return int
 	 */
-    public static function await_pay_num($user_id)
+    public static function await_pay_num($user_id, $store_id = 0)
     {
     	$db1 = RC_DB::table('order_info');
+    	if (!empty($store_id)) {
+    		$db1->where('store_id', $store_id);
+    	}
     	/*货到付款订单不在待付款里显示*/
     	$pay_cod_id = RC_DB::table('payment')->where('pay_code', 'pay_cod')->pluck('pay_id');
     	if (!empty($pay_cod_id)) {
@@ -346,9 +349,13 @@ class UserInfoFunction
      * @param int $user_id
      * @return int
      */
-    public static function await_ship_num($user_id)
+    public static function await_ship_num($user_id, $store_id = 0)
     {
-    	$await_ship = RC_DB::table('order_info')->where('user_id', $user_id)->where('extension_code', '!=', "group_buy")->whereRaw(self::EM_order_query_sql('await_ship', ''))->count();
+    	$db = RC_DB::table('order_info');
+    	if (!empty($store_id)) {
+    		$db->where('store_id', $store_id);
+    	}
+    	$await_ship = $db->where('user_id', $user_id)->where('extension_code', '!=', "group_buy")->whereRaw(self::EM_order_query_sql('await_ship', ''))->count();
 		return $await_ship;
     }
     
@@ -357,9 +364,14 @@ class UserInfoFunction
      * @param int $user_id
      * @return int
      */
-    public static function shipped_num($user_id)
+    public static function shipped_num($user_id, $store_id = 0)
     {
-    	$shipped = RC_DB::table('order_info')->where('user_id', $user_id)->where('extension_code', "!=", "group_buy")->whereRaw(self::EM_order_query_sql('shipped', ''))->count();
+    	$db = RC_DB::table('order_info');
+    	if (!empty($store_id)) {
+    		$db->where('store_id', $store_id);
+    	}
+    	
+    	$shipped = $db->where('user_id', $user_id)->where('extension_code', "!=", "group_buy")->whereRaw(self::EM_order_query_sql('shipped', ''))->count();
 		return $shipped;
     }
     
@@ -368,9 +380,14 @@ class UserInfoFunction
      * @param int $user_id
      * @return int
      */
-    public static function finished_num($user_id)
+    public static function finished_num($user_id, $store_id = 0)
     {
-    	$finished   = RC_DB::table('order_info')->where('user_id', $user_id)->whereIn('order_status', array(OS_CONFIRMED, OS_SPLITED))
+    	$db = RC_DB::table('order_info');
+    	if (!empty($store_id)) {
+    		$db->where('store_id', $store_id);
+    	}
+    	
+    	$finished   = $db->where('user_id', $user_id)->whereIn('order_status', array(OS_CONFIRMED, OS_SPLITED))
     	->whereIn('shipping_status', array(SS_RECEIVED))
     	->whereIn('pay_status', array(PS_PAYED, PS_PAYING))
     	->where('extension_code', "!=", "group_buy")
@@ -384,7 +401,7 @@ class UserInfoFunction
      * @param int $user_id
      * @return int
      */
-    public static function allow_comment_num($user_id)
+    public static function allow_comment_num($user_id, $store_id = 0)
     {
     	$db_allow_comment = RC_DB::table('order_info as oi')
     	->leftJoin('order_goods as og', RC_DB::raw('oi.order_id'), '=', RC_DB::raw('og.order_id'))
@@ -403,8 +420,14 @@ class UserInfoFunction
     		->where(RC_DB::raw('oi.shipping_status'), SS_RECEIVED)
     		->whereIn(RC_DB::raw('oi.order_status'), array(OS_CONFIRMED, OS_SPLITED))
     		->whereIn(RC_DB::raw('oi.pay_status'), array(PS_PAYED, PS_PAYING))
-    		->whereRaw(RC_DB::raw('c.comment_id is null'))
-    		->select(RC_DB::Raw('count(DISTINCT oi.order_id) as counts'))->get();
+    		->whereRaw(RC_DB::raw('c.comment_id is null'));
+    	
+    	//store_id
+    	if (!empty($store_id)) {
+    		$allow_comment_count->where(RC_DB::raw('oi.store_id'), $store_id);
+    	}
+    	$allow_comment_count = $db_allow_comment->select(RC_DB::Raw('count(DISTINCT oi.order_id) as counts'))->get();
+    	
     	$allow_comment_count = $allow_comment_count['0']['counts'];
     	
     	return $allow_comment_count;
@@ -415,10 +438,14 @@ class UserInfoFunction
      * @param int $user_id
      * @return int
      */
-    public static function refund_order_num($user_id)
+    public static function refund_order_num($user_id, $store_id = 0)
     {
     	//申请售后数
-    	$refund_order = RC_DB::table('refund_order')->where('user_id', $user_id)
+    	$db = RC_DB::table('refund_order');
+    	if (!empty($store_id)) {
+    		$db->where('store_id', $store_id);
+    	}
+    	$refund_order = $db->where('user_id', $user_id)
     	->whereRaw('status != 10 and refund_status != 2')
     	->count();
     	
