@@ -94,7 +94,6 @@ class admin_user_signin_module extends api_admin implements api_interface
         }
 
         /* 获取device_id*/
-        //$device_id = RC_Model::model('mobile/mobile_device_model')->where(array('device_udid' => $device['udid'], 'device_client' => $device['client'], 'device_code' => $device['code']))->get_field('id');
         $device_id             = RC_DB::table('mobile_device')
             ->where('device_udid', $device['udid'])
             ->where('device_client', $device['client'])
@@ -116,7 +115,6 @@ class admin_user_signin_module extends api_admin implements api_interface
                 'ec_salt'  => $ec_salt,
                 'password' => $new_possword
             );
-            //$db_user->where(array('user_id' => $_SESSION['admin_id']))->update($data);
             RC_DB::table('admin_user')->where('user_id', $_SESSION['admin_id'])->update($data);
         }
 
@@ -155,7 +153,7 @@ class admin_user_signin_module extends api_admin implements api_interface
             'device_client' => $request->header('device-client'),
             'device_code'   => $request->header('device-code'),
             'user_type'     => 'merchant',
-            'user_id'       => session('session_user_id'),
+            'user_id'       => session('admin_id'),
         ));
 
         return $out;
