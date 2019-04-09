@@ -83,15 +83,13 @@ class admin_user_signin_module extends api_admin implements api_interface
 
         // 登录成功
         /* 设置session信息 */
-        $_SESSION['admin_id']         = $row['user_id'];
-        $_SESSION['admin_name']       = $row['user_name'];
-        $_SESSION['action_list']      = $row['action_list'];
-        $_SESSION['last_check_order'] = $row['last_login'];
-        $_SESSION['suppliers_id']     = $row['suppliers_id'];
+        $this->admin_session($row['user_id'], $row['user_name'], $row['action_list'], $row['last_login']);
 
         if (!empty($row['seller_id'])) {
             $_SESSION['seller_id'] = $row['seller_id'];
         }
+
+        $_SESSION['suppliers_id']     = $row['suppliers_id'];
 
         /* 获取device_id*/
         $device_id             = RC_DB::table('mobile_device')
@@ -153,7 +151,7 @@ class admin_user_signin_module extends api_admin implements api_interface
             'device_client' => $request->header('device-client'),
             'device_code'   => $request->header('device-code'),
             'user_type'     => 'merchant',
-            'user_id'       => session('admin_id'),
+            'user_id'       => session('session_user_id'),
         ));
 
         return $out;
