@@ -138,14 +138,15 @@ class admin_level extends ecjia_admin
         $filter['start_date'] = empty($_GET['start_date']) ? RC_Time::local_date('Y-m-d', $start_date) : $_GET['start_date'];
         $filter['end_date']   = empty($_GET['end_date']) ? RC_Time::local_date('Y-m-d', $end_date) : $_GET['end_date'];
 
+        $start_date = RC_Time::local_strtotime($filter['start_date']);
+        $end_date = RC_Time::local_strtotime($filter['end_date']);
+
+
         $sql = "select u.user_id, u.user_name, u.user_money as avaliable_money, u.pay_points as integral, order_count, order_money
 from " . $table_users . " as u
 
-INNER JOIN (select user_id, count(order_id) as order_count from " . $table_order_info . " where is_delete = 0 and order_status in (1, 5) and shipping_status = 2 and pay_status in (2, 1) and  add_time >=" . $start_date . " and add_time <=" . $end_date . " GROUP BY user_id)
-as c on c.user_id = u.user_id
-
-INNER JOIN (select user_id, sum(goods_amount + shipping_fee + insure_fee + pay_fee + pack_fee + card_fee + tax - integral_money - bonus - discount) as order_money from " . $table_order_info . " where is_delete = 0 and order_status in (1, 5) and shipping_status = 2 and pay_status in (2, 1) and add_time >=" . $start_date . " and add_time <=" . $end_date . " GROUP BY user_id)
-as d on d.user_id = u.user_id";
+INNER JOIN (select user_id, count(order_id) as order_count, sum(goods_amount + shipping_fee + insure_fee + pay_fee + pack_fee + card_fee + tax - integral_money - bonus - discount) as order_money from " . $table_order_info . " where is_delete = 0 and order_status in (1, 5) and shipping_status = 2 and pay_status in (2, 1) and  add_time >=" . $start_date . " and add_time <=" . $end_date . " GROUP BY user_id)
+as c on c.user_id = u.user_id";
 
         //图表数据 根据按钮状态切换显示 start
         $stats = !empty($_GET['stats']) ? trim($_GET['stats']) : 'order_money';
@@ -162,10 +163,11 @@ as d on d.user_id = u.user_id";
         //列表数据 start
         $data = [];
         if (!empty($keywords)) {
-            $sql .= ' and u.user_name like "' . '%' . $keywords . '%"';
+            $sql .= ' where u.user_name like "' . '%' . $keywords . '%"';
         }
         $sql  .= " ORDER BY " . $sort_by . ' ' . $sort_order;
         $data = RC_DB::select($sql);
+
         //列表数据 end
 
         //店铺排行 不受分页/关键字影响 start
