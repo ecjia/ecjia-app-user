@@ -67,6 +67,10 @@ class admin extends ecjia_admin
         RC_Style::enqueue_style('uniform-aristo');
         RC_Script::enqueue_script('jquery-uniform');
 
+        //时间控件
+        RC_Script::enqueue_script('bootstrap-datepicker');
+        RC_Style::enqueue_style('bootstrap-datepicker');
+
         RC_Script::enqueue_script('user_info', RC_App::apps_url('statics/js/user_info.js', __FILE__));
         RC_Style::enqueue_style('user_info_css', RC_App::apps_url('statics/css/user_info.css', __FILE__));
         RC_Script::localize_script('user_info', 'js_lang', config('app-user::jslang.admin_page'));
@@ -310,10 +314,6 @@ class admin extends ecjia_admin
             '<p><strong>' . __('更多信息：', 'user') . '</strong></p>' .
             '<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:会员列表#.E4.BC.9A.E5.91.98.E7.BC.96.E8.BE.91" target="_blank">关于编辑会员帮助文档</a>', 'user') . '</p>'
         );
-
-        //时间控件
-        RC_Script::enqueue_script('bootstrap-datepicker');
-        RC_Style::enqueue_style('bootstrap-datepicker');
 
         $this->assign('ur_here', __('编辑会员账号', 'user'));
         $this->assign('action_link', array('text' => __('会员列表', 'user'), 'href' => RC_Uri::url('user/admin/init')));
