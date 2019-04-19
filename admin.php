@@ -311,6 +311,10 @@ class admin extends ecjia_admin
             '<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:会员列表#.E4.BC.9A.E5.91.98.E7.BC.96.E8.BE.91" target="_blank">关于编辑会员帮助文档</a>', 'user') . '</p>'
         );
 
+        //时间控件
+        RC_Script::enqueue_script('bootstrap-datepicker');
+        RC_Style::enqueue_style('bootstrap-datepicker');
+
         $this->assign('ur_here', __('编辑会员账号', 'user'));
         $this->assign('action_link', array('text' => __('会员列表', 'user'), 'href' => RC_Uri::url('user/admin/init')));
 
