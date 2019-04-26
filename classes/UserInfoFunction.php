@@ -276,42 +276,58 @@ class UserInfoFunction
             $_SESSION['email']      = $row['email'];
 
             /* 判断是否是特殊等级，可能后台把特殊会员组更改普通会员组 */
-            if ($row['user_rank'] > 0) {
-                $special_rank = $db_user_rank->where('rank_id = "' . $row['user_rank'] . '"')->get_field('special_rank');
-                if ($special_rank === '0' || $special_rank === null) {
-                    $data = array(
-                        'user_rank' => '0'
-                    );
-                    $db_users->where('user_id = ' . $_SESSION['user_id'] . '')->update($data);
-                    $row['user_rank'] = 0;
-                }
+//             if ($row['user_rank'] > 0) {
+//                 $special_rank = $db_user_rank->where('rank_id = "' . $row['user_rank'] . '"')->get_field('special_rank');
+//                 if ($special_rank === '0' || $special_rank === null) {
+//                     $data = array(
+//                         'user_rank' => '0'
+//                     );
+//                     $db_users->where('user_id = ' . $_SESSION['user_id'] . '')->update($data);
+//                     $row['user_rank'] = 0;
+//                 }
+//             }
+            
+            if ($row['user_rank'] == 0) {
+            	//重新计算会员等级
+            	$now_rank = RC_Api::api('user', 'update_user_rank', array('user_id' => $_SESSION['user_id']));
+            } else {
+            	//用户等级更新，不用计算，直接读取
+            	$now_rank = RC_DB::table('user_rank')->where('rank_id', $row['user_rank'])->first();
             }
 
             /* 取得用户等级和折扣 */
-            if ($row['user_rank'] == 0) {
-                // 非特殊等级，根据成长值计算用户等级（注意：不包括特殊等级）
-                $row_rank = $db_user_rank->field('rank_id, discount')->find('special_rank = "0" AND min_points <= "' . intval($row['rank_points']) . '" AND max_points > "' . intval($row['rank_points']) . '"');
-                if ($row_rank) {
-                    $_SESSION['user_rank'] = $row_rank['rank_id'];
-                    $_SESSION['discount']  = $row_rank['discount'] / 100.00;
-                } else {
-                    $_SESSION['user_rank'] = 0;
-                    $_SESSION['discount']  = 1;
-                }
-            } else {
-                // 特殊等级
-                $row_rank = $db_user_rank->field('rank_id, discount')->find('rank_id = "' . $row['user_rank'] . '"');
-                if ($row_rank) {
-                    $_SESSION['user_rank'] = $row_rank['rank_id'];
-                    $_SESSION['discount']  = $row_rank['discount'] / 100.00;
-                } else {
-                    $_SESSION['user_rank'] = 0;
-                    $_SESSION['discount']  = 1;
-                }
-            }
-            if (empty($_SESSION['user_rank'])) {
-                $_SESSION['user_rank'] = 0;
-            }
+//             if ($row['user_rank'] == 0) {
+//                 // 非特殊等级，根据成长值计算用户等级（注意：不包括特殊等级）
+//                 $row_rank = $db_user_rank->field('rank_id, discount')->find('special_rank = "0" AND min_points <= "' . intval($row['rank_points']) . '" AND max_points > "' . intval($row['rank_points']) . '"');
+//                 if ($row_rank) {
+//                     $_SESSION['user_rank'] = $row_rank['rank_id'];
+//                     $_SESSION['discount']  = $row_rank['discount'] / 100.00;
+//                 } else {
+//                     $_SESSION['user_rank'] = 0;
+//                     $_SESSION['discount']  = 1;
+//                 }
+//             } else {
+//                 // 特殊等级
+//                 $row_rank = $db_user_rank->field('rank_id, discount')->find('rank_id = "' . $row['user_rank'] . '"');
+//                 if ($row_rank) {
+//                     $_SESSION['user_rank'] = $row_rank['rank_id'];
+//                     $_SESSION['discount']  = $row_rank['discount'] / 100.00;
+//                 } else {
+//                     $_SESSION['user_rank'] = 0;
+//                     $_SESSION['discount']  = 1;
+//                 }
+//             }
+//             if (empty($_SESSION['user_rank'])) {
+//                 $_SESSION['user_rank'] = 0;
+//             }
+
+               if (!empty($now_rank)) {
+               		$_SESSION['user_rank'] = $now_rank['rank_id'];
+               	    $_SESSION['discount']  = $now_rank['discount'] / 100;
+               } else {
+	               	$_SESSION['user_rank'] = 0;
+	               	$_SESSION['discount']  = 1;
+               }
         }
 
         /* 更新登录时间，登录次数及登录ip */
