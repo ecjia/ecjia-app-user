@@ -741,7 +741,7 @@ function EM_user_info($user_id, $mobile = '')
     if (!empty($pay_cod_id)) {
         $db1->where('pay_id', '!=', $pay_cod_id);
     }
-    $await_pay  = $db1->where('user_id', $user_id)->where('extension_code', '!=', "group_buy")->where('pay_status', PS_UNPAYED)->whereIn('order_status', array(OS_UNCONFIRMED, OS_CONFIRMED, OS_SPLITED))->count();
+    $await_pay  = $db1->where('user_id', $user_id)->where('extension_id', 0)->where('pay_status', PS_UNPAYED)->whereIn('order_status', array(OS_UNCONFIRMED, OS_CONFIRMED, OS_SPLITED))->count();
     $await_ship = RC_DB::table('order_info')->where('user_id', $user_id)->where('extension_code', '!=', "group_buy")->whereRaw(EM_order_query_sql('await_ship', ''))->count();
     $shipped    = RC_DB::table('order_info')->where('user_id', $user_id)->where('extension_code', "!=", "group_buy")->whereRaw(EM_order_query_sql('shipped', ''))->count();
     $finished   = RC_DB::table('order_info')->where('user_id', $user_id)->whereIn('order_status', array(OS_CONFIRMED, OS_SPLITED))
