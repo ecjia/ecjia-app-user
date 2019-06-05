@@ -74,6 +74,8 @@ class user_agent_info_module extends api_front implements api_interface
             $user_info['is_affiliate_agent'] = 'yes';
             if($user_info['agent_parent_id'] == 0) {
                 $user_info['affiliate_agent_level'] = 'level1';
+            } else if ($user_info['agent_parent_id'] > 0) {
+                $user_info['affiliate_agent_level'] = 'level2';
             }
         }
 
