@@ -72,13 +72,12 @@ class user_agent_info_module extends api_front implements api_interface
         $info = AffiliateStore::getAgentInfoByUserId($_SESSION['user_id']);
         if($info) {
             $user_info['is_affiliate_agent'] = 'yes';
-            if($user_info['agent_parent_id'] == 0) {
+            if($info['agent_parent_id'] == 0) {
                 $user_info['affiliate_agent_level'] = 'level1';
-            } else if ($user_info['agent_parent_id'] > 0) {
+            } else if ($info['agent_parent_id'] > 0) {
                 $user_info['affiliate_agent_level'] = 'level2';
             }
         }
-
         return $user_info;
     }
 }
