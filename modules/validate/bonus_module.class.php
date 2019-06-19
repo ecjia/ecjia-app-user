@@ -114,7 +114,7 @@ class validate_bonus_module extends api_front implements api_interface
                 $result['error'] = sprintf(__('订单商品金额没有达到使用该红包的最低金额 %s', 'user'), price_format($bonus['min_goods_amount'], false));
             }
             /* 团购标志 */
-            if ($flow_type == CART_GROUP_BUY_GOODS) {
+            if ($flow_type == \Ecjia\App\Cart\Enums\CartEnum::CART_GROUP_BUY_GOODS) {
                 $is_group_buy = 1;
             }
 
