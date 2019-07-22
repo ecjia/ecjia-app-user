@@ -49,6 +49,7 @@ defined('IN_ECJIA') or exit('No permission resources.');
 /**
  * 用户充值提现记录
  * @author royalwang
+ * @update 2019-07-22 增加推广类型affiliate
  */
 class user_account_record_module extends api_front implements api_interface
 {
@@ -72,7 +73,7 @@ class user_account_record_module extends api_front implements api_interface
         $size         = $this->requestData('pagination.count', 15);
         $page         = $this->requestData('pagination.page', 1);
         $process_type = $this->requestData('type');
-        $type         = array('', 'deposit', 'raply');
+        $type         = array('', 'deposit', 'raply', 'affiliate');
         if (!in_array($process_type, $type)) {
             return new ecjia_error('invalid_parameter', sprintf(__('请求接口%s参数无效', 'user'), __CLASS__));
         }
@@ -84,11 +85,13 @@ class user_account_record_module extends api_front implements api_interface
         if (!empty($process_type)) {
             if ($process_type == 'deposit') {
                 $db->where('process_type', SURPLUS_SAVE);
-            } else {
+            } else if ($process_type == 'raply') {
                 $db->where('process_type', SURPLUS_RETURN);
+            } else if ($process_type == 'affiliate') {
+                $db->where('process_type', SURPLUS_AFFILIATE);
             }
         } else {
-            $db->whereIn('process_type', array(SURPLUS_SAVE, SURPLUS_RETURN));
+            $db->whereIn('process_type', array(SURPLUS_SAVE, SURPLUS_RETURN, SURPLUS_AFFILIATE));
         }
 
         /* 获取记录条数 */
