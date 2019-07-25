@@ -56,6 +56,8 @@ class add_storeuser {
 	 */
 	
 	public static function add_store_user($options) {
+        //其他方式不能成为店铺会员
+        return false;
 		
 		if (!empty($options['store_id']) && !empty($options['user_id'])) {
 			$is_exist_store_user = RC_DB::table('store_users')->where('store_id', $options['store_id'])->where('user_id', $options['user_id'])->first();
