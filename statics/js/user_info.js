@@ -217,10 +217,10 @@
                 },
                 messages: {
                     reg_field_name: {
-                        required: js_lang.reg_field_name_required
+                        required: js_lang.reg_field_name_confirm
                     },
                     reg_field_order: {
-                        required: js_lang.reg_field_order_required
+                        required: js_lang.reg_field_order_confirm
                     }
                 },
                 submitHandler: function () {
