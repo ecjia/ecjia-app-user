@@ -141,9 +141,7 @@ class user_signin_module extends api_front implements api_interface
                 if (!empty($check_user)) {
                     if (ecjia_integrate::login($check_user, $password)) {
                         $is_mobile = true;
-                    } else {
-                    	return new ecjia_error('userinfo_error', __('您输入的账号信息不正确 ！', 'user'));
-                    }
+                    } 
                 }
             }
 
